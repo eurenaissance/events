@@ -1,5 +1,13 @@
-
+###> symfony/framework-bundle ###
+.env
+/public/bundles/
+/var/
+/vendor/
+docker-compose.override.yml
+supervisord.log
+supervisord.pid
+###< symfony/framework-bundle ###
 ###> symfony/phpunit-bridge ###
-.phpunit
 /phpunit.xml
+bin/phpunit
 ###< symfony/phpunit-bridge ###
