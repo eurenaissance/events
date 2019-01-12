@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  app:
+    build:
+      context: docker/app/dev
+    container_name: mobilisation-eu.code
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
+      - rabbitmq
+
+  db:
+    build:
+      context: docker/db
+    environment:
+      - POSTGRES_USER=mobilisation_eu
+      - POSTGRES_PASSWORD=mobilisation_eu
+
+  rabbitmq:
+    image: rabbitmq:3-management

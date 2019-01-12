@@ -1,0 +1,72 @@
+2019-01-12 13:38:51,358 CRIT Supervisor running as root (no user in config file)
+2019-01-12 13:38:51,360 INFO supervisord started with pid 1
+2019-01-12 13:38:52,362 INFO spawned: 'nginx' with pid 9
+2019-01-12 13:38:52,364 INFO spawned: 'php7-fpm' with pid 10
+2019-01-12 13:38:53,453 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 13:38:53,453 INFO success: php7-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 13:40:30,873 WARN received SIGTERM indicating exit request
+2019-01-12 13:40:30,873 INFO waiting for nginx, php7-fpm to die
+2019-01-12 13:40:31,897 INFO stopped: php7-fpm (exit status 0)
+2019-01-12 13:40:31,905 INFO stopped: nginx (exit status 0)
+2019-01-12 13:40:50,775 CRIT Supervisor running as root (no user in config file)
+2019-01-12 13:40:50,777 INFO supervisord started with pid 1
+2019-01-12 13:40:51,779 INFO spawned: 'nginx' with pid 10
+2019-01-12 13:40:51,782 INFO spawned: 'php7-fpm' with pid 11
+2019-01-12 13:40:52,918 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 13:40:52,919 INFO success: php7-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 13:46:22,210 WARN received SIGTERM indicating exit request
+2019-01-12 13:46:22,211 INFO waiting for nginx, php7-fpm to die
+2019-01-12 13:46:22,228 INFO stopped: php7-fpm (exit status 0)
+2019-01-12 13:46:22,239 INFO stopped: nginx (exit status 0)
+2019-01-12 13:46:32,513 CRIT Supervisor running as root (no user in config file)
+2019-01-12 13:46:32,515 INFO supervisord started with pid 1
+2019-01-12 13:46:33,519 INFO spawned: 'nginx' with pid 10
+2019-01-12 13:46:33,523 INFO spawned: 'php7-fpm' with pid 11
+2019-01-12 13:46:34,670 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 13:46:34,670 INFO success: php7-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 13:46:54,013 WARN received SIGTERM indicating exit request
+2019-01-12 13:46:54,014 INFO waiting for nginx, php7-fpm to die
+2019-01-12 13:46:54,038 INFO stopped: php7-fpm (exit status 0)
+2019-01-12 13:46:54,046 INFO stopped: nginx (exit status 0)
+2019-01-12 15:29:24,545 CRIT Supervisor running as root (no user in config file)
+2019-01-12 15:29:24,548 INFO supervisord started with pid 1
+2019-01-12 15:29:25,551 INFO spawned: 'nginx' with pid 17
+2019-01-12 15:29:25,554 INFO spawned: 'php7-fpm' with pid 18
+2019-01-12 15:29:26,708 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 15:29:26,709 INFO success: php7-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 15:34:36,747 CRIT Supervisor running as root (no user in config file)
+2019-01-12 15:34:36,750 INFO supervisord started with pid 1
+2019-01-12 15:34:37,752 INFO spawned: 'nginx' with pid 17
+2019-01-12 15:34:37,753 INFO spawned: 'php7-fpm' with pid 18
+2019-01-12 15:34:38,829 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 15:34:38,829 INFO success: php7-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 15:37:44,444 WARN received SIGTERM indicating exit request
+2019-01-12 15:37:44,444 INFO waiting for nginx, php7-fpm to die
+2019-01-12 15:37:44,468 INFO stopped: php7-fpm (exit status 0)
+2019-01-12 15:37:44,474 INFO stopped: nginx (exit status 0)
+2019-01-12 15:37:46,243 CRIT Supervisor running as root (no user in config file)
+2019-01-12 15:37:46,246 INFO supervisord started with pid 1
+2019-01-12 15:37:47,249 INFO spawned: 'nginx' with pid 10
+2019-01-12 15:37:47,252 INFO spawned: 'php7-fpm' with pid 11
+2019-01-12 15:37:48,344 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 15:37:48,345 INFO success: php7-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 15:47:28,009 WARN received SIGTERM indicating exit request
+2019-01-12 15:47:28,009 INFO waiting for nginx, php7-fpm to die
+2019-01-12 15:47:28,035 INFO stopped: php7-fpm (exit status 0)
+2019-01-12 15:47:28,040 INFO stopped: nginx (exit status 0)
+2019-01-12 15:47:30,163 CRIT Supervisor running as root (no user in config file)
+2019-01-12 15:47:30,166 INFO supervisord started with pid 1
+2019-01-12 15:47:31,169 INFO spawned: 'nginx' with pid 43
+2019-01-12 15:47:31,172 INFO spawned: 'php7-fpm' with pid 44
+2019-01-12 15:47:32,257 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 15:47:32,257 INFO success: php7-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 17:35:16,496 WARN received SIGTERM indicating exit request
+2019-01-12 17:35:16,496 INFO waiting for nginx, php7-fpm to die
+2019-01-12 17:35:16,505 INFO stopped: php7-fpm (exit status 0)
+2019-01-12 17:35:16,507 INFO stopped: nginx (exit status 0)
+2019-01-12 17:35:18,122 CRIT Supervisor running as root (no user in config file)
+2019-01-12 17:35:18,123 INFO supervisord started with pid 1
+2019-01-12 17:35:19,124 INFO spawned: 'nginx' with pid 49
+2019-01-12 17:35:19,125 INFO spawned: 'php7-fpm' with pid 50
+2019-01-12 17:35:20,162 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2019-01-12 17:35:20,162 INFO success: php7-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
