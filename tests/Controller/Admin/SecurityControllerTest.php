@@ -5,6 +5,9 @@ namespace Test\App\Controller\Admin;
 use App\DataFixtures\AdministratorFixtures;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * @group functional
+ */
 class SecurityControllerTest extends WebTestCase
 {
     public function testLogin(): void

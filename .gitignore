@@ -9,6 +9,5 @@ supervisord.pid
 ###< symfony/framework-bundle ###
 ###> symfony/phpunit-bridge ###
 /phpunit.xml
-bin/phpunit
 bin/.phpunit/
 ###< symfony/phpunit-bridge ###

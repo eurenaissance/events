@@ -6,6 +6,9 @@ use App\DataFixtures\AdministratorFixtures;
 use App\Repository\AdministratorRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * @group functional
+ */
 class AdministratorSetupControllerTest extends WebTestCase
 {
     public function testSetup(): void

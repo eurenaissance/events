@@ -87,24 +87,24 @@ db-init: db-schema-drop db-migrate db-fixtures ## Init the database with fixture
 
 test: tu tf phpcs                                           ## Run the PHP tests
 
-tu: vendor                                                  ## Run the PHP Unit tests
+tu: install                                                 ## Run the PHP Unit tests
 	$(EXEC) bin/phpunit --exclude-group functional $(PHPUNIT_ARGS)
 
 tf: tfp init-phpunit-bridge                                 ## Run the PHP Functional tests
 	$(EXEC) bin/phpunit --group functional $(PHPUNIT_ARGS)
 
-tfp: vendor                                                 ## Prepare the PHP functional tests
+tfp: install                                                ## Prepare the PHP functional tests
 	$(CONSOLE) doctrine:schema:drop --force -n --env=test
 	$(CONSOLE) doctrine:migrations:version --all --delete -n --env=test
 	$(CONSOLE) doctrine:migrations:migrate -n --env=test
 	$(CONSOLE) doctrine:schema:validate --env=test
 	$(CONSOLE) doctrine:fixtures:load -n --env=test
 
-phpcs: vendor                                               ## Lint PHP Code
+phpcs: install                                              ## Lint PHP Code
 	$(PHPCSFIXER) fix --diff --dry-run --no-interaction -v
 
-phpcsfix: vendor                                            ## Lint and fix PHP code to follow the convention
+phpcsfix: install                                           ## Lint and fix PHP code to follow the convention
 	$(PHPCSFIXER) fix
 
-security-check: vendor
+security-check: install
 	$(EXEC) vendor/bin/security-checker security:check

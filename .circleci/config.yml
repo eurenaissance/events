@@ -1,41 +1,65 @@
 version: 2
+
+references:
+  working_directory: &working_directory
+    working_directory: ~/app
+
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: ~/app
+
+  configure_base: &configure_base
+    environment:
+      - DOCKER_COMPOSE: "docker-compose -f docker-compose.yml"
+    machine:
+      enabled: true
+      image: circleci/classic:201711-01
+
 jobs:
   build:
-    docker:
-      - image: circleci/php:7.1-browsers
-
-    working_directory: ~/repo
-
+    <<: *working_directory
+    <<: *configure_base
     steps:
-      - run: sudo apt-get install -y libpng-dev postgresql
-
-      - run:
-          name: Install PHP Extensions
-          command: sudo docker-php-ext-install gd bcmath sockets pdo pdo_pgsql
-
       - checkout
 
       - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "composer.json" }}
-            - v1-dependencies-
-
-      - run: composer install -n --prefer-dist
+          key: composer-{{ checksum "composer.lock" }}
 
       - save_cache:
           paths:
             - ./vendor
-          key: v1-dependencies-{{ checksum "composer.json" }}
+            - ./bin/.phpunit
+          key: composer-{{ checksum "composer.lock" }}
 
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./
+
+  tests:
+    <<: *working_directory
+    <<: *configure_base
+    steps:
+      - *attach_workspace
       - run:
-          name: Prepare test environment
+          name: "Execute all tests"
           command: |
-            bin/console doctrine:schema:drop --force -n --env=test
-            bin/console doctrine:migrations:version --all --delete -n --env=test
-            bin/console doctrine:migrations:migrate -n --env=test
-            bin/console doctrine:schema:validate --env=test
-            bin/console doctrine:fixtures:load -n --env=test
+            set -x
 
-      - run:
-          name: Run testsuite
-          command: bin/phpunit
+            export PHPUNIT_ARGS="-v --log-junit ./phpunit/junit.xml"
+
+            make up
+            make test
+
+      - store_test_results:
+          path: ./phpunit
+
+workflows:
+  version: 2
+  build_test:
+    jobs:
+      - build
+
+      - tests:
+          requires:
+            - build
