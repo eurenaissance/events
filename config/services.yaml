@@ -24,5 +24,16 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+
+    admin.administrator:
+        class: App\Admin\AdministratorAdmin
+        arguments: [~, App\Entity\Administrator, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: 'system', label: 'administrators' }
+
+    App\EventListener\AdministratorSetupListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

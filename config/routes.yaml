@@ -1,15 +1,3 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
-
-admin_security_2fa:
-  path: /admin/2fa
-  defaults:
-    _controller: "scheb_two_factor.form_controller:form"
-
-admin_security_2fa_check:
-  path: /admin/2fa_check
-
-app_admin_logout:
-  path: /admin/logout
-  methods: GET

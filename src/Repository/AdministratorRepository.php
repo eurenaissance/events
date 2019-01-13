@@ -13,24 +13,13 @@ class AdministratorRepository extends ServiceEntityRepository
         parent::__construct($registry, Administrator::class);
     }
 
-    /**
-     * Loads the user for the given username.
-     *
-     * This method must return null if the user is not found.
-     *
-     * @param string $username The username
-     *
-     * @return UserInterface|null
-     */
-    public function loadUserByUsername($username)
+    public function countAdministrators(): int
     {
-        $query = $this
+        return $this
             ->createQueryBuilder('a')
-            ->where('a.emailAddress = :username')
-            ->setParameter('username', $username)
+            ->select('COUNT(a)')
             ->getQuery()
+            ->getSingleScalarResult()
         ;
-
-        return $query->getOneOrNullResult();
     }
 }

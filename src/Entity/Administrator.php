@@ -69,9 +69,6 @@ class Administrator implements UserInterface, TwoFactorInterface
         return $this->emailAddress ?: '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRoles()
     {
         return $this->roles;
@@ -92,17 +89,11 @@ class Administrator implements UserInterface, TwoFactorInterface
         $this->roles = $roles;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSalt()
     {
         return;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getUsername()
     {
         return $this->emailAddress;
@@ -113,9 +104,6 @@ class Administrator implements UserInterface, TwoFactorInterface
         return $this->password;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function eraseCredentials()
     {
         $this->plainPassword = null;
@@ -157,7 +145,7 @@ class Administrator implements UserInterface, TwoFactorInterface
 
     public function getGoogleAuthenticatorSecret(): string
     {
-        return $this->googleAuthenticatorSecret;
+        return $this->googleAuthenticatorSecret ?? '';
     }
 
     public function getGoogleAuthenticatorUsername(): string

@@ -10,4 +10,5 @@ supervisord.pid
 ###> symfony/phpunit-bridge ###
 /phpunit.xml
 bin/phpunit
+bin/.phpunit/
 ###< symfony/phpunit-bridge ###

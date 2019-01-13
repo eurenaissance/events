@@ -20,14 +20,18 @@ class AdministratorFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $superAdministrator = new Administrator();
+        $superAdministartor = new Administrator();
+        $superAdministartor->setEmailAddress('superadmin@mobilisation-eu.code');
+        $superAdministartor->setPassword($this->encoder->encodePassword($superAdministartor, self::DEFAULT_PASSWORD));
+        $superAdministartor->setRoles(['ROLE_SUPER_ADMIN']);
 
-        $superAdministrator->setEmailAddress('admin@mobilisation-eu.code');
-        $superAdministrator->setPassword($this->encoder->encodePassword($superAdministrator, self::DEFAULT_PASSWORD));
-        $superAdministrator->setRoles(['ROLE_SUPER_ADMIN']);
-        $superAdministrator->setGoogleAuthenticatorSecret('53YNXH6LFUOBT7LC');
+        $administrator = new Administrator();
+        $administrator->setEmailAddress('admin@mobilisation-eu.code');
+        $administrator->setPassword($this->encoder->encodePassword($administrator, self::DEFAULT_PASSWORD));
+        $administrator->setGoogleAuthenticatorSecret('53YNXH6LFUOBT7LC');
 
-        $manager->persist($superAdministrator);
+        $manager->persist($superAdministartor);
+        $manager->persist($administrator);
 
         $manager->flush();
     }

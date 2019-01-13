@@ -82,23 +82,29 @@ db-init: db-schema-drop db-migrate db-fixtures ## Init the database with fixture
 ##
 ## Tests
 ##---------------------------------------------------------------------------
-.PHONY: test-phpunit test-behat test-db-init test security-check init-phpunit-bridge phpcs phpcsfix
-test: test-phpunit test-behat phpcs ## Launch the full test suite
 
-test-db-init: wait-for-db ## Init the test database
-	$(CONSOLE) --env=test doctrine:schema:drop --force -n
-	$(CONSOLE) --env=test doctrine:migrations:version --all --delete -n
-	$(CONSOLE) --env=test doctrine:migrations:migrate -n
-	$(CONSOLE) --env=test doctrine:schema:validate
+.PHONY: test tu tf tfp phpcs phpcsfix behat init-phpunit-bridge tfp-rabbitmq security-check
 
-test-phpunit: ## Run phpunit tests
-	$(EXEC) bin/phpunit ${PHPUNIT_ARGS}
+test: tu tf phpcs                                           ## Run the PHP tests
 
-security-check: ## Check if vendors contains some known security issues
-	$(EXEC) vendor/bin/security-checker security:check
+tu: vendor                                                  ## Run the PHP Unit tests
+	$(EXEC) bin/phpunit --exclude-group functional $(PHPUNIT_ARGS)
 
-phpcs: install ## Lint PHP code
+tf: tfp init-phpunit-bridge                                 ## Run the PHP Functional tests
+	$(EXEC) bin/phpunit --group functional $(PHPUNIT_ARGS)
+
+tfp: vendor                                                 ## Prepare the PHP functional tests
+	$(CONSOLE) doctrine:schema:drop --force -n --env=test
+	$(CONSOLE) doctrine:migrations:version --all --delete -n --env=test
+	$(CONSOLE) doctrine:migrations:migrate -n --env=test
+	$(CONSOLE) doctrine:schema:validate --env=test
+	$(CONSOLE) doctrine:fixtures:load -n --env=test
+
+phpcs: vendor                                               ## Lint PHP Code
 	$(PHPCSFIXER) fix --diff --dry-run --no-interaction -v
 
-phpcsfix: install ## Lint and fix PHP code to follow the convention
+phpcsfix: vendor                                            ## Lint and fix PHP code to follow the convention
 	$(PHPCSFIXER) fix
+
+security-check: vendor
+	$(EXEC) vendor/bin/security-checker security:check

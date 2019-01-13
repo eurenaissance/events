@@ -11,10 +11,6 @@ security:
         ROLE_SUPER_ADMIN:
             - ROLE_ADMIN_DASHBOARD
 
-
-    access_decision_manager:
-        strategy: unanimous
-
     providers:
         app_administrator_provider:
             entity:
@@ -27,10 +23,10 @@ security:
             security: false
 
         admin:
+            pattern: ^/admin
             context: main_context
             anonymous: true
             switch_user: true
-            pattern: ^/admin
             provider: app_administrator_provider
             two_factor:
                 auth_form_path: admin_security_2fa
@@ -42,10 +38,10 @@ security:
                     - App\Security\AdministratorAuthenticator
             logout:
                 path: app_admin_logout
-                target: /admin/login
+                target: app_admin_login
 
     access_control:
-        - { path: ^/admin/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/(login|setup), role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/logout, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
         - { path: ^/admin/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
         - { path: ^/admin/impersonation/exit, roles: [ROLE_PREVIOUS_ADMIN] }

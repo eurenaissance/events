@@ -7,11 +7,18 @@ jobs:
     working_directory: ~/repo
 
     steps:
+      - run: sudo apt-get install -y libpng-dev postgresql
+
+      - run:
+          name: Install PHP Extensions
+          command: sudo docker-php-ext-install gd bcmath sockets pdo pdo_pgsql
+
       - checkout
 
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "composer.json" }}
+            - v1-dependencies-
 
       - run: composer install -n --prefer-dist
 
@@ -20,4 +27,15 @@ jobs:
             - ./vendor
           key: v1-dependencies-{{ checksum "composer.json" }}
 
-      - run: phpunit
+      - run:
+          name: Prepare test environment
+          command: |
+            bin/console doctrine:schema:drop --force -n --env=test
+            bin/console doctrine:migrations:version --all --delete -n --env=test
+            bin/console doctrine:migrations:migrate -n --env=test
+            bin/console doctrine:schema:validate --env=test
+            bin/console doctrine:fixtures:load -n --env=test
+
+      - run:
+          name: Run testsuite
+          command: bin/phpunit

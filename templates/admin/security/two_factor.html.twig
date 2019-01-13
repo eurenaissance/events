@@ -2,7 +2,9 @@
     <p>{{ authenticationError|trans(authenticationErrorData) }}</p>
 {% endif %}
 
-<p class="label"><label for="_auth_code">{{ "scheb_two_factor.auth_code"|trans }} {{ twoFactorProvider }}:</label></p>
+<p class="label">
+    <label for="_auth_code">{{ "scheb_two_factor.auth_code"|trans }} {{ twoFactorProvider }}:</label>
+</p>
 
 <form class="form" action="{{ path("admin_security_2fa_check") }}" method="post">
     <p class="widget"><input id="_auth_code" type="text" autocomplete="off" name="{{ authCodeParameterName }}" /></p>
@@ -15,4 +17,6 @@
     <p class="submit"><input type="submit" value="{{ "scheb_two_factor.login"|trans }}" /></p>
 </form>
 
-<p class="cancel"><a href="{{ path("app_admin_logout") }}">{{ "scheb_two_factor.cancel"|trans }}</a></p>
+<p class="cancel">
+    <a href="{{ path("app_admin_logout") }}">{{ "scheb_two_factor.cancel"|trans }}</a>
+</p>

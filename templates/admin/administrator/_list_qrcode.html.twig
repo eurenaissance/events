@@ -1,0 +1,9 @@
+{% if object.googleAuthenticatorSecret %}
+    <a href="{{ path('app_admin_qr_code', { id: object.id }) }}"
+       title="{{ 'administrator.qrcode_google'|trans }}"
+       class="btn btn-sm btn-default"
+       target="_blank">
+        <i class="fa fa-qrcode" aria-hidden="true"></i>
+        QR code Google Authenticator
+    </a>
+{% endif %}
