@@ -18,12 +18,7 @@ class AdministratorSetupControllerTest extends WebTestCase
         /** @var AdministratorRepository $administratorRepository */
         $administratorRepository = self::$container->get(AdministratorRepository::class);
 
-        $administratorRepository
-            ->createQueryBuilder('a')
-            ->delete()
-            ->getQuery()
-            ->execute()
-        ;
+        $administratorRepository->deleteAll();
         self::assertEquals(0, $administratorRepository->countAdministrators());
 
         $client->request('GET', '/admin/login');

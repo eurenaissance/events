@@ -106,7 +106,7 @@ class Administrator implements UserInterface, TwoFactorInterface
 
     public function eraseCredentials()
     {
-        $this->plainPassword = null;
+        $this->password = null;
     }
 
     public function getId(): ?int

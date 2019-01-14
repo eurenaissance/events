@@ -15,11 +15,16 @@ class AdministratorRepository extends ServiceEntityRepository
 
     public function countAdministrators(): int
     {
-        return $this
+        return $this->count([]);
+    }
+
+    public function deleteAll(): void
+    {
+        $this
             ->createQueryBuilder('a')
-            ->select('COUNT(a)')
+            ->delete()
             ->getQuery()
-            ->getSingleScalarResult()
+            ->execute()
         ;
     }
 }
