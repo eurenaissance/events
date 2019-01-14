@@ -9,6 +9,7 @@
         "enqueue/amqp-lib": "^0.9.2",
         "enqueue/enqueue-bundle": "^0.9.3",
         "enqueue/fs": "^0.9.2",
+        "league/csv": "^9.1",
         "predis/predis": "^1.1",
         "ramsey/uuid-doctrine": "^1.5",
         "scheb/two-factor-bundle": "^3.16",
@@ -18,11 +19,22 @@
         "sonata-project/doctrine-orm-admin-bundle": "^3.7",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
+        "symfony/finder": "4.2.*",
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "4.2.*",
         "symfony/orm-pack": "^1.0",
         "symfony/security": "4.2.*",
         "symfony/yaml": "4.2.*"
+    },
+    "require-dev": {
+        "dama/doctrine-test-bundle": "^5.0",
+        "doctrine/doctrine-fixtures-bundle": "^3.1",
+        "friendsofphp/php-cs-fixer": "^2.14",
+        "sensiolabs/security-checker": "^5.0",
+        "symfony/debug-pack": "^1.0",
+        "symfony/maker-bundle": "^1.11",
+        "symfony/test-pack": "^1.0",
+        "webmozart/assert": "^1.4"
     },
     "config": {
         "preferred-install": {
@@ -69,14 +81,5 @@
             "allow-contrib": false,
             "require": "4.2.*"
         }
-    },
-    "require-dev": {
-        "dama/doctrine-test-bundle": "^5.0",
-        "doctrine/doctrine-fixtures-bundle": "^3.1",
-        "friendsofphp/php-cs-fixer": "^2.14",
-        "sensiolabs/security-checker": "^5.0",
-        "symfony/debug-pack": "^1.0",
-        "symfony/maker-bundle": "^1.11",
-        "symfony/test-pack": "^1.0"
     }
 }

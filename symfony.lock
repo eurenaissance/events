@@ -188,6 +188,9 @@
     "lcobucci/jwt": {
         "version": "3.2.5"
     },
+    "league/csv": {
+        "version": "9.1.4"
+    },
     "makasim/temp-file": {
         "version": "0.2.0"
     },
@@ -568,6 +571,9 @@
     },
     "twig/twig": {
         "version": "v2.6.0"
+    },
+    "webmozart/assert": {
+        "version": "1.4.0"
     },
     "zendframework/zend-code": {
         "version": "3.3.1"
