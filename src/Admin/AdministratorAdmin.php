@@ -71,6 +71,7 @@ class AdministratorAdmin extends AbstractAdmin
         if (!$this->isCurrentRoute('create')) {
             $formMapper->add('googleAuthenticatorSecret', TextType::class, [
                 'label' => 'administrator.google_authenticator_secret',
+                'required' => false,
             ]);
         }
 

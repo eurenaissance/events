@@ -3,6 +3,7 @@ security:
     erase_credentials: false
 
     encoders:
+        App\Entity\Actor: bcrypt
         App\Entity\Administrator: bcrypt
 
     role_hierarchy:
@@ -12,6 +13,10 @@ security:
             - ROLE_ADMIN_DASHBOARD
 
     providers:
+        app_actor_provider:
+            entity:
+                class: App\Entity\Actor
+                property: emailAddress
         app_administrator_provider:
             entity:
                 class: App\Entity\Administrator
@@ -26,7 +31,6 @@ security:
             pattern: ^/admin
             context: main_context
             anonymous: true
-            switch_user: true
             provider: app_administrator_provider
             two_factor:
                 auth_form_path: admin_security_2fa
@@ -40,9 +44,22 @@ security:
                 path: app_admin_logout
                 target: app_admin_login
 
+        main:
+            context: main_context
+            anonymous: true
+            provider: app_actor_provider
+            switch_user:
+                provider: app_actor_provider
+            guard:
+                authenticators:
+                    - App\Security\AppActorAuthenticator
+            logout:
+                path: app_logout
+                target: app_login
+
     access_control:
+        - { path: ^/profile, roles: [ROLE_USER] }
         - { path: ^/admin/(login|setup), role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/logout, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
-        - { path: ^/admin/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+        - { path: ^/admin/(2fa|logout), role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
         - { path: ^/admin/impersonation/exit, roles: [ROLE_PREVIOUS_ADMIN] }
         - { path: ^/admin, roles: ROLE_ADMIN_DASHBOARD }

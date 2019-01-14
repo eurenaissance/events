@@ -32,7 +32,7 @@ class AdministratorSetupController extends AbstractController
             return $this->redirectToRoute('app_admin_login');
         }
 
-        return $this->render('admin/security/setup.html.twig', [
+        return $this->render('admin/setup/form.html.twig', [
             'form' => $form->createView(),
         ]);
     }

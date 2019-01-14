@@ -1,23 +1,76 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/security/base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block sonata_wrapper %}
 
-{% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+    <div class="login-box">
+        {% block login_box_header %}
+            <div class="login-logo">
+                <a href="{{ path('sonata_admin_dashboard') }}">
+                    {% if sonata_admin.adminPool.getOption('title_mode') in ['single_image', 'both'] %}
+                        <div>
+                            <img style="width:64px;" src="{{ asset(sonata_admin.adminPool.titlelogo) }}" alt="{{ sonata_admin.adminPool.title }}">
+                        </div>
+                    {% endif %}
+                    {% if sonata_admin.adminPool.getOption('title_mode') in ['single_text', 'both'] %}
+                        <span>{{ sonata_admin.adminPool.title }}</span>
+                    {% endif %}
+                </a>
+            </div>
+        {% endblock %}
+        <div class="login-box-body">
+            {% block sonata_user_login_form %}
+                {% block sonata_user_login_error %}
+                    {% if error %}
+                        <div class="alert alert-danger alert-error">
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
+                    {% endif %}
+                {% endblock %}
+                <p class="login-box-msg">{{ 'title_user_authentication'|trans }}</p>
 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="inputEmailAddress" class="sr-only">Email Address</label>
-        <input type="email" value="{{ last_username }}" name="emailAddress" id="inputEmailAddress" class="form-control" placeholder="Email Address" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <form action="{{ path("app_admin_login") }}" method="post" role="form">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <div class="form-group has-feedback">
+                        <input class="form-control"
+                               id="emailAddress"
+                               name="emailAddress"
+                               placeholder="{{ 'security.login.username'|trans }}"
+                               required="required"
+                               type="text"
+                               value="{{ last_username }}"/>
+                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                    </div>
 
-        <button class="btn btn-lg btn-primary" type="submit">
-            {{ 'sign_in'|trans }}
-        </button>
-    </form>
-{% endblock %}
+                    <div class="form-group has-feedback">
+                        <input class="form-control"
+                               id="password"
+                               name="password"
+                               placeholder="{{ 'security.login.password'|trans }}"
+                               required="required"
+                               type="password"/>
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
+                                    {{ 'security.login.remember_me'|trans }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="submit" class="btn btn-primary btn-block btn-flat">{{ 'sign_in'|trans }}</button>
+                        </div>
+                    </div>
+                </form>
+
+                <a href="">{{ 'forgotten_password'|trans }}</a>
+
+            {% endblock %}
+        </div>
+    </div>
+
+{% endblock sonata_wrapper %}

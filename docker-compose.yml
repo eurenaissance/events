@@ -7,7 +7,6 @@ services:
   app:
     build:
       context: docker/app/dev
-    container_name: mobilisation-eu.code
     volumes:
       - ./:/app
     depends_on:

@@ -18,14 +18,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Administrator implements UserInterface, TwoFactorInterface
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    private $id;
+    use EntityIdTrait;
 
     /**
      * @var string|null
@@ -61,10 +54,10 @@ class Administrator implements UserInterface, TwoFactorInterface
 
     public function __construct()
     {
-        $this->roles[] = 'ROLE_ADMIN_DASHBOARD';
+        $this->roles = ['ROLE_ADMIN_DASHBOARD'];
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->emailAddress ?: '';
     }
@@ -74,19 +67,19 @@ class Administrator implements UserInterface, TwoFactorInterface
         return $this->roles;
     }
 
-    public function addRole(string $role)
-    {
-        if (!\in_array($role, $this->roles, true)) {
-            $this->roles[] = $role;
-        }
-    }
-
     /**
      * @param string[] $roles
      */
     public function setRoles(array $roles): void
     {
         $this->roles = $roles;
+    }
+
+    public function addRole(string $role): void
+    {
+        if (!\in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
     }
 
     public function getSalt()
@@ -107,11 +100,6 @@ class Administrator implements UserInterface, TwoFactorInterface
     public function eraseCredentials()
     {
         $this->password = null;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     /**

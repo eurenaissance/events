@@ -45,5 +45,11 @@ class SecurityControllerTest extends WebTestCase
 
         $crawler = $client->followRedirect();
         self::assertTrue($client->getResponse()->isSuccessful());
+
+        $client->click($crawler->selectLink('cancel')->link());
+        self::assertTrue($client->getResponse()->isRedirect($client->getRequest()->getSchemeAndHttpHost().'/admin/login'));
+
+        $client->followRedirect();
+        self::assertTrue($client->getResponse()->isSuccessful());
     }
 }

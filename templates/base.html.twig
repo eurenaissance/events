@@ -1,3 +1,7 @@
+{% set has_role_user = is_granted('ROLE_USER') %}
+{% set has_role_adherent = is_granted('ROLE_ADHERENT') %}
+{% set has_role_admin = is_granted('ROLE_ADMIN_DASHBOARD') %}
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -5,7 +9,31 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
-    <body>
+        {% if app.user %}
+            Hello {{ app.user.fullName }}!
+            ({{ app.user.emailAddress }})
+        {% endif %}
+        <ul>
+            {% if app.user %}
+                <li>
+                    <a href="{{ path('app_profile') }}">logout</a>
+                </li>
+                <li>
+                    <a href="{{ path('app_logout') }}">logout</a>
+                </li>
+            {% endif %}
+
+            {% if not app.user %}
+                <li>
+                    <a href="{{ path('app_login') }}">login</a>
+                </li>
+                <li>
+                    <a href="{{ path('app_registration_form') }}">register</a>
+                </li>
+            {% endif %}
+        </ul>
+        <hr>
+
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

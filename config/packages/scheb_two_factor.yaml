@@ -1,7 +1,7 @@
-# See the configuration reference at https://github.com/scheb/two-factor-bundle/blob/master/Resources/doc/configuration.md
 scheb_two_factor:
     google:
         enabled: true
+        issuer: Mobilisation
         template: admin/security/two_factor.html.twig
 
     security_tokens:

@@ -20,19 +20,39 @@ class AdministratorFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $superAdministartor = new Administrator();
-        $superAdministartor->setEmailAddress('superadmin@mobilisation-eu.code');
-        $superAdministartor->setPassword($this->encoder->encodePassword($superAdministartor, self::DEFAULT_PASSWORD));
-        $superAdministartor->setRoles(['ROLE_SUPER_ADMIN']);
+        $superAdministartor = $this->create([
+            'emailAddress' => 'superadmin@mobilisation-eu.code',
+            'roles' => ['ROLE_SUPER_ADMIN'],
+        ]);
 
-        $administrator = new Administrator();
-        $administrator->setEmailAddress('admin@mobilisation-eu.code');
-        $administrator->setPassword($this->encoder->encodePassword($administrator, self::DEFAULT_PASSWORD));
-        $administrator->setGoogleAuthenticatorSecret('53YNXH6LFUOBT7LC');
+        $administrator = $this->create([
+            'emailAddress' => 'admin@mobilisation-eu.code',
+            'googleAuthenticatorSecret' => '53YNXH6LFUOBT7LC',
+        ]);
 
         $manager->persist($superAdministartor);
         $manager->persist($administrator);
 
         $manager->flush();
+    }
+
+    private function create(array $data): Administrator
+    {
+        $administrator = new Administrator();
+
+        $administrator->setEmailAddress($data['emailAddress']);
+        $administrator->setPassword($this->encoder->encodePassword($administrator, self::DEFAULT_PASSWORD));
+
+        if (isset($data['roles'])) {
+            foreach ($data['roles'] as $role) {
+                $administrator->addRole($role);
+            }
+        }
+
+        if (isset($data['googleAuthenticatorSecret'])) {
+            $administrator->setGoogleAuthenticatorSecret($data['googleAuthenticatorSecret']);
+        }
+
+        return $administrator;
     }
 }

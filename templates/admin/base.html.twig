@@ -1,0 +1,31 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+{% block sonata_top_nav_menu_user_block '' %}
+
+{% block side_bar_before_nav %}
+    <ul class="sidebar-menu">
+        <li>
+            <a href="{{ path('sonata_admin_dashboard') }}">
+                <i class="fa fa-home"></i>
+                <span>dashboard</span>
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block side_bar_after_nav %}
+    <ul class="sidebar-menu">
+        <li>
+            <a href="{{ path('app_homepage') }}">
+                <i class="fa fa-reply"></i>
+                <span>homepage</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('app_admin_logout') }}">
+                <i class="fa fa-sign-out"></i>
+                <span>logout</span>
+            </a>
+        </li>
+    </ul>
+{% endblock %}

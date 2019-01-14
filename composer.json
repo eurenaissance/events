@@ -10,6 +10,7 @@
         "enqueue/enqueue-bundle": "^0.9.3",
         "enqueue/fs": "^0.9.2",
         "predis/predis": "^1.1",
+        "ramsey/uuid-doctrine": "^1.5",
         "scheb/two-factor-bundle": "^3.16",
         "sensio/framework-extra-bundle": "^5.2",
         "snc/redis-bundle": "^2.1",
