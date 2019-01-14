@@ -60,7 +60,10 @@ init-phpunit-bridge: ## Run phpunit check version to bootstrap it
 ##
 ## Database
 ##---------------------------------------------------------------------------
-.PHONY: db-schema-drop db-schema-create db-migrate db-diff db-fixtures db-init
+.PHONY: wait-for-db db-schema-drop db-schema-create db-migrate db-diff db-fixtures db-init
+wait-for-db:
+	$(EXEC) php -r "set_time_limit(60);for(;;){if(@fsockopen('db',5432)){break;}echo \"Waiting for MySQL\n\";sleep(1);}"
+
 db-schema-drop: ## Drop the database schema
 	$(CONSOLE) doctrine:schema:drop --force -n
 	$(CONSOLE) doctrine:migrations:version --all --delete -n
@@ -77,7 +80,7 @@ db-diff: ## Create a doctrine migration diff
 db-fixtures: ## Load fixtures
 	$(CONSOLE) doctrine:fixtures:load -n
 
-db-init: db-schema-drop db-migrate db-fixtures ## Init the database with fixtures
+db-init: wait-for-db db-schema-drop db-migrate db-fixtures ## Init the database with fixtures
 
 ##
 ## Tests
@@ -93,7 +96,7 @@ tu: install                                                 ## Run the PHP Unit 
 tf: tfp init-phpunit-bridge                                 ## Run the PHP Functional tests
 	$(EXEC) bin/phpunit --group functional $(PHPUNIT_ARGS)
 
-tfp: install                                                ## Prepare the PHP functional tests
+tfp: install wait-for-db                                    ## Prepare the PHP functional tests
 	$(CONSOLE) doctrine:schema:drop --force -n --env=test
 	$(CONSOLE) doctrine:migrations:version --all --delete -n --env=test
 	$(CONSOLE) doctrine:migrations:migrate -n --env=test

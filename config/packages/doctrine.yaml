@@ -14,7 +14,7 @@ doctrine:
         user:           '%env(DATABASE_USER)%'
         password:       '%env(DATABASE_PASSWORD)%'
         driver:         pdo_pgsql
-        server_version: 9.6
+        server_version: '11.1'
         schema_filter:  ~^(?!(public))~
 
     orm:

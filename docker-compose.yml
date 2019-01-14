@@ -1,5 +1,8 @@
 version: '3.4'
 
+volumes:
+  mobilisation-data: {}
+
 services:
   app:
     build:
@@ -13,11 +16,13 @@ services:
       - rabbitmq
 
   db:
-    build:
-      context: docker/db
+    image: postgres:11
     environment:
-      - POSTGRES_USER=mobilisation_eu
-      - POSTGRES_PASSWORD=mobilisation_eu
+      POSTGRES_DB: mobilisation_eu
+      POSTGRES_USER: mobilisation_eu
+      POSTGRES_PASSWORD: mobilisation_eu
+    volumes:
+      - mobilisation-data:/var/lib/postgresql/data:rw
 
   redis:
     image: redis:4-alpine
