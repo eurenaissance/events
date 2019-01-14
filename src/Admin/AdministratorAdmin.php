@@ -41,11 +41,11 @@ class AdministratorAdmin extends AbstractAdmin
     }
 
     /**
-     * @param Administrator $admin
+     * @param Administrator $administrator
      */
-    public function prePersist($admin)
+    public function prePersist($administrator)
     {
-        $admin->setGoogleAuthenticatorSecret($this->googleAuthenticator->generateSecret());
+        $administrator->setGoogleAuthenticatorSecret($this->googleAuthenticator->generateSecret());
     }
 
     protected function configureFormFields(FormMapper $formMapper)
@@ -97,19 +97,17 @@ class AdministratorAdmin extends AbstractAdmin
         $datagridMapper
             ->add('emailAddress', null, [
                 'label' => 'administrator.email_address',
+                'show_filter' => true,
             ])
-            ->add(
-                'roles',
-                ChoiceFilter::class,
-                [
-                    'label' => 'administrator.roles',
-                ],
-                ChoiceType::class,
-                [
-                    'choices' => self::ROLES,
+            ->add('roles', ChoiceFilter::class, [
+                'label' => 'administrator.roles',
+                'show_filter' => true,
+                'field_type' => ChoiceType::class,
+                'field_options' => [
                     'multiple' => true,
-                ]
-            )
+                    'choices' => self::ROLES,
+                ],
+            ])
         ;
     }
 

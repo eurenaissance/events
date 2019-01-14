@@ -115,7 +115,7 @@ class Administrator implements UserInterface, TwoFactorInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getEmailAddress()
     {
@@ -123,7 +123,7 @@ class Administrator implements UserInterface, TwoFactorInterface
     }
 
     /**
-     * @param null|string $emailAddress
+     * @param string|null $emailAddress
      */
     public function setEmailAddress($emailAddress)
     {

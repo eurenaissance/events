@@ -88,7 +88,7 @@ db-init: wait-for-db db-schema-drop db-migrate db-fixtures ## Init the database 
 
 .PHONY: test tu tf tfp phpcs phpcsfix behat init-phpunit-bridge tfp-rabbitmq security-check
 
-test: tu tf phpcs                                           ## Run the PHP tests
+test: tu tf phpcs security-check                            ## Run the PHP tests
 
 tu: install                                                 ## Run the PHP Unit tests
 	$(EXEC) bin/phpunit --exclude-group functional $(PHPUNIT_ARGS)
