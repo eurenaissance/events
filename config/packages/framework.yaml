@@ -1,17 +1,13 @@
 framework:
     secret: '%env(APP_SECRET)%'
-    #default_locale: en
-    #csrf_protection: true
-    #http_method_override: true
-
-    # Enables session support. Note that the session will ONLY be started if you read or write from it.
-    # Remove or comment this section to explicitly disable session support.
+    csrf_protection: true
     session:
-        handler_id: ~
+        handler_id: snc_redis.session.handler
         cookie_secure: auto
         cookie_samesite: lax
-
-    #esi: true
-    #fragments: true
+        name: '_mobilisation_user'
     php_errors:
         log: true
+    cache:
+        app: cache.adapter.redis
+        default_redis_provider: '%env(REDIS_URL)%'

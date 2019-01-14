@@ -9,6 +9,7 @@ services:
       - ./:/app
     depends_on:
       - db
+      - redis
       - rabbitmq
 
   db:
@@ -17,6 +18,9 @@ services:
     environment:
       - POSTGRES_USER=mobilisation_eu
       - POSTGRES_PASSWORD=mobilisation_eu
+
+  redis:
+    image: redis:4-alpine
 
   rabbitmq:
     image: rabbitmq:3-management
