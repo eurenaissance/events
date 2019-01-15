@@ -1,76 +1,54 @@
 {% extends 'admin/security/base.html.twig' %}
 
-{% block sonata_wrapper %}
+{% block title %}Administration login{% endblock %}
 
-    <div class="login-box">
-        {% block login_box_header %}
-            <div class="login-logo">
-                <a href="{{ path('sonata_admin_dashboard') }}">
-                    {% if sonata_admin.adminPool.getOption('title_mode') in ['single_image', 'both'] %}
-                        <div>
-                            <img style="width:64px;" src="{{ asset(sonata_admin.adminPool.titlelogo) }}" alt="{{ sonata_admin.adminPool.title }}">
-                        </div>
-                    {% endif %}
-                    {% if sonata_admin.adminPool.getOption('title_mode') in ['single_text', 'both'] %}
-                        <span>{{ sonata_admin.adminPool.title }}</span>
-                    {% endif %}
-                </a>
-            </div>
-        {% endblock %}
-        <div class="login-box-body">
-            {% block sonata_user_login_form %}
-                {% block sonata_user_login_error %}
-                    {% if error %}
-                        <div class="alert alert-danger alert-error">
-                            {{ error.messageKey|trans(error.messageData, 'security') }}
-                        </div>
-                    {% endif %}
-                {% endblock %}
-                <p class="login-box-msg">{{ 'title_user_authentication'|trans }}</p>
-
-                <form action="{{ path("app_admin_login") }}" method="post" role="form">
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-                    <div class="form-group has-feedback">
-                        <input class="form-control"
-                               id="emailAddress"
-                               name="emailAddress"
-                               placeholder="{{ 'security.login.username'|trans }}"
-                               required="required"
-                               type="text"
-                               value="{{ last_username }}"/>
-                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <input class="form-control"
-                               id="password"
-                               name="password"
-                               placeholder="{{ 'security.login.password'|trans }}"
-                               required="required"
-                               type="password"/>
-                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-xs-8">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
-                                    {{ 'security.login.remember_me'|trans }}
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-xs-4">
-                            <button type="submit" class="btn btn-primary btn-block btn-flat">{{ 'sign_in'|trans }}</button>
-                        </div>
-                    </div>
-                </form>
-
-                <a href="">{{ 'forgotten_password'|trans }}</a>
-
-            {% endblock %}
+{% block login_wrapper %}
+    {% if error %}
+        <div class="alert alert-danger alert-error">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
         </div>
-    </div>
+    {% endif %}
 
-{% endblock sonata_wrapper %}
+    <p class="login-box-msg">Enter your credentials</p>
+
+    <form action="{{ path("app_admin_login") }}" method="post" role="form">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <div class="form-group has-feedback">
+            <input class="form-control"
+                   id="emailAddress"
+                   name="emailAddress"
+                   placeholder="Email address"
+                   required="required"
+                   type="text"
+                   value="{{ last_username }}"/>
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        </div>
+
+        <div class="form-group has-feedback">
+            <input class="form-control"
+                   id="password"
+                   name="password"
+                   placeholder="Password"
+                   required="required"
+                   type="password"/>
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
+                        Remember me
+                    </label>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <button type="submit" class="btn btn-primary btn-block btn-flat">
+                    Sign in
+                </button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

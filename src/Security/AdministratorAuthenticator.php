@@ -28,8 +28,12 @@ class AdministratorAuthenticator extends AbstractFormLoginAuthenticator
     private $csrfTokenManager;
     private $passwordEncoder;
 
-    public function __construct(EntityManagerInterface $entityManager, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        RouterInterface $router,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        UserPasswordEncoderInterface $passwordEncoder
+    ) {
         $this->entityManager = $entityManager;
         $this->router = $router;
         $this->csrfTokenManager = $csrfTokenManager;
@@ -65,7 +69,11 @@ class AdministratorAuthenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(Administrator::class)->findOneBy(['emailAddress' => $credentials['emailAddress']]);
+        $user = $this
+            ->entityManager
+            ->getRepository(Administrator::class)
+            ->findOneBy(['emailAddress' => $credentials['emailAddress']])
+        ;
 
         if (!$user) {
             // fail authentication with a custom error

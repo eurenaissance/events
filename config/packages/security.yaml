@@ -2,6 +2,9 @@ security:
     hide_user_not_found: false
     erase_credentials: false
 
+    access_decision_manager:
+        strategy: unanimous
+
     encoders:
         App\Entity\Actor: bcrypt
         App\Entity\Administrator: bcrypt
@@ -9,8 +12,16 @@ security:
     role_hierarchy:
         ROLE_ADMIN_DASHBOARD: ~
 
+        ROLE_ADMIN_ACTORS:
+            - ROLE_ALLOWED_TO_SWITCH
+            - ROLE_APP_ADMIN_ACTOR_EXPORT
+            - ROLE_APP_ADMIN_ACTOR_LIST
+            - ROLE_APP_ADMIN_ACTOR_VIEW
+            - ROLE_APP_ADMIN_ACTOR_EDIT
+
         ROLE_SUPER_ADMIN:
             - ROLE_ADMIN_DASHBOARD
+            - ROLE_ADMIN_ACTORS
 
     providers:
         app_actor_provider:
@@ -48,8 +59,7 @@ security:
             context: main_context
             anonymous: true
             provider: app_actor_provider
-            switch_user:
-                provider: app_actor_provider
+            switch_user: true
             guard:
                 authenticators:
                     - App\Security\AppActorAuthenticator

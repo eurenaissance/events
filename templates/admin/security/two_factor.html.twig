@@ -1,61 +1,40 @@
 {% extends 'admin/security/base.html.twig' %}
 
-{% block title %}2fa form{% endblock %}
+{% block title %}Authentication code{% endblock %}
 
-{% block sonata_wrapper %}
+{% block login_wrapper %}
+    {% if authenticationError %}
+        <div class="alert alert-danger alert-error">
+            {{ authenticationError|trans(authenticationErrorData) }}
+        </div>
+    {% endif %}
 
+    <p class="login-box-msg">Authentication code</p>
 
-    <div class="login-box">
-        {% block login_box_header %}
-            <div class="login-logo">
-                <a href="{{ path('sonata_admin_dashboard') }}">
-                    {% if sonata_admin.adminPool.getOption('title_mode') in ['single_image', 'both'] %}
-                        <div>
-                            <img style="width:64px;" src="{{ asset(sonata_admin.adminPool.titlelogo) }}" alt="{{ sonata_admin.adminPool.title }}">
-                        </div>
-                    {% endif %}
-                    {% if sonata_admin.adminPool.getOption('title_mode') in ['single_text', 'both'] %}
-                        <span>{{ sonata_admin.adminPool.title }}</span>
-                    {% endif %}
+    <form action="{{ path("admin_security_2fa_check") }}" method="post" role="form">
+        <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">
+
+        <div class="form-group has-feedback">
+            <input class="form-control"
+                   id="_auth_code"
+                   name="{{ authCodeParameterName }}"
+                   placeholder="Authentication code"
+                   type="text"
+                   autocomplete="off"/>
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-4">
+                <a href="{{ path("app_admin_logout") }}" class="btn btn-default btn-block btn-flat">
+                    Cancel
                 </a>
             </div>
-        {% endblock %}
-        <div class="login-box-body">
-            {% block sonata_user_login_form %}
-                {% block sonata_user_login_error %}
-                    {% if authenticationError %}
-                        <div class="alert alert-danger alert-error">
-                            {{ authenticationError|trans(authenticationErrorData) }}
-                        </div>
-                    {% endif %}
-                {% endblock %}
-                <p class="login-box-msg">{{ 'title_user_2fa'|trans }}</p>
-
-                <form action="{{ path("admin_security_2fa_check") }}" method="post" role="form">
-                    <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">
-
-                    <div class="form-group has-feedback">
-                        <input class="form-control"
-                               id="_auth_code"
-                               name="{{ authCodeParameterName }}"
-                               placeholder="{{ 'security.login.auth_code'|trans }}"
-                               type="text"
-                               autocomplete="off"/>
-                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-xs-8"></div>
-                        <div class="col-xs-4">
-                            <button type="submit" class="btn btn-primary btn-block btn-flat">{{ 'security.login.submit'|trans }}</button>
-                        </div>
-                    </div>
-                </form>
-
-                <a href="{{ path("app_admin_logout") }}">{{ 'cancel'|trans }}</a>
-
-            {% endblock %}
+            <div class="col-xs-8">
+                <button type="submit" class="btn btn-primary btn-block btn-flat">
+                    Continue
+                </button>
+            </div>
         </div>
-    </div>
-
+    </form>
 {% endblock %}

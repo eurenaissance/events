@@ -38,7 +38,7 @@ class ActorFixtures extends Fixture
             'emailAddress' => 'titouan@mobilisation.eu',
             'firstName' => 'Titouan',
             'lastName' => 'Galopin',
-            'birthday' => '2001-01-13',
+            'birthday' => '1994-12-01',
         ]);
 
         $manager->persist($actor1);

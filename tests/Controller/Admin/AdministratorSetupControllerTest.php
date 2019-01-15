@@ -27,7 +27,7 @@ class AdministratorSetupControllerTest extends WebTestCase
         $crawler = $client->followRedirect();
         self::assertTrue($client->getResponse()->isSuccessful());
 
-        $client->submit($crawler->selectButton('save')->form([
+        $client->submit($crawler->selectButton('Save')->form([
             'emailAddress' => 'first_admin@mobilisation-eu.code',
             'password' => [
                 'first' => AdministratorFixtures::DEFAULT_PASSWORD,
@@ -40,7 +40,7 @@ class AdministratorSetupControllerTest extends WebTestCase
         self::assertTrue($client->getResponse()->isSuccessful());
         self::assertEquals(1, $administratorRepository->countAdministrators());
 
-        $client->submit($crawler->selectButton('sign_in')->form([
+        $client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => 'first_admin@mobilisation-eu.code',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
         ]));
@@ -48,7 +48,7 @@ class AdministratorSetupControllerTest extends WebTestCase
 
         $crawler = $client->followRedirect();
         self::assertTrue($client->getResponse()->isSuccessful());
-        self::assertGreaterThan(0, $crawler->filter('a:contains("administrators")')->count());
+        self::assertGreaterThan(0, $crawler->filter('a:contains("Administrators")')->count());
     }
 
     public function testSetupIsDisabled(): void

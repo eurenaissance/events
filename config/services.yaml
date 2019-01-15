@@ -29,7 +29,12 @@ services:
         class: App\Admin\AdministratorAdmin
         arguments: [~, App\Entity\Administrator, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: 'system', label: 'administrators' }
+            - { name: sonata.admin, manager_type: orm, group: 'System', label: 'Administrators' }
+    admin.actor:
+        class: App\Admin\ActorAdmin
+        arguments: [~, App\Entity\Actor, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: 'Mobilisation', label: 'Actors' }
 
     App\EventListener\AdministratorSetupListener:
         tags:

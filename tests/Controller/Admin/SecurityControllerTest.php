@@ -17,7 +17,7 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/admin/login');
         self::assertTrue($client->getResponse()->isSuccessful());
 
-        $client->submit($crawler->selectButton('sign_in')->form([
+        $client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => 'superadmin@mobilisation-eu.code',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
         ]));
@@ -34,7 +34,7 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/admin/login');
         self::assertTrue($client->getResponse()->isSuccessful());
 
-        $client->submit($crawler->selectButton('sign_in')->form([
+        $client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => 'admin@mobilisation-eu.code',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
         ]));
@@ -46,7 +46,7 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $client->followRedirect();
         self::assertTrue($client->getResponse()->isSuccessful());
 
-        $client->click($crawler->selectLink('cancel')->link());
+        $client->click($crawler->selectLink('Cancel')->link());
         self::assertTrue($client->getResponse()->isRedirect($client->getRequest()->getSchemeAndHttpHost().'/admin/login'));
 
         $client->followRedirect();

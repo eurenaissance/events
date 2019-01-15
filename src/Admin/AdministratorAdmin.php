@@ -23,8 +23,9 @@ class AdministratorAdmin extends AbstractAdmin
     private $googleAuthenticator;
 
     private const ROLES = [
-        'role.super_administrator' => 'ROLE_SUPER_ADMIN',
-        'role.admin_dashboard' => 'ROLE_ADMIN_DASHBOARD',
+        'Super administrator' => 'ROLE_SUPER_ADMIN',
+        'Dashboard administrator' => 'ROLE_ADMIN_DASHBOARD',
+        'Actors administrator' => 'ROLE_ADMIN_ACTORS',
     ];
 
     public function __construct(
@@ -52,10 +53,10 @@ class AdministratorAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('emailAddress', EmailType::class, [
-                'label' => 'administrator.email_address',
+                'label' => 'Email address',
             ])
             ->add('roles', ChoiceType::class, [
-                'label' => 'administrator.roles',
+                'label' => 'Roles',
                 'expanded' => true,
                 'multiple' => true,
                 'choices' => self::ROLES,
@@ -63,14 +64,14 @@ class AdministratorAdmin extends AbstractAdmin
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'required' => $this->isCurrentRoute('create'),
-                'first_options' => ['label' => 'administrator.password'],
-                'second_options' => ['label' => 'administrator.password_confirmation'],
+                'first_options' => ['label' => 'Password'],
+                'second_options' => ['label' => 'Confirmation'],
             ])
         ;
 
         if (!$this->isCurrentRoute('create')) {
             $formMapper->add('googleAuthenticatorSecret', TextType::class, [
-                'label' => 'administrator.google_authenticator_secret',
+                'label' => 'Google Authenticator key',
                 'required' => false,
             ]);
         }
@@ -97,11 +98,11 @@ class AdministratorAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('emailAddress', null, [
-                'label' => 'administrator.email_address',
+                'label' => 'Email address',
                 'show_filter' => true,
             ])
             ->add('roles', ChoiceFilter::class, [
-                'label' => 'administrator.roles',
+                'label' => 'Roles',
                 'show_filter' => true,
                 'field_type' => ChoiceType::class,
                 'field_options' => [
@@ -116,7 +117,7 @@ class AdministratorAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('emailAddress', null, [
-                'label' => 'administrator.email_address',
+                'label' => 'Email address',
             ])
             ->add('_action', null, [
                 'virtual_field' => true,
