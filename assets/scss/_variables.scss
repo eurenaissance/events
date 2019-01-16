@@ -1,0 +1,15 @@
+@import '~bootswatch/dist/cosmo/variables';
+
+$font-roboto: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-roboto-slab: 'Roboto Slab', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-family-sans-serif: $font-roboto;
+
+$font-weight-semibold: 600;
+
+$primary: #3145cd;
+
+$body-color: #333;
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';

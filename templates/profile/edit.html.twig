@@ -2,16 +2,17 @@
 
 {% block title %}registration form{% endblock %}
 
-{% block body %}
-    {{ form_start(form) }}
-        {{ form_row(form.firstName) }}
-        {{ form_row(form.lastName) }}
-        {{ form_row(form.birthday) }}
-        {{ form_row(form.gender) }}
-        {{ form_row(form.emailAddress) }}
+{% block content %}
+    <div class="container">
+        {{ form_start(form) }}
+            {{ form_row(form.firstName) }}
+            {{ form_row(form.lastName) }}
+            {{ form_row(form.birthday) }}
+            {{ form_row(form.gender) }}
+            {{ form_row(form.emailAddress) }}
+            <button type="submit">Save</button>
+        {{ form_end(form) }}
 
-        <button type="submit">Save</button>
-    {{ form_end(form) }}
-
-    <a href="{{ path('app_profile_password') }}">Change password</a>
+        <a href="{{ path('app_profile_password') }}">Change password</a>
+    </div>
 {% endblock %}

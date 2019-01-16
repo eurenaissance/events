@@ -1,0 +1,18 @@
+@import '../variables';
+
+.header {
+    padding: 20px 0;
+
+    svg {
+        fill: $body-color;
+    }
+
+    .btn-link {
+        color: $body-color;
+    }
+
+    .btn-primary {
+        text-transform: uppercase;
+        font-weight: 300;
+    }
+}

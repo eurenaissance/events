@@ -1,0 +1,50 @@
+@import '../variables';
+
+.home {
+    &__slogan {
+        background: $primary;
+        color: #fff;
+
+        &__inner {
+            padding: 70px 15px;
+        }
+
+        h1, h2 {
+            text-transform: uppercase;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 56px;
+            font-weight: bold;
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: normal;
+        }
+    }
+
+    &__map {
+        text-align: center;
+        padding: 60px 0 0 0;
+
+        h2 {
+            font-size: 26px;
+            margin: 0 0 10px 0;
+            padding: 0;
+        }
+
+        h3 {
+            font-size: 18px;
+            margin: 0 0 30px 0;
+            padding: 0;
+            font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        #map {
+            height: 500px;
+        }
+    }
+}

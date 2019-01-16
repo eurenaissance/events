@@ -4,62 +4,74 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8">
 
-        {% block flash_message %}
-            {% for message in app.flashes('info') %}
-                <div class="flash notice-flashes">
-                    <div class="flash__inner">{{ message|trans }}</div>
+    <title>{% block title %}{% block page_title 'Les événements' %} | Renaissance{% endblock %}</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700|Roboto:300,400&amp;subset=cyrillic,greek" rel="stylesheet">
+    {{ encore_entry_link_tags('lib') }}
+    {{ encore_entry_link_tags('app') }}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    {% block stylesheets '' %}
+</head>
+<body>
+    {% block flash_message %}
+        {% for message in app.flashes('info') %}
+            <div class="flash notice-flashes">
+                <div class="flash__inner">{{ message|trans }}</div>
+            </div>
+        {% endfor %}
+    {% endblock %}
+
+    <header class="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <a href="{{ path('app_homepage') }}">
+                        {{ include('_components/logo.html.twig') }}
+                    </a>
                 </div>
-            {% endfor %}
-        {% endblock %}
+                <div class="col-md-auto ml-auto text-right">
+                    {% if not app.user %}
+                        <a href="{{ path('app_login') }}" class="btn btn-link mr-2">
+                            Se connecter
+                        </a>
+                        <a href="{{ path('app_registration_form') }}" class="btn btn-link mr-2">
+                            Devenir acteur
+                        </a>
+                    {% else %}
+                        <a href="{{ path('app_profile') }}" class="btn btn-link mr-2">
+                            {{ app.user.fullName }}
+                        </a>
 
-        {% if is_granted('ROLE_ADMIN_DASHBOARD') %}
-            <a href="{{ path('sonata_admin_dashboard') }}">
-                admin
-            </a>
-        {% else %}
-
-            {% if app.user %}
-                Hello {{ app.user.fullName }}!
-                ({{ app.user.emailAddress }})
-            {% endif %}
-            <ul>
-                {% if app.user %}
-                    <li>
-                        <a href="{{ path('app_profile_edit') }}">profile</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('app_logout') }}">logout</a>
-                    </li>
-                    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                        <li class="text--small">
-                            <a href="{{ path('app_admin_impersonation_exit') }}">
-                                quit impersonation
+                        {% if is_granted('ROLE_ADMIN_DASHBOARD') %}
+                            <a href="{{ path('sonata_admin_dashboard') }}" class="btn btn-link mr-2">
+                                Admin
                             </a>
-                        </li>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                            <a href="{{ path('app_admin_impersonation_exit') }}" class="btn btn-link mr-2">
+                                Quitter l'impersonification
+                            </a>
+                        {% else %}
+                            <a href="{{ path('app_logout') }}" class="btn btn-link mr-2">
+                                Déconnexion
+                            </a>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
 
-                {% if not app.user %}
-                    <li>
-                        <a href="{{ path('app_login') }}">login</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('app_registration_form') }}">register</a>
-                    </li>
-                {% endif %}
-            </ul>
+                    <a href="" class="btn btn-primary cta-find">
+                        Trouver un événement
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
 
-        {% endif %}
-        <hr>
+    {% block content '' %}
 
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+    {% block javascripts %}{% endblock %}
+</body>
 </html>

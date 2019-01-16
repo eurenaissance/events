@@ -2,15 +2,16 @@
 
 {% block title %}Registration form{% endblock %}
 
-{% block body %}
-    {{ form_start(form) }}
-        {{ form_errors(form) }}
-        {{ form_row(form.firstName) }}
-        {{ form_row(form.lastName) }}
-        {{ form_row(form.birthday) }}
-        {{ form_row(form.emailAddress) }}
-        {{ form_row(form.password) }}
-
-        <button type="submit">Register</button>
-    {{ form_end(form) }}
+{% block content %}
+    <div class="container">
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.firstName) }}
+            {{ form_row(form.lastName) }}
+            {{ form_row(form.birthday) }}
+            {{ form_row(form.emailAddress) }}
+            {{ form_row(form.password) }}
+            <button type="submit">Register</button>
+        {{ form_end(form) }}
+    </div>
 {% endblock %}

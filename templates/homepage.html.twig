@@ -1,7 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Homepage{% endblock %}
+{% block stylesheets %}
+    <link href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" rel="stylesheet">
+{% endblock %}
 
-{% block body %}
-    Homepage
+{% block javascripts %}
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([47.081012, 2.398782], 4.5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="home">
+        <div class="home__slogan">
+            <div class="container">
+                <div class="home__slogan__inner">
+                    <h2>
+                        N'attendez pas une meilleure Europe.
+                    </h2>
+                    <h1>
+                        Changez-la !
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="home__map">
+            <div class="container">
+                <h2>
+                    Concevez l'Europe de demain
+                </h2>
+                <h3>
+                    Des centaines d’événements gratuits chaque semaine pour comprendre, débattre et agir.
+                </h3>
+
+                <div id="map"></div>
+            </div>
+        </div>
+
+        <div style="height: 200px"></div>
+    </div>
 {% endblock %}
