@@ -1,30 +1,30 @@
 version: '3.4'
 
 volumes:
-  mobilisation-data: {}
+    mobilisation-data: {}
 
 services:
-  app:
-    build:
-      context: docker/app/dev
-    volumes:
-      - ./:/app
-    depends_on:
-      - db
-      - redis
-      - rabbitmq
+    app:
+        build:
+            context: docker/app/dev
+        volumes:
+            - ./:/app
+        depends_on:
+            - db
+            - redis
+            - rabbitmq
 
-  db:
-    image: postgres:11
-    environment:
-      POSTGRES_DB: mobilisation_eu
-      POSTGRES_USER: mobilisation_eu
-      POSTGRES_PASSWORD: mobilisation_eu
-    volumes:
-      - mobilisation-data:/var/lib/postgresql/data:rw
+    db:
+        image: postgres:11
+        environment:
+            POSTGRES_DB: mobilisation_eu
+            POSTGRES_USER: mobilisation_eu
+            POSTGRES_PASSWORD: mobilisation_eu
+        volumes:
+            - mobilisation-data:/var/lib/postgresql/data:rw
 
-  redis:
-    image: redis:4-alpine
+    redis:
+        image: redis:4-alpine
 
-  rabbitmq:
-    image: rabbitmq:3-management
+    rabbitmq:
+        image: rabbitmq:3-management
