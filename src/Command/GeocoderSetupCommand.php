@@ -18,20 +18,29 @@ class GeocoderSetupCommand extends Command
     protected static $defaultName = 'app:geocoder:setup';
 
     private $manager;
+    private $appCountry;
+
     private $imported = 0;
 
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(EntityManagerInterface $manager, string $appCountry)
     {
         parent::__construct();
 
         $this->manager = $manager;
+        $this->appCountry = $appCountry;
     }
 
     protected function configure()
     {
         $this
             ->setDescription('Prepare the Geocoder database for usage.')
-            ->addOption('country', 'c', InputOption::VALUE_REQUIRED, 'Limit the import to a given country.')
+            ->addOption(
+                'all',
+                null,
+                InputOption::VALUE_NONE,
+                'By default, this command only import data for the current instance country. '.
+                'Use this option to import all the countries.'
+            )
         ;
     }
 
@@ -42,8 +51,9 @@ class GeocoderSetupCommand extends Command
         $finder->sortByName();
         $finder->directories();
 
-        if ($input->getOption('country')) {
-            $finder->name($input->getOption('country'));
+        if (!$input->getOption('all')) {
+            $output->writeln('└ Limiting the import to '.$this->appCountry);
+            $finder->name($this->appCountry);
         }
 
         foreach ($finder as $file) {

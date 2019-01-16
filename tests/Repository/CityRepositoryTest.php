@@ -6,6 +6,9 @@ use App\Entity\City;
 use App\Repository\CityRepository;
 use App\Tests\RepositoryTestCase;
 
+/**
+ * @group functional
+ */
 class CityRepositoryTest extends RepositoryTestCase
 {
     public function provideZipCodes()
