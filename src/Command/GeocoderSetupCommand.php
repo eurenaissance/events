@@ -30,7 +30,7 @@ class GeocoderSetupCommand extends Command
         $this->appCountry = $appCountry;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Prepare the Geocoder database for usage.')
@@ -44,7 +44,7 @@ class GeocoderSetupCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $finder = new Finder();
         $finder->in(__DIR__.'/../Geocoder/data');
@@ -85,7 +85,7 @@ class GeocoderSetupCommand extends Command
         $output->writeln("\n".$this->imported.' postal codes imported.');
     }
 
-    private function importFile(SplFileInfo $file, OutputInterface $output)
+    private function importFile(SplFileInfo $file, OutputInterface $output): void
     {
         $csv = Reader::createFromPath($file->getPathname());
         $csv->setDelimiter("\t");
@@ -93,15 +93,13 @@ class GeocoderSetupCommand extends Command
         $progress = new ProgressBar($output, $csv->count());
 
         foreach ($csv->getRecords() as $record) {
-            $city = new City(
+            $this->manager->persist(new City(
                 $file->getBasename('.'.$file->getExtension()),
                 $record[2],
                 $record[1],
                 $record[9],
                 $record[10]
-            );
-
-            $this->manager->persist($city);
+            ));
 
             ++$this->imported;
 

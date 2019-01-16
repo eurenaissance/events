@@ -11,7 +11,7 @@ use App\Tests\RepositoryTestCase;
  */
 class CityRepositoryTest extends RepositoryTestCase
 {
-    public function provideZipCodes()
+    public function provideZipCodes(): iterable
     {
         yield [
             'country' => 'FR',
@@ -67,7 +67,7 @@ class CityRepositoryTest extends RepositoryTestCase
     /**
      * @dataProvider provideZipCodes
      */
-    public function testFindByZipCode($country, $zipCode, $expected)
+    public function testFindByZipCode($country, $zipCode, $expected): void
     {
         /** @var CityRepository $repository */
         $repository = $this->manager->getRepository(City::class);

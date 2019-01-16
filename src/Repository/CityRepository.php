@@ -26,7 +26,7 @@ class CityRepository extends ServiceEntityRepository
      *
      * @return City[]
      */
-    public function findByZipCode(string $country, string $zipCode)
+    public function findByZipCode(string $country, string $zipCode): iterable
     {
         $zipCode = strtoupper(preg_replace('/\s+/', '', $zipCode));
 

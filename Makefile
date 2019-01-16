@@ -49,7 +49,7 @@ var/private.key:  ## Generate the private key
 ##---------------------------------------------------------------------------
 .PHONY: install init-phpunit-bridge
 install: composer.lock ## Install project dependencies
-	$(EXEC) composer install --no-ainsi
+	$(EXEC) composer install --no-ansi
 
 composer.lock: composer.json
 	echo compose.lock is not up to date.
