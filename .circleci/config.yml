@@ -1,65 +1,58 @@
 version: 2
 
 references:
-  working_directory: &working_directory
-    working_directory: ~/app
+    working_directory: &working_directory
+        working_directory: ~/app
 
-  attach_workspace: &attach_workspace
-    attach_workspace:
-      at: ~/app
+    attach_workspace: &attach_workspace
+        attach_workspace:
+            at: ~/app
 
-  configure_base: &configure_base
-    environment:
-      - DOCKER_COMPOSE: "docker-compose -f docker-compose.yml"
-    machine:
-      enabled: true
-      image: circleci/classic:201711-01
+    configure_base: &configure_base
+        environment:
+            - DOCKER_COMPOSE: "docker-compose -f docker-compose.yml"
+        machine:
+            enabled: true
+            image: circleci/classic:201711-01
 
 jobs:
-  build:
-    <<: *working_directory
-    <<: *configure_base
-    steps:
-      - checkout
+    build:
+        <<: *working_directory
+        <<: *configure_base
+        steps:
+            - checkout
+            - restore_cache:
+                  key: composer-{{ checksum "composer.lock" }}
+            - save_cache:
+                  paths:
+                      - ./vendor
+                      - ./bin/.phpunit
+                  key: composer-{{ checksum "composer.lock" }}
+            - persist_to_workspace:
+                  root: ./
+                  paths:
+                      - ./
 
-      - restore_cache:
-          key: composer-{{ checksum "composer.lock" }}
-
-      - save_cache:
-          paths:
-            - ./vendor
-            - ./bin/.phpunit
-          key: composer-{{ checksum "composer.lock" }}
-
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - ./
-
-  tests:
-    <<: *working_directory
-    <<: *configure_base
-    steps:
-      - *attach_workspace
-      - run:
-          name: "Execute all tests"
-          command: |
-            set -x
-
-            export PHPUNIT_ARGS="-v --log-junit ./phpunit/junit.xml"
-
-            make up
-            make test
-
-      - store_test_results:
-          path: ./phpunit
+    tests:
+        <<: *working_directory
+        <<: *configure_base
+        steps:
+            - *attach_workspace
+            - run:
+                  name: "Execute all tests"
+                  command: |
+                      set -x
+                      export PHPUNIT_ARGS="-v --log-junit ./phpunit/junit.xml"
+                      make up
+                      make test
+            - store_test_results:
+                  path: ./phpunit
 
 workflows:
-  version: 2
-  build_test:
-    jobs:
-      - build
-
-      - tests:
-          requires:
+    version: 2
+    build_test:
+        jobs:
             - build
+            - tests:
+                  requires:
+                      - build
