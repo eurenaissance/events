@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\City;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -19,13 +20,22 @@ class CityRepository extends ServiceEntityRepository
         parent::__construct($registry, City::class);
     }
 
+    /**
+     * @param string $country
+     * @param string $zipCode
+     *
+     * @return City[]
+     */
     public function findByZipCode(string $country, string $zipCode)
     {
+        $zipCode = strtoupper(preg_replace('/\s+/', '', $zipCode));
+
         return $this->createQueryBuilder('c')
             ->where('c.country = :country')
             ->setParameter('country', $country)
-            ->andWhere(':zipCode LIKE CONCAT(c.zipCode, \'%\')')
+            ->andWhere(':zipCode LIKE UPPER(CONCAT(c.zipCode, \'%\'))')
             ->setParameter('zipCode', $zipCode)
+            ->orderBy('c.name', 'ASC')
             ->getQuery()
             ->getResult()
         ;

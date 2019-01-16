@@ -15,8 +15,9 @@ abstract class RepositoryTestCase extends KernelTestCase
     protected function setUp()
     {
         parent::setUp();
+        self::bootKernel();
 
-        $this->manager = self::bootKernel()->getContainer()->get(EntityManagerInterface::class);
+        $this->manager = self::$container->get(EntityManagerInterface::class);
     }
 
     /**
