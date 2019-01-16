@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Util\EntityIdTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;

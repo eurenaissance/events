@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Util\EntityIdTrait;
+use App\Entity\Util\EntityUuidTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
