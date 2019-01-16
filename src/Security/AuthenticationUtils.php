@@ -10,6 +10,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AuthenticationUtils
 {
+    private const ADMIN_PROVIDER_KEY = 'app_administrator_provider';
+    private const ACTOR_PROVIDER_KEY = 'app_actor_provider';
+    private const ADMIN_FIREWALL_NAME = 'admin';
+
     private $tokenStorage;
     private $session;
 
@@ -32,12 +36,12 @@ final class AuthenticationUtils
 
     public function authenticateAdministrator(UserInterface $user): void
     {
-        $this->doAuthenticateUser($user, 'app_administrator_provider');
+        $this->doAuthenticateUser($user, self::ADMIN_PROVIDER_KEY);
     }
 
     public function authenticateActor(UserInterface $user): void
     {
-        $this->doAuthenticateUser($user, 'app_actor_provider');
+        $this->doAuthenticateUser($user, self::ACTOR_PROVIDER_KEY);
     }
 
     private function doAuthenticateUser(UserInterface $user, string $providerKey): void
@@ -45,6 +49,6 @@ final class AuthenticationUtils
         $token = new UsernamePasswordToken($user, '', $providerKey, $user->getRoles());
 
         $this->tokenStorage->setToken($token);
-        $this->session->set('_security_main', serialize($token));
+        $this->session->set(sprintf('_security_%s', self::ADMIN_FIREWALL_NAME), serialize($token));
     }
 }

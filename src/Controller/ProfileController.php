@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
-use App\Form\ProfileType;
+use App\Actor\ChangePasswordHandler;
+use App\Form\Actor\ProfileType;
+use App\Form\Actor\PasswordType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,9 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProfileController extends AbstractController
 {
     /**
-     * @Route(name="app_profile")
+     * @Route(name="app_profile_edit", methods={"GET", "POST"})
      */
-    public function profile(Request $request): Response
+    public function edit(Request $request): Response
     {
         $form = $this->createForm(ProfileType::class, $actor = $this->getUser());
 
@@ -26,10 +28,28 @@ class ProfileController extends AbstractController
             $manager->persist($actor);
             $manager->flush();
 
-            return $this->redirectToRoute('app_profile');
+            return $this->redirectToRoute('app_profile_edit');
         }
 
-        return $this->render('profile/form.html.twig', [
+        return $this->render('profile/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/password", name="app_profile_password", methods={"GET", "POST"})
+     */
+    public function password(Request $request, ChangePasswordHandler $changePasswordHandler): Response
+    {
+        $form = $this->createForm(PasswordType::class, $actor = $this->getUser());
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $changePasswordHandler->change($actor);
+
+            return $this->redirectToRoute('app_profile_edit');
+        }
+
+        return $this->render('profile/password.html.twig', [
             'form' => $form->createView(),
         ]);
     }
