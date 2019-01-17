@@ -6,7 +6,7 @@ volumes:
 services:
     app:
         build:
-            context: docker/app/dev
+            context: docker/app
         volumes:
             - ./:/app
         depends_on:

@@ -1,0 +1,79 @@
+FROM composer:1.7
+FROM php:7.2-fpm-alpine3.7
+
+ENV APCU_VERSION=5.1.9 \
+    XDEBUG_VERSION=2.6.0 \
+    COMPOSER_ALLOW_SUPERUSER=1
+
+RUN apk add --no-cache --virtual .persistent-deps \
+        git \
+        gmp-dev \
+        icu-libs \
+        libpq \
+        make \
+        nano \
+        nginx \
+        postgresql-client \
+        python \
+        py-pip \
+        zlib
+
+RUN set -xe \
+    && apk add --no-cache --virtual .build-deps \
+        $PHPIZE_DEPS \
+        freetype \
+        freetype-dev \
+        icu-dev \
+        jpeg-dev \
+        libpng \
+        libpng-dev \
+        libjpeg \
+        libjpeg-turbo \
+        libjpeg-turbo-dev \
+        postgresql-dev \
+        sqlite-dev \
+        zlib-dev \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/lib/ --with-png-dir=/usr/lib/ --with-jpeg-dir=/usr/lib/ --with-gd \
+    && docker-php-ext-install \
+        bcmath \
+        exif \
+        gd \
+        gmp \
+        intl \
+        pdo_pgsql \
+        pdo_sqlite \
+        zip \
+    && pecl install \
+        apcu-${APCU_VERSION} \
+        xdebug-${XDEBUG_VERSION} \
+    && docker-php-ext-enable --ini-name 20-apcu.ini apcu \
+    && docker-php-ext-enable --ini-name 90-xdebug.ini xdebug \
+    && runDeps="$( \
+        scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
+            | tr ',' '\n' \
+            | sort -u \
+            | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+    )" \
+    && apk add --no-cache --virtual .php-phpexts-rundeps $runDeps \
+    && apk del .build-deps \
+    && pip install supervisor \
+    && mkdir -p /run/nginx/
+
+RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
+    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/alpine/amd64/$version \
+    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
+    && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
+    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini \
+    && mkdir -p /tmp/blackfire \
+    && curl -A "Docker" -L https://blackfire.io/api/v1/releases/client/linux_static/amd64 | tar zxp -C /tmp/blackfire \
+    && mv /tmp/blackfire/blackfire /usr/bin/blackfire \
+    && rm -Rf /tmp/blackfire \
+    && chmod -R 777 /tmp
+
+COPY --from=0 /usr/bin/composer /usr/bin/composer
+COPY php.ini /usr/local/etc/php/php.ini
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY supervisord.conf /usr/local/etc/supervisord.conf
+
+WORKDIR /app
+CMD ["supervisord", "--configuration", "/usr/local/etc/supervisord.conf"]
