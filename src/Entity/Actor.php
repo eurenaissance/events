@@ -16,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * })
  * @ORM\Entity(repositoryClass="App\Repository\ActorRepository")
  *
- * @UniqueEntity(fields={"emailAddress"})
+ * @UniqueEntity(fields={"emailAddress"}, message="common.email_address.unique", groups={"registration"})
  */
 class Actor implements UserInterface
 {
@@ -28,9 +28,9 @@ class Actor implements UserInterface
      *
      * @ORM\Column
      *
-     * @Assert\Email(message="common.email.email", groups={"registration", "profile"})
-     * @Assert\NotBlank(message="common.email.not_blank", groups={"registration", "profile"})
-     * @Assert\Length(max=255, maxMessage="common.email.max_length", groups={"registration", "profile"})
+     * @Assert\Email(message="common.email_address.valid", groups={"registration", "profile"})
+     * @Assert\NotBlank(message="common.email_address.not_blank", groups={"registration", "profile"})
+     * @Assert\Length(max=255, maxMessage="common.email_address.max_length", groups={"registration", "profile"})
      */
     private $emailAddress;
 
@@ -78,6 +78,8 @@ class Actor implements UserInterface
      * @var string|null
      *
      * @ORM\Column
+     *
+     * @Assert\Length(min=6, minMessage="common.password.min_length", groups={"registration", "reset_password"})
      */
     private $password;
 
@@ -199,10 +201,7 @@ class Actor implements UserInterface
         $this->gender = $gender;
     }
 
-    /**
-     * @param string|null $password
-     */
-    public function setPassword($password)
+    public function setPassword(string $password): void
     {
         $this->password = $password;
     }

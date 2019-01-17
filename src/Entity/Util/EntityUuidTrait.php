@@ -19,6 +19,11 @@ trait EntityUuidTrait
         return $this->uuid;
     }
 
+    public function getUuidAsString(): string
+    {
+        return $this->uuid->toString();
+    }
+
     protected static function createUuid(): UuidInterface
     {
         return Uuid::uuid4();

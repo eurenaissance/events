@@ -3,53 +3,82 @@
 namespace Test\App\Controller\Admin;
 
 use App\DataFixtures\AdministratorFixtures;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\HttpTestCase;
 
 /**
  * @group functional
  */
-class SecurityControllerTest extends WebTestCase
+class SecurityControllerTest extends HttpTestCase
 {
-    public function testLogin(): void
+    public function provideBadCredentials(): iterable
     {
-        $client = static::createClient();
+        yield [
+            'email' => 'unknown@mobilisation.eu',
+            'password' => AdministratorFixtures::DEFAULT_PASSWORD,
+        ];
 
-        $crawler = $client->request('GET', '/admin/login');
-        self::assertTrue($client->getResponse()->isSuccessful());
+        yield [
+            'email' => 'superadmin@mobilisation-eu.code',
+            'password' => 'bad_password',
+        ];
+    }
 
-        $client->submit($crawler->selectButton('Sign in')->form([
+    /**
+     * @dataProvider provideBadCredentials
+     */
+    public function testLoginFailure(string $email, string $password): void
+    {
+        $crawler = $this->client->request('GET', '/admin/login');
+        self::assertTrue($this->client->getResponse()->isSuccessful());
+
+        $this->client->submit($crawler->selectButton('Sign in')->form([
+            'emailAddress' => $email,
+            'password' => $password,
+        ]));
+        self::assertTrue($this->client->getResponse()->isRedirect('/admin/login'));
+
+        $crawler = $this->client->followRedirect();
+        self::assertTrue($this->client->getResponse()->isSuccessful());
+        self::assertEquals($email, $crawler->selectButton('Sign in')->form()->get('emailAddress')->getValue());
+    }
+
+    public function testLoginSuccess(): void
+    {
+        $crawler = $this->client->request('GET', '/admin/login');
+        self::assertTrue($this->client->getResponse()->isSuccessful());
+
+        $this->client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => 'superadmin@mobilisation-eu.code',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
         ]));
-        self::assertTrue($client->getResponse()->isRedirect('/admin/dashboard'));
+        self::assertTrue($this->client->getResponse()->isRedirect('/admin/dashboard'));
 
-        $client->followRedirect();
-        self::assertTrue($client->getResponse()->isSuccessful());
+        $crawler = $this->client->followRedirect();
+        self::assertTrue($this->client->getResponse()->isSuccessful());
+        self::assertGreaterThan(0, $crawler->filter('a:contains("Dashboard")')->count());
     }
 
     public function testLoginTwoFactor(): void
     {
-        $client = static::createClient();
+        $crawler = $this->client->request('GET', '/admin/login');
+        self::assertTrue($this->client->getResponse()->isSuccessful());
 
-        $crawler = $client->request('GET', '/admin/login');
-        self::assertTrue($client->getResponse()->isSuccessful());
-
-        $client->submit($crawler->selectButton('Sign in')->form([
+        $this->client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => 'admin@mobilisation-eu.code',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
         ]));
-        self::assertTrue($client->getResponse()->isRedirect('/admin/dashboard'));
+        self::assertTrue($this->client->getResponse()->isRedirect('/admin/dashboard'));
 
-        $client->followRedirect();
-        self::assertTrue($client->getResponse()->isRedirect($client->getRequest()->getSchemeAndHttpHost().'/admin/2fa'));
+        $this->client->followRedirect();
+        self::assertTrue($this->client->getResponse()->isRedirect($this->client->getRequest()->getSchemeAndHttpHost().'/admin/2fa'));
 
-        $crawler = $client->followRedirect();
-        self::assertTrue($client->getResponse()->isSuccessful());
+        $crawler = $this->client->followRedirect();
+        self::assertTrue($this->client->getResponse()->isSuccessful());
 
-        $client->click($crawler->selectLink('Cancel')->link());
-        self::assertTrue($client->getResponse()->isRedirect($client->getRequest()->getSchemeAndHttpHost().'/admin/login'));
+        $this->client->click($crawler->selectLink('Cancel')->link());
+        self::assertTrue($this->client->getResponse()->isRedirect($this->client->getRequest()->getSchemeAndHttpHost().'/admin/login'));
 
-        $client->followRedirect();
-        self::assertTrue($client->getResponse()->isSuccessful());
+        $this->client->followRedirect();
+        self::assertTrue($this->client->getResponse()->isSuccessful());
     }
 }

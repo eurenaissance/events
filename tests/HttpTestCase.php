@@ -2,7 +2,9 @@
 
 namespace App\Tests;
 
+use App\Entity\Actor;
 use App\Entity\Administrator;
+use App\Repository\ActorRepository;
 use App\Repository\AdministratorRepository;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -28,13 +30,22 @@ abstract class HttpTestCase extends WebTestCase
         $this->client = null;
     }
 
+    protected function authenticateActor(string $email): void
+    {
+        /** @var Actor $actor */
+        $actor = $this->get(ActorRepository::class)->findOneBy(['emailAddress' => $email]);
+        Assert::notNull($actor, 'Actor not found for email '.$actor);
+
+        $this->authenticate($actor, 'main', 'main_context');
+    }
+
     protected function authenticateAdmin(string $email): void
     {
         /** @var Administrator $user */
-        $admin = $this->get(AdministratorRepository::class)->findOneBy(['email' => $email]);
+        $admin = $this->get(AdministratorRepository::class)->findOneBy(['emailAddress' => $email]);
         Assert::notNull($admin, 'Administrator not found for email '.$email);
 
-        $this->authenticate($admin, 'admin', 'admin');
+        $this->authenticate($admin, 'admin', 'main_context');
     }
 
     private function authenticate(UserInterface $user, string $firewallName, string $firewallContext): void
@@ -58,5 +69,10 @@ abstract class HttpTestCase extends WebTestCase
     protected function get(string $name)
     {
         return self::$container->get($name);
+    }
+
+    protected function getAbsoluteUrl(string $path): string
+    {
+        return $this->client->getRequest()->getSchemeAndHttpHost().$path;
     }
 }

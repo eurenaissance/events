@@ -30,7 +30,6 @@ class ActorFixtures extends Fixture
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => '1988-11-27',
-            'gender' => 'male',
         ]);
 
         $actor2 = $this->create([
@@ -39,7 +38,11 @@ class ActorFixtures extends Fixture
             'firstName' => 'Titouan',
             'lastName' => 'Galopin',
             'birthday' => '1994-12-01',
+            'gender' => 'male',
         ]);
+
+        $this->setReference('actor-1', $actor1);
+        $this->setReference('actor-2', $actor2);
 
         $manager->persist($actor1);
         $manager->persist($actor2);

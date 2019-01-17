@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
+use App\Actor\RegistrationHandler;
 use App\Entity\Actor;
-use App\Form\RegistrationType;
+use App\Form\Actor\RegistrationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route(name="app_registration_form", methods={"GET", "POST"})
      */
-    public function register(Request $request): Response
+    public function register(Request $request, RegistrationHandler $registrationHandler): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_profile');
@@ -26,10 +27,7 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationType::class, $actor = new Actor());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $manager = $this->getDoctrine()->getManager();
-
-            $manager->persist($actor);
-            $manager->flush();
+            $registrationHandler->register($actor);
 
             return $this->redirectToRoute('app_registration_success');
         }

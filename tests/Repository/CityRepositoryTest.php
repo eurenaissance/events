@@ -67,7 +67,7 @@ class CityRepositoryTest extends RepositoryTestCase
     /**
      * @dataProvider provideZipCodes
      */
-    public function testFindByZipCode($country, $zipCode, $expected): void
+    public function testFindByZipCode(string $country, string $zipCode, array $expected): void
     {
         /** @var CityRepository $repository */
         $repository = $this->manager->getRepository(City::class);
@@ -79,6 +79,6 @@ class CityRepositoryTest extends RepositoryTestCase
             $actual[] = [$city->getName(), $city->getLatitude(), $city->getLongitude()];
         }
 
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 }
