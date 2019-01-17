@@ -22,6 +22,7 @@ class ProfileType extends AbstractType
                     'common.gender.male' => 'male',
                     'common.gender.other' => 'other',
                 ],
+                'empty_data' => '',
             ])
         ;
 

@@ -36,33 +36,18 @@ class ProfileControllerTest extends HttpTestCase
         self::assertEquals('male', $form->get('gender')->getValue());
     }
 
-    public function provideBadRegistrations(): iterable
+    public function provideBadProfiles(): iterable
     {
         yield [
             'firstName' => null,
             'lastName' => null,
             'gender' => 'male',
-            'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
+            'birthday' => ['year' => 2000, 'month' => 11, 'day' => 31],
             'errors' => [
                 'common.first_name.not_blank',
                 'common.last_name.not_blank',
+                'common.date.invalid',
             ],
-        ];
-
-        yield [
-            'firstName' => 'Rémi',
-            'lastName' => 'Gardien',
-            'gender' => 'male',
-            'birthday' => null,
-            'errors' => ['common.date.not_blank'],
-        ];
-
-        yield [
-            'firstName' => 'Rémi',
-            'lastName' => 'Gardien',
-            'gender' => 'unknown',
-            'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'errors' => ['common.gender.choice'],
         ];
 
         yield [
@@ -75,8 +60,7 @@ class ProfileControllerTest extends HttpTestCase
     }
 
     /**
-     * @dataProvider provideBadRegistrations
-     * @group profile
+     * @dataProvider provideBadProfiles
      */
     public function testEditFailure(
         ?string $firstName,
