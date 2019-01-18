@@ -13,7 +13,7 @@ help:
 ## Project setup
 ##---------------------------------------------------------------------------
 .PHONY: dev start up up-without-xdebug stop build cc
-dev: build start install db-init var/public.key ## Build, start the application and load fixtures
+dev: build start install wait-for-rabbitmq db-init var/public.key ## Build, start the application and load fixtures
 
 start: up ## Start the application
 
@@ -61,7 +61,7 @@ init-phpunit-bridge: ## Run phpunit check version to bootstrap it
 ## Database
 ##---------------------------------------------------------------------------
 .PHONY: wait-for-db db-schema-drop db-schema-create db-migrate db-diff db-fixtures db-init
-wait-for-db:
+wait-for-db: ## Wait for database setup
 	$(EXEC) php -r "set_time_limit(60);for(;;){if(@fsockopen('db',5432)){break;}echo \"Waiting for MySQL\n\";sleep(1);}"
 
 db-schema-drop: ## Drop the database schema
@@ -83,6 +83,14 @@ db-fixtures: ## Load fixtures
 db-init: wait-for-db db-schema-drop db-migrate db-fixtures ## Init the database with fixtures
 
 ##
+## RabbitMQ
+##
+.PHONY: wait-for-rabbitmq
+
+wait-for-rabbitmq: ## Wait for RabbitMQ setup
+	$(EXEC) php -r "set_time_limit(60);for(;;){if(@fsockopen('rabbitmq',5672)){break;}echo \"Waiting for RabbitMQ\n\";sleep(1);}"
+
+##
 ## Tests
 ##---------------------------------------------------------------------------
 
@@ -96,7 +104,7 @@ tu: install                                                 ## Run the PHP Unit 
 tf: init-phpunit-bridge                                     ## Run the PHP Functional tests
 	$(EXEC) bin/phpunit --group functional $(PHPUNIT_ARGS)
 
-tfp: install wait-for-db                                    ## Prepare the PHP functional tests
+tfp: install wait-for-db wait-for-rabbitmq                  ## Prepare the PHP functional tests
 	$(CONSOLE) doctrine:schema:drop --force -n --env=test
 	$(CONSOLE) doctrine:migrations:version --all --delete -n --env=test
 	$(CONSOLE) doctrine:migrations:migrate -n --env=test

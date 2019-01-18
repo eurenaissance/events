@@ -14,6 +14,18 @@ services:
             - redis
             - rabbitmq
 
+    worker:
+        build:
+            context: docker/app/dev
+        entrypoint: ./docker/worker/dev/entrypoint.sh
+
+        volumes:
+            - ./:/app
+        depends_on:
+            - db
+            - redis
+            - rabbitmq
+
     db:
         image: postgres:11
         environment:
@@ -28,3 +40,6 @@ services:
 
     rabbitmq:
         image: rabbitmq:3-management
+
+    mailcatcher:
+        image: schickling/mailcatcher
