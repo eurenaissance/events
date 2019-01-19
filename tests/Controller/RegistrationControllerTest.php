@@ -23,6 +23,13 @@ class RegistrationControllerTest extends HttpTestCase
             'password' => ['first' => 'test123', 'second' => 'test123'],
         ]));
         self::assertTrue($this->client->getResponse()->isRedirect('/register/success'));
+        $this->assertMailSent([
+            'to' => 'new@mobilisation.eu',
+            'subject' => 'actor.registration.subject',
+            'body' => "@string@
+                        .contains('Hello Rémi!')
+                        .contains('http://localhost/register/confirm')",
+        ]);
 
         $this->client->followRedirect();
         self::assertTrue($this->client->getResponse()->isSuccessful());

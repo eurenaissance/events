@@ -44,4 +44,12 @@ class RegistrationController extends AbstractController
     {
         return $this->render('registration/success.html.twig');
     }
+
+    /**
+     * @Route("/confirm", name="app_registration_confirm", methods="GET")
+     */
+    public function confirm(): Response
+    {
+        return $this->redirectToRoute('app_login');
+    }
 }

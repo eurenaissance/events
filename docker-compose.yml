@@ -14,6 +14,17 @@ services:
             - redis
             - rabbitmq
 
+    worker:
+        build:
+            context: docker/app
+        entrypoint: bin/console enqueue:consume default --setup-broker -vv
+        volumes:
+            - ./:/app
+        depends_on:
+            - db
+            - redis
+            - rabbitmq
+
     db:
         image: postgres:11
         environment:
@@ -28,3 +39,6 @@ services:
 
     rabbitmq:
         image: rabbitmq:3-management
+
+    mailcatcher:
+        image: schickling/mailcatcher
