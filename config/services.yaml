@@ -3,6 +3,7 @@ parameters:
     app_language: '%env(APP_LANGUAGE)%'
     app_country: '%env(APP_COUNTRY)%'
     app_timezone: '%env(APP_TIMEZONE)%'
+    default_sender: { '%env(DEFAULT_SENDER_EMAIL)%': '%env(DEFAULT_SENDER_NAME)%' }
 
 services:
     _defaults:
@@ -10,6 +11,7 @@ services:
         autoconfigure: true
         bind:
             string $appCountry: '%app_country%'
+            array $defaultSender: '%default_sender%'
 
     App\:
         resource: '../src/*'
