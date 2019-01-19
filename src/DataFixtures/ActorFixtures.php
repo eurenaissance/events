@@ -14,6 +14,7 @@ class ActorFixtures extends Fixture
 
     public const ACTOR_01_UUID = '472508fa-4e4d-4330-8fda-5fefc92b1a8a';
     public const ACTOR_02_UUID = '7ba7b43a-4a65-4862-b49a-91776043575b';
+    public const ACTOR_03_UUID = 'b4e514ac-5ccb-4687-aed1-14d3678b5491';
 
     private $encoder;
 
@@ -30,6 +31,7 @@ class ActorFixtures extends Fixture
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => '1988-11-27',
+            'confirmed' => true,
         ]);
 
         $actor2 = $this->create([
@@ -39,13 +41,25 @@ class ActorFixtures extends Fixture
             'lastName' => 'Galopin',
             'birthday' => '1994-12-01',
             'gender' => 'male',
+            'confirmed' => true,
+        ]);
+
+        $actor3 = $this->create([
+            'uuid' => self::ACTOR_03_UUID,
+            'emailAddress' => 'marine@mobilisation.eu',
+            'firstName' => 'Marine',
+            'lastName' => 'Boudeau',
+            'birthday' => '1983-11-09',
+            'gender' => 'female',
         ]);
 
         $this->setReference('actor-1', $actor1);
         $this->setReference('actor-2', $actor2);
+        $this->setReference('actor-3', $actor3);
 
         $manager->persist($actor1);
         $manager->persist($actor2);
+        $manager->persist($actor3);
 
         $manager->flush();
     }
@@ -62,6 +76,10 @@ class ActorFixtures extends Fixture
 
         if (isset($data['gender'])) {
             $actor->setGender($data['gender']);
+        }
+
+        if (isset($data['confirmed']) && true === $data['confirmed']) {
+            $actor->confirm();
         }
 
         return $actor;

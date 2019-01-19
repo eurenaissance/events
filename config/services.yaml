@@ -4,6 +4,7 @@ parameters:
     app_country: '%env(APP_COUNTRY)%'
     app_timezone: '%env(APP_TIMEZONE)%'
     default_sender: { '%env(DEFAULT_SENDER_EMAIL)%': '%env(DEFAULT_SENDER_NAME)%' }
+    pattern_uuid: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
 
 services:
     _defaults:

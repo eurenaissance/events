@@ -25,12 +25,15 @@ class Mailer
         $this->twig = $twig;
     }
 
-    public function sendActorRegistrationMail(Actor $actor): void
+    public function sendActorRegistrationMail(Actor $actor, string $confirmationToken): void
     {
         $this->send([
             'to' => $actor->getEmailAddress(),
             'subject' => $this->trans('mail.actor.registration.subject'),
-            'body' => $this->render('mail/actor/registration.html.twig', ['actor' => $actor]),
+            'body' => $this->render('mail/actor/registration.html.twig', [
+                'actor' => $actor,
+                'token' => $confirmationToken,
+            ]),
         ]);
     }
 

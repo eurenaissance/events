@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class ResetPasswordRequestType extends AbstractType
+class EmailRequestType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

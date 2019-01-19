@@ -84,6 +84,13 @@ class Actor implements UserInterface
     private $password;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $confirmedAt;
+
+    /**
      * @var string[]
      */
     private $roles = [];
@@ -204,5 +211,20 @@ class Actor implements UserInterface
     public function setPassword(string $password): void
     {
         $this->password = $password;
+    }
+
+    public function getConfirmedAt(): ?\DateTime
+    {
+        return $this->confirmedAt;
+    }
+
+    public function isConfirmed(): bool
+    {
+        return null !== $this->confirmedAt;
+    }
+
+    public function confirm(): void
+    {
+        $this->confirmedAt = new \DateTime('now');
     }
 }

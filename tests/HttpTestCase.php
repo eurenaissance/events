@@ -19,6 +19,8 @@ abstract class HttpTestCase extends WebTestCase
 {
     use PHPMatcherAssertions;
 
+    protected const UUID_PATTERN = '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}';
+
     /**
      * @var Client
      */
@@ -32,35 +34,6 @@ abstract class HttpTestCase extends WebTestCase
     protected function tearDown()
     {
         $this->client = null;
-    }
-
-    protected function authenticateActor(string $email): void
-    {
-        /** @var Actor $actor */
-        $actor = $this->get(ActorRepository::class)->findOneBy(['emailAddress' => $email]);
-        Assert::notNull($actor, 'Actor not found for email '.$actor);
-
-        $this->authenticate($actor, 'main', 'main_context');
-    }
-
-    protected function authenticateAdmin(string $email): void
-    {
-        /** @var Administrator $user */
-        $admin = $this->get(AdministratorRepository::class)->findOneBy(['emailAddress' => $email]);
-        Assert::notNull($admin, 'Administrator not found for email '.$email);
-
-        $this->authenticate($admin, 'admin', 'main_context');
-    }
-
-    private function authenticate(UserInterface $user, string $firewallName, string $firewallContext): void
-    {
-        $session = $this->client->getContainer()->get('session');
-
-        $token = new PostAuthenticationGuardToken($user, $firewallName, $user->getRoles());
-        $session->set('_security_'.$firewallContext, serialize($token));
-        $session->save();
-
-        $this->client->getCookieJar()->set(new Cookie($session->getName(), $session->getId()));
     }
 
     protected function assertMailSent(array $expectedMail): void
@@ -87,6 +60,11 @@ abstract class HttpTestCase extends WebTestCase
         self::fail(sprintf('No mail for "%s" could be found.', $expectedMail['to']));
     }
 
+    protected function assertNoMailSent(): void
+    {
+        self::assertEmpty($this->getMessagesForTopic('mail'));
+    }
+
     /**
      * Helper to get a service.
      *
@@ -99,9 +77,43 @@ abstract class HttpTestCase extends WebTestCase
         return self::$container->get($name);
     }
 
+    protected static function getActorRepository(): ActorRepository
+    {
+        return self::get(ActorRepository::class);
+    }
+
     protected function getAbsoluteUrl(string $path): string
     {
         return $this->client->getRequest()->getSchemeAndHttpHost().$path;
+    }
+
+    protected function authenticateActor(string $email): void
+    {
+        /** @var Actor $actor */
+        $actor = self::get(ActorRepository::class)->findOneBy(['emailAddress' => $email]);
+        Assert::notNull($actor, 'Actor not found for email '.$actor);
+
+        $this->authenticate($actor, 'main', 'main_context');
+    }
+
+    protected function authenticateAdmin(string $email): void
+    {
+        /** @var Administrator $user */
+        $admin = self::get(AdministratorRepository::class)->findOneBy(['emailAddress' => $email]);
+        Assert::notNull($admin, 'Administrator not found for email '.$email);
+
+        $this->authenticate($admin, 'admin', 'main_context');
+    }
+
+    private function authenticate(UserInterface $user, string $firewallName, string $firewallContext): void
+    {
+        $session = $this->client->getContainer()->get('session');
+
+        $token = new PostAuthenticationGuardToken($user, $firewallName, $user->getRoles());
+        $session->set('_security_'.$firewallContext, serialize($token));
+        $session->save();
+
+        $this->client->getCookieJar()->set(new Cookie($session->getName(), $session->getId()));
     }
 
     private function getClientProducer(): TraceableProducer

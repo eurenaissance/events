@@ -5,8 +5,7 @@ namespace App\Controller;
 use App\Actor\ResetPasswordHandler;
 use App\Entity\ActorResetPasswordToken;
 use App\Form\Actor\PasswordType;
-use App\Form\Actor\ResetPasswordRequestType;
-use App\Repository\ActorRepository;
+use App\Form\Actor\EmailRequestType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,17 +19,15 @@ class ResetPasswordController extends AbstractController
     /**
      * @Route("/request", name="app_password_request", methods={"GET", "POST"})
      */
-    public function request(
-        Request $request,
-        ActorRepository $actorRepository,
-        ResetPasswordHandler $resetPasswordHandler
-    ): Response {
-        $form = $this->createForm(ResetPasswordRequestType::class);
+    public function request(Request $request, ResetPasswordHandler $resetPasswordHandler): Response
+    {
+        $form = $this->createForm(EmailRequestType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            /** @var string $email */
             $email = $form->get('emailAddress')->getData();
 
-            if ($actor = $actorRepository->findOneByEmail($email)) {
+            if ($actor = $resetPasswordHandler->findActor($email)) {
                 if ($resetPasswordHandler->hasPendingToken($actor)) {
                     $this->addFlash('info', 'actor.password_request.pending_token_exists');
 
@@ -58,7 +55,12 @@ class ResetPasswordController extends AbstractController
     }
 
     /**
-     * @Route("/reset/{uuid}", name="app_password_reset", methods={"GET", "POST"})
+     * @Route(
+     *     "/reset/{uuid}",
+     *     name="app_password_reset",
+     *     requirements={"uuid": "%pattern_uuid%"},
+     *     methods={"GET", "POST"}
+     * )
      */
     public function reset(
         Request $request,
@@ -82,7 +84,7 @@ class ResetPasswordController extends AbstractController
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $resetPasswordHandler->reset($token);
 
-            $this->addFlash('info', 'actor.password_reset.password_changed');
+            $this->addFlash('info', 'actor.password_reset.success');
 
             return $this->redirectToRoute('app_login');
         }

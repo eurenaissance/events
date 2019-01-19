@@ -1,7 +1,7 @@
 {% extends 'mail/base.html.twig' %}
 
 {% block body %}
-    Hello {{ actor.firstName }}!
+    Welcome {{ actor.firstName }}!
     <br>
-    Please <a href="{{ url('app_registration_confirm') }}">activate</a> your account.
+    Please <a href="{{ url('app_registration_confirm', { uuid: token }) }}">activate</a> your account.
 {% endblock %}
