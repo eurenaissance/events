@@ -24,6 +24,20 @@ class ResetPasswordControllerTest extends HttpTestCase
         self::assertTrue($this->client->getResponse()->isSuccessful());
     }
 
+    public function testRequestToPendingToken(): void
+    {
+        $crawler = $this->client->request('GET', '/password/request');
+        self::assertTrue($this->client->getResponse()->isSuccessful());
+
+        $this->client->submit($crawler->selectButton('Request new password')->form([
+            'emailAddress' => 'titouan@mobilisation.eu',
+        ]));
+        self::assertTrue($this->client->getResponse()->isRedirect('/login'));
+
+        $this->client->followRedirect();
+        self::assertContains('actor.password_request.pending_token_exists', $this->client->getResponse()->getContent());
+    }
+
     public function testReset(): void
     {
         $resetPasswordUrl = sprintf('/password/reset/%s', ActorResetPasswordTokenFixtures::TOKEN_01_UUID);
@@ -40,7 +54,7 @@ class ResetPasswordControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         self::assertTrue($this->client->getResponse()->isSuccessful());
-        self::assertContains('actor.password_reset.password_changed', $this->client->getResponse()->getContent());
+        self::assertContains('actor.password_reset.success', $this->client->getResponse()->getContent());
 
         $this->client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => 'titouan@mobilisation.eu',
@@ -53,23 +67,28 @@ class ResetPasswordControllerTest extends HttpTestCase
         self::assertContains('Hello Titouan', $this->client->getResponse()->getContent());
     }
 
-    public function testExpiredToken(): void
+    public function provideInvalidTokens(): iterable
     {
-        $resetPasswordUrl = sprintf('/password/reset/%s', ActorResetPasswordTokenFixtures::TOKEN_02_UUID);
-        $this->client->request('GET', $resetPasswordUrl);
-        self::assertTrue($this->client->getResponse()->isRedirect('/login'));
+        yield [
+            'token' => ActorResetPasswordTokenFixtures::TOKEN_02_UUID,
+            'error' => 'actor.password_reset.token_expired',
+        ];
 
-        $this->client->followRedirect();
-        self::assertContains('actor.password_reset.token_expired', $this->client->getResponse()->getContent());
+        yield [
+            'token' => ActorResetPasswordTokenFixtures::TOKEN_03_UUID,
+            'error' => 'actor.password_reset.token_already_consumed',
+        ];
     }
 
-    public function testAlreadyConsumedToken(): void
+    /**
+     * @dataProvider provideInvalidTokens
+     */
+    public function testInvalidToken(string $token, string $error): void
     {
-        $resetPasswordUrl = sprintf('/password/reset/%s', ActorResetPasswordTokenFixtures::TOKEN_03_UUID);
-        $this->client->request('GET', $resetPasswordUrl);
+        $this->client->request('GET', "/password/reset/$token");
         self::assertTrue($this->client->getResponse()->isRedirect('/login'));
 
         $this->client->followRedirect();
-        self::assertContains('actor.password_reset.token_already_consumed', $this->client->getResponse()->getContent());
+        self::assertContains($error, $this->client->getResponse()->getContent());
     }
 }

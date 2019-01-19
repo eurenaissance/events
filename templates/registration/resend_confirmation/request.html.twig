@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Resend confirmation{% endblock %}
+
+{% block body %}
+    {{ form_start(form)}}
+
+        {{ form_row(form.emailAddress) }}
+
+        <button type="submit">Resend confirmation</button>
+
+        <a href="{{ path('app_login') }}">back to login</a>
+
+    {{ form_end(form) }}
+{% endblock %}

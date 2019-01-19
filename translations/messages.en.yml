@@ -1,0 +1,3 @@
+security.actor.not_confirmed: |
+    Your account is not confirmed yet.
+    Click <a href="%resend_confirmation_url%">here</a> to resend a confirmation email.

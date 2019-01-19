@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
@@ -72,8 +74,7 @@ class ActorAuthenticator extends AbstractFormLoginAuthenticator
         $user = $this->entityManager->getRepository(Actor::class)->findOneBy(['emailAddress' => $credentials['emailAddress']]);
 
         if (!$user) {
-            // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Email Address could not be found.');
+            throw self::createBadCredentialsException();
         }
 
         return $user;
@@ -93,8 +94,28 @@ class ActorAuthenticator extends AbstractFormLoginAuthenticator
         return new RedirectResponse($this->urlGenerator->generate('app_homepage'));
     }
 
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
+        if ($request->hasSession()) {
+            if ($exception instanceof BadCredentialsException) {
+                $exception = self::createBadCredentialsException();
+            }
+
+            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+        }
+
+        $url = $this->getLoginUrl();
+
+        return new RedirectResponse($url);
+    }
+
     protected function getLoginUrl()
     {
         return $this->urlGenerator->generate('app_login');
+    }
+
+    private static function createBadCredentialsException(): CustomUserMessageAuthenticationException
+    {
+        return new CustomUserMessageAuthenticationException('security.actor.bad_credentials');
     }
 }

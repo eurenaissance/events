@@ -102,6 +102,7 @@ tfp: install wait-for-db                                    ## Prepare the PHP f
 	$(CONSOLE) doctrine:migrations:migrate -n --env=test
 	$(CONSOLE) doctrine:schema:validate --env=test
 	$(CONSOLE) doctrine:fixtures:load -n --env=test
+	$(CONSOLE) cache:clear --env=test
 
 phpcs: install                                              ## Lint PHP Code
 	$(PHPCSFIXER) fix --diff --dry-run --no-interaction -v
