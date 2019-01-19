@@ -25,7 +25,7 @@ class RegistrationControllerTest extends HttpTestCase
         self::assertTrue($this->client->getResponse()->isRedirect('/register/success'));
         $this->assertMailSent([
             'to' => 'new@mobilisation.eu',
-            'subject' => 'actor.registration.subject',
+            'subject' => 'mail.actor.registration.subject',
             'body' => "@string@
                         .contains('Hello Rémi!')
                         .contains('http://localhost/register/confirm')",
