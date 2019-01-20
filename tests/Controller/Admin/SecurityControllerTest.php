@@ -41,7 +41,7 @@ class SecurityControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        self::assertEquals($email, $crawler->selectButton('Sign in')->form()->get('emailAddress')->getValue());
+        $this->assertEquals($email, $crawler->selectButton('Sign in')->form()->get('emailAddress')->getValue());
     }
 
     public function testLoginSuccess(): void
@@ -57,7 +57,7 @@ class SecurityControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        self::assertGreaterThan(0, $crawler->filter('a:contains("Dashboard")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('a:contains("Dashboard")')->count());
     }
 
     public function testLoginTwoFactor(): void

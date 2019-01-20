@@ -115,7 +115,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->assertResponseContains($error);
 
         $finalPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation.eu')->getPassword();
-        self::assertSame($initialPassword, $finalPassword);
+        $this->assertSame($initialPassword, $finalPassword);
     }
 
     public function provideInvalidTokens(): iterable

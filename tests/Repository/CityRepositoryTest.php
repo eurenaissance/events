@@ -79,6 +79,6 @@ class CityRepositoryTest extends RepositoryTestCase
             $actual[] = [$city->getName(), $city->getLatitude(), $city->getLongitude()];
         }
 
-        self::assertSame($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

@@ -95,6 +95,6 @@ class ResendConfirmationControllerTest extends HttpTestCase
 
     private function assertActorConfirmed(string $email, bool $expected): void
     {
-        self::assertSame($expected, $this->getActorRepository()->findOneByEmail($email)->isConfirmed());
+        $this->assertSame($expected, $this->getActorRepository()->findOneByEmail($email)->isConfirmed());
     }
 }

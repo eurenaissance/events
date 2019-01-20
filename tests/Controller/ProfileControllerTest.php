@@ -17,14 +17,14 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         $form = $crawler->selectButton('Save')->form();
-        self::assertTrue($form->get('emailAddress')->isDisabled());
-        self::assertEquals('remi@mobilisation.eu', $form->get('emailAddress')->getValue());
-        self::assertEquals('Rémi', $form->get('firstName')->getValue());
-        self::assertEquals('Gardien', $form->get('lastName')->getValue());
-        self::assertEmpty($form->get('gender')->getValue());
+        $this->assertTrue($form->get('emailAddress')->isDisabled());
+        $this->assertEquals('remi@mobilisation.eu', $form->get('emailAddress')->getValue());
+        $this->assertEquals('Rémi', $form->get('firstName')->getValue());
+        $this->assertEquals('Gardien', $form->get('lastName')->getValue());
+        $this->assertEmpty($form->get('gender')->getValue());
 
         $birthday = $form->get('birthday');
-        self::assertEquals(
+        $this->assertEquals(
             ['year' => 1988, 'month' => 11, 'day' => 27],
             [
                 'year' => $birthday['year']->getValue(),
@@ -46,14 +46,14 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertResponseCOntains('Your profile has been successfully saved.');
 
         $form = $crawler->selectButton('Save')->form();
-        self::assertTrue($form->get('emailAddress')->isDisabled());
-        self::assertEquals('remi@mobilisation.eu', $form->get('emailAddress')->getValue());
-        self::assertEquals('Rem', $form->get('firstName')->getValue());
-        self::assertEquals('Gar', $form->get('lastName')->getValue());
-        self::assertEquals('male', $form->get('gender')->getValue());
+        $this->assertTrue($form->get('emailAddress')->isDisabled());
+        $this->assertEquals('remi@mobilisation.eu', $form->get('emailAddress')->getValue());
+        $this->assertEquals('Rem', $form->get('firstName')->getValue());
+        $this->assertEquals('Gar', $form->get('lastName')->getValue());
+        $this->assertEquals('male', $form->get('gender')->getValue());
 
         $birthday = $form->get('birthday');
-        self::assertEquals(
+        $this->assertEquals(
             ['year' => 1988, 'month' => 01, 'day' => 12],
             [
                 'year' => $birthday['year']->getValue(),
@@ -184,6 +184,6 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         $finalPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation.eu')->getPassword();
-        self::assertSame($initialPassword, $finalPassword);
+        $this->assertSame($initialPassword, $finalPassword);
     }
 }
