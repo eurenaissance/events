@@ -17,7 +17,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $administratorRepository = $this->get(AdministratorRepository::class);
 
         $administratorRepository->deleteAll();
-        self::assertEquals(0, $administratorRepository->countAdministrators());
+        $this->assertEquals(0, $administratorRepository->countAdministrators());
 
         $this->client->request('GET', '/admin/login');
         $this->assertIsRedirectedTo('/admin/setup');
@@ -36,7 +36,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        self::assertEquals(1, $administratorRepository->countAdministrators());
+        $this->assertEquals(1, $administratorRepository->countAdministrators());
 
         $this->client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => 'first_admin@mobilisation-eu.code',
@@ -46,7 +46,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        self::assertGreaterThan(0, $crawler->filter('a:contains("Administrators")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('a:contains("Administrators")')->count());
     }
 
     public function testSetupIsDisabled(): void

@@ -46,7 +46,7 @@ abstract class HttpTestCase extends WebTestCase
         }
 
         foreach ($patterns as $pattern) {
-            self::assertContains($pattern, $this->client->getResponse()->getContent());
+            $this->assertContains($pattern, $this->client->getResponse()->getContent());
         }
     }
 
@@ -54,7 +54,7 @@ abstract class HttpTestCase extends WebTestCase
     {
         $response = $this->client->getResponse();
 
-        self::assertTrue(
+        $this->assertTrue(
             $response->isRedirection(),
             'Expected redirection but got status code '.$response->getStatusCode().' instead.'
         );
@@ -64,7 +64,7 @@ abstract class HttpTestCase extends WebTestCase
 
     protected function assertResponseSuccessFul(): void
     {
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
     }
 
     protected function assertMailSent(array $expectedMail): void
@@ -80,7 +80,7 @@ abstract class HttpTestCase extends WebTestCase
 
                 foreach (['from', 'cc', 'bcc'] as $strictComparison) {
                     if (isset($expectedMail[$strictComparison])) {
-                        self::assertSame($expectedMail[$strictComparison], $mail[$strictComparison]);
+                        $this->assertSame($expectedMail[$strictComparison], $mail[$strictComparison]);
                     }
                 }
 
@@ -88,12 +88,12 @@ abstract class HttpTestCase extends WebTestCase
             }
         }
 
-        self::fail(sprintf('No mail for "%s" could be found.', $expectedMail['to']));
+        $this->fail(sprintf('No mail for "%s" could be found.', $expectedMail['to']));
     }
 
     protected function assertNoMailSent(): void
     {
-        self::assertEmpty($this->getMessagesForTopic('mail'));
+        $this->assertEmpty($this->getMessagesForTopic('mail'));
     }
 
     /**
@@ -103,14 +103,14 @@ abstract class HttpTestCase extends WebTestCase
      *
      * @return mixed
      */
-    protected static function get(string $name)
+    protected function get(string $name)
     {
         return self::$container->get($name);
     }
 
-    protected static function getActorRepository(): ActorRepository
+    protected function getActorRepository(): ActorRepository
     {
-        return self::get(ActorRepository::class);
+        return $this->get(ActorRepository::class);
     }
 
     protected function getAbsoluteUrl(string $path): string
@@ -121,7 +121,7 @@ abstract class HttpTestCase extends WebTestCase
     protected function authenticateActor(string $email): void
     {
         /** @var Actor $actor */
-        $actor = self::get(ActorRepository::class)->findOneBy(['emailAddress' => $email]);
+        $actor = $this->getActorRepository()->findOneBy(['emailAddress' => $email]);
         Assert::notNull($actor, 'Actor not found for email '.$actor);
 
         $this->authenticate($actor, 'main', 'main_context');
@@ -130,7 +130,7 @@ abstract class HttpTestCase extends WebTestCase
     protected function authenticateAdmin(string $email): void
     {
         /** @var Administrator $user */
-        $admin = self::get(AdministratorRepository::class)->findOneBy(['emailAddress' => $email]);
+        $admin = $this->get(AdministratorRepository::class)->findOneBy(['emailAddress' => $email]);
         Assert::notNull($admin, 'Administrator not found for email '.$email);
 
         $this->authenticate($admin, 'admin', 'main_context');

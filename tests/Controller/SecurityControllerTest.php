@@ -50,10 +50,10 @@ class SecurityControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        self::assertEquals($email, $crawler->selectButton('Sign in')->form()->get('emailAddress')->getValue());
+        $this->assertEquals($email, $crawler->selectButton('Sign in')->form()->get('emailAddress')->getValue());
 
         foreach ($errors as $error) {
-            self::assertContains($error, $crawler->filter('.login_error')->html());
+            $this->assertContains($error, $crawler->filter('.login_error')->html());
         }
     }
 
