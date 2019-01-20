@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Entity\City;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -94,6 +95,7 @@ class GeocoderSetupCommand extends Command
 
         foreach ($csv->getRecords() as $record) {
             $this->manager->persist(new City(
+                Uuid::uuid4(),
                 $file->getBasename('.'.$file->getExtension()),
                 $record[2],
                 $record[1],

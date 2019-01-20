@@ -33,7 +33,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => '1988-11-27',
-            'city' => 'city-6',
+            'city' => 'city-2',
             'confirmed' => true,
         ]);
 
@@ -64,7 +64,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             'firstName' => 'Nicolas',
             'lastName' => 'Cage',
             'birthday' => '1964-01-07',
-            'city' => 'city-5',
+            'city' => 'city-6',
             'address' => '2 random street',
             'gender' => 'male',
         ]);

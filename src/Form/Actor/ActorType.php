@@ -3,7 +3,7 @@
 namespace App\Form\Actor;
 
 use App\Entity\Actor;
-use App\Form\DataTransformer\CityToIdTransformer;
+use App\Form\DataTransformer\CityToUuidTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
@@ -20,11 +20,11 @@ class ActorType extends AbstractType
     private const BIRTHDAY_MIN_YEARS = 15;
     private const BIRTHDAY_MAX_YEARS = 120;
 
-    private $cityToIdTransformer;
+    private $cityToUuidTransformer;
 
-    public function __construct(CityToIdTransformer $cityToIdTransformer)
+    public function __construct(CityToUuidTransformer $cityToUuidTransformer)
     {
-        $this->cityToIdTransformer = $cityToIdTransformer;
+        $this->cityToUuidTransformer = $cityToUuidTransformer;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -72,7 +72,7 @@ class ActorType extends AbstractType
             ])
         ;
 
-        $builder->get('city')->addModelTransformer($this->cityToIdTransformer);
+        $builder->get('city')->addModelTransformer($this->cityToUuidTransformer);
 
         $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
             $form = $event->getForm();

@@ -3,6 +3,7 @@
 namespace Test\App\Controller;
 
 use App\DataFixtures\ActorConfirmTokenFixtures;
+use App\DataFixtures\CityFixtures;
 use App\Repository\CityRepository;
 use App\Tests\HttpTestCase;
 
@@ -23,7 +24,7 @@ class RegistrationControllerTest extends HttpTestCase
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'password' => ['first' => 'test123', 'second' => 'test123'],
             'address' => null,
-            'city' => 6,
+            'city' => CityFixtures::CITY_02_UUID,
         ]));
         $this->assertIsRedirectedTo('/register/check-email');
         $this->assertMailSent([
@@ -49,7 +50,7 @@ class RegistrationControllerTest extends HttpTestCase
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'password' => ['first' => 'test123', 'second' => 'test123'],
             'address' => '123 random street',
-            'city' => 6,
+            'city' => CityFixtures::CITY_02_UUID,
             'errors' => ['Email address is required.'],
         ];
 
@@ -60,7 +61,7 @@ class RegistrationControllerTest extends HttpTestCase
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'password' => ['first' => 'test123', 'second' => 'test123'],
             'address' => '123 random street',
-            'city' => 6,
+            'city' => CityFixtures::CITY_02_UUID,
             'errors' => ['This email address is already registered.'],
         ];
 
@@ -71,7 +72,7 @@ class RegistrationControllerTest extends HttpTestCase
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'password' => ['first' => 'test123', 'second' => 'test123'],
             'address' => '123 random street',
-            'city' => 6,
+            'city' => CityFixtures::CITY_02_UUID,
             'errors' => ['This email address is already registered.'],
         ];
 
@@ -82,7 +83,7 @@ class RegistrationControllerTest extends HttpTestCase
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'password' => ['first' => '123', 'second' => '123'],
             'address' => '123 random street',
-            'city' => 9999999,
+            'city' => 'abcdef',
             'errors' => [
                 'This email address is not valid.',
                 'Password must be at least 6 characters long.',
@@ -120,7 +121,7 @@ class RegistrationControllerTest extends HttpTestCase
         array $birthday,
         array $password,
         ?string $address,
-        ?int $city,
+        ?string $cityUuid,
         array $errors
     ): void {
         $crawler = $this->client->request('GET', '/register');
@@ -133,7 +134,7 @@ class RegistrationControllerTest extends HttpTestCase
             'birthday' => $birthday,
             'password' => $password,
             'address' => $address,
-            'city' => $city,
+            'city' => $cityUuid,
         ]));
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);

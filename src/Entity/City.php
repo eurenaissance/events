@@ -3,16 +3,21 @@
 namespace App\Entity;
 
 use App\Entity\Util\EntityIdTrait;
+use App\Entity\Util\EntityUuidTrait;
 use CrEOF\Spatial\PHP\Types\Geography\Point;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\UuidInterface;
 
 /**
- * @ORM\Table(name="cities")
+ * @ORM\Table(name="cities", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="cities_uuid_unique", columns="uuid")
+ * })
  * @ORM\Entity(repositoryClass="App\Repository\CityRepository")
  */
 class City
 {
     use EntityIdTrait;
+    use EntityUuidTrait;
 
     /**
      * @var string
@@ -42,8 +47,15 @@ class City
      */
     private $coordinates;
 
-    public function __construct(string $country, string $name, string $zipCode, float $latitude, float $longitude)
-    {
+    public function __construct(
+        UuidInterface $uuid,
+        string $country,
+        string $name,
+        string $zipCode,
+        float $latitude,
+        float $longitude
+    ) {
+        $this->uuid = $uuid;
         $this->country = $country;
         $this->name = $name;
         $this->zipCode = $zipCode;
