@@ -10,7 +10,7 @@ use App\Tests\HttpTestCase;
  */
 class ResetPasswordControllerTest extends HttpTestCase
 {
-    public function testRequest(): void
+    public function testRequestSuccess(): void
     {
         $crawler = $this->client->request('GET', '/password/request');
         $this->assertResponseSuccessFul();
@@ -21,7 +21,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/password/request/check-email');
         $this->assertMailSent([
             'to' => 'remi@mobilisation.eu',
-            'subject' => 'mail.actor.reset_password.subject',
+            'subject' => 'A password reset has been requested.',
             'body' => "@string@
                         .contains('Hello Rémi!')
                         .matchRegex('#href=\"http://localhost/password/reset/".self::UUID_PATTERN."#\"')",
@@ -40,12 +40,13 @@ class ResetPasswordControllerTest extends HttpTestCase
             'emailAddress' => 'titouan@mobilisation.eu',
         ]));
         $this->assertIsRedirectedTo('/login');
+        $this->assertNoMailSent();
 
         $this->client->followRedirect();
-        $this->assertResponseContains('actor.password_request.pending_token_exists');
+        $this->assertResponseContains('A mail has already been sent in the last 2 hours');
     }
 
-    public function testReset(): void
+    public function testResetSuccess(): void
     {
         $resetPasswordUrl = sprintf('/password/reset/%s', ActorResetPasswordTokenFixtures::TOKEN_01_UUID);
         $crawler = $this->client->request('GET', $resetPasswordUrl);
@@ -58,6 +59,13 @@ class ResetPasswordControllerTest extends HttpTestCase
             ],
         ]));
         $this->assertIsRedirectedTo('/login');
+        $this->assertMailSent([
+            'to' => 'titouan@mobilisation.eu',
+            'subject' => 'Your password has been successfully reset.',
+            'body' => "@string@
+                        .contains('Hello Titouan!')
+                        .contains('Your password has been successfully reset.')",
+        ]);
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
@@ -71,19 +79,57 @@ class ResetPasswordControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('Hello Titouan');
+        $this->assertResponseContains('Hello Titouan!');
+    }
+
+    public function provideBadPasswordChanges(): iterable
+    {
+        yield [
+            'first' => 'test',
+            'second' => 'test',
+            'error' => 'Password must be at least 6 characters long.',
+        ];
+
+        yield [
+            'first' => 'test123',
+            'second' => '123test',
+            'error' => 'Passwords do not match.',
+        ];
+    }
+
+    /**
+     * @dataProvider provideBadPasswordChanges
+     */
+    public function testResetFailure(string $first, string $second, string $error): void
+    {
+        $initialPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation.eu')->getPassword();
+
+        $resetPasswordUrl = sprintf('/password/reset/%s', ActorResetPasswordTokenFixtures::TOKEN_01_UUID);
+        $crawler = $this->client->request('GET', $resetPasswordUrl);
+        $this->assertResponseSuccessFul();
+
+        $this->client->submit($crawler->selectButton('Reset password')->form([
+            'password' => ['first' => $first, 'second' => $second],
+        ]));
+        $this->assertResponseSuccessFul();
+        $this->assertResponseContains($error);
+
+        $finalPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation.eu')->getPassword();
+        self::assertSame($initialPassword, $finalPassword);
     }
 
     public function provideInvalidTokens(): iterable
     {
+        // consumed token
         yield [
             'token' => ActorResetPasswordTokenFixtures::TOKEN_02_UUID,
-            'error' => 'actor.password_reset.token_expired',
+            'error' => 'This link is no longer valid.',
         ];
 
+        // expired token
         yield [
             'token' => ActorResetPasswordTokenFixtures::TOKEN_03_UUID,
-            'error' => 'actor.password_reset.token_already_consumed',
+            'error' => 'This link is no longer valid.',
         ];
     }
 

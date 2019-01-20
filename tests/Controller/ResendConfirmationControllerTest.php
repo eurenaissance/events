@@ -22,7 +22,7 @@ class ResendConfirmationControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/register/resend-confirmation/check-email');
         $this->assertMailSent([
             'to' => 'nicolas@mobilisation.eu',
-            'subject' => 'mail.actor.registration.subject',
+            'subject' => 'Welcome Nicolas, please confirm your registration.',
             'body' => "@string@
                         .contains('Welcome Nicolas!')
                         .matchRegex('#href=\"http://localhost/register/confirm/".self::UUID_PATTERN."#\"')",
@@ -30,7 +30,7 @@ class ResendConfirmationControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('A new mail has been sent to confirm your account.');
+        $this->assertResponseContains('A new mail has been sent with a link to confirm your account.');
         $this->assertActorConfirmed('nicolas@mobilisation.eu', false);
     }
 
@@ -47,7 +47,7 @@ class ResendConfirmationControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('A new mail has been sent to confirm your account.');
+        $this->assertResponseContains('A new mail has been sent with a link to confirm your account.');
     }
 
     public function provideResendConfirmationFailures(): iterable

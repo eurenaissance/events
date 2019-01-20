@@ -86,17 +86,20 @@ db-init: wait-for-db db-schema-drop db-migrate db-fixtures ## Init the database 
 ## Tests
 ##---------------------------------------------------------------------------
 
-.PHONY: test tu tf tfp phpcs phpcsfix behat init-phpunit-bridge tfp-rabbitmq security-check
+.PHONY: test tu tf td tp phpcs phpcsfix behat init-phpunit-bridge tfp-rabbitmq security-check
 
-test: tu tfp tf phpcs security-check                        ## Run the PHP tests
+test: tp tu tf                                              ## Run the PHP tests
 
-tu: install                                                 ## Run the PHP Unit tests
+tu:                                                         ## Run the PHP Unit tests
 	$(EXEC) bin/phpunit --exclude-group functional $(PHPUNIT_ARGS)
 
-tf: init-phpunit-bridge                                     ## Run the PHP Functional tests
+tf:                                                         ## Run the PHP Functional tests
 	$(EXEC) bin/phpunit --group functional $(PHPUNIT_ARGS)
 
-tfp: install wait-for-db                                    ## Prepare the PHP functional tests
+td:                                                         ## Run the PHP tests with "debug" group
+	$(EXEC) bin/phpunit --group debug $(PHPUNIT_ARGS)
+
+tp: install init-phpunit-bridge wait-for-db                 ## Prepare the PHP functional tests
 	$(CONSOLE) doctrine:schema:drop --force -n --env=test
 	$(CONSOLE) doctrine:migrations:version --all --delete -n --env=test
 	$(CONSOLE) doctrine:migrations:migrate -n --env=test
@@ -104,11 +107,11 @@ tfp: install wait-for-db                                    ## Prepare the PHP f
 	$(CONSOLE) doctrine:fixtures:load -n --env=test
 	$(CONSOLE) cache:clear --env=test
 
-phpcs: install                                              ## Lint PHP Code
+phpcs:                                                      ## Lint PHP Code
 	$(PHPCSFIXER) fix --diff --dry-run --no-interaction -v
 
-phpcsfix: install                                           ## Lint and fix PHP code to follow the convention
+phpcsfix:                                                   ## Lint and fix PHP code to follow the convention
 	$(PHPCSFIXER) fix
 
-security-check: install
+security-check:                                             ## Check for security updates
 	$(EXEC) vendor/bin/security-checker security:check

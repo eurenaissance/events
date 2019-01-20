@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'actor.registration.resend_confirmation'|trans %}
+{% block title 'security.password_request'|trans %}
 
 {% block body %}
     {{ form_start(form)}}
         {{ form_row(form.emailAddress) }}
 
         <button type="submit">
-            {{ 'actor.registration.resend_confirmation'|trans }}
+            {{ 'security.password_request'|trans }}
         </button>
     {{ form_end(form) }}
 

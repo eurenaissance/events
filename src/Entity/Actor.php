@@ -6,6 +6,7 @@ use App\Entity\Util\EntityIdTrait;
 use App\Entity\Util\EntityUuidTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -18,7 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @UniqueEntity(fields={"emailAddress"}, message="common.email_address.unique", groups={"registration"})
  */
-class Actor implements UserInterface
+class Actor implements UserInterface, EquatableInterface
 {
     use EntityIdTrait;
     use EntityUuidTrait;
@@ -105,6 +106,11 @@ class Actor implements UserInterface
         return trim($this->getFullName());
     }
 
+    public function isEqualTo(UserInterface $user)
+    {
+        return $user->getUsername() === $this->getUsername();
+    }
+
     public function getRoles()
     {
         return array_merge($this->roles, ['ROLE_USER']);
@@ -143,12 +149,9 @@ class Actor implements UserInterface
         return $this->emailAddress;
     }
 
-    /**
-     * @param string|null $emailAddress
-     */
-    public function setEmailAddress($emailAddress)
+    public function setEmailAddress(string $emailAddress): void
     {
-        $this->emailAddress = $emailAddress;
+        $this->emailAddress = mb_strtolower($emailAddress);
     }
 
     public function getFullName(): string

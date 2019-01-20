@@ -25,26 +25,63 @@ class Mailer
         $this->twig = $twig;
     }
 
-    public function sendActorRegistrationMail(Actor $actor, string $token): void
+    public function sendActorRegistrationConfirmationMail(Actor $actor, string $token): void
     {
         $this->send([
             'to' => $actor->getEmailAddress(),
-            'subject' => $this->trans('mail.actor.registration.subject'),
-            'body' => $this->render('mail/actor/registration.html.twig', [
+            'subject' => $this->trans('mail.actor.registration_confirmation.subject', [
+                '%actor%' => $actor->getFirstName(),
+            ]),
+            'body' => $this->render('mail/actor/registration_confirmation.html.twig', [
                 'actor' => $actor,
                 'token' => $token,
             ]),
         ]);
     }
 
-    public function sendActorResetPasswordMail(Actor $actor, string $token): void
+    public function sendActorRegistrationCompletedMail(Actor $actor): void
     {
         $this->send([
             'to' => $actor->getEmailAddress(),
-            'subject' => $this->trans('mail.actor.reset_password.subject'),
-            'body' => $this->render('mail/actor/reset_password.html.twig', [
+            'subject' => $this->trans('mail.actor.registration_complete.subject', [
+                '%actor%' => $actor->getFirstName(),
+            ]),
+            'body' => $this->render('mail/actor/registration_complete.html.twig', [
+                'actor' => $actor,
+            ]),
+        ]);
+    }
+
+    public function sendActorResetPasswordRequestMail(Actor $actor, string $token): void
+    {
+        $this->send([
+            'to' => $actor->getEmailAddress(),
+            'subject' => $this->trans('mail.actor.reset_password_request.subject'),
+            'body' => $this->render('mail/actor/reset_password_request.html.twig', [
                 'actor' => $actor,
                 'token' => $token,
+            ]),
+        ]);
+    }
+
+    public function sendActorResetPasswordSuccessMail(Actor $actor): void
+    {
+        $this->send([
+            'to' => $actor->getEmailAddress(),
+            'subject' => $this->trans('mail.actor.reset_password_success.subject'),
+            'body' => $this->render('mail/actor/reset_password_success.html.twig', [
+                'actor' => $actor,
+            ]),
+        ]);
+    }
+
+    public function sendActorPasswordChangedMail(Actor $actor): void
+    {
+        $this->send([
+            'to' => $actor->getEmailAddress(),
+            'subject' => $this->trans('mail.actor.password_changed.subject'),
+            'body' => $this->render('mail/actor/password_changed.html.twig', [
+                'actor' => $actor,
             ]),
         ]);
     }

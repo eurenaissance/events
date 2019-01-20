@@ -29,7 +29,7 @@ class ResetPasswordController extends AbstractController
 
             if ($actor = $resetPasswordHandler->findActor($email)) {
                 if ($resetPasswordHandler->hasPendingToken($actor)) {
-                    $this->addFlash('info', 'actor.password_request.pending_token_exists');
+                    $this->addFlash('info', 'security.password_request.pending_token');
 
                     return $this->redirectToRoute('app_login');
                 }
@@ -40,7 +40,7 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_password_request_check_email');
         }
 
-        return $this->render('security/password_request.html.twig', [
+        return $this->render('security/password/request.html.twig', [
             'legacy' => $request->query->getBoolean('legacy'),
             'form' => $form->createView(),
         ]);
@@ -51,7 +51,7 @@ class ResetPasswordController extends AbstractController
      */
     public function checkEmail(): Response
     {
-        return $this->render('security/password_request_check_email.html.twig');
+        return $this->render('security/password/check_email.html.twig');
     }
 
     /**
@@ -68,13 +68,13 @@ class ResetPasswordController extends AbstractController
         ResetPasswordHandler $resetPasswordHandler
     ): Response {
         if ($token->isConsumed()) {
-            $this->addFlash('info', 'actor.password_reset.token_already_consumed');
+            $this->addFlash('info', 'security.password_reset.token_already_consumed');
 
             return $this->redirectToRoute('app_login');
         }
 
         if ($token->isExpired()) {
-            $this->addFlash('info', 'actor.password_reset.token_expired');
+            $this->addFlash('info', 'security.password_reset.token_expired');
 
             return $this->redirectToRoute('app_login');
         }
@@ -89,7 +89,7 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('security/password_reset.html.twig', [
+        return $this->render('security/password/reset.html.twig', [
             'form' => $form->createView(),
         ]);
     }

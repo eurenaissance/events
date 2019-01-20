@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}registration form{% endblock %}
+{% block title 'actor.profile'|trans %}
 
 {% block body %}
     {{ form_start(form) }}
@@ -10,8 +10,12 @@
         {{ form_row(form.gender) }}
         {{ form_row(form.emailAddress) }}
 
-        <button type="submit">Save</button>
+        <button type="submit">
+            {{ 'actor.profile.save'|trans }}
+        </button>
     {{ form_end(form) }}
 
-    <a href="{{ path('app_profile_password') }}">Change password</a>
+    <a href="{{ path('app_profile_change_password') }}">
+        {{ 'actor.profile.change_password'|trans }}
+    </a>
 {% endblock %}

@@ -45,7 +45,7 @@ class ResetPasswordHandler
         $this->entityManager->persist($token);
         $this->entityManager->flush();
 
-        $this->mailer->sendActorResetPasswordMail($actor, $token->getUuidAsString());
+        $this->mailer->sendActorResetPasswordRequestMail($actor, $token->getUuidAsString());
     }
 
     public function reset(ActorResetPasswordToken $token): void
@@ -53,5 +53,7 @@ class ResetPasswordHandler
         $token->consume();
 
         $this->entityManager->flush();
+
+        $this->mailer->sendActorResetPasswordSuccessMail($token->getActor());
     }
 }

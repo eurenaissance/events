@@ -1,0 +1,9 @@
+{% extends 'mail/base.html.twig' %}
+
+{% block body %}
+    {{ 'common.welcome_actor'|trans({ '%actor%': actor.firstName }) }}
+    <br>
+    {{ 'mail.actor.registration_complete.body'|trans }}
+    <br/>
+    {{ 'mail.common.click_here_to_sign_in'|trans({ '%url%': url('app_login') })|raw }}
+{% endblock %}

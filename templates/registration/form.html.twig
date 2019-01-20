@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Registration form{% endblock %}
+{% block title 'actor.registration'|trans %}
 
 {% block body %}
     {{ form_start(form) }}
@@ -11,6 +11,8 @@
         {{ form_row(form.emailAddress) }}
         {{ form_row(form.password) }}
 
-        <button type="submit">Register</button>
+        <button type="submit">
+            {{ 'actor.registration.register'|trans }}
+        </button>
     {{ form_end(form) }}
 {% endblock %}

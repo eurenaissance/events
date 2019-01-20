@@ -25,14 +25,15 @@ class RegistrationControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/register/check-email');
         $this->assertMailSent([
             'to' => 'new@mobilisation.eu',
-            'subject' => 'mail.actor.registration.subject',
+            'subject' => 'Welcome Rémi, please confirm your registration.',
             'body' => "@string@
                         .contains('Welcome Rémi!')
-                        .contains('http://localhost/register/confirm')",
+                        .matchRegex('#href=\"http://localhost/register/confirm/".self::UUID_PATTERN."#\"')",
         ]);
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
+        $this->assertResponseContains('A mail has been sent to confirm your account.');
         $this->assertActorConfirmed('new@mobilisation.eu', false);
     }
 
@@ -44,7 +45,16 @@ class RegistrationControllerTest extends HttpTestCase
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'password' => ['first' => 'test123', 'second' => 'test123'],
-            'errors' => ['common.email_address.unique'],
+            'errors' => ['This email address is already registered.'],
+        ];
+
+        yield [
+            'emailAddress' => 'REMI@MOBILISATION.eu',
+            'firstName' => 'Rémi',
+            'lastName' => 'Gardien',
+            'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
+            'password' => ['first' => 'test123', 'second' => 'test123'],
+            'errors' => ['This email address is already registered.'],
         ];
 
         yield [
@@ -53,37 +63,21 @@ class RegistrationControllerTest extends HttpTestCase
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'password' => ['first' => 'test123', 'second' => 'test123'],
-            'errors' => ['common.email_address.valid'],
+            'errors' => ['This email address is not valid.'],
         ];
 
         yield [
             'emailAddress' => 'new@mobilisation.eu',
             'firstName' => null,
             'lastName' => null,
-            'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'password' => ['first' => 'test123', 'second' => 'test123'],
-            'errors' => [
-                'common.first_name.not_blank',
-                'common.last_name.not_blank',
-            ],
-        ];
-
-        yield [
-            'emailAddress' => 'new@mobilisation.eu',
-            'firstName' => 'Rémi',
-            'lastName' => 'Gardien',
             'birthday' => ['year' => null, 'month' => 11, 'day' => 27],
-            'password' => ['first' => 'test123', 'second' => '321test'],
-            'errors' => ['common.date.invalid'],
-        ];
-
-        yield [
-            'emailAddress' => 'new@mobilisation.eu',
-            'firstName' => 'Rémi',
-            'lastName' => 'Gardien',
-            'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'password' => ['first' => 'test123', 'second' => '321test'],
-            'errors' => ['common.password.mismatch'],
+            'password' => ['first' => 'test123', 'second' => '123test'],
+            'errors' => [
+                'Please enter your first name.',
+                'Please enter your last name.',
+                'This date is not valid.',
+                'Passwords do not match.',
+            ],
         ];
 
         yield [
@@ -92,7 +86,7 @@ class RegistrationControllerTest extends HttpTestCase
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'password' => ['first' => '123', 'second' => '123'],
-            'errors' => ['common.password.min_length'],
+            'errors' => ['Password must be at least 6 characters long.'],
         ];
     }
 
@@ -127,10 +121,18 @@ class RegistrationControllerTest extends HttpTestCase
 
         $this->client->request('GET', '/register/confirm/'.ActorConfirmTokenFixtures::TOKEN_04_UUID);
         $this->assertIsRedirectedTo('/login');
+        $this->assertMailSent([
+            'to' => 'marine@mobilisation.eu',
+            'subject' => 'Welcome Marine, your registration is now complete.',
+            'body' => "@string@
+                        .contains('Welcome Marine!')
+                        .contains('Your registration is now complete.')
+                        .contains('href=\"http://localhost/login\"')",
+        ]);
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('actor.registration.confirmed');
+        $this->assertResponseContains('Your registration is now complete.');
         $this->assertActorConfirmed('marine@mobilisation.eu', true);
     }
 
@@ -160,7 +162,7 @@ class RegistrationControllerTest extends HttpTestCase
             'alreadyConfirmed' => false,
             'token' => ActorConfirmTokenFixtures::TOKEN_05_UUID,
             'redirectedTo' => '/register/resend-confirmation',
-            'errors' => ['actor.registration.token_expired'],
+            'errors' => ['This link is no longer valid.'],
         ];
     }
 

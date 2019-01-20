@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Resend confirmation success{% endblock %}
+{% block title 'actor.registration.resend_confirmation'|trans %}
 
 {% block body %}
     {{ 'actor.registration.resend_confirmation.mail_sent'|trans }}
 
-    <a href="{{ path('app_login') }}">back to login</a>
+    <a href="{{ path('app_login') }}">
+        {{ 'security.back_to_login'|trans }}
+    </a>
 {% endblock %}
