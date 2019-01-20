@@ -23,6 +23,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertEquals('Gardien', $form->get('lastName')->getValue());
         $this->assertEmpty($form->get('gender')->getValue());
 
+        /** @var \Symfony\Component\DomCrawler\Field\FormField[] $birthday */
         $birthday = $form->get('birthday');
         $this->assertEquals(
             ['year' => 1988, 'month' => 11, 'day' => 27],
@@ -52,6 +53,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertEquals('Gar', $form->get('lastName')->getValue());
         $this->assertEquals('male', $form->get('gender')->getValue());
 
+        /** @var \Symfony\Component\DomCrawler\Field\FormField[] $birthday */
         $birthday = $form->get('birthday');
         $this->assertEquals(
             ['year' => 1988, 'month' => 01, 'day' => 12],

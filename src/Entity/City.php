@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Util\EntityIdTrait;
+use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,26 +36,18 @@ class City
     private $zipCode;
 
     /**
-     * @var float
+     * @var Point
      *
-     * @ORM\Column(type="decimal", precision=9, scale=6)
+     * @ORM\Column(type="point")
      */
-    private $latitude;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(type="decimal", precision=9, scale=6)
-     */
-    private $longitude;
+    private $coordinates;
 
     public function __construct(string $country, string $name, string $zipCode, float $latitude, float $longitude)
     {
         $this->country = $country;
         $this->name = $name;
         $this->zipCode = $zipCode;
-        $this->latitude = $latitude;
-        $this->longitude = $longitude;
+        $this->coordinates = new Point($longitude, $latitude);
     }
 
     public function getCountry(): string
@@ -72,13 +65,18 @@ class City
         return $this->zipCode;
     }
 
+    public function getCoordinates(): Point
+    {
+        return $this->coordinates;
+    }
+
     public function getLatitude(): float
     {
-        return $this->latitude;
+        return $this->coordinates->getLatitude();
     }
 
     public function getLongitude(): float
     {
-        return $this->longitude;
+        return $this->coordinates->getLongitude();
     }
 }
