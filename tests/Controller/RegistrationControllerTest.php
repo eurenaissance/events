@@ -13,7 +13,7 @@ class RegistrationControllerTest extends HttpTestCase
     public function testRegister(): void
     {
         $crawler = $this->client->request('GET', '/register');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Register')->form([
             'emailAddress' => 'new@mobilisation.eu',
@@ -22,7 +22,7 @@ class RegistrationControllerTest extends HttpTestCase
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'password' => ['first' => 'test123', 'second' => 'test123'],
         ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/register/check-email'));
+        $this->assertIsRedirectedTo('/register/check-email');
         $this->assertMailSent([
             'to' => 'new@mobilisation.eu',
             'subject' => 'mail.actor.registration.subject',
@@ -32,8 +32,8 @@ class RegistrationControllerTest extends HttpTestCase
         ]);
 
         $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-        self::assertActorConfirmed('new@mobilisation.eu', false);
+        $this->assertResponseSuccessFul();
+        $this->assertActorConfirmed('new@mobilisation.eu', false);
     }
 
     public function provideBadRegistrations(): iterable
@@ -108,7 +108,7 @@ class RegistrationControllerTest extends HttpTestCase
         array $errors
     ): void {
         $crawler = $this->client->request('GET', '/register');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Register')->form([
             'emailAddress' => $emailAddress,
@@ -117,95 +117,76 @@ class RegistrationControllerTest extends HttpTestCase
             'birthday' => $birthday,
             'password' => $password,
         ]));
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-
-        foreach ($errors as $error) {
-            self::assertContains($error, $this->client->getResponse()->getContent());
-        }
-    }
-
-    public function testResendConfirmation(): void
-    {
-        $crawler = $this->client->request('GET', '/register/resend-confirmation');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-
-        $this->client->submit($crawler->selectButton('Resend confirmation')->form([
-            'emailAddress' => 'marine@mobilisation.eu',
-        ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/register/resend-confirmation/check-email'));
-        $this->assertMailSent([
-            'to' => 'marine@mobilisation.eu',
-            'subject' => 'mail.actor.registration.subject',
-            'body' => "@string@
-                        .contains('Welcome Marine!')
-                        .matchRegex('#href=\"http://localhost/register/confirm/".self::UUID_PATTERN."#\"')",
-        ]);
-
-        $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-    }
-
-    public function testResendConfirmationToUnknown(): void
-    {
-        $crawler = $this->client->request('GET', '/register/resend-confirmation');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-
-        $this->client->submit($crawler->selectButton('Resend confirmation')->form([
-            'emailAddress' => 'unknown@mobilisation.eu',
-        ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/register/resend-confirmation/check-email'));
-        $this->assertNoMailSent();
-
-        $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-    }
-
-    public function testResendConfirmationToAlreadyConfirmed(): void
-    {
-        self::assertActorConfirmed('remi@mobilisation.eu', true);
-
-        $crawler = $this->client->request('GET', '/register/resend-confirmation');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-
-        $this->client->submit($crawler->selectButton('Resend confirmation')->form([
-            'emailAddress' => 'remi@mobilisation.eu',
-        ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/login'));
-        $this->assertNoMailSent();
-
-        $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-        self::assertContains('actor.registration.already_confirmed', $this->client->getResponse()->getContent());
+        $this->assertResponseSuccessFul();
+        $this->assertResponseContains($errors);
     }
 
     public function testConfirmSuccess(): void
     {
-        self::assertActorConfirmed('marine@mobilisation.eu', false);
+        $this->assertActorConfirmed('marine@mobilisation.eu', false);
 
-        $this->client->request('GET', '/register/confirm/'.ActorConfirmTokenFixtures::TOKEN_03_UUID);
-        self::assertTrue($this->client->getResponse()->isRedirect('/login'));
-
-        $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-        self::assertContains('actor.registration.confirmed', $this->client->getResponse()->getContent());
-        self::assertActorConfirmed('marine@mobilisation.eu', true);
-    }
-
-    public function testConfirmFailure(): void
-    {
-        self::assertActorConfirmed('titouan@mobilisation.eu', true);
-
-        $this->client->request('GET', '/register/confirm/'.ActorConfirmTokenFixtures::TOKEN_02_UUID);
-        self::assertTrue($this->client->getResponse()->isRedirect('/login'));
+        $this->client->request('GET', '/register/confirm/'.ActorConfirmTokenFixtures::TOKEN_04_UUID);
+        $this->assertIsRedirectedTo('/login');
 
         $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-        self::assertContains('actor.registration.already_confirmed', $this->client->getResponse()->getContent());
-        self::assertActorConfirmed('titouan@mobilisation.eu', true);
+        $this->assertResponseSuccessFul();
+        $this->assertResponseContains('actor.registration.confirmed');
+        $this->assertActorConfirmed('marine@mobilisation.eu', true);
     }
 
-    private static function assertActorConfirmed(string $email, bool $expected): void
+    public function provideConfirmationFailures(): iterable
     {
-        self::assertSame($expected, self::getActorRepository()->findOneByEmail($email)->isConfirmed());
+        // token is already consumed
+        yield [
+            'email' => 'remi@mobilisation.eu',
+            'alreadyConfirmed' => true,
+            'token' => ActorConfirmTokenFixtures::TOKEN_01_UUID,
+            'redirectedTo' => '/login',
+            'errors' => ['Your account is already confirmed.'],
+        ];
+
+        // token is expired but user is now confirmed
+        yield [
+            'email' => 'titouan@mobilisation.eu',
+            'alreadyConfirmed' => true,
+            'token' => ActorConfirmTokenFixtures::TOKEN_02_UUID,
+            'redirectedTo' => '/login',
+            'errors' => ['Your account is already confirmed.'],
+        ];
+
+        // token is expired
+        yield [
+            'email' => 'nicolas@mobilisation.eu',
+            'alreadyConfirmed' => false,
+            'token' => ActorConfirmTokenFixtures::TOKEN_05_UUID,
+            'redirectedTo' => '/register/resend-confirmation',
+            'errors' => ['actor.registration.token_expired'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideConfirmationFailures
+     */
+    public function testConfirmationFailure(
+        string $email,
+        bool $alreadyConfirmed,
+        string $token,
+        string $redirectedTo,
+        array $errors
+    ): void {
+        $this->assertActorConfirmed($email, $alreadyConfirmed);
+
+        $this->client->request('GET', "/register/confirm/$token");
+        $this->assertIsRedirectedTo($redirectedTo);
+
+        $this->client->followRedirect();
+        $this->assertResponseSuccessFul();
+        $this->assertResponseContains($errors);
+        $this->assertActorConfirmed($email, $alreadyConfirmed);
+    }
+
+    private function assertActorConfirmed(string $email, bool $expected): void
+    {
+        self::assertSame($expected, $this->getActorRepository()->findOneByEmail($email)->isConfirmed());
     }
 }

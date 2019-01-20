@@ -13,36 +13,43 @@ class ResetPasswordControllerTest extends HttpTestCase
     public function testRequest(): void
     {
         $crawler = $this->client->request('GET', '/password/request');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Request new password')->form([
             'emailAddress' => 'remi@mobilisation.eu',
         ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/password/request/check-email'));
+        $this->assertIsRedirectedTo('/password/request/check-email');
+        $this->assertMailSent([
+            'to' => 'remi@mobilisation.eu',
+            'subject' => 'mail.actor.reset_password.subject',
+            'body' => "@string@
+                        .contains('Hello Rémi!')
+                        .matchRegex('#href=\"http://localhost/password/reset/".self::UUID_PATTERN."#\"')",
+        ]);
 
         $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
     }
 
     public function testRequestToPendingToken(): void
     {
         $crawler = $this->client->request('GET', '/password/request');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Request new password')->form([
             'emailAddress' => 'titouan@mobilisation.eu',
         ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/login'));
+        $this->assertIsRedirectedTo('/login');
 
         $this->client->followRedirect();
-        self::assertContains('actor.password_request.pending_token_exists', $this->client->getResponse()->getContent());
+        $this->assertResponseContains('actor.password_request.pending_token_exists');
     }
 
     public function testReset(): void
     {
         $resetPasswordUrl = sprintf('/password/reset/%s', ActorResetPasswordTokenFixtures::TOKEN_01_UUID);
         $crawler = $this->client->request('GET', $resetPasswordUrl);
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Reset password')->form([
             'password' => [
@@ -50,21 +57,21 @@ class ResetPasswordControllerTest extends HttpTestCase
                 'second' => 'test!321',
             ],
         ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/login'));
+        $this->assertIsRedirectedTo('/login');
 
         $crawler = $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-        self::assertContains('actor.password_reset.success', $this->client->getResponse()->getContent());
+        $this->assertResponseSuccessFul();
+        $this->assertResponseContains('actor.password_reset.success');
 
         $this->client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => 'titouan@mobilisation.eu',
             'password' => 'test!321',
         ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/'));
+        $this->assertIsRedirectedTo('/');
 
         $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-        self::assertContains('Hello Titouan', $this->client->getResponse()->getContent());
+        $this->assertResponseSuccessFul();
+        $this->assertResponseContains('Hello Titouan');
     }
 
     public function provideInvalidTokens(): iterable
@@ -86,9 +93,9 @@ class ResetPasswordControllerTest extends HttpTestCase
     public function testInvalidToken(string $token, string $error): void
     {
         $this->client->request('GET', "/password/reset/$token");
-        self::assertTrue($this->client->getResponse()->isRedirect('/login'));
+        $this->assertIsRedirectedTo('/login');
 
         $this->client->followRedirect();
-        self::assertContains($error, $this->client->getResponse()->getContent());
+        $this->assertResponseContains($error);
     }
 }

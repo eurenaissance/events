@@ -36,6 +36,33 @@ abstract class HttpTestCase extends WebTestCase
         $this->client = null;
     }
 
+    /**
+     * @param array|string $patterns
+     */
+    protected function assertResponseContains($patterns): void
+    {
+        if (is_string($patterns)) {
+            $patterns = [$patterns];
+        }
+
+        foreach ($patterns as $pattern) {
+            self::assertContains($pattern, $this->client->getResponse()->getContent());
+        }
+    }
+
+    protected function assertIsRedirectedTo(string $pattern): void
+    {
+        $response = $this->client->getResponse();
+
+        self::assertTrue($response->isRedirection());
+        $this->assertMatchesPattern($pattern, $response->headers->get('Location'));
+    }
+
+    protected function assertResponseSuccessFul(): void
+    {
+        self::assertTrue($this->client->getResponse()->isSuccessful());
+    }
+
     protected function assertMailSent(array $expectedMail): void
     {
         if (!isset($expectedMail['to'])) {
@@ -44,8 +71,8 @@ abstract class HttpTestCase extends WebTestCase
 
         foreach ($this->getMessagesForTopic('mail') as $mail) {
             if ($expectedMail['to'] === $mail['to']) {
-                self::assertMatchesPattern($expectedMail['subject'], $mail['subject']);
-                self::assertMatchesPattern($expectedMail['body'], $mail['body']);
+                $this->assertMatchesPattern($expectedMail['subject'], $mail['subject']);
+                $this->assertMatchesPattern($expectedMail['body'], $mail['body']);
 
                 foreach (['from', 'cc', 'bcc'] as $strictComparison) {
                     if (isset($expectedMail[$strictComparison])) {

@@ -16,6 +16,13 @@ abstract class ActorToken
     use EntityUuidTrait;
 
     /**
+     * Defines the interval specifications for the expiration date.
+     *
+     * @see http://php.net/manual/en/dateinterval.construct.php
+     */
+    protected const EXPIRATION_INTERVAL = 'PT2H';
+
+    /**
      * @var Actor
      *
      * @ORM\ManyToOne(targetEntity=Actor::class)
@@ -26,17 +33,30 @@ abstract class ActorToken
     /**
      * @var \DateTime
      *
+     * @ORM\Column(type="datetime")
+     */
+    protected $expiredAt;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $consumedAt;
 
-    public function __construct(UuidInterface $uuid, Actor $actor)
+    public function __construct(UuidInterface $uuid, Actor $actor, \DateTime $expiredAt)
     {
         $this->actor = $actor;
         $this->uuid = $uuid;
+        $this->expiredAt = $expiredAt;
     }
 
-    abstract public static function generate(Actor $actor): self;
+    final public static function generate(Actor $actor): self
+    {
+        $expirationDate = (new \DateTime('now'))->add(new \DateInterval(static::EXPIRATION_INTERVAL));
+
+        return new static(self::createUuid(), $actor, $expirationDate);
+    }
 
     public function consume(): void
     {
@@ -52,6 +72,11 @@ abstract class ActorToken
         return null !== $this->consumedAt;
     }
 
+    public function isExpired(): bool
+    {
+        return new \DateTime('now') >= $this->expiredAt;
+    }
+
     public function getActor(): Actor
     {
         return $this->actor;
@@ -60,5 +85,10 @@ abstract class ActorToken
     public function getConsumedAt(): ?\DateTime
     {
         return $this->consumedAt;
+    }
+
+    public function getExpiredAt(): \DateTime
+    {
+        return $this->expiredAt;
     }
 }

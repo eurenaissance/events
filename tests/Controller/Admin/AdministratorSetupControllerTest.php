@@ -20,10 +20,10 @@ class AdministratorSetupControllerTest extends HttpTestCase
         self::assertEquals(0, $administratorRepository->countAdministrators());
 
         $this->client->request('GET', '/admin/login');
-        self::assertTrue($this->client->getResponse()->isRedirect('/admin/setup'));
+        $this->assertIsRedirectedTo('/admin/setup');
 
         $crawler = $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Save')->form([
             'emailAddress' => 'first_admin@mobilisation-eu.code',
@@ -32,26 +32,26 @@ class AdministratorSetupControllerTest extends HttpTestCase
                 'second' => AdministratorFixtures::DEFAULT_PASSWORD,
             ],
         ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/admin/login'));
+        $this->assertIsRedirectedTo('/admin/login');
 
         $crawler = $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
         self::assertEquals(1, $administratorRepository->countAdministrators());
 
         $this->client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => 'first_admin@mobilisation-eu.code',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
         ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/admin/dashboard'));
+        $this->assertIsRedirectedTo('/admin/dashboard');
 
         $crawler = $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
         self::assertGreaterThan(0, $crawler->filter('a:contains("Administrators")')->count());
     }
 
     public function testSetupIsDisabled(): void
     {
         $this->client->request('GET', '/admin/login');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
     }
 }

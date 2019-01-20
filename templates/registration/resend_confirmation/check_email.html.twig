@@ -3,7 +3,7 @@
 {% block title %}Resend confirmation success{% endblock %}
 
 {% block body %}
-    Go check your mails to confirm your account.
+    {{ 'actor.registration.resend_confirmation.mail_sent'|trans }}
 
     <a href="{{ path('app_login') }}">back to login</a>
 {% endblock %}

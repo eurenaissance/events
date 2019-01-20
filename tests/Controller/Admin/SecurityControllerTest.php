@@ -12,11 +12,13 @@ class SecurityControllerTest extends HttpTestCase
 {
     public function provideBadCredentials(): iterable
     {
+        // unknown email and known password
         yield [
             'email' => 'unknown@mobilisation.eu',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
         ];
 
+        // valid email account and bad password
         yield [
             'email' => 'superadmin@mobilisation-eu.code',
             'password' => 'bad_password',
@@ -29,56 +31,56 @@ class SecurityControllerTest extends HttpTestCase
     public function testLoginFailure(string $email, string $password): void
     {
         $crawler = $this->client->request('GET', '/admin/login');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => $email,
             'password' => $password,
         ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/admin/login'));
+        $this->assertIsRedirectedTo('/admin/login');
 
         $crawler = $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
         self::assertEquals($email, $crawler->selectButton('Sign in')->form()->get('emailAddress')->getValue());
     }
 
     public function testLoginSuccess(): void
     {
         $crawler = $this->client->request('GET', '/admin/login');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => 'superadmin@mobilisation-eu.code',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
         ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/admin/dashboard'));
+        $this->assertIsRedirectedTo('/admin/dashboard');
 
         $crawler = $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
         self::assertGreaterThan(0, $crawler->filter('a:contains("Dashboard")')->count());
     }
 
     public function testLoginTwoFactor(): void
     {
         $crawler = $this->client->request('GET', '/admin/login');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => 'admin@mobilisation-eu.code',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
         ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/admin/dashboard'));
+        $this->assertIsRedirectedTo('/admin/dashboard');
 
         $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isRedirect($this->client->getRequest()->getSchemeAndHttpHost().'/admin/2fa'));
+        $this->assertIsRedirectedTo($this->getAbsoluteUrl('/admin/2fa'));
 
         $crawler = $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $this->client->click($crawler->selectLink('Cancel')->link());
-        self::assertTrue($this->client->getResponse()->isRedirect($this->client->getRequest()->getSchemeAndHttpHost().'/admin/login'));
+        $this->assertIsRedirectedTo($this->getAbsoluteUrl('/admin/login'));
 
         $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
     }
 }
