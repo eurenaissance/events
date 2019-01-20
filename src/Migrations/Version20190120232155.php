@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190120194435 extends AbstractMigration
+final class Version20190120232155 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -37,8 +37,10 @@ final class Version20190120194435 extends AbstractMigration
         $this->addSql('CREATE TABLE administrators (id BIGINT NOT NULL, email_address VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, google_authenticator_secret VARCHAR(255) DEFAULT NULL, roles TEXT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX administrators_email_address_unique ON administrators (email_address)');
         $this->addSql('COMMENT ON COLUMN administrators.roles IS \'(DC2Type:simple_array)\'');
-        $this->addSql('CREATE TABLE actors (id BIGINT NOT NULL, email_address VARCHAR(255) NOT NULL, first_name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, birthday DATE NOT NULL, gender VARCHAR(6) DEFAULT NULL, password VARCHAR(255) NOT NULL, confirmed_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, uuid UUID NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE UNIQUE INDEX acors_email_address_unique ON actors (email_address)');
+        $this->addSql('CREATE TABLE actors (id BIGINT NOT NULL, city_id BIGINT NOT NULL, email_address VARCHAR(255) NOT NULL, first_name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, birthday DATE NOT NULL, gender VARCHAR(6) DEFAULT NULL, address VARCHAR(150) DEFAULT NULL, password VARCHAR(255) NOT NULL, confirmed_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, uuid UUID NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_DF2BF0E58BAC62AF ON actors (city_id)');
+        $this->addSql('CREATE UNIQUE INDEX actors_email_address_unique ON actors (email_address)');
+        $this->addSql('CREATE UNIQUE INDEX actors_uuid_unique ON actors (uuid)');
         $this->addSql('COMMENT ON COLUMN actors.uuid IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE cities (id BIGINT NOT NULL, country VARCHAR(3) NOT NULL, name VARCHAR(150) NOT NULL, zip_code VARCHAR(20) NOT NULL, coordinates Geometry(Point) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN cities.coordinates IS \'(DC2Type:point)\'');
@@ -47,6 +49,7 @@ final class Version20190120194435 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX actor_confirm_token_unique_uuid ON actor_confirm_tokens (uuid)');
         $this->addSql('COMMENT ON COLUMN actor_confirm_tokens.uuid IS \'(DC2Type:uuid)\'');
         $this->addSql('ALTER TABLE actor_reset_password_tokens ADD CONSTRAINT FK_A5FB187B10DAF24A FOREIGN KEY (actor_id) REFERENCES actors (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE actors ADD CONSTRAINT FK_DF2BF0E58BAC62AF FOREIGN KEY (city_id) REFERENCES cities (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE actor_confirm_tokens ADD CONSTRAINT FK_AE6DC40710DAF24A FOREIGN KEY (actor_id) REFERENCES actors (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
@@ -57,6 +60,7 @@ final class Version20190120194435 extends AbstractMigration
 
         $this->addSql('ALTER TABLE actor_reset_password_tokens DROP CONSTRAINT FK_A5FB187B10DAF24A');
         $this->addSql('ALTER TABLE actor_confirm_tokens DROP CONSTRAINT FK_AE6DC40710DAF24A');
+        $this->addSql('ALTER TABLE actors DROP CONSTRAINT FK_DF2BF0E58BAC62AF');
         $this->addSql('DROP SEQUENCE actor_reset_password_tokens_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE administrators_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE actors_id_seq CASCADE');

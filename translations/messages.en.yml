@@ -7,6 +7,7 @@ common.hello_actor: Hello %actor%!
 common.welcome_actor: Welcome %actor%!
 common.password.mismatch: Passwords do not match.
 common.password.min_length: Password must be at least {{ limit }} characters long.
+common.email_address.not_blank: Email address is required.
 common.email_address.valid: This email address is not valid.
 common.email_address.unique: This email address is already registered.
 common.first_name.not_blank: Please enter your first name.
@@ -16,6 +17,12 @@ common.gender.not_blank: Please select a gender.
 common.gender.male: Male
 common.gender.female: Female
 common.gender.other: Other
+common.gender.select: Select a gender
+common.year.placeholder: YYYY
+common.month.placeholder: MM
+common.day.placeholder: DD
+common.city.invalid: This city is not valid.
+common.address.max_length: Your address can not exceed {{ limit }} characters.
 
 #
 # Actor
@@ -23,8 +30,14 @@ common.gender.other: Other
 actor.first_name: First name
 actor.last_name: Last name
 actor.email_address: Email address
+actor.password: Mot de passe
+actor.password_confirmation: Confirmation du mot de passe
 actor.gender: Gender
 actor.birthday: Birth date
+actor.address: Address
+actor.country: Country
+actor.zip_code: Zip code
+actor.city: City
 
 #
 # Registration

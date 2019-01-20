@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Util\EntityIdTrait;
-use CrEOF\Spatial\PHP\Types\Geometry\Point;
+use CrEOF\Spatial\PHP\Types\Geography\Point;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

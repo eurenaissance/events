@@ -3,17 +3,29 @@
 namespace App\Form\Actor;
 
 use App\Entity\Actor;
+use App\Form\DataTransformer\CityToIdTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ActorType extends AbstractType
 {
     private const BIRTHDAY_MIN_YEARS = 15;
     private const BIRTHDAY_MAX_YEARS = 120;
+
+    private $cityToIdTransformer;
+
+    public function __construct(CityToIdTransformer $cityToIdTransformer)
+    {
+        $this->cityToIdTransformer = $cityToIdTransformer;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -31,9 +43,9 @@ class ActorType extends AbstractType
                 'widget' => 'choice',
                 'years' => $options['years'],
                 'placeholder' => [
-                    'year' => 'AAAA',
-                    'month' => 'MM',
-                    'day' => 'JJ',
+                    'year' => 'common.year.placeholder',
+                    'month' => 'common.month.placeholder',
+                    'day' => 'common.day.placeholder',
                 ],
                 'invalid_message' => 'common.date.invalid',
                 'empty_data' => '',
@@ -41,7 +53,35 @@ class ActorType extends AbstractType
             ->add('emailAddress', EmailType::class, [
                 'label' => 'actor.email_address',
             ])
+            ->add('address', TextType::class, [
+                'label' => 'actor.address',
+                'required' => false,
+            ])
+            ->add('zipCode', TextType::class, [
+                'label' => 'actor.zip_code',
+                'mapped' => false,
+            ])
+            ->add('country', CountryType::class, [
+                'label' => 'actor.country',
+                'mapped' => false,
+            ])
+            ->add('city', HiddenType::class, [
+                'label' => 'actor.city',
+                'invalid_message' => 'common.city.invalid',
+                'error_bubbling' => false,
+            ])
         ;
+
+        $builder->get('city')->addModelTransformer($this->cityToIdTransformer);
+
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
+            $form = $event->getForm();
+            /** @var Actor $actor */
+            $actor = $event->getData();
+
+            $form->get('zipCode')->setData($actor->getZipCode());
+            $form->get('country')->setData($actor->getCountry());
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)

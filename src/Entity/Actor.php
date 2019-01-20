@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Util\EntityIdTrait;
 use App\Entity\Util\EntityUuidTrait;
+use CrEOF\Spatial\PHP\Types\Geography\Point;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
@@ -13,7 +14,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table(name="actors", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="acors_email_address_unique", columns="email_address")
+ *     @ORM\UniqueConstraint(name="actors_email_address_unique", columns="email_address"),
+ *     @ORM\UniqueConstraint(name="actors_uuid_unique", columns="uuid"),
  * })
  * @ORM\Entity(repositoryClass="App\Repository\ActorRepository")
  *
@@ -74,6 +76,25 @@ class Actor implements UserInterface, EquatableInterface
      * @Assert\Choice(message="common.gender.choice", choices={"female", "male", "other"}, groups={"profile"})
      */
     private $gender;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(length=150, nullable=true)
+     *
+     * @Assert\Length(max=150, maxMessage="common.address.max_length", groups={"registration", "profile"})
+     */
+    private $address;
+
+    /**
+     * @var City|null
+     *
+     * @ORM\ManyToOne(targetEntity=City::class)
+     * @ORM\JoinColumn(nullable=false)
+     *
+     * @Assert\NotBlank(message="common.city.not_blank", groups={"registration", "profile"})
+     */
+    private $city;
 
     /**
      * @var string|null
@@ -229,5 +250,40 @@ class Actor implements UserInterface, EquatableInterface
     public function confirm(): void
     {
         $this->confirmedAt = new \DateTime('now');
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): void
+    {
+        $this->address = $address;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(City $city): void
+    {
+        $this->city = $city;
+    }
+
+    public function getZipCode(): ?string
+    {
+        return $this->city ? $this->city->getZipCode() : null;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->city ? $this->city->getCountry() : null;
+    }
+
+    public function getCoordinates(): ?Point
+    {
+        return $this->city ? $this->city->getCoordinates() : null;
     }
 }
