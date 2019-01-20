@@ -44,17 +44,17 @@ class RegistrationHandler
         return $this->actorRepository->findOneByEmail($email);
     }
 
-    public function findPendingToken(Actor $actor): ?ActorConfirmToken
+    public function hasPendingToken(Actor $actor): bool
     {
-        return $this->confirmTokenRepository->findPendingToken($actor);
+        return null !== $this->confirmTokenRepository->findPendingToken($actor);
     }
 
     public function resendConfirmation(Actor $actor): void
     {
-        // Consumed tokens will be deleted by a cleanup task
-        if (!$token = $this->confirmTokenRepository->findPendingToken($actor)) {
-            return;
-        }
+        $token = ActorConfirmToken::generate($actor);
+
+        $this->entityManager->persist($token);
+        $this->entityManager->flush();
 
         $this->mailer->sendActorRegistrationMail($actor, $token->getUuidAsString());
     }

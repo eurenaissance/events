@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190119155026 extends AbstractMigration
+final class Version20190119213316 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -27,7 +27,7 @@ final class Version20190119155026 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE actors_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE cities_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE actor_confirm_tokens_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE actor_reset_password_tokens (id BIGINT NOT NULL, actor_id BIGINT DEFAULT NULL, consumed_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, uuid UUID NOT NULL, expired_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE actor_reset_password_tokens (id BIGINT NOT NULL, actor_id BIGINT DEFAULT NULL, expired_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, consumed_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, uuid UUID NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_A5FB187B10DAF24A ON actor_reset_password_tokens (actor_id)');
         $this->addSql('CREATE UNIQUE INDEX actor_reset_password_token_unique_uuid ON actor_reset_password_tokens (uuid)');
         $this->addSql('COMMENT ON COLUMN actor_reset_password_tokens.uuid IS \'(DC2Type:uuid)\'');
@@ -38,9 +38,9 @@ final class Version20190119155026 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX acors_email_address_unique ON actors (email_address)');
         $this->addSql('COMMENT ON COLUMN actors.uuid IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE cities (id BIGINT NOT NULL, country VARCHAR(3) NOT NULL, name VARCHAR(150) NOT NULL, zip_code VARCHAR(20) NOT NULL, latitude NUMERIC(9, 6) NOT NULL, longitude NUMERIC(9, 6) NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE TABLE actor_confirm_tokens (id BIGINT NOT NULL, actor_id BIGINT DEFAULT NULL, consumed_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, uuid UUID NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE actor_confirm_tokens (id BIGINT NOT NULL, actor_id BIGINT DEFAULT NULL, expired_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, consumed_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, uuid UUID NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_AE6DC40710DAF24A ON actor_confirm_tokens (actor_id)');
         $this->addSql('CREATE UNIQUE INDEX actor_confirm_token_unique_uuid ON actor_confirm_tokens (uuid)');
-        $this->addSql('CREATE UNIQUE INDEX actor_confirm_token_unique_actor_id ON actor_confirm_tokens (actor_id)');
         $this->addSql('COMMENT ON COLUMN actor_confirm_tokens.uuid IS \'(DC2Type:uuid)\'');
         $this->addSql('ALTER TABLE actor_reset_password_tokens ADD CONSTRAINT FK_A5FB187B10DAF24A FOREIGN KEY (actor_id) REFERENCES actors (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE actor_confirm_tokens ADD CONSTRAINT FK_AE6DC40710DAF24A FOREIGN KEY (actor_id) REFERENCES actors (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');

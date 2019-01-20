@@ -15,13 +15,13 @@ class SecurityControllerTest extends HttpTestCase
         yield [
             'email' => 'unknown@mobilisation.eu',
             'password' => ActorFixtures::DEFAULT_PASSWORD,
-            'errors' => ['security.actor.bad_credentials'],
+            'errors' => ['Invalid credentials'],
         ];
 
         yield [
             'email' => 'remi@mobilisation.eu',
             'password' => 'bad_password',
-            'errors' => ['security.actor.bad_credentials'],
+            'errors' => ['Invalid credentials'],
         ];
 
         yield [
@@ -40,16 +40,16 @@ class SecurityControllerTest extends HttpTestCase
     public function testLoginFailure(string $email, string $password, array $errors): void
     {
         $crawler = $this->client->request('GET', '/login');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => $email,
             'password' => $password,
         ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/login'));
+        $this->assertIsRedirectedTo('/login');
 
         $crawler = $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
         self::assertEquals($email, $crawler->selectButton('Sign in')->form()->get('emailAddress')->getValue());
 
         foreach ($errors as $error) {
@@ -60,16 +60,16 @@ class SecurityControllerTest extends HttpTestCase
     public function testLogin(): void
     {
         $crawler = $this->client->request('GET', '/login');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => 'remi@mobilisation.eu',
             'password' => ActorFixtures::DEFAULT_PASSWORD,
         ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/'));
+        $this->assertIsRedirectedTo('/');
 
         $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-        self::assertContains('Hello Rémi!', $this->client->getResponse()->getContent());
+        $this->assertResponseSuccessFul();
+        $this->assertResponseContains('Hello Rémi!');
     }
 }

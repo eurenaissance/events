@@ -14,26 +14,52 @@ class ProfileControllerTest extends HttpTestCase
         $this->authenticateActor('remi@mobilisation.eu');
 
         $crawler = $this->client->request('GET', '/profile');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-        self::assertEmpty($crawler->selectButton('Save')->form()->get('gender')->getValue());
-
-        $this->client->submit($crawler->selectButton('Save')->form([
-            'firstName' => 'Rémi',
-            'lastName' => 'Gardien',
-            'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'gender' => 'male',
-        ]));
-        self::assertTrue($this->client->getResponse()->isRedirect('/profile'));
-
-        $crawler = $this->client->followRedirect();
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $form = $crawler->selectButton('Save')->form();
         self::assertTrue($form->get('emailAddress')->isDisabled());
         self::assertEquals('remi@mobilisation.eu', $form->get('emailAddress')->getValue());
         self::assertEquals('Rémi', $form->get('firstName')->getValue());
         self::assertEquals('Gardien', $form->get('lastName')->getValue());
+        self::assertEmpty($form->get('gender')->getValue());
+
+        $birthday = $form->get('birthday');
+        self::assertEquals(
+            ['year' => 1988, 'month' => 11, 'day' => 27],
+            [
+                'year' => $birthday['year']->getValue(),
+                'month' => $birthday['month']->getValue(),
+                'day' => $birthday['day']->getValue(),
+            ]
+        );
+
+        $this->client->submit($crawler->selectButton('Save')->form([
+            'firstName' => 'Rem',
+            'lastName' => 'Gar',
+            'birthday' => ['year' => 1988, 'month' => 01, 'day' => 12],
+            'gender' => 'male',
+        ]));
+        $this->assertIsRedirectedTo('/profile');
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseSuccessFul();
+
+        $form = $crawler->selectButton('Save')->form();
+        self::assertTrue($form->get('emailAddress')->isDisabled());
+        self::assertEquals('remi@mobilisation.eu', $form->get('emailAddress')->getValue());
+        self::assertEquals('Rem', $form->get('firstName')->getValue());
+        self::assertEquals('Gar', $form->get('lastName')->getValue());
         self::assertEquals('male', $form->get('gender')->getValue());
+
+        $birthday = $form->get('birthday');
+        self::assertEquals(
+            ['year' => 1988, 'month' => 01, 'day' => 12],
+            [
+                'year' => $birthday['year']->getValue(),
+                'month' => $birthday['month']->getValue(),
+                'day' => $birthday['day']->getValue(),
+            ]
+        );
     }
 
     public function provideBadProfiles(): iterable
@@ -72,7 +98,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->authenticateActor('remi@mobilisation.eu');
 
         $crawler = $this->client->request('GET', '/profile');
-        self::assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Save')->form([
             'firstName' => $firstName,
@@ -80,10 +106,7 @@ class ProfileControllerTest extends HttpTestCase
             'gender' => $gender,
             'birthday' => $birthday,
         ]));
-        self::assertTrue($this->client->getResponse()->isSuccessful());
-
-        foreach ($errors as $error) {
-            self::assertContains($error, $this->client->getResponse()->getContent());
-        }
+        $this->assertResponseSuccessFul();
+        $this->assertResponseContains($errors);
     }
 }

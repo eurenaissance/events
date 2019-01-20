@@ -25,14 +25,26 @@ class Mailer
         $this->twig = $twig;
     }
 
-    public function sendActorRegistrationMail(Actor $actor, string $confirmationToken): void
+    public function sendActorRegistrationMail(Actor $actor, string $token): void
     {
         $this->send([
             'to' => $actor->getEmailAddress(),
             'subject' => $this->trans('mail.actor.registration.subject'),
             'body' => $this->render('mail/actor/registration.html.twig', [
                 'actor' => $actor,
-                'token' => $confirmationToken,
+                'token' => $token,
+            ]),
+        ]);
+    }
+
+    public function sendActorResetPasswordMail(Actor $actor, string $token): void
+    {
+        $this->send([
+            'to' => $actor->getEmailAddress(),
+            'subject' => $this->trans('mail.actor.reset_password.subject'),
+            'body' => $this->render('mail/actor/reset_password.html.twig', [
+                'actor' => $actor,
+                'token' => $token,
             ]),
         ]);
     }

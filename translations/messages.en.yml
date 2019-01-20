@@ -1,3 +1,14 @@
+#
+# Registration
+#
+actor.registration.resend_confirmation.mail_sent: A new mail has been sent to confirm your account. Please go check your mails.
+actor.registration.already_confirmed: Your account is already confirmed.
+actor.registration.pending_token: A mail has already been sent in the last 2 hours with a link to confirm your account. Please wait a while to ask for another confirmation mail.
+
+#
+# Security
+#
+security.actor.bad_credentials: Invalid credentials
 security.actor.not_confirmed: |
     Your account is not confirmed yet.
-    Click <a href="%resend_confirmation_url%">here</a> to resend a confirmation email.
+    Click <a href="%resend_confirmation_url%">here</a> to resend a confirmation mail.
