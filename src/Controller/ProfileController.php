@@ -28,6 +28,8 @@ class ProfileController extends AbstractController
             $manager->persist($actor);
             $manager->flush();
 
+            $this->addFlash('info', 'actor.profile.edited');
+
             return $this->redirectToRoute('app_profile_edit');
         }
 
@@ -37,14 +39,16 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * @Route("/password", name="app_profile_password", methods={"GET", "POST"})
+     * @Route("/password", name="app_profile_change_password", methods={"GET", "POST"})
      */
-    public function password(Request $request, ChangePasswordHandler $changePasswordHandler): Response
+    public function changePassword(Request $request, ChangePasswordHandler $changePasswordHandler): Response
     {
         $form = $this->createForm(PasswordType::class, $actor = $this->getUser());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $changePasswordHandler->change($actor);
+
+            $this->addFlash('info', 'actor.profile.password_changed');
 
             return $this->redirectToRoute('app_profile_edit');
         }

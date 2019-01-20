@@ -44,7 +44,10 @@ jobs:
                       set -x
                       export PHPUNIT_ARGS="-v --log-junit ./phpunit/junit.xml"
                       make up
+
                       make test
+                      make phpcs
+                      make security-check
             - store_test_results:
                   path: ./phpunit
 

@@ -1,38 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title 'security.login'|trans %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="login_error">
-            {{ error.messageKey|trans(error.messageData)|raw }}
-        </div>
-    {% endif %}
+    <form method="post">
+        {% if error %}
+            <div class="login_error">
+                {{ error.messageKey|trans(error.messageData)|raw }}
+            </div>
+        {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmailAddress" class="sr-only">Email Address</label>
-    <input type="email" value="{{ last_username }}" name="emailAddress" id="inputEmailAddress" class="form-control" placeholder="Email Address" required autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <label for="emailAddress">{{ 'security.login.email'|trans }}</label>
+        <input type="email"
+               value="{{ last_username }}"
+               name="emailAddress"
+               id="emailAddress"
+               placeholder="{{ 'security.login.email'|trans }}"
+               required autofocus>
 
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <label for="inputPassword">{{ 'security.login.password'|trans }}</label>
+        <input type="password"
+               name="password"
+               id="inputPassword"
+               placeholder="{{ 'security.login.password'|trans }}"
+               required>
 
-    {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
-        </div>
-    #}
+        <button type="submit">
+            {{- 'security.login'|trans -}}
+        </button>
+    </form>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-
-    <a href="{{ path('app_password_request') }}">Forgot password ?</a>
-</form>
+    <a href="{{ path('app_password_request') }}">
+        {{- 'security.password.forgot_password'|trans -}}
+    </a>
 {% endblock %}

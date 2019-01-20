@@ -1,12 +1,8 @@
-{% set has_role_user = is_granted('ROLE_USER') %}
-{% set has_role_adherent = is_granted('ROLE_ADHERENT') %}
-{% set has_role_admin = is_granted('ROLE_ADMIN_DASHBOARD') %}
-
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title 'common.default_title'|trans %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
@@ -21,26 +17,30 @@
 
         {% if is_granted('ROLE_ADMIN_DASHBOARD') %}
             <a href="{{ path('sonata_admin_dashboard') }}">
-                admin
+                {{ 'security.administration'|trans }}
             </a>
         {% else %}
 
             {% if app.user %}
-                Hello {{ app.user.firstName }}!
+                {{ 'common.hello_actor'|trans({ '%actor%': app.user.firstName }) }}
                 ({{ app.user.emailAddress }})
             {% endif %}
             <ul>
                 {% if app.user %}
                     <li>
-                        <a href="{{ path('app_profile_edit') }}">profile</a>
+                        <a href="{{ path('app_profile_edit') }}">
+                            {{ 'actor.profile'|trans }}
+                        </a>
                     </li>
                     <li>
-                        <a href="{{ path('app_logout') }}">logout</a>
+                        <a href="{{ path('app_logout') }}">
+                            {{ 'security.logout'|trans }}
+                        </a>
                     </li>
                     {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
                         <li class="text--small">
                             <a href="{{ path('app_admin_impersonation_exit') }}">
-                                quit impersonation
+                                {{ 'security.quit_impersonation'|trans }}
                             </a>
                         </li>
                     {% endif %}
@@ -48,10 +48,14 @@
 
                 {% if not app.user %}
                     <li>
-                        <a href="{{ path('app_login') }}">login</a>
+                        <a href="{{ path('app_login') }}">
+                            {{ 'security.login'|trans }}
+                        </a>
                     </li>
                     <li>
-                        <a href="{{ path('app_registration_form') }}">register</a>
+                        <a href="{{ path('app_registration_form') }}">
+                            {{ 'actor.registration.register'|trans }}
+                        </a>
                     </li>
                 {% endif %}
             </ul>

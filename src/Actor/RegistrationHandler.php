@@ -36,7 +36,7 @@ class RegistrationHandler
         $this->entityManager->persist($token);
         $this->entityManager->flush();
 
-        $this->mailer->sendActorRegistrationMail($actor, $token->getUuidAsString());
+        $this->mailer->sendActorRegistrationConfirmationMail($actor, $token->getUuidAsString());
     }
 
     public function findActor(string $email): ?Actor
@@ -56,14 +56,18 @@ class RegistrationHandler
         $this->entityManager->persist($token);
         $this->entityManager->flush();
 
-        $this->mailer->sendActorRegistrationMail($actor, $token->getUuidAsString());
+        $this->mailer->sendActorRegistrationConfirmationMail($actor, $token->getUuidAsString());
     }
 
     public function confirm(ActorConfirmToken $token): void
     {
-        $token->getActor()->confirm();
+        $actor = $token->getActor();
+
+        $actor->confirm();
         $token->consume();
 
         $this->entityManager->flush();
+
+        $this->mailer->sendActorRegistrationCompletedMail($actor);
     }
 }

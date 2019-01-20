@@ -54,7 +54,11 @@ abstract class HttpTestCase extends WebTestCase
     {
         $response = $this->client->getResponse();
 
-        self::assertTrue($response->isRedirection());
+        self::assertTrue(
+            $response->isRedirection(),
+            'Expected redirection but got status code '.$response->getStatusCode().' instead.'
+        );
+
         $this->assertMatchesPattern($pattern, $response->headers->get('Location'));
     }
 

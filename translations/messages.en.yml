@@ -1,14 +1,90 @@
 #
+# Common
+#
+common.default_title: Mobilisation EU
+common.homepage: Homepage
+common.hello_actor: Hello %actor%!
+common.welcome_actor: Welcome %actor%!
+common.password.mismatch: Passwords do not match.
+common.password.min_length: Password must be at least {{ limit }} characters long.
+common.email_address.valid: This email address is not valid.
+common.email_address.unique: This email address is already registered.
+common.first_name.not_blank: Please enter your first name.
+common.last_name.not_blank: Please enter your last name.
+common.date.invalid: This date is not valid.
+common.gender.not_blank: Please select a gender.
+common.gender.male: Male
+common.gender.female: Female
+common.gender.other: Other
+
+#
+# Actor
+#
+actor.first_name: First name
+actor.last_name: Last name
+actor.email_address: Email address
+actor.gender: Gender
+actor.birthday: Birth date
+
+#
 # Registration
 #
-actor.registration.resend_confirmation.mail_sent: A new mail has been sent to confirm your account. Please go check your mails.
+actor.registration: Registration
+actor.registration.register: Register
+actor.registration.success: Registration success
+actor.registration.mail_sent: A mail has been sent to confirm your account.
+actor.registration.resend_confirmation: Resend confirmation
+actor.registration.resend_confirmation.mail_sent: A new mail has been sent with a link to confirm your account. Please go check your mails.
 actor.registration.already_confirmed: Your account is already confirmed.
 actor.registration.pending_token: A mail has already been sent in the last 2 hours with a link to confirm your account. Please wait a while to ask for another confirmation mail.
+actor.registration.token_expired: This link is no longer valid. Please request a new confirmation mail to confirm your account.
+actor.registration.confirmed: Your registration is now complete.
+
+#
+# Profile
+#
+actor.profile: Profile
+actor.back_to_profile: Back to profile
+actor.profile.save: Save profile
+actor.profile.edited: Your profile has been successfully saved.
+actor.profile.change_password: Change password
+actor.profile.password_changed: Your password has been successfully changed.
 
 #
 # Security
 #
+security.login: Sign in
+security.login.email: Email address
+security.login.password: Password
+security.logout: Sign out
+security.back_to_login: Back to login
 security.actor.bad_credentials: Invalid credentials
 security.actor.not_confirmed: |
     Your account is not confirmed yet.
     Click <a href="%resend_confirmation_url%">here</a> to resend a confirmation mail.
+
+security.password.forgot_password: Forgot password?
+security.password_request: Request new password
+security.password_request.success: Password reset requested
+security.password_request.mail_sent: A mail has been sent with a link to reset your password. Please go check your mails.
+security.password_reset: Reset password
+security.password_reset.token_already_consumed: This link is no longer valid. Please request a new reset password link.
+security.password_request.pending_token: A mail has already been sent in the last 2 hours with a link to reset your password. Please wait a while to ask for another reset password request.
+security.password_reset.token_expired: This link is no longer valid. Please request a new reset password link.
+security.administration: Administration
+security.quit_impersonation: Quit impersonation
+
+#
+# Mails
+#
+mail.common.click_here_to_sign_in: Click <a href="%url%">here</a> to sign in
+mail.actor.password_changed.subject: Your password has been successfully changed.
+mail.actor.password_changed.body: Your password has been successfully changed.
+mail.actor.registration_complete.subject: Welcome %actor%, your registration is now complete.
+mail.actor.registration_complete.body: Your registration is now complete.
+mail.actor.registration_confirmation.subject: Welcome %actor%, please confirm your registration.
+mail.actor.registration_confirmation.body: Click <a href="%url%">here</a> to confirm your registration.
+mail.actor.reset_password_request.subject: A password reset has been requested.
+mail.actor.reset_password_request.body: Click <a href="%url%">here</a> to reset your password.
+mail.actor.reset_password_success.subject: Your password has been successfully reset.
+mail.actor.reset_password_success.body: Your password has been successfully reset.
