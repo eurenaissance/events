@@ -3,6 +3,7 @@
 namespace Test\App\Controller;
 
 use App\DataFixtures\ActorConfirmTokenFixtures;
+use App\Repository\CityRepository;
 use App\Tests\HttpTestCase;
 
 /**
@@ -21,6 +22,8 @@ class RegistrationControllerTest extends HttpTestCase
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'password' => ['first' => 'test123', 'second' => 'test123'],
+            'address' => null,
+            'city' => 6,
         ]));
         $this->assertIsRedirectedTo('/register/check-email');
         $this->assertMailSent([
@@ -40,11 +43,24 @@ class RegistrationControllerTest extends HttpTestCase
     public function provideBadRegistrations(): iterable
     {
         yield [
+            'emailAddress' => null,
+            'firstName' => 'Rémi',
+            'lastName' => 'Gardien',
+            'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
+            'password' => ['first' => 'test123', 'second' => 'test123'],
+            'address' => '123 random street',
+            'city' => 6,
+            'errors' => ['Email address is required.'],
+        ];
+
+        yield [
             'emailAddress' => 'remi@mobilisation.eu',
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'password' => ['first' => 'test123', 'second' => 'test123'],
+            'address' => '123 random street',
+            'city' => 6,
             'errors' => ['This email address is already registered.'],
         ];
 
@@ -54,6 +70,8 @@ class RegistrationControllerTest extends HttpTestCase
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'password' => ['first' => 'test123', 'second' => 'test123'],
+            'address' => '123 random street',
+            'city' => 6,
             'errors' => ['This email address is already registered.'],
         ];
 
@@ -62,31 +80,33 @@ class RegistrationControllerTest extends HttpTestCase
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'password' => ['first' => 'test123', 'second' => 'test123'],
-            'errors' => ['This email address is not valid.'],
-        ];
-
-        yield [
-            'emailAddress' => 'new@mobilisation.eu',
-            'firstName' => null,
-            'lastName' => null,
-            'birthday' => ['year' => null, 'month' => 11, 'day' => 27],
-            'password' => ['first' => 'test123', 'second' => '123test'],
+            'password' => ['first' => '123', 'second' => '123'],
+            'address' => '123 random street',
+            'city' => 9999999,
             'errors' => [
-                'Please enter your first name.',
-                'Please enter your last name.',
-                'This date is not valid.',
-                'Passwords do not match.',
+                'This email address is not valid.',
+                'Password must be at least 6 characters long.',
+                'This city is not valid.',
             ],
         ];
 
         yield [
-            'emailAddress' => 'new@mobilisation.eu',
-            'firstName' => 'Rémi',
-            'lastName' => 'Gardien',
-            'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'password' => ['first' => '123', 'second' => '123'],
-            'errors' => ['Password must be at least 6 characters long.'],
+            'emailAddress' => 'new@mobilisation',
+            'firstName' => null,
+            'lastName' => null,
+            'birthday' => ['year' => null, 'month' => 11, 'day' => 27],
+            'password' => ['first' => 'test123', 'second' => '123test'],
+            'address' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquet ligula ut elit consectetur, quis vulputate felis vestibulum. Vivamus rutrum metus leo, in dignissim lectus fringilla nec.',
+            'city' => null,
+            'errors' => [
+                'This email address is not valid.',
+                'Please enter your first name.',
+                'Please enter your last name.',
+                'This date is not valid.',
+                'Passwords do not match.',
+                'This city is not valid.',
+                'Your address can not exceed 150 characters.',
+            ],
         ];
     }
 
@@ -99,6 +119,8 @@ class RegistrationControllerTest extends HttpTestCase
         ?string $lastName,
         array $birthday,
         array $password,
+        ?string $address,
+        ?int $city,
         array $errors
     ): void {
         $crawler = $this->client->request('GET', '/register');
@@ -110,6 +132,8 @@ class RegistrationControllerTest extends HttpTestCase
             'lastName' => $lastName,
             'birthday' => $birthday,
             'password' => $password,
+            'address' => $address,
+            'city' => $city,
         ]));
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
@@ -190,5 +214,10 @@ class RegistrationControllerTest extends HttpTestCase
     private function assertActorConfirmed(string $email, bool $expected): void
     {
         $this->assertSame($expected, $this->getActorRepository()->findOneByEmail($email)->isConfirmed());
+    }
+
+    private function getCityRepository(): CityRepository
+    {
+        return $this->get(CityRepository::class);
     }
 }

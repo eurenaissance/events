@@ -22,6 +22,10 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertEquals('Rémi', $form->get('firstName')->getValue());
         $this->assertEquals('Gardien', $form->get('lastName')->getValue());
         $this->assertEmpty($form->get('gender')->getValue());
+        $this->assertEmpty($form->get('address')->getValue());
+        $this->assertEquals('FR', $form->get('country')->getValue());
+        $this->assertEquals('92270', $form->get('zipCode')->getValue());
+        $this->assertEquals(6, $form->get('city')->getValue());
 
         /** @var \Symfony\Component\DomCrawler\Field\FormField[] $birthday */
         $birthday = $form->get('birthday');
@@ -39,6 +43,8 @@ class ProfileControllerTest extends HttpTestCase
             'lastName' => 'Gar',
             'birthday' => ['year' => 1988, 'month' => 01, 'day' => 12],
             'gender' => 'male',
+            'address' => '123 random street',
+            'city' => 1,
         ]));
         $this->assertIsRedirectedTo('/profile');
 
@@ -52,6 +58,10 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertEquals('Rem', $form->get('firstName')->getValue());
         $this->assertEquals('Gar', $form->get('lastName')->getValue());
         $this->assertEquals('male', $form->get('gender')->getValue());
+        $this->assertEquals('123 random street', $form->get('address')->getValue());
+        $this->assertEquals('FR', $form->get('country')->getValue());
+        $this->assertEquals('75000', $form->get('zipCode')->getValue());
+        $this->assertEquals(1, $form->get('city')->getValue());
 
         /** @var \Symfony\Component\DomCrawler\Field\FormField[] $birthday */
         $birthday = $form->get('birthday');
@@ -72,11 +82,15 @@ class ProfileControllerTest extends HttpTestCase
             'lastName' => null,
             'gender' => null,
             'birthday' => ['year' => null, 'month' => 11, 'day' => 27],
+            'address' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquet ligula ut elit consectetur, quis vulputate felis vestibulum. Vivamus rutrum metus leo, in dignissim lectus fringilla nec.',
+            'city' => 9999999,
             'errors' => [
                 'Please enter your first name.',
                 'Please enter your last name.',
-                'This date is not valid.',
                 'Please select a gender.',
+                'This date is not valid.',
+                'This city is not valid.',
+                'Your address can not exceed 150 characters.',
             ],
         ];
     }
@@ -89,6 +103,8 @@ class ProfileControllerTest extends HttpTestCase
         ?string $lastName,
         ?string $gender,
         ?array $birthday,
+        ?string $address,
+        ?int $city,
         array $errors
     ): void {
         $this->authenticateActor('remi@mobilisation.eu');
@@ -101,6 +117,8 @@ class ProfileControllerTest extends HttpTestCase
             'lastName' => $lastName,
             'gender' => $gender,
             'birthday' => $birthday,
+            'address' => $address,
+            'city' => $city,
         ]));
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);

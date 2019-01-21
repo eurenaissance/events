@@ -4,11 +4,12 @@ namespace App\DataFixtures;
 
 use App\Entity\Actor;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class ActorFixtures extends Fixture
+class ActorFixtures extends Fixture implements DependentFixtureInterface
 {
     public const DEFAULT_PASSWORD = 'secret!12345';
 
@@ -32,6 +33,7 @@ class ActorFixtures extends Fixture
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => '1988-11-27',
+            'city' => 'city-6',
             'confirmed' => true,
         ]);
 
@@ -42,6 +44,7 @@ class ActorFixtures extends Fixture
             'lastName' => 'Galopin',
             'birthday' => '1994-12-01',
             'gender' => 'male',
+            'city' => 'city-1',
             'confirmed' => true,
         ]);
 
@@ -51,6 +54,7 @@ class ActorFixtures extends Fixture
             'firstName' => 'Marine',
             'lastName' => 'Boudeau',
             'birthday' => '1983-11-09',
+            'city' => 'city-1',
             'gender' => 'female',
         ]);
 
@@ -60,6 +64,8 @@ class ActorFixtures extends Fixture
             'firstName' => 'Nicolas',
             'lastName' => 'Cage',
             'birthday' => '1964-01-07',
+            'city' => 'city-5',
+            'address' => '2 random street',
             'gender' => 'male',
         ]);
 
@@ -76,6 +82,13 @@ class ActorFixtures extends Fixture
         $manager->flush();
     }
 
+    public function getDependencies()
+    {
+        return [
+            CityFixtures::class,
+        ];
+    }
+
     private function create(array $data): Actor
     {
         $actor = new Actor(Uuid::fromString($data['uuid']));
@@ -85,9 +98,14 @@ class ActorFixtures extends Fixture
         $actor->setLastName($data['lastName']);
         $actor->setBirthday(new \DateTime($data['birthday']));
         $actor->setPassword($this->encoder->encodePassword($actor, self::DEFAULT_PASSWORD));
+        $actor->setCity($this->getReference($data['city']));
 
         if (isset($data['gender'])) {
             $actor->setGender($data['gender']);
+        }
+
+        if (isset($data['address'])) {
+            $actor->setAddress($data['address']);
         }
 
         if (isset($data['confirmed']) && true === $data['confirmed']) {

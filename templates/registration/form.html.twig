@@ -10,6 +10,12 @@
         {{ form_row(form.birthday) }}
         {{ form_row(form.emailAddress) }}
         {{ form_row(form.password) }}
+        {{ form_row(form.address) }}
+        {{ form_row(form.country) }}
+        {{ form_row(form.zipCode) }}
+        {# since `form.city` is a hidden type we need to explicitely show errors with `form_errors(form.city)` #}
+        {{ form_errors(form.city) }}
+        {{ form_widget(form.city) }}
 
         <button type="submit">
             {{ 'actor.registration.register'|trans }}
