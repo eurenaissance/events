@@ -21,17 +21,15 @@ class GeocoderSetupCommand extends Command
 
     private $manager;
     private $actionRepository;
-    private $appCountry;
 
     private $imported = 0;
 
-    public function __construct(EntityManagerInterface $manager, ActorRepository $actorRepository, string $appCountry)
+    public function __construct(EntityManagerInterface $manager, ActorRepository $actorRepository)
     {
         parent::__construct();
 
         $this->manager = $manager;
         $this->actionRepository = $actorRepository;
-        $this->appCountry = $appCountry;
     }
 
     protected function configure(): void
@@ -40,13 +38,6 @@ class GeocoderSetupCommand extends Command
             ->setDescription(
                 'Prepare the Geocoder database for usage. '.
                 'This command cannot be run if some actors are already registered.'
-            )
-            ->addOption(
-                'all',
-                null,
-                InputOption::VALUE_NONE,
-                'By default, this command only import data for the current instance country. '.
-                'Use this option to import all the countries. '
             )
             ->addOption(
                 'country',
@@ -65,17 +56,13 @@ class GeocoderSetupCommand extends Command
             return 1;
         }
 
-        $filterCountry = !$input->getOption('all')
-            ? $input->getOption('country') ?? $this->appCountry
-            : null;
-
         $finder = new Finder();
         $finder->in(__DIR__.'/../Geocoder/data');
         $finder->sortByName();
         $finder->directories();
 
-        if ($filterCountry) {
-            $output->writeln('└ Limiting the import to '.$filterCountry);
+        if ($filterCountry = $input->getOption('country')) {
+            $output->writeln("└ Limiting the import to $filterCountry");
             $finder->name($filterCountry);
         }
 

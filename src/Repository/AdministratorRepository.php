@@ -23,11 +23,6 @@ class AdministratorRepository extends ServiceEntityRepository
      */
     public function deleteAll(): void
     {
-        $this
-            ->createQueryBuilder('a')
-            ->delete()
-            ->getQuery()
-            ->execute()
-        ;
+        $this->createQueryBuilder('a')->delete()->getQuery()->execute();
     }
 }

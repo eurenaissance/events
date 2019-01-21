@@ -2,6 +2,7 @@
 
 namespace App\Tests\Command;
 
+use App\Repository\ActorRepository;
 use App\Repository\CityRepository;
 use App\Tests\CommandTestCase;
 
@@ -15,11 +16,13 @@ class GeocoderSetupCommandTest extends CommandTestCase
         $commandTester = $this->executeCommand('app:geocoder:setup');
 
         $this->assertCommandFailure($commandTester);
-        $this->assertOutputContains('This command can not be run if some actors are already registered.', $commandTester);
+        $this->assertOutputContains('This command cannot be run if some actors are already registered.', $commandTester);
     }
 
     public function testExecuteSuccess(): void
     {
+        $this->get(ActorRepository::class)->deleteAll();
+
         $commandTester = $this->executeCommand('app:geocoder:setup', ['--country' => 'MT']);
 
         $this->assertCommandSuccess($commandTester);
