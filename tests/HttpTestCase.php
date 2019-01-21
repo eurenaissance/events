@@ -33,6 +33,8 @@ abstract class HttpTestCase extends WebTestCase
 
     protected function tearDown()
     {
+        parent::tearDown();
+
         $this->client = null;
     }
 
