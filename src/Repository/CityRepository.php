@@ -33,13 +33,11 @@ class CityRepository extends ServiceEntityRepository
      */
     public function findByZipCode(string $country, string $zipCode): iterable
     {
-        $zipCode = strtoupper(preg_replace('/\s+/', '', $zipCode));
-
         return $this->createQueryBuilder('c')
             ->where('c.country = :country')
             ->setParameter('country', $country)
-            ->andWhere(':zipCode LIKE UPPER(CONCAT(c.zipCode, \'%\'))')
-            ->setParameter('zipCode', $zipCode)
+            ->andWhere(':zipCode LIKE CONCAT(c.canonicalZipCode, \'%\')')
+            ->setParameter('zipCode', City::canonicalizeZipCode($zipCode))
             ->orderBy('c.name', 'ASC')
             ->getQuery()
             ->getResult()

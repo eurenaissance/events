@@ -42,7 +42,7 @@ class GeocoderSetupCommand extends Command
             ->addOption(
                 'country',
                 null,
-                InputOption::VALUE_NONE,
+                InputOption::VALUE_OPTIONAL,
                 'Limit the import to a specific country code.'
             )
         ;

@@ -69,6 +69,25 @@ abstract class HttpTestCase extends WebTestCase
         $this->assertTrue($this->client->getResponse()->isSuccessful());
     }
 
+    protected function assertJsonResponse(array $expectedContent = null): void
+    {
+        $response = $this->client->getResponse();
+
+        $this->assertResponseSuccessFul();
+        $this->assertSame('application/json', $response->headers->get('Content-Type'));
+        $this->assertNotEmpty($response->getContent());
+        $this->assertJson($response->getContent());
+
+        if ($expectedContent) {
+            $this->assertMatchesPattern(\GuzzleHttp\json_encode($expectedContent), $response->getContent());
+        }
+    }
+
+    protected function assertNotFoundResponse(): void
+    {
+        $this->assertSame(404, $this->client->getResponse()->getStatusCode());
+    }
+
     protected function assertMailSent(array $expectedMail): void
     {
         if (!isset($expectedMail['to'])) {
