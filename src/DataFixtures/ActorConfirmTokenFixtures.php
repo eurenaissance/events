@@ -75,7 +75,7 @@ class ActorConfirmTokenFixtures extends Fixture implements DependentFixtureInter
         $token = new ActorConfirmToken(
             Uuid::fromString($data['uuid']),
             $this->getReference($data['actor']),
-            new \DateTime($data['expiredAt'])
+            new \DateTimeImmutable($data['expiredAt'])
         );
 
         return $token;

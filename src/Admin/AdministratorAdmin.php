@@ -26,6 +26,7 @@ class AdministratorAdmin extends AbstractAdmin
         'Super administrator' => 'ROLE_SUPER_ADMIN',
         'Dashboard administrator' => 'ROLE_ADMIN_DASHBOARD',
         'Actors administrator' => 'ROLE_ADMIN_ACTORS',
+        'Groups administrator' => 'ROLE_ADMIN_GROUPS',
     ];
 
     public function __construct(

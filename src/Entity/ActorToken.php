@@ -44,7 +44,7 @@ abstract class ActorToken
      */
     protected $consumedAt;
 
-    public function __construct(UuidInterface $uuid, Actor $actor, \DateTime $expiredAt)
+    public function __construct(UuidInterface $uuid, Actor $actor, \DateTimeInterface $expiredAt)
     {
         $this->actor = $actor;
         $this->uuid = $uuid;
@@ -64,7 +64,7 @@ abstract class ActorToken
             throw new \LogicException('Token is already consumed.');
         }
 
-        $this->consumedAt = new \DateTime('now');
+        $this->consumedAt = new \DateTimeImmutable('now');
     }
 
     public function isConsumed(): bool
@@ -82,12 +82,12 @@ abstract class ActorToken
         return $this->actor;
     }
 
-    public function getConsumedAt(): ?\DateTime
+    public function getConsumedAt(): ?\DateTimeInterface
     {
         return $this->consumedAt;
     }
 
-    public function getExpiredAt(): \DateTime
+    public function getExpiredAt(): \DateTimeInterface
     {
         return $this->expiredAt;
     }

@@ -18,9 +18,16 @@ security:
             - ROLE_APP_ADMIN_ACTOR_VIEW
             - ROLE_APP_ADMIN_ACTOR_EDIT
 
+        ROLE_ADMIN_GROUPS:
+            - ROLE_APP_ADMIN_GROUP_EXPORT
+            - ROLE_APP_ADMIN_GROUP_LIST
+            - ROLE_APP_ADMIN_GROUP_VIEW
+            - ROLE_APP_ADMIN_GROUP_EDIT
+
         ROLE_SUPER_ADMIN:
             - ROLE_ADMIN_DASHBOARD
             - ROLE_ADMIN_ACTORS
+            - ROLE_ADMIN_GROUPS
 
     providers:
         app_actor_provider:

@@ -11,11 +11,11 @@ trait EntityUuidTrait
     /**
      * @var UuidInterface
      *
-     * @ORM\Column(type="uuid")
+     * @ORM\Column(type="uuid", unique=true)
      *
      * @Groups("city_autocomplete")
      */
-    protected $uuid;
+    private $uuid;
 
     public function getUuid(): UuidInterface
     {

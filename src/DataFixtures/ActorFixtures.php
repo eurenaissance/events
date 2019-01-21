@@ -35,6 +35,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             'birthday' => '1988-11-27',
             'city' => 'city-2',
             'confirmed' => true,
+            'registeredAt' => '2 days ago',
         ]);
 
         $actor2 = $this->create([
@@ -46,6 +47,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             'gender' => 'male',
             'city' => 'city-1',
             'confirmed' => true,
+            'registeredAt' => '1 day ago',
         ]);
 
         $actor3 = $this->create([
@@ -56,6 +58,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             'birthday' => '1983-11-09',
             'city' => 'city-1',
             'gender' => 'female',
+            'registeredAt' => '1 hour ago',
         ]);
 
         $actor4 = $this->create([
@@ -67,6 +70,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             'city' => 'city-6',
             'address' => '2 random street',
             'gender' => 'male',
+            'registeredAt' => '2 days ago',
         ]);
 
         $this->setReference('actor-1', $actor1);
@@ -96,7 +100,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor->setEmailAddress($data['emailAddress']);
         $actor->setFirstName($data['firstName']);
         $actor->setLastName($data['lastName']);
-        $actor->setBirthday(new \DateTime($data['birthday']));
+        $actor->setBirthday(new \DateTimeImmutable($data['birthday']));
         $actor->setPassword($this->encoder->encodePassword($actor, self::DEFAULT_PASSWORD));
         $actor->setCity($this->getReference($data['city']));
 

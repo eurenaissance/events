@@ -54,7 +54,7 @@ class ActorResetPasswordTokenFixtures extends Fixture implements DependentFixtur
         $token = new ActorResetPasswordToken(
             Uuid::fromString($data['uuid']),
             $this->getReference($data['actor']),
-            new \DateTime($data['expiredAt'])
+            new \DateTimeImmutable($data['expiredAt'])
         );
 
         return $token;

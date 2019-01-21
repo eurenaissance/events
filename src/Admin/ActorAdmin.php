@@ -14,7 +14,7 @@ class ActorAdmin extends AbstractAdmin
     {
         $list = parent::configureActionButtons($action, $object);
 
-        if ('list' !== $action) {
+        if ($object) {
             $list['switch_user'] = ['template' => 'admin/actor/_action_switch_user.html.twig'];
         }
 
