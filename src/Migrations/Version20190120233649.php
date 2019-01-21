@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190120232155 extends AbstractMigration
+final class Version20190120233649 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -42,8 +42,10 @@ final class Version20190120232155 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX actors_email_address_unique ON actors (email_address)');
         $this->addSql('CREATE UNIQUE INDEX actors_uuid_unique ON actors (uuid)');
         $this->addSql('COMMENT ON COLUMN actors.uuid IS \'(DC2Type:uuid)\'');
-        $this->addSql('CREATE TABLE cities (id BIGINT NOT NULL, country VARCHAR(3) NOT NULL, name VARCHAR(150) NOT NULL, zip_code VARCHAR(20) NOT NULL, coordinates Geometry(Point) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE cities (id BIGINT NOT NULL, country VARCHAR(3) NOT NULL, name VARCHAR(150) NOT NULL, zip_code VARCHAR(20) NOT NULL, coordinates Geometry(Point) NOT NULL, uuid UUID NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX cities_uuid_unique ON cities (uuid)');
         $this->addSql('COMMENT ON COLUMN cities.coordinates IS \'(DC2Type:point)\'');
+        $this->addSql('COMMENT ON COLUMN cities.uuid IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE actor_confirm_tokens (id BIGINT NOT NULL, actor_id BIGINT DEFAULT NULL, expired_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, consumed_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, uuid UUID NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_AE6DC40710DAF24A ON actor_confirm_tokens (actor_id)');
         $this->addSql('CREATE UNIQUE INDEX actor_confirm_token_unique_uuid ON actor_confirm_tokens (uuid)');

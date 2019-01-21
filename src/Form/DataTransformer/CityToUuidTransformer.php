@@ -4,10 +4,11 @@ namespace App\Form\DataTransformer;
 
 use App\Entity\City;
 use App\Repository\CityRepository;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class CityToIdTransformer implements DataTransformerInterface
+class CityToUuidTransformer implements DataTransformerInterface
 {
     private $cityRepository;
 
@@ -27,24 +28,24 @@ class CityToIdTransformer implements DataTransformerInterface
             return '';
         }
 
-        return (string) $city->getId();
+        return (string) $city->getUuidAsString();
     }
 
     /**
      * Transforms a string (number) to an object (issue).
      *
-     * @param string $cityId
+     * @param string $cityUuid
      *
      * @return City|null
      */
-    public function reverseTransform($cityId)
+    public function reverseTransform($cityUuid)
     {
-        if (!$cityId) {
-            throw new TransformationFailedException('City is required');
+        if (!Uuid::isValid((string) $cityUuid)) {
+            throw new TransformationFailedException('Invalid UUID provided for city.');
         }
 
-        if (!$city = $this->cityRepository->find((int) $cityId)) {
-            throw new TransformationFailedException("City with id $cityId does not exist.");
+        if (!$city = $this->cityRepository->findOneByUuid($cityUuid)) {
+            throw new TransformationFailedException("City with uuid \"$cityUuid\" does not exist.");
         }
 
         return $city;

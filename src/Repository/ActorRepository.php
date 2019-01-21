@@ -17,4 +17,12 @@ class ActorRepository extends ServiceEntityRepository
     {
         return $this->findOneBy(['emailAddress' => $email]);
     }
+
+    /**
+     * For tests purpose only.
+     */
+    public function deleteAll(): void
+    {
+        $this->createQueryBuilder('a')->delete()->getQuery()->execute();
+    }
 }

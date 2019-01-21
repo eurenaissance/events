@@ -20,6 +20,11 @@ class CityRepository extends ServiceEntityRepository
         parent::__construct($registry, City::class);
     }
 
+    public function findOneByUuid(string $uuid): ?City
+    {
+        return $this->findOneBy(['uuid' => $uuid]);
+    }
+
     /**
      * @param string $country
      * @param string $zipCode

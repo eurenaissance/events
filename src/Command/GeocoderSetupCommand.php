@@ -3,8 +3,10 @@
 namespace App\Command;
 
 use App\Entity\City;
+use App\Repository\ActorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,42 +20,50 @@ class GeocoderSetupCommand extends Command
     protected static $defaultName = 'app:geocoder:setup';
 
     private $manager;
-    private $appCountry;
+    private $actionRepository;
 
     private $imported = 0;
 
-    public function __construct(EntityManagerInterface $manager, string $appCountry)
+    public function __construct(EntityManagerInterface $manager, ActorRepository $actorRepository)
     {
         parent::__construct();
 
         $this->manager = $manager;
-        $this->appCountry = $appCountry;
+        $this->actionRepository = $actorRepository;
     }
 
     protected function configure(): void
     {
         $this
-            ->setDescription('Prepare the Geocoder database for usage.')
+            ->setDescription(
+                'Prepare the Geocoder database for usage. '.
+                'This command cannot be run if some actors are already registered.'
+            )
             ->addOption(
-                'all',
+                'country',
                 null,
                 InputOption::VALUE_NONE,
-                'By default, this command only import data for the current instance country. '.
-                'Use this option to import all the countries.'
+                'Limit the import to a specific country code.'
             )
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (0 !== $this->actionRepository->count([])) {
+            $output->writeln('This command cannot be run if some actors are already registered.');
+
+            return 1;
+        }
+
         $finder = new Finder();
         $finder->in(__DIR__.'/../Geocoder/data');
         $finder->sortByName();
         $finder->directories();
 
-        if (!$input->getOption('all')) {
-            $output->writeln('└ Limiting the import to '.$this->appCountry);
-            $finder->name($this->appCountry);
+        if ($filterCountry = $input->getOption('country')) {
+            $output->writeln("└ Limiting the import to $filterCountry");
+            $finder->name($filterCountry);
         }
 
         foreach ($finder as $file) {
@@ -83,6 +93,8 @@ class GeocoderSetupCommand extends Command
         }
 
         $output->writeln("\n".$this->imported.' postal codes imported.');
+
+        return 0;
     }
 
     private function importFile(SplFileInfo $file, OutputInterface $output): void
@@ -94,6 +106,7 @@ class GeocoderSetupCommand extends Command
 
         foreach ($csv->getRecords() as $record) {
             $this->manager->persist(new City(
+                Uuid::uuid4(),
                 $file->getBasename('.'.$file->getExtension()),
                 $record[2],
                 $record[1],

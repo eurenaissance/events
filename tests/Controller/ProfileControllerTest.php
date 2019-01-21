@@ -2,6 +2,7 @@
 
 namespace Test\App\Controller;
 
+use App\DataFixtures\CityFixtures;
 use App\Tests\HttpTestCase;
 
 /**
@@ -25,7 +26,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertEmpty($form->get('address')->getValue());
         $this->assertEquals('FR', $form->get('country')->getValue());
         $this->assertEquals('92270', $form->get('zipCode')->getValue());
-        $this->assertEquals(6, $form->get('city')->getValue());
+        $this->assertEquals(CityFixtures::CITY_02_UUID, $form->get('city')->getValue());
 
         /** @var \Symfony\Component\DomCrawler\Field\FormField[] $birthday */
         $birthday = $form->get('birthday');
@@ -44,7 +45,7 @@ class ProfileControllerTest extends HttpTestCase
             'birthday' => ['year' => 1988, 'month' => 01, 'day' => 12],
             'gender' => 'male',
             'address' => '123 random street',
-            'city' => 1,
+            'city' => CityFixtures::CITY_01_UUID,
         ]));
         $this->assertIsRedirectedTo('/profile');
 
@@ -61,7 +62,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertEquals('123 random street', $form->get('address')->getValue());
         $this->assertEquals('FR', $form->get('country')->getValue());
         $this->assertEquals('75000', $form->get('zipCode')->getValue());
-        $this->assertEquals(1, $form->get('city')->getValue());
+        $this->assertEquals(CityFixtures::CITY_01_UUID, $form->get('city')->getValue());
 
         /** @var \Symfony\Component\DomCrawler\Field\FormField[] $birthday */
         $birthday = $form->get('birthday');
@@ -83,7 +84,7 @@ class ProfileControllerTest extends HttpTestCase
             'gender' => null,
             'birthday' => ['year' => null, 'month' => 11, 'day' => 27],
             'address' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquet ligula ut elit consectetur, quis vulputate felis vestibulum. Vivamus rutrum metus leo, in dignissim lectus fringilla nec.',
-            'city' => 9999999,
+            'city' => 'abcdef',
             'errors' => [
                 'Please enter your first name.',
                 'Please enter your last name.',
@@ -104,7 +105,7 @@ class ProfileControllerTest extends HttpTestCase
         ?string $gender,
         ?array $birthday,
         ?string $address,
-        ?int $city,
+        ?string $cityUuid,
         array $errors
     ): void {
         $this->authenticateActor('remi@mobilisation.eu');
@@ -118,7 +119,7 @@ class ProfileControllerTest extends HttpTestCase
             'gender' => $gender,
             'birthday' => $birthday,
             'address' => $address,
-            'city' => $city,
+            'city' => $cityUuid,
         ]));
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
