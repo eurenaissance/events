@@ -9,7 +9,7 @@ interface EntitySlugInterface
      *
      * @return string
      */
-    public function slug(): string;
+    public function createSlugSource(): string;
 
     /**
      * Sets the encoded slug.

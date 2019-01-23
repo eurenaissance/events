@@ -1,13 +1,15 @@
 <?php
 
-namespace App\EventListener;
+namespace App\EventSubscriber;
 
 use App\Repository\AdministratorRepository;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\RouterInterface;
 
-class AdministratorSetupListener
+class AdministratorSetupSubscriber implements EventSubscriberInterface
 {
     private $administratorRepository;
     private $router;
@@ -16,6 +18,15 @@ class AdministratorSetupListener
     {
         $this->administratorRepository = $administratorRepository;
         $this->router = $router;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return [
+            KernelEvents::REQUEST => [
+                ['onKernelRequest', 30],
+            ],
+        ];
     }
 
     public function onKernelRequest(GetResponseEvent $event)

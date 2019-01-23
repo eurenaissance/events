@@ -1,2 +1,2 @@
 cocur_slugify:
-  rulesets: ['%app_language_ruleset%']
+    rulesets: ['%app_language_ruleset%']

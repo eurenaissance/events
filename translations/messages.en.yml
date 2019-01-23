@@ -101,5 +101,7 @@ mail.actor.reset_password_request.subject: A password reset has been requested.
 mail.actor.reset_password_request.body: Click <a href="%url%">here</a> to reset your password.
 mail.actor.reset_password_success.subject: Your password has been successfully reset.
 mail.actor.reset_password_success.body: Your password has been successfully reset.
+mail.group.created.subject: Your group "%group%" has been created.
+mail.group.created.body: Your group "%group%" has been created. Please wait for an admin approval.
 mail.group.confirmed.subject: Your group "%group%" has been confirmed.
 mail.group.confirmed.body: Your group "%group%" has been confirmed.

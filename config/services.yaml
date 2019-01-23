@@ -1,5 +1,8 @@
+imports:
+    - { resource: services_admin.yaml }
+
 parameters:
-    locale: 'en'
+    locale: '%env(APP_LANGUAGE)%'
     app_language: '%env(APP_LANGUAGE)%'
     app_country: '%env(APP_COUNTRY)%'
     app_timezone: '%env(APP_TIMEZONE)%'
@@ -22,29 +25,6 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-
-    App\EventListener\AdministratorSetupListener:
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-
-    #
-    # Sonata Admin
-    #
-    admin.administrator:
-        class: App\Admin\AdministratorAdmin
-        arguments: [~, App\Entity\Administrator, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: 'System', label: 'Administrators' }
-    admin.actor:
-        class: App\Admin\ActorAdmin
-        arguments: [~, App\Entity\Actor, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: 'Mobilisation', label: 'Actors' }
-    admin.group:
-        class: App\Admin\GroupAdmin
-        arguments: [~, App\Entity\Group, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: 'Mobilisation', label: 'Groups' }
 
     #
     # Doctrine

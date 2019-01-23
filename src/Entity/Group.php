@@ -93,7 +93,7 @@ class Group implements EntitySlugInterface
         return $this->createdAt;
     }
 
-    public function slug(): string
+    public function createSlugSource(): string
     {
         return (string) $this->name;
     }

@@ -7,27 +7,37 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\Form\Type\DateRangeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class GroupAdmin extends AbstractAdmin
 {
+    public function configureRoutes(RouteCollection $collection)
+    {
+        $collection->remove('delete');
+    }
+
     /**
      * @param Group|null $object
+     *
+     * @return array
      */
     public function configureActionButtons($action, $object = null)
     {
         $list = parent::configureActionButtons($action, $object);
 
-        if ($object) {
-            if (!$object->isApproved()) {
-                $list['approve'] = ['template' => 'admin/group/_action_approve.html.twig'];
-            }
+        if (!$object) {
+            return $list;
+        }
 
-            if (!$object->isRefused()) {
-                $list['refuse'] = ['template' => 'admin/group/_action_refuse.html.twig'];
-            }
+        if (!$object->isApproved()) {
+            $list['approve'] = ['template' => 'admin/group/_action_approve.html.twig'];
+        }
+
+        if (!$object->isRefused()) {
+            $list['refuse'] = ['template' => 'admin/group/_action_refuse.html.twig'];
         }
 
         return $list;
@@ -38,6 +48,7 @@ class GroupAdmin extends AbstractAdmin
         $formMapper
             ->add('name', TextType::class, [
                 'label' => 'Name',
+                'disabled' => true,
             ])
         ;
     }

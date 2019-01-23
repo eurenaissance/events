@@ -87,7 +87,20 @@ class Mailer
         ]);
     }
 
-    public function sendGroupConfirmationMail(Group $group): void
+    public function sendGroupCreatedMail(Group $group): void
+    {
+        $this->send([
+            'to' => $group->getAnimator()->getEmailAddress(),
+            'subject' => $this->trans('mail.group.created.subject', [
+                'group' => $group->getName(),
+            ]),
+            'body' => $this->render('mail/group/created.html.twig', [
+                'group' => $group,
+            ]),
+        ]);
+    }
+
+    public function sendGroupConfirmedMail(Group $group): void
     {
         $this->send([
             'to' => $group->getAnimator()->getEmailAddress(),

@@ -17,12 +17,17 @@ class SlugListener
 
     public function prePersist(LifecycleEventArgs $args)
     {
-        if (!($entity = $args->getObject()) instanceof EntitySlugInterface) {
+        $entity = $args->getObject();
+
+        if (!$entity instanceof EntitySlugInterface) {
             return;
         }
 
-        $slug = $this->slugify->slugify($entity->slug());
+        $entity->setSlug($this->createSlug($entity));
+    }
 
-        $entity->setSlug($slug);
+    private function createSlug(EntitySlugInterface $entity)
+    {
+        return $this->slugify->slugify($entity->createSlugSource());
     }
 }

@@ -23,7 +23,7 @@ class AdministrationHandler
 
         $this->entityManager->flush();
 
-        $this->mailer->sendGroupConfirmationMail($group);
+        $this->mailer->sendGroupConfirmedMail($group);
     }
 
     public function refuse(Group $group): void

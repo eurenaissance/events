@@ -4,13 +4,14 @@ namespace App\Controller\Admin;
 
 use App\Entity\Group;
 use App\Group\AdministrationHandler;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/group")
+ * @IsGranted("ROLE_ADMIN_GROUPS")
  */
 class GroupController extends AbstractController
 {
@@ -20,12 +21,12 @@ class GroupController extends AbstractController
     public function approve(AdministrationHandler $administrationHandler, Group $group): Response
     {
         if ($group->isApproved()) {
-            throw new UnprocessableEntityHttpException('Group is already approved.');
+            $this->addFlash('error', sprintf('Group "%s" has already been approved.', $group->getName()));
+        } else {
+            $administrationHandler->approve($group);
+
+            $this->addFlash('success', sprintf('Group "%s" has been approved successfully.', $group->getName()));
         }
-
-        $administrationHandler->approve($group);
-
-        $this->addFlash('success', sprintf('Group "%s" has been approved successfully.', $group->getName()));
 
         return $this->redirectToRoute('admin_app_group_edit', ['id' => $group->getId()]);
     }
@@ -36,12 +37,12 @@ class GroupController extends AbstractController
     public function refuse(AdministrationHandler $administrationHandler, Group $group): Response
     {
         if ($group->isRefused()) {
-            throw new UnprocessableEntityHttpException('Group is already refused.');
+            $this->addFlash('error', sprintf('Group "%s" has already been refused.', $group->getName()));
+        } else {
+            $administrationHandler->refuse($group);
+
+            $this->addFlash('warning', sprintf('Group "%s" has been refused successfully.', $group->getName()));
         }
-
-        $administrationHandler->refuse($group);
-
-        $this->addFlash('warning', sprintf('Group "%s" has been refused successfully.', $group->getName()));
 
         return $this->redirectToRoute('admin_app_group_edit', ['id' => $group->getId()]);
     }
