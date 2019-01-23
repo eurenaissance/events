@@ -62,6 +62,38 @@ class CityRepositoryTest extends RepositoryTestCase
                 ['Dublin 8', 53.3346, -6.2733],
             ],
         ];
+
+        yield [
+            'country' => 'LV',
+            'zipCode' => 'LV-4561',
+            'expected' => [
+                ['Ozolsala', 57.062, 27.3037],
+            ],
+        ];
+
+        yield [
+            'country' => 'LV',
+            'zipCode' => 'LV4561',
+            'expected' => [
+                ['Ozolsala', 57.062, 27.3037],
+            ],
+        ];
+
+        yield [
+            'country' => 'LV',
+            'zipCode' => 'LV - 4561',
+            'expected' => [
+                ['Ozolsala', 57.062, 27.3037],
+            ],
+        ];
+
+        yield [
+            'country' => 'LV',
+            'zipCode' => 'LV 4561',
+            'expected' => [
+                ['Ozolsala', 57.062, 27.3037],
+            ],
+        ];
     }
 
     /**

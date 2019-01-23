@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190120233649 extends AbstractMigration
+final class Version20190121222459 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -42,7 +42,7 @@ final class Version20190120233649 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX actors_email_address_unique ON actors (email_address)');
         $this->addSql('CREATE UNIQUE INDEX actors_uuid_unique ON actors (uuid)');
         $this->addSql('COMMENT ON COLUMN actors.uuid IS \'(DC2Type:uuid)\'');
-        $this->addSql('CREATE TABLE cities (id BIGINT NOT NULL, country VARCHAR(3) NOT NULL, name VARCHAR(150) NOT NULL, zip_code VARCHAR(20) NOT NULL, coordinates Geometry(Point) NOT NULL, uuid UUID NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE cities (id BIGINT NOT NULL, country VARCHAR(3) NOT NULL, name VARCHAR(150) NOT NULL, zip_code VARCHAR(20) NOT NULL, canonical_zip_code VARCHAR(20) NOT NULL, coordinates Geometry(Point) NOT NULL, uuid UUID NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX cities_uuid_unique ON cities (uuid)');
         $this->addSql('COMMENT ON COLUMN cities.coordinates IS \'(DC2Type:point)\'');
         $this->addSql('COMMENT ON COLUMN cities.uuid IS \'(DC2Type:uuid)\'');

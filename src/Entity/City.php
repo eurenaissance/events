@@ -7,6 +7,7 @@ use App\Entity\Util\EntityUuidTrait;
 use CrEOF\Spatial\PHP\Types\Geography\Point;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Table(name="cities", uniqueConstraints={
@@ -30,6 +31,8 @@ class City
      * @var string
      *
      * @ORM\Column(length=150)
+     *
+     * @Groups("city_autocomplete")
      */
     private $name;
 
@@ -39,6 +42,13 @@ class City
      * @ORM\Column(length=20)
      */
     private $zipCode;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(length=20)
+     */
+    private $canonicalZipCode;
 
     /**
      * @var Point
@@ -59,6 +69,7 @@ class City
         $this->country = $country;
         $this->name = $name;
         $this->zipCode = $zipCode;
+        $this->canonicalZipCode = $this->canonicalizeZipCode($zipCode);
         $this->coordinates = new Point($longitude, $latitude);
     }
 
@@ -90,5 +101,10 @@ class City
     public function getLongitude(): float
     {
         return $this->coordinates->getLongitude();
+    }
+
+    public static function canonicalizeZipCode(string $zipCode): string
+    {
+        return mb_strtoupper(preg_replace('/[\s\-]+/', '', $zipCode));
     }
 }
