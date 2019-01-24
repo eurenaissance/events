@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'group.show'|trans %}
+
+{% block body %}
+    {{ 'group.show.title'|trans({ '%group%': group.name }) }}
+{% endblock %}

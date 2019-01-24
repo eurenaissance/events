@@ -4,14 +4,12 @@ namespace App\Controller\Admin;
 
 use App\Entity\Group;
 use App\Group\AdministrationHandler;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/group")
- * @IsGranted("ROLE_ADMIN_GROUPS")
  */
 class GroupController extends AbstractController
 {
@@ -20,6 +18,8 @@ class GroupController extends AbstractController
      */
     public function approve(AdministrationHandler $administrationHandler, Group $group): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN_GROUPS');
+
         if ($group->isApproved()) {
             $this->addFlash('error', sprintf('Group "%s" has already been approved.', $group->getName()));
         } else {
@@ -36,6 +36,8 @@ class GroupController extends AbstractController
      */
     public function refuse(AdministrationHandler $administrationHandler, Group $group): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN_GROUPS');
+
         if ($group->isRefused()) {
             $this->addFlash('error', sprintf('Group "%s" has already been refused.', $group->getName()));
         } else {

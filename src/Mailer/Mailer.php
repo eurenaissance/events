@@ -92,7 +92,7 @@ class Mailer
         $this->send([
             'to' => $group->getAnimator()->getEmailAddress(),
             'subject' => $this->trans('mail.group.created.subject', [
-                'group' => $group->getName(),
+                '%group%' => $group->getName(),
             ]),
             'body' => $this->render('mail/group/created.html.twig', [
                 'group' => $group,
@@ -105,7 +105,7 @@ class Mailer
         $this->send([
             'to' => $group->getAnimator()->getEmailAddress(),
             'subject' => $this->trans('mail.group.confirmed.subject', [
-                'group' => $group->getName(),
+                '%group%' => $group->getName(),
             ]),
             'body' => $this->render('mail/group/confirmed.html.twig', [
                 'group' => $group,

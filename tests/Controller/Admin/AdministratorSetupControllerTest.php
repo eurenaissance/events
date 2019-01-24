@@ -17,7 +17,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $administratorRepository = $this->get(AdministratorRepository::class);
 
         $administratorRepository->deleteAll();
-        $this->assertEquals(0, $administratorRepository->countAdministrators());
+        $this->assertFalse($administratorRepository->hasAdministrator());
 
         $this->client->request('GET', '/admin/login');
         $this->assertIsRedirectedTo('/admin/setup');
@@ -36,7 +36,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertEquals(1, $administratorRepository->countAdministrators());
+        $this->assertTrue($administratorRepository->hasAdministrator());
 
         $this->client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => 'first_admin@mobilisation-eu.code',

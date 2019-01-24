@@ -35,7 +35,7 @@ class AdministratorSetupSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if (0 === $this->administratorRepository->countAdministrators()) {
+        if (!$this->administratorRepository->hasAdministrator()) {
             $event->setResponse(new RedirectResponse($this->router->generate('app_admin_setup')));
         }
     }

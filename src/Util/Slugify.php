@@ -1,12 +1,11 @@
 <?php
 
-namespace App\EventListener;
+namespace App\Util;
 
 use App\Entity\Util\EntitySlugInterface;
 use Cocur\Slugify\SlugifyInterface;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 
-class SlugListener
+class Slugify
 {
     private $slugify;
 
@@ -15,14 +14,8 @@ class SlugListener
         $this->slugify = $slugify;
     }
 
-    public function prePersist(LifecycleEventArgs $args)
+    public function setSlug(EntitySlugInterface $entity)
     {
-        $entity = $args->getObject();
-
-        if (!$entity instanceof EntitySlugInterface) {
-            return;
-        }
-
         $entity->setSlug($this->createSlug($entity));
     }
 

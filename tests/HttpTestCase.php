@@ -6,6 +6,7 @@ use App\Entity\Actor;
 use App\Entity\Administrator;
 use App\Repository\ActorRepository;
 use App\Repository\AdministratorRepository;
+use App\Repository\GroupRepository;
 use Coduo\PHPMatcher\PHPUnit\PHPMatcherAssertions;
 use Enqueue\Client\TraceableProducer;
 use Symfony\Bundle\FrameworkBundle\Client;
@@ -88,6 +89,11 @@ abstract class HttpTestCase extends WebTestCase
         $this->assertSame(404, $this->client->getResponse()->getStatusCode());
     }
 
+    protected function assertAccessDeniedResponse(): void
+    {
+        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
+    }
+
     protected function assertMailSent(array $expectedMail): void
     {
         if (!isset($expectedMail['to'])) {
@@ -134,6 +140,11 @@ abstract class HttpTestCase extends WebTestCase
         return $this->get(ActorRepository::class);
     }
 
+    protected function getGroupRepository(): GroupRepository
+    {
+        return $this->get(GroupRepository::class);
+    }
+
     protected function getAbsoluteUrl(string $path): string
     {
         return $this->client->getRequest()->getSchemeAndHttpHost().$path;
@@ -142,7 +153,7 @@ abstract class HttpTestCase extends WebTestCase
     protected function authenticateActor(string $email): void
     {
         /** @var Actor $actor */
-        $actor = $this->getActorRepository()->findOneBy(['emailAddress' => $email]);
+        $actor = $this->getActorRepository()->findOneByEmail($email);
         Assert::notNull($actor, 'Actor not found for email '.$actor);
 
         $this->authenticate($actor, 'main', 'main_context');
@@ -151,7 +162,7 @@ abstract class HttpTestCase extends WebTestCase
     protected function authenticateAdmin(string $email): void
     {
         /** @var Administrator $user */
-        $admin = $this->get(AdministratorRepository::class)->findOneBy(['emailAddress' => $email]);
+        $admin = $this->get(AdministratorRepository::class)->findOneByEmail($email);
         Assert::notNull($admin, 'Administrator not found for email '.$email);
 
         $this->authenticate($admin, 'admin', 'main_context');

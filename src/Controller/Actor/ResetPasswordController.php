@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Actor;
 
 use App\Actor\ResetPasswordHandler;
 use App\Entity\ActorResetPasswordToken;
@@ -17,10 +17,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class ResetPasswordController extends AbstractController
 {
     /**
-     * @Route("/request", name="app_password_request", methods={"GET", "POST"})
+     * @Route("/request", name="app_actor_reset_password_request", methods={"GET", "POST"})
      */
     public function request(Request $request, ResetPasswordHandler $resetPasswordHandler): Response
     {
+        $this->denyAccessUnlessGranted('ACTOR_RESET_PASSWORD');
+
         $form = $this->createForm(EmailRequestType::class);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -37,27 +39,28 @@ class ResetPasswordController extends AbstractController
                 $resetPasswordHandler->request($actor);
             }
 
-            return $this->redirectToRoute('app_password_request_check_email');
+            return $this->redirectToRoute('app_actor_reset_password_check_email');
         }
 
-        return $this->render('security/password/request.html.twig', [
-            'legacy' => $request->query->getBoolean('legacy'),
+        return $this->render('actor/reset_password/request.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/request/check-email", name="app_password_request_check_email", methods="GET")
+     * @Route("/request/check-email", name="app_actor_reset_password_check_email", methods="GET")
      */
     public function checkEmail(): Response
     {
-        return $this->render('security/password/check_email.html.twig');
+        $this->denyAccessUnlessGranted('ACTOR_RESET_PASSWORD');
+
+        return $this->render('actor/reset_password/check_email.html.twig');
     }
 
     /**
      * @Route(
      *     "/reset/{uuid}",
-     *     name="app_password_reset",
+     *     name="app_actor_reset_password_reset",
      *     requirements={"uuid": "%pattern_uuid%"},
      *     methods={"GET", "POST"}
      * )
@@ -67,6 +70,8 @@ class ResetPasswordController extends AbstractController
         ActorResetPasswordToken $token,
         ResetPasswordHandler $resetPasswordHandler
     ): Response {
+        $this->denyAccessUnlessGranted('ACTOR_RESET_PASSWORD');
+
         if ($token->isConsumed()) {
             $this->addFlash('info', 'security.password_reset.token_already_consumed');
 
@@ -89,7 +94,7 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('security/password/reset.html.twig', [
+        return $this->render('actor/reset_password/reset.html.twig', [
             'form' => $form->createView(),
         ]);
     }

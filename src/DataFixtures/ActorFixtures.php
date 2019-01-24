@@ -27,6 +27,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
+        // animator of only one and refused group
         $actor1 = $this->create([
             'uuid' => self::ACTOR_01_UUID,
             'emailAddress' => 'remi@mobilisation.eu',
@@ -38,6 +39,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             'registeredAt' => '2 days ago',
         ]);
 
+        // animator of only one and confirmed group
         $actor2 = $this->create([
             'uuid' => self::ACTOR_02_UUID,
             'emailAddress' => 'titouan@mobilisation.eu',
@@ -50,6 +52,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             'registeredAt' => '1 day ago',
         ]);
 
+        // animator of online one and pending group
         $actor3 = $this->create([
             'uuid' => self::ACTOR_03_UUID,
             'emailAddress' => 'marine@mobilisation.eu',
@@ -61,6 +64,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             'registeredAt' => '1 hour ago',
         ]);
 
+        // no relation with any group
         $actor4 = $this->create([
             'uuid' => self::ACTOR_04_UUID,
             'emailAddress' => 'nicolas@mobilisation.eu',

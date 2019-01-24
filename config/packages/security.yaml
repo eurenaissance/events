@@ -75,9 +75,7 @@ security:
                 target: app_login
 
     access_control:
-        - { path: ^/profile, roles: [ROLE_USER] }
-        - { path: ^/(register|password), role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/(login|setup), role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/(2fa|logout), role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
-        - { path: ^/admin/impersonation/exit, roles: [ROLE_PREVIOUS_ADMIN] }
-        - { path: ^/admin, roles: ROLE_ADMIN_DASHBOARD }
+        - { path: ^/admin/impersonation/exit, role: [ROLE_PREVIOUS_ADMIN] }
+        - { path: ^/admin, role: ROLE_ADMIN_DASHBOARD }

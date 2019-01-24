@@ -2,6 +2,7 @@
 
 namespace App\Group;
 
+use App\Entity\Actor;
 use App\Entity\Group;
 use App\Mailer\Mailer;
 use App\Repository\GroupRepository;
@@ -29,5 +30,10 @@ class CreationHandler
         $this->entityManager->flush();
 
         $this->mailer->sendGroupCreatedMail($group);
+    }
+
+    public function hasPendingGroup(Actor $actor): bool
+    {
+        return $this->groupRepository->hasPendingGroup($actor);
     }
 }

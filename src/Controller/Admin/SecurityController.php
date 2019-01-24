@@ -2,8 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Administrator;
-use App\Security\QrCodeResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,13 +29,5 @@ class SecurityController extends AbstractController
      */
     public function logout(): void
     {
-    }
-
-    /**
-     * @Route("/qr-code/{id}", name="app_admin_qr_code", methods="GET")
-     */
-    public function qrCode(Administrator $administrator, QrCodeResponseFactory $qrCode): Response
-    {
-        return $qrCode->createResponseFor($administrator);
     }
 }

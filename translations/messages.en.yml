@@ -64,6 +64,17 @@ actor.profile.change_password: Change password
 actor.profile.password_changed: Your password has been successfully changed.
 
 #
+# Group
+#
+group.creation: Create a group
+group.creation.create: Create
+group.creation.success: Your group has been created successfully.
+group.creation.need_login: Please sign in to create a group.
+group.creation.already_pending: You already have a pending group waiting for admin confirmation.
+group.name.not_blank: A group name is required.
+group.name.unique: A group named "{{ value }}" already exists.
+group.show.title: "Group: %group%"
+#
 # Security
 #
 security.login: Sign in
@@ -82,7 +93,7 @@ security.password_request.success: Password reset requested
 security.password_request.mail_sent: A mail has been sent with a link to reset your password. Please go check your mails.
 security.password_reset: Reset password
 security.password_reset.token_already_consumed: This link is no longer valid. Please request a new reset password link.
-security.password_request.pending_token: A mail has already been sent in the last 2 hours with a link to reset your password. Please wait a while to ask for another reset password request.
+security.password_request.pending_token: A mail has already been sent in the last 2 hours with a link to reset your password. Please wait a while to ask for another reset reset_password request.
 security.password_reset.token_expired: This link is no longer valid. Please request a new reset password link.
 security.administration: Administration
 security.quit_impersonation: Quit impersonation

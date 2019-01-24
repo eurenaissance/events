@@ -17,7 +17,7 @@ class AdministratorSetupController extends AbstractController
      */
     public function setup(Request $request, AdministratorRepository $administratorRepository): Response
     {
-        if (0 !== $administratorRepository->countAdministrators()) {
+        if ($administratorRepository->hasAdministrator()) {
             return $this->redirectToRoute('app_admin_login');
         }
 

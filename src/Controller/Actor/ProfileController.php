@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Actor;
 
 use App\Actor\ChangePasswordHandler;
 use App\Form\Actor\ProfileType;
@@ -16,10 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProfileController extends AbstractController
 {
     /**
-     * @Route(name="app_profile_edit", methods={"GET", "POST"})
+     * @Route(name="app_actor_profile_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ACTOR_PROFILE');
+
         $form = $this->createForm(ProfileType::class, $actor = $this->getUser());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -30,19 +32,21 @@ class ProfileController extends AbstractController
 
             $this->addFlash('info', 'actor.profile.edited');
 
-            return $this->redirectToRoute('app_profile_edit');
+            return $this->redirectToRoute('app_actor_profile_edit');
         }
 
-        return $this->render('profile/edit.html.twig', [
+        return $this->render('actor/profile/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/password", name="app_profile_change_password", methods={"GET", "POST"})
+     * @Route("/change-password", name="app_profile_change_password", methods={"GET", "POST"})
      */
     public function changePassword(Request $request, ChangePasswordHandler $changePasswordHandler): Response
     {
+        $this->denyAccessUnlessGranted('ACTOR_PROFILE');
+
         $form = $this->createForm(PasswordType::class, $actor = $this->getUser());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -50,10 +54,10 @@ class ProfileController extends AbstractController
 
             $this->addFlash('info', 'actor.profile.password_changed');
 
-            return $this->redirectToRoute('app_profile_edit');
+            return $this->redirectToRoute('app_actor_profile_edit');
         }
 
-        return $this->render('profile/password.html.twig', [
+        return $this->render('actor/profile/change_password.html.twig', [
             'form' => $form->createView(),
         ]);
     }

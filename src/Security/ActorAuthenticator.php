@@ -2,8 +2,7 @@
 
 namespace App\Security;
 
-use App\Entity\Actor;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ActorRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -25,21 +24,21 @@ class ActorAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
 
-    private $entityManager;
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    private $actorRepository;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
         UrlGeneratorInterface $urlGenerator,
         CsrfTokenManagerInterface $csrfTokenManager,
-        UserPasswordEncoderInterface $passwordEncoder
+        UserPasswordEncoderInterface $passwordEncoder,
+        ActorRepository $actorRepository
     ) {
-        $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->actorRepository = $actorRepository;
     }
 
     public function supports(Request $request)
@@ -67,11 +66,12 @@ class ActorAuthenticator extends AbstractFormLoginAuthenticator
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
+
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(Actor::class)->findOneBy(['emailAddress' => $credentials['emailAddress']]);
+        $user = $this->actorRepository->findOneByEmail($credentials['emailAddress']);
 
         if (!$user) {
             throw self::createBadCredentialsException();

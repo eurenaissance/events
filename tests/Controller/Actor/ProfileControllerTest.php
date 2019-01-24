@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\App\Controller;
+namespace Test\App\Controller\Actor;
 
 use App\DataFixtures\CityFixtures;
 use App\Tests\HttpTestCase;
@@ -129,7 +129,7 @@ class ProfileControllerTest extends HttpTestCase
     {
         $this->authenticateActor('remi@mobilisation.eu');
 
-        $crawler = $this->client->request('GET', '/profile/password');
+        $crawler = $this->client->request('GET', '/profile/change-password');
         $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Change password')->form([
@@ -191,7 +191,7 @@ class ProfileControllerTest extends HttpTestCase
 
         $this->authenticateActor('remi@mobilisation.eu');
 
-        $crawler = $this->client->request('GET', '/profile/password');
+        $crawler = $this->client->request('GET', '/profile/change-password');
         $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Change password')->form([

@@ -34,6 +34,6 @@ class ActorChecker implements UserCheckerInterface
 
     private function generateResendConfirmationUrl(): string
     {
-        return $this->urlGenerator->generate('app_resend_confirmation_request');
+        return $this->urlGenerator->generate('app_actor_register_resend_confirmation');
     }
 }

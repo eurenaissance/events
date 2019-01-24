@@ -13,9 +13,20 @@ class AdministratorRepository extends ServiceEntityRepository
         parent::__construct($registry, Administrator::class);
     }
 
-    public function countAdministrators(): int
+    public function findOneByEmail(string $email): ?Administrator
     {
-        return $this->count([]);
+        return $this
+            ->createQueryBuilder('a')
+            ->where('a.emailAddress = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function hasAdministrator(): bool
+    {
+        return 0 !== $this->count([]);
     }
 
     /**

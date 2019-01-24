@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\App\Controller;
+namespace Test\App\Controller\Actor;
 
 use App\DataFixtures\ActorResetPasswordTokenFixtures;
 use App\Tests\HttpTestCase;

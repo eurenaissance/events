@@ -8,7 +8,7 @@ parameters:
     app_timezone: '%env(APP_TIMEZONE)%'
     app_language_ruleset: '%env(APP_LANGUAGE_RULESET)%'
     default_sender: { '%env(DEFAULT_SENDER_EMAIL)%': '%env(DEFAULT_SENDER_NAME)%' }
-    pattern_uuid: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
+    pattern_uuid: '[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}'
 
 services:
     _defaults:
@@ -25,10 +25,3 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-
-    #
-    # Doctrine
-    #
-    App\EventListener\SlugListener:
-        tags:
-            - { name: doctrine.event_listener, event: prePersist }

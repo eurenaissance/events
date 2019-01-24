@@ -5,6 +5,7 @@ namespace App\Form\Group;
 use App\Entity\Actor;
 use App\Entity\Group;
 use App\Form\DataTransformer\CityToUuidTransformer;
+use App\Util\Slugify;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -17,20 +18,21 @@ use Symfony\Component\Security\Core\Security;
 
 class CreationType extends AbstractType
 {
+    /**
+     * @var Actor
+     */
     private $animator;
+    private $slugify;
     private $cityToUuidTransformer;
 
-    public function __construct(Security $security, CityToUuidTransformer $cityToUuidTransformer)
+    public function __construct(Security $security, Slugify $slugify, CityToUuidTransformer $cityToUuidTransformer)
     {
         if (!$animator = $security->getUser()) {
             throw new \InvalidArgumentException('A group cannot be created without an animator.');
         }
 
-        if (!$animator instanceof Actor) {
-            throw new \InvalidArgumentException(sprintf('The animator of a group must be an instance of %s. (%s given)', Actor::class, get_class($animator)));
-        }
-
         $this->animator = $animator;
+        $this->slugify = $slugify;
         $this->cityToUuidTransformer = $cityToUuidTransformer;
     }
 
@@ -71,6 +73,7 @@ class CreationType extends AbstractType
                 $group = $event->getData();
 
                 $group->setAnimator($this->animator);
+                $this->slugify->setSlug($group);
             })
         ;
 
