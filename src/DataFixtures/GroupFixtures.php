@@ -81,7 +81,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
         $group->setAddress($data['address']);
         $group->setCity($this->getReference($data['city']));
 
-        $this->slugify->setSlug($group);
+        $this->slugify->createSlug($group);
 
         return $group;
     }

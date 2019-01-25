@@ -14,12 +14,12 @@ class Slugify
         $this->slugify = $slugify;
     }
 
-    public function setSlug(EntitySlugInterface $entity)
+    public function createSlug(EntitySlugInterface $entity): void
     {
-        $entity->setSlug($this->createSlug($entity));
+        $entity->setSlug($this->buildSlug($entity));
     }
 
-    private function createSlug(EntitySlugInterface $entity)
+    private function buildSlug(EntitySlugInterface $entity): string
     {
         return $this->slugify->slugify($entity->createSlugSource());
     }

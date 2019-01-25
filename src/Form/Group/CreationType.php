@@ -73,7 +73,7 @@ class CreationType extends AbstractType
                 $group = $event->getData();
 
                 $group->setAnimator($this->animator);
-                $this->slugify->setSlug($group);
+                $this->slugify->createSlug($group);
             })
         ;
 

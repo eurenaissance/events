@@ -21,7 +21,7 @@ trait EntityAddressTrait
     /**
      * @var City|null
      *
-     * @ORM\ManyToOne(targetEntity=City::class)
+     * @ORM\ManyToOne(targetEntity=City::class, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      *
      * @Assert\NotBlank(message="common.city.not_blank", groups={"registration", "profile"})
