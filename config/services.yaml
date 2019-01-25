@@ -1,10 +1,14 @@
+imports:
+    - { resource: services_admin.yaml }
+
 parameters:
-    locale: 'en'
+    locale: '%env(APP_LANGUAGE)%'
     app_language: '%env(APP_LANGUAGE)%'
     app_country: '%env(APP_COUNTRY)%'
     app_timezone: '%env(APP_TIMEZONE)%'
+    app_language_ruleset: '%env(APP_LANGUAGE_RULESET)%'
     default_sender: { '%env(DEFAULT_SENDER_EMAIL)%': '%env(DEFAULT_SENDER_NAME)%' }
-    pattern_uuid: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'
+    pattern_uuid: '[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}'
 
 services:
     _defaults:
@@ -21,19 +25,3 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-
-
-    admin.administrator:
-        class: App\Admin\AdministratorAdmin
-        arguments: [~, App\Entity\Administrator, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: 'System', label: 'Administrators' }
-    admin.actor:
-        class: App\Admin\ActorAdmin
-        arguments: [~, App\Entity\Actor, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: 'Mobilisation', label: 'Actors' }
-
-    App\EventListener\AdministratorSetupListener:
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

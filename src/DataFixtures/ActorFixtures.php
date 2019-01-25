@@ -17,6 +17,8 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
     public const ACTOR_02_UUID = '7ba7b43a-4a65-4862-b49a-91776043575b';
     public const ACTOR_03_UUID = 'b4e514ac-5ccb-4687-aed1-14d3678b5491';
     public const ACTOR_04_UUID = '9b1f4321-8935-4ab5-b392-1e6f6913ace9';
+    public const ACTOR_05_UUID = 'a43cc607-9c38-45dc-afda-82e06af69a6a';
+    public const ACTOR_06_UUID = '99f7783e-e0ad-4fd7-b34e-4ff061635e51';
 
     private $encoder;
 
@@ -27,6 +29,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
+        // animator of only one and refused group
         $actor1 = $this->create([
             'uuid' => self::ACTOR_01_UUID,
             'emailAddress' => 'remi@mobilisation.eu',
@@ -34,9 +37,11 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             'lastName' => 'Gardien',
             'birthday' => '1988-11-27',
             'city' => 'city-2',
+            'registeredAt' => '2 days ago',
             'confirmed' => true,
         ]);
 
+        // animator of only one and confirmed group
         $actor2 = $this->create([
             'uuid' => self::ACTOR_02_UUID,
             'emailAddress' => 'titouan@mobilisation.eu',
@@ -45,9 +50,11 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             'birthday' => '1994-12-01',
             'gender' => 'male',
             'city' => 'city-1',
+            'registeredAt' => '1 day ago',
             'confirmed' => true,
         ]);
 
+        // not confirmed yet and pending confirmation token
         $actor3 = $this->create([
             'uuid' => self::ACTOR_03_UUID,
             'emailAddress' => 'marine@mobilisation.eu',
@@ -56,8 +63,10 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             'birthday' => '1983-11-09',
             'city' => 'city-1',
             'gender' => 'female',
+            'registeredAt' => '1 hour ago',
         ]);
 
+        // not confirmed yet and expired confirmation token
         $actor4 = $this->create([
             'uuid' => self::ACTOR_04_UUID,
             'emailAddress' => 'nicolas@mobilisation.eu',
@@ -67,17 +76,50 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             'city' => 'city-6',
             'address' => '2 random street',
             'gender' => 'male',
+            'registeredAt' => '2 days ago',
+        ]);
+
+        // animator of only one and pending group
+        $actor5 = $this->create([
+            'uuid' => self::ACTOR_05_UUID,
+            'emailAddress' => 'john@mobilisation.eu',
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+            'birthday' => '1975-01-12',
+            'address' => '3 random street',
+            'city' => 'city-1',
+            'gender' => 'male',
+            'registeredAt' => '2 days ago',
+            'confirmed' => true,
+        ]);
+
+        // no relation with any group
+        $actor6 = $this->create([
+            'uuid' => self::ACTOR_06_UUID,
+            'emailAddress' => 'jane@mobilisation.eu',
+            'firstName' => 'Jane',
+            'lastName' => 'Doe',
+            'birthday' => '1976-02-13',
+            'address' => '4 random street',
+            'city' => 'city-1',
+            'gender' => 'female',
+            'registeredAt' => '1 day ago',
+            'confirmed' => true,
         ]);
 
         $this->setReference('actor-1', $actor1);
         $this->setReference('actor-2', $actor2);
         $this->setReference('actor-3', $actor3);
         $this->setReference('actor-4', $actor4);
+        $this->setReference('actor-5', $actor5);
+        $this->setReference('actor-6', $actor6);
 
         $manager->persist($actor1);
         $manager->persist($actor2);
         $manager->persist($actor3);
         $manager->persist($actor4);
+        $manager->persist($actor5);
+        $manager->persist($actor6);
 
         $manager->flush();
     }
@@ -96,7 +138,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor->setEmailAddress($data['emailAddress']);
         $actor->setFirstName($data['firstName']);
         $actor->setLastName($data['lastName']);
-        $actor->setBirthday(new \DateTime($data['birthday']));
+        $actor->setBirthday(new \DateTimeImmutable($data['birthday']));
         $actor->setPassword($this->encoder->encodePassword($actor, self::DEFAULT_PASSWORD));
         $actor->setCity($this->getReference($data['city']));
 

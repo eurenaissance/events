@@ -24,8 +24,9 @@ class AdministratorAdmin extends AbstractAdmin
 
     private const ROLES = [
         'Super administrator' => 'ROLE_SUPER_ADMIN',
-        'Dashboard administrator' => 'ROLE_ADMIN_DASHBOARD',
+        'Dashboard administrator' => 'ROLE_ADMIN',
         'Actors administrator' => 'ROLE_ADMIN_ACTORS',
+        'Groups administrator' => 'ROLE_ADMIN_GROUPS',
     ];
 
     public function __construct(

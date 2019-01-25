@@ -3,6 +3,7 @@
 namespace App\Mailer;
 
 use App\Entity\Actor;
+use App\Entity\Group;
 use Enqueue\Client\ProducerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -82,6 +83,32 @@ class Mailer
             'subject' => $this->trans('mail.actor.password_changed.subject'),
             'body' => $this->render('mail/actor/password_changed.html.twig', [
                 'actor' => $actor,
+            ]),
+        ]);
+    }
+
+    public function sendGroupCreatedMail(Group $group): void
+    {
+        $this->send([
+            'to' => $group->getAnimator()->getEmailAddress(),
+            'subject' => $this->trans('mail.group.created.subject', [
+                '%group%' => $group->getName(),
+            ]),
+            'body' => $this->render('mail/group/created.html.twig', [
+                'group' => $group,
+            ]),
+        ]);
+    }
+
+    public function sendGroupConfirmedMail(Group $group): void
+    {
+        $this->send([
+            'to' => $group->getAnimator()->getEmailAddress(),
+            'subject' => $this->trans('mail.group.confirmed.subject', [
+                '%group%' => $group->getName(),
+            ]),
+            'body' => $this->render('mail/group/confirmed.html.twig', [
+                'group' => $group,
             ]),
         ]);
     }

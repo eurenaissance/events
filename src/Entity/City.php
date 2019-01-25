@@ -10,8 +10,9 @@ use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Table(name="cities", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="cities_uuid_unique", columns="uuid")
+ * @ORM\Table(name="cities", indexes={
+ *     @ORM\Index(name="cities_zip_code_index", columns={"zip_code"}),
+ *     @ORM\Index(name="cities_country_index", columns={"country"}),
  * })
  * @ORM\Entity(repositoryClass="App\Repository\CityRepository")
  */
@@ -71,6 +72,11 @@ class City
         $this->zipCode = $zipCode;
         $this->canonicalZipCode = $this->canonicalizeZipCode($zipCode);
         $this->coordinates = new Point($longitude, $latitude);
+    }
+
+    public function __toString(): string
+    {
+        return trim($this->name);
     }
 
     public function getCountry(): string

@@ -3,8 +3,9 @@ sonata_admin:
     title_logo: bundles/sonataadmin/logo_title.png
     persist_filters: true
     security:
-        role_admin: ROLE_ADMIN_DASHBOARD
+        role_admin: ROLE_ADMIN
         role_super_admin: ROLE_SUPER_ADMIN
+        handler: sonata.admin.security.handler.role
     templates:
         layout:  admin/base.html.twig
 

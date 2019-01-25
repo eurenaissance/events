@@ -28,7 +28,6 @@ class AdministratorFixtures extends Fixture
         $administrator = $this->create([
             'emailAddress' => 'admin@mobilisation-eu.code',
             'googleAuthenticatorSecret' => '53YNXH6LFUOBT7LC',
-            'roles' => ['ROLE_ADMIN_DASHBOARD'],
         ]);
 
         $manager->persist($superAdministartor);

@@ -15,7 +15,13 @@ class ActorRepository extends ServiceEntityRepository
 
     public function findOneByEmail(string $email): ?Actor
     {
-        return $this->findOneBy(['emailAddress' => $email]);
+        return $this
+            ->createQueryBuilder('a')
+            ->where('a.emailAddress = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 
     /**

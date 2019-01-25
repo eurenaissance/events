@@ -4,6 +4,7 @@ namespace App\Tests\Command;
 
 use App\Repository\ActorRepository;
 use App\Repository\CityRepository;
+use App\Repository\GroupRepository;
 use App\Tests\CommandTestCase;
 
 /**
@@ -21,6 +22,7 @@ class GeocoderSetupCommandTest extends CommandTestCase
 
     public function testExecuteSuccess(): void
     {
+        $this->get(GroupRepository::class)->deleteAll();
         $this->get(ActorRepository::class)->deleteAll();
 
         $commandTester = $this->executeCommand('app:geocoder:setup', ['--country' => 'MT']);

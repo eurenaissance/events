@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'group.creation'|trans %}
+
+{% block body %}
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.address) }}
+        {{ form_row(form.country) }}
+        {{ form_row(form.zipCode) }}
+        {# since `form.city` is a hidden type we need to explicitely show errors with `form_errors(form.city)` #}
+        {{ form_errors(form.city) }}
+        {{ form_widget(form.city) }}
+
+        <button type="submit">
+            {{ 'group.creation.create'|trans }}
+        </button>
+    {{ form_end(form) }}
+{% endblock %}

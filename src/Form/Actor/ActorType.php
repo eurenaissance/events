@@ -56,6 +56,7 @@ class ActorType extends AbstractType
             ->add('address', TextType::class, [
                 'label' => 'actor.address',
                 'required' => false,
+                'empty_data' => '',
             ])
             ->add('zipCode', TextType::class, [
                 'label' => 'actor.zip_code',

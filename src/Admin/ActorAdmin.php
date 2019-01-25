@@ -6,15 +6,22 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ActorAdmin extends AbstractAdmin
 {
+    public function configureRoutes(RouteCollection $collection)
+    {
+        $collection->remove('delete');
+    }
+
     public function configureActionButtons($action, $object = null)
     {
         $list = parent::configureActionButtons($action, $object);
 
-        if ('list' !== $action) {
+        if ($object) {
             $list['switch_user'] = ['template' => 'admin/actor/_action_switch_user.html.twig'];
         }
 
@@ -26,6 +33,15 @@ class ActorAdmin extends AbstractAdmin
         $formMapper
             ->add('emailAddress', EmailType::class, [
                 'label' => 'Email address',
+                'disabled' => true,
+            ])
+            ->add('firstName', TextType::class, [
+                'label' => 'First name',
+                'disabled' => true,
+            ])
+            ->add('lastName', TextType::class, [
+                'label' => 'Last name',
+                'disabled' => true,
             ])
         ;
     }
@@ -45,6 +61,12 @@ class ActorAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('emailAddress', null, [
                 'label' => 'Email address',
+            ])
+            ->add('firstName', null, [
+                'label' => 'First name',
+            ])
+            ->add('lastName', null, [
+                'label' => 'Last name',
             ])
             ->add('_action', null, [
                 'virtual_field' => true,

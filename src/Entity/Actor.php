@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Util\EntityAddressTrait;
 use App\Entity\Util\EntityIdTrait;
 use App\Entity\Util\EntityUuidTrait;
-use CrEOF\Spatial\PHP\Types\Geography\Point;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
@@ -15,16 +15,16 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Table(name="actors", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="actors_email_address_unique", columns="email_address"),
- *     @ORM\UniqueConstraint(name="actors_uuid_unique", columns="uuid"),
  * })
  * @ORM\Entity(repositoryClass="App\Repository\ActorRepository")
  *
- * @UniqueEntity(fields={"emailAddress"}, message="common.email_address.unique", groups={"registration"})
+ * @UniqueEntity("emailAddress", message="common.email_address.unique", groups={"registration"})
  */
 class Actor implements UserInterface, EquatableInterface
 {
     use EntityIdTrait;
     use EntityUuidTrait;
+    use EntityAddressTrait;
 
     /**
      * @var string|null
@@ -80,30 +80,18 @@ class Actor implements UserInterface, EquatableInterface
     /**
      * @var string|null
      *
-     * @ORM\Column(length=150, nullable=true)
-     *
-     * @Assert\Length(max=150, maxMessage="common.address.max_length", groups={"registration", "profile"})
-     */
-    private $address;
-
-    /**
-     * @var City|null
-     *
-     * @ORM\ManyToOne(targetEntity=City::class)
-     * @ORM\JoinColumn(nullable=false)
-     *
-     * @Assert\NotBlank(message="common.city.not_blank", groups={"registration", "profile"})
-     */
-    private $city;
-
-    /**
-     * @var string|null
-     *
      * @ORM\Column
      *
      * @Assert\Length(min=6, minMessage="common.password.min_length", groups={"registration", "reset_password"})
      */
     private $password;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private $registeredAt;
 
     /**
      * @var \DateTime
@@ -120,6 +108,7 @@ class Actor implements UserInterface, EquatableInterface
     public function __construct(UuidInterface $uuid = null)
     {
         $this->uuid = $uuid ?? self::createUuid();
+        $this->registeredAt = new \DateTimeImmutable();
     }
 
     public function __toString(): string
@@ -134,7 +123,7 @@ class Actor implements UserInterface, EquatableInterface
 
     public function getRoles()
     {
-        return array_merge($this->roles, ['ROLE_USER']);
+        return array_merge($this->roles, ['ROLE_ACTOR']);
     }
 
     /**
@@ -212,12 +201,12 @@ class Actor implements UserInterface, EquatableInterface
         return strtoupper($normalized[0]).'.';
     }
 
-    public function getBirthday(): ?\DateTime
+    public function getBirthday(): ?\DateTimeInterface
     {
         return $this->birthday;
     }
 
-    public function setBirthday(\DateTime $birthday): void
+    public function setBirthday(\DateTimeInterface $birthday): void
     {
         $this->birthday = $birthday;
     }
@@ -237,9 +226,9 @@ class Actor implements UserInterface, EquatableInterface
         $this->password = $password;
     }
 
-    public function getConfirmedAt(): ?\DateTime
+    public function getRegisteredAt(): \DateTimeInterface
     {
-        return $this->confirmedAt;
+        return $this->registeredAt;
     }
 
     public function isConfirmed(): bool
@@ -249,41 +238,6 @@ class Actor implements UserInterface, EquatableInterface
 
     public function confirm(): void
     {
-        $this->confirmedAt = new \DateTime('now');
-    }
-
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(string $address): void
-    {
-        $this->address = $address;
-    }
-
-    public function getCity(): ?City
-    {
-        return $this->city;
-    }
-
-    public function setCity(City $city): void
-    {
-        $this->city = $city;
-    }
-
-    public function getZipCode(): ?string
-    {
-        return $this->city ? $this->city->getZipCode() : null;
-    }
-
-    public function getCountry(): ?string
-    {
-        return $this->city ? $this->city->getCountry() : null;
-    }
-
-    public function getCoordinates(): ?Point
-    {
-        return $this->city ? $this->city->getCoordinates() : null;
+        $this->confirmedAt = new \DateTimeImmutable();
     }
 }

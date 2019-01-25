@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'security.reset_password.request.success'|trans %}
+
+{% block body %}
+    {{ 'security.password_request.mail_sent'|trans }}
+
+    <a href="{{ path('app_login') }}">
+        {{- 'security.back_to_login'|trans -}}
+    </a>
+{% endblock %}

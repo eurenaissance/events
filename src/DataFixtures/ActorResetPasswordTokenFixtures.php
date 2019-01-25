@@ -16,18 +16,21 @@ class ActorResetPasswordTokenFixtures extends Fixture implements DependentFixtur
 
     public function load(ObjectManager $manager)
     {
+        // pending token
         $token1 = $this->create([
             'uuid' => self::TOKEN_01_UUID,
             'actor' => 'actor-2',
             'expiredAt' => '+1 day',
         ]);
 
+        // expired token
         $token2 = $this->create([
             'uuid' => self::TOKEN_02_UUID,
             'actor' => 'actor-2',
             'expiredAt' => '-5 minutes',
         ]);
 
+        // consumed token
         $token3 = $this->create([
             'uuid' => self::TOKEN_03_UUID,
             'actor' => 'actor-2',
@@ -54,7 +57,7 @@ class ActorResetPasswordTokenFixtures extends Fixture implements DependentFixtur
         $token = new ActorResetPasswordToken(
             Uuid::fromString($data['uuid']),
             $this->getReference($data['actor']),
-            new \DateTime($data['expiredAt'])
+            new \DateTimeImmutable($data['expiredAt'])
         );
 
         return $token;

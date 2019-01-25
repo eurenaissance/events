@@ -1,0 +1,20 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    admin.administrator:
+        class: App\Admin\AdministratorAdmin
+        arguments: [~, App\Entity\Administrator, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: 'System', label: 'Administrators' }
+    admin.actor:
+        class: App\Admin\ActorAdmin
+        arguments: [~, App\Entity\Actor, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: 'Mobilisation', label: 'Actors' }
+    admin.group:
+        class: App\Admin\GroupAdmin
+        arguments: [~, App\Entity\Group, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: 'Mobilisation', label: 'Groups' }
