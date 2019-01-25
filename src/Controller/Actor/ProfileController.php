@@ -20,8 +20,6 @@ class ProfileController extends AbstractController
      */
     public function edit(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('ACTOR_PROFILE');
-
         $form = $this->createForm(ProfileType::class, $actor = $this->getUser());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -41,12 +39,10 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * @Route("/change-password", name="app_profile_change_password", methods={"GET", "POST"})
+     * @Route("/change-password", name="app_actor_profile_change_password", methods={"GET", "POST"})
      */
     public function changePassword(Request $request, ChangePasswordHandler $changePasswordHandler): Response
     {
-        $this->denyAccessUnlessGranted('ACTOR_PROFILE');
-
         $form = $this->createForm(PasswordType::class, $actor = $this->getUser());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

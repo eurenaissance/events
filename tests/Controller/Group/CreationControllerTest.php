@@ -10,11 +10,23 @@ use App\Tests\HttpTestCase;
  */
 class CreationControllerTest extends HttpTestCase
 {
+    public function testAnonymousCannotCreateGroup(): void
+    {
+        $this->client->request('GET', '/group/create');
+        $this->assertIsRedirectedTo('/login');
+
+        $this->client->request('POST', '/group/create', [
+            'name' => 'My new group',
+            'city' => CityFixtures::CITY_02_UUID,
+        ]);
+        $this->assertIsRedirectedTo('/login');
+    }
+
     public function provideActorsForCreateSuccess(): iterable
     {
         yield ['remi@mobilisation.eu', 'Rémi']; // animator of a refused group
         yield ['titouan@mobilisation.eu', 'Titouan']; // animator of a confirmed group
-        yield ['nicolas@mobilisation.eu', 'Nicolas']; // no relation with any group
+        yield ['jane@mobilisation.eu', 'Jane']; // no relation with any group
     }
 
     /**
@@ -50,6 +62,20 @@ class CreationControllerTest extends HttpTestCase
         $this->assertTrue($group->isPending());
     }
 
+    public function testActorWithPendingGroupCannotCreateGroup(): void
+    {
+        $this->authenticateActor('john@mobilisation.eu');
+
+        $this->client->request('GET', '/group/create');
+        $this->assertAccessDeniedResponse();
+
+        $this->client->request('POST', '/group/create', [
+            'name' => 'My new group',
+            'city' => CityFixtures::CITY_02_UUID,
+        ]);
+        $this->assertAccessDeniedResponse();
+    }
+
     public function provideBadCreations(): iterable
     {
         yield [
@@ -76,7 +102,6 @@ class CreationControllerTest extends HttpTestCase
 
     /**
      * @dataProvider provideBadCreations
-     * @group debug
      */
     public function testCreateFailure(?string $name, ?string $city, array $errors): void
     {
@@ -95,19 +120,5 @@ class CreationControllerTest extends HttpTestCase
             'animator' => $this->getActorRepository()->findOneByEmail('nicolas@mobilisation.eu'),
             'name' => $name,
         ]));
-    }
-
-    public function testAnonymousCannotCreateGroup(): void
-    {
-        $this->client->request('GET', '/group/create');
-        $this->assertIsRedirectedTo('/login');
-    }
-
-    public function testActorWithPendingGroupCannotCreateGroup(): void
-    {
-        $this->authenticateActor('marine@mobilisation.eu');
-
-        $this->client->request('GET', '/group/create');
-        $this->assertAccessDeniedResponse();
     }
 }

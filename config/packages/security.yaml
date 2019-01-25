@@ -9,7 +9,7 @@ security:
         App\Entity\Administrator: bcrypt
 
     role_hierarchy:
-        ROLE_ADMIN_DASHBOARD: ~
+        ROLE_ADMIN: ~
 
         ROLE_ADMIN_ACTORS:
             - ROLE_ALLOWED_TO_SWITCH
@@ -25,7 +25,7 @@ security:
             - ROLE_APP_ADMIN_GROUP_EDIT
 
         ROLE_SUPER_ADMIN:
-            - ROLE_ADMIN_DASHBOARD
+            - ROLE_ADMIN
             - ROLE_ADMIN_ACTORS
             - ROLE_ADMIN_GROUPS
 
@@ -75,7 +75,9 @@ security:
                 target: app_login
 
     access_control:
+        - { path: ^/profile, role: ROLE_ACTOR }
+        - { path: ^/group, role: ROLE_ACTOR }
         - { path: ^/admin/(login|setup), role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/(2fa|logout), role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
-        - { path: ^/admin/impersonation/exit, role: [ROLE_PREVIOUS_ADMIN] }
-        - { path: ^/admin, role: ROLE_ADMIN_DASHBOARD }
+        - { path: ^/admin/impersonation/exit, role: ROLE_PREVIOUS_ADMIN }
+        - { path: ^/admin, role: ROLE_ADMIN }

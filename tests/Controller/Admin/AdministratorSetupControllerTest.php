@@ -51,7 +51,10 @@ class AdministratorSetupControllerTest extends HttpTestCase
 
     public function testSetupIsDisabled(): void
     {
-        $this->client->request('GET', '/admin/login');
+        $this->client->request('GET', '/admin/setup');
+        $this->assertIsRedirectedTo('/admin/login');
+
+        $this->client->followRedirect();
         $this->assertResponseSuccessFul();
     }
 }

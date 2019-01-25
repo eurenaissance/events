@@ -29,8 +29,8 @@ class ViewControllerTest extends HttpTestCase
     {
         yield ['remi@mobilisation.eu']; // animator of the refused group
         yield ['titouan@mobilisation.eu']; // animator of another confirmed group
-        yield ['marine@mobilisation.eu']; // animator of another pending group
-        yield ['nicolas@mobilisation.eu']; // no relation with any group
+        yield ['john@mobilisation.eu']; // animator of another pending group
+        yield ['jane@mobilisation.eu']; // no relation with any group
     }
 
     /**
@@ -48,7 +48,7 @@ class ViewControllerTest extends HttpTestCase
     {
         yield ['remi@mobilisation.eu']; // animator of another refused group
         yield ['titouan@mobilisation.eu']; // animator of another confirmed group
-        yield ['nicolas@mobilisation.eu']; // no relation with any group
+        yield ['jane@mobilisation.eu']; // no relation with any group
     }
 
     /**
@@ -64,7 +64,7 @@ class ViewControllerTest extends HttpTestCase
 
     public function testAnimatorCanViewHisPendingGroup(): void
     {
-        $this->authenticateActor('marine@mobilisation.eu');
+        $this->authenticateActor('john@mobilisation.eu');
 
         $this->client->request('GET', '/group/this-is-a-pending-group');
         $this->assertResponseSuccessFul();
@@ -75,8 +75,8 @@ class ViewControllerTest extends HttpTestCase
     {
         yield ['remi@mobilisation.eu']; // animator of another refused group
         yield ['titouan@mobilisation.eu']; // animator of the confirmed group
-        yield ['marine@mobilisation.eu']; // animator of another pending group
-        yield ['nicolas@mobilisation.eu']; // no relation with any group
+        yield ['john@mobilisation.eu']; // animator of another pending group
+        yield ['jane@mobilisation.eu']; // no relation with any group
     }
 
     /**

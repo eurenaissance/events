@@ -24,6 +24,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
+        // refused group
         $group1 = $this->create([
             'uuid' => self::GROUP_01_UUID,
             'name' => 'This is a refused group',
@@ -33,14 +34,16 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
         ]);
         $group1->refuse();
 
+        // pending group
         $group2 = $this->create([
             'uuid' => self::GROUP_02_UUID,
             'name' => 'This is a pending group',
-            'animator' => 'actor-3',
+            'animator' => 'actor-5',
             'address' => '789 random street',
             'city' => 'city-2',
         ]);
 
+        // confirmed group
         $group3 = $this->create([
             'uuid' => self::GROUP_03_UUID,
             'name' => 'This is a confirmed group',

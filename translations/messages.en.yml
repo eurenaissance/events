@@ -39,6 +39,8 @@ actor.country: Country
 actor.zip_code: Zip code
 actor.city: City
 
+actor.reset_password.success: Your password has been successfully reset.
+
 #
 # Registration
 #
@@ -73,7 +75,7 @@ group.creation.need_login: Please sign in to create a group.
 group.creation.already_pending: You already have a pending group waiting for admin confirmation.
 group.name.not_blank: A group name is required.
 group.name.unique: A group named "{{ value }}" already exists.
-group.show.title: "Group: %group%"
+group.view.title: "Group: %group%"
 #
 # Security
 #

@@ -123,7 +123,7 @@ class Actor implements UserInterface, EquatableInterface
 
     public function getRoles()
     {
-        return array_merge($this->roles, ['ROLE_USER']);
+        return array_merge($this->roles, ['ROLE_ACTOR']);
     }
 
     /**

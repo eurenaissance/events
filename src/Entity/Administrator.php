@@ -55,7 +55,7 @@ class Administrator implements UserInterface, TwoFactorInterface
 
     public function __construct()
     {
-        $this->roles = ['ROLE_ADMIN_DASHBOARD'];
+        $this->roles = ['ROLE_ADMIN'];
     }
 
     public function __toString(): string

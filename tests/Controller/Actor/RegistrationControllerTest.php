@@ -4,14 +4,45 @@ namespace Test\App\Controller\Actor;
 
 use App\DataFixtures\ActorConfirmTokenFixtures;
 use App\DataFixtures\CityFixtures;
-use App\Repository\CityRepository;
 use App\Tests\HttpTestCase;
 
 /**
  * @group functional
+ * @group debug
  */
 class RegistrationControllerTest extends HttpTestCase
 {
+    public function provideRequestsForLoggedInUser(): iterable
+    {
+        yield ['GET', '/register'];
+        yield ['POST', '/register', [
+            'emailAddress' => 'new@mobilisation.eu',
+            'firstName' => 'Rémi',
+            'lastName' => 'Gardien',
+            'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
+            'password' => ['first' => 'test123', 'second' => 'test123'],
+            'address' => '3 random street',
+            'country' => 'FR',
+            'zipCode' => '92270',
+            'city' => CityFixtures::CITY_02_UUID,
+        ]];
+        yield ['GET', '/register/check-email'];
+        yield ['GET', '/register/resend-confirmation'];
+        yield ['GET', '/register/resend-confirmation/check-email'];
+        yield ['GET', '/register/confirm/'.ActorConfirmTokenFixtures::TOKEN_04_UUID];
+    }
+
+    /**
+     * @dataProvider provideRequestsForLoggedInUser
+     */
+    public function testLoggedInUserCannotRegister(string $method, string $uri, array $parameters = []): void
+    {
+        $this->authenticateActor('remi@mobilisation.eu');
+
+        $this->client->request($method, $uri, $parameters);
+        $this->assertAccessDeniedResponse();
+    }
+
     public function testRegister(): void
     {
         $crawler = $this->client->request('GET', '/register');
@@ -299,10 +330,5 @@ class RegistrationControllerTest extends HttpTestCase
     private function assertActorConfirmed(string $email, bool $expected): void
     {
         $this->assertSame($expected, $this->getActorRepository()->findOneByEmail($email)->isConfirmed());
-    }
-
-    private function getCityRepository(): CityRepository
-    {
-        return $this->get(CityRepository::class);
     }
 }

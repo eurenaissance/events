@@ -20,7 +20,7 @@ abstract class HttpTestCase extends WebTestCase
 {
     use PHPMatcherAssertions;
 
-    protected const UUID_PATTERN = '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}';
+    protected const UUID_PATTERN = '[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}';
 
     /**
      * @var Client

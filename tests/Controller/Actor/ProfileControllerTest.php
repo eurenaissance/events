@@ -10,28 +10,134 @@ use App\Tests\HttpTestCase;
  */
 class ProfileControllerTest extends HttpTestCase
 {
-    public function testEditSuccess(): void
+    public function provideRequestsForAnonymous(): iterable
     {
-        $this->authenticateActor('remi@mobilisation.eu');
+        yield ['GET', '/profile'];
+        yield ['POST', '/profile', [
+            'firstName' => 'Rémi',
+            'lastName' => 'Gardien',
+            'gender' => 'male',
+            'address' => '3 random street',
+            'country' => 'FR',
+            'zipCode' => '92270',
+            'city' => CityFixtures::CITY_02_UUID,
+            'birthday' => ['year' => '1988', 'month' => '11', 'day' => '27'],
+        ]];
+        yield ['GET', '/profile/change-password'];
+        yield ['POST', '/profile/change-password', [
+            'password' => ['first' => 'test@12345', 'second' => 'test@12345'],
+        ]];
+    }
+
+    /**
+     * @dataProvider provideRequestsForAnonymous
+     */
+    public function testAnonymousCannotEditProfile(string $method, string $uri, array $parameters = []): void
+    {
+        $this->client->request($method, $uri, $parameters);
+        $this->assertIsRedirectedTo('/login');
+    }
+
+    public function provideProfileEditions(): iterable
+    {
+        yield [
+            'remi@mobilisation.eu',
+            [
+                'firstName' => 'Rémi',
+                'lastName' => 'Gardien',
+                'gender' => '',
+                'address' => '',
+                'country' => 'FR',
+                'zipCode' => '92270',
+                'city' => CityFixtures::CITY_02_UUID,
+                'birthday' => ['year' => '1988', 'month' => '11', 'day' => '27'],
+            ],
+            [
+                'firstName' => 'Rem',
+                'lastName' => 'Gar',
+                'gender' => 'male',
+                'address' => '3 random street',
+                'country' => 'FR',
+                'zipCode' => '75000',
+                'city' => CityFixtures::CITY_01_UUID,
+                'birthday' => ['year' => '1988', 'month' => '1', 'day' => '12'],
+            ],
+        ];
+
+        yield [
+            'titouan@mobilisation.eu',
+            [
+                'firstName' => 'Titouan',
+                'lastName' => 'Galopin',
+                'gender' => 'male',
+                'address' => '',
+                'country' => 'FR',
+                'zipCode' => '75000',
+                'city' => CityFixtures::CITY_01_UUID,
+                'birthday' => ['year' => '1994', 'month' => '12', 'day' => '1'],
+            ],
+            [
+                'firstName' => 'El Titouan',
+                'lastName' => 'G.',
+                'gender' => 'male',
+                'address' => '',
+                'country' => 'FR',
+                'zipCode' => '92270',
+                'city' => CityFixtures::CITY_02_UUID,
+                'birthday' => ['year' => '1995', 'month' => '5', 'day' => '5'],
+            ],
+        ];
+
+        yield [
+            'jane@mobilisation.eu',
+            [
+                'firstName' => 'Jane',
+                'lastName' => 'Doe',
+                'gender' => 'female',
+                'address' => '4 random street',
+                'country' => 'FR',
+                'zipCode' => '75000',
+                'city' => CityFixtures::CITY_01_UUID,
+                'birthday' => ['year' => '1976', 'month' => '2', 'day' => '13'],
+            ],
+            [
+                'firstName' => 'Jane',
+                'lastName' => 'Doe',
+                'gender' => 'other',
+                'address' => '',
+                'country' => 'FR',
+                'zipCode' => '35420',
+                'city' => CityFixtures::CITY_03_UUID,
+                'birthday' => ['year' => '2000', 'month' => '2', 'day' => '20'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provideProfileEditions
+     */
+    public function testEditSuccess(string $email, array $actualProfile, array $editedProfile): void
+    {
+        $this->authenticateActor($email);
 
         $crawler = $this->client->request('GET', '/profile');
         $this->assertResponseSuccessFul();
 
         $form = $crawler->selectButton('Save')->form();
         $this->assertTrue($form->get('emailAddress')->isDisabled());
-        $this->assertEquals('remi@mobilisation.eu', $form->get('emailAddress')->getValue());
-        $this->assertEquals('Rémi', $form->get('firstName')->getValue());
-        $this->assertEquals('Gardien', $form->get('lastName')->getValue());
-        $this->assertEmpty($form->get('gender')->getValue());
-        $this->assertEmpty($form->get('address')->getValue());
-        $this->assertEquals('FR', $form->get('country')->getValue());
-        $this->assertEquals('92270', $form->get('zipCode')->getValue());
-        $this->assertEquals(CityFixtures::CITY_02_UUID, $form->get('city')->getValue());
+        $this->assertSame($email, $form->get('emailAddress')->getValue());
+        $this->assertSame($actualProfile['firstName'], $form->get('firstName')->getValue());
+        $this->assertSame($actualProfile['lastName'], $form->get('lastName')->getValue());
+        $this->assertSame($actualProfile['gender'], $form->get('gender')->getValue());
+        $this->assertSame($actualProfile['address'], $form->get('address')->getValue());
+        $this->assertSame($actualProfile['country'], $form->get('country')->getValue());
+        $this->assertSame($actualProfile['zipCode'], $form->get('zipCode')->getValue());
+        $this->assertSame($actualProfile['city'], $form->get('city')->getValue());
 
         /** @var \Symfony\Component\DomCrawler\Field\FormField[] $birthday */
         $birthday = $form->get('birthday');
-        $this->assertEquals(
-            ['year' => 1988, 'month' => 11, 'day' => 27],
+        $this->assertSame(
+            $actualProfile['birthday'],
             [
                 'year' => $birthday['year']->getValue(),
                 'month' => $birthday['month']->getValue(),
@@ -39,14 +145,7 @@ class ProfileControllerTest extends HttpTestCase
             ]
         );
 
-        $this->client->submit($crawler->selectButton('Save')->form([
-            'firstName' => 'Rem',
-            'lastName' => 'Gar',
-            'birthday' => ['year' => 1988, 'month' => 01, 'day' => 12],
-            'gender' => 'male',
-            'address' => '123 random street',
-            'city' => CityFixtures::CITY_01_UUID,
-        ]));
+        $this->client->submit($crawler->selectButton('Save')->form($editedProfile));
         $this->assertIsRedirectedTo('/profile');
 
         $crawler = $this->client->followRedirect();
@@ -55,19 +154,19 @@ class ProfileControllerTest extends HttpTestCase
 
         $form = $crawler->selectButton('Save')->form();
         $this->assertTrue($form->get('emailAddress')->isDisabled());
-        $this->assertEquals('remi@mobilisation.eu', $form->get('emailAddress')->getValue());
-        $this->assertEquals('Rem', $form->get('firstName')->getValue());
-        $this->assertEquals('Gar', $form->get('lastName')->getValue());
-        $this->assertEquals('male', $form->get('gender')->getValue());
-        $this->assertEquals('123 random street', $form->get('address')->getValue());
-        $this->assertEquals('FR', $form->get('country')->getValue());
-        $this->assertEquals('75000', $form->get('zipCode')->getValue());
-        $this->assertEquals(CityFixtures::CITY_01_UUID, $form->get('city')->getValue());
+        $this->assertSame($email, $form->get('emailAddress')->getValue());
+        $this->assertSame($editedProfile['firstName'], $form->get('firstName')->getValue());
+        $this->assertSame($editedProfile['lastName'], $form->get('lastName')->getValue());
+        $this->assertSame($editedProfile['gender'], $form->get('gender')->getValue());
+        $this->assertSame($editedProfile['address'], $form->get('address')->getValue());
+        $this->assertSame($editedProfile['country'], $form->get('country')->getValue());
+        $this->assertSame($editedProfile['zipCode'], $form->get('zipCode')->getValue());
+        $this->assertSame($editedProfile['city'], $form->get('city')->getValue());
 
         /** @var \Symfony\Component\DomCrawler\Field\FormField[] $birthday */
         $birthday = $form->get('birthday');
-        $this->assertEquals(
-            ['year' => 1988, 'month' => 01, 'day' => 12],
+        $this->assertSame(
+            $editedProfile['birthday'],
             [
                 'year' => $birthday['year']->getValue(),
                 'month' => $birthday['month']->getValue(),
@@ -76,14 +175,16 @@ class ProfileControllerTest extends HttpTestCase
         );
     }
 
-    public function provideBadProfiles(): iterable
+    public function provideBadProfileEditions(): iterable
     {
         yield [
             'firstName' => null,
             'lastName' => null,
             'gender' => null,
-            'birthday' => ['year' => null, 'month' => 11, 'day' => 27],
+            'birthday' => ['year' => null, 'month' => '11', 'day' => '27'],
             'address' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquet ligula ut elit consectetur, quis vulputate felis vestibulum. Vivamus rutrum metus leo, in dignissim lectus fringilla nec.',
+            'country' => 'FR',
+            'zipCode' => null,
             'city' => 'abcdef',
             'errors' => [
                 'Please enter your first name.',
@@ -97,7 +198,7 @@ class ProfileControllerTest extends HttpTestCase
     }
 
     /**
-     * @dataProvider provideBadProfiles
+     * @dataProvider provideBadProfileEditions
      */
     public function testEditFailure(
         ?string $firstName,
@@ -105,6 +206,8 @@ class ProfileControllerTest extends HttpTestCase
         ?string $gender,
         ?array $birthday,
         ?string $address,
+        ?string $country,
+        ?string $zipCode,
         ?string $cityUuid,
         array $errors
     ): void {
@@ -119,36 +222,59 @@ class ProfileControllerTest extends HttpTestCase
             'gender' => $gender,
             'birthday' => $birthday,
             'address' => $address,
+            'country' => $country,
+            'zipCode' => $zipCode,
             'city' => $cityUuid,
         ]));
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
     }
 
-    public function testChangePasswordSuccess(): void
+    public function providePasswordChanges(): iterable
     {
-        $this->authenticateActor('remi@mobilisation.eu');
+        yield ['remi@mobilisation.eu', 'Rémi', 'new_password!123'];
+        yield ['john@mobilisation.eu', 'John', 'n3W_P@sS'];
+        yield ['jane@mobilisation.eu', 'Jane', '654_pass_123'];
+        // actor with pending reset password token
+        yield ['titouan@mobilisation.eu', 'Titouan', 'secret!321'];
+    }
+
+    /**
+     * @dataProvider providePasswordChanges
+     */
+    public function testChangePasswordSuccess(string $email, string $firstName, string $newPassword): void
+    {
+        $this->authenticateActor($email);
 
         $crawler = $this->client->request('GET', '/profile/change-password');
         $this->assertResponseSuccessFul();
 
+        /** @var \Symfony\Component\DomCrawler\Field\FormField[] $password */
+        $password = $crawler->selectButton('Change password')->form()->get('password');
+        $this->assertSame('', $password['first']->getValue());
+        $this->assertSame('', $password['second']->getValue());
+
         $this->client->submit($crawler->selectButton('Change password')->form([
             'password' => [
-                'first' => 'new_password',
-                'second' => 'new_password',
+                'first' => $newPassword,
+                'second' => $newPassword,
             ],
         ]));
         $this->assertIsRedirectedTo('/profile');
         $this->assertMailSent([
-            'to' => 'remi@mobilisation.eu',
+            'to' => $email,
             'subject' => 'Your password has been successfully changed.',
             'body' => "@string@
-                        .contains('Hello Rémi!')
+                        .contains('Hello $firstName!')
                         .contains('Your password has been successfully changed.')",
         ]);
 
         $this->client->followRedirect();
         $this->assertResponseContains('Your password has been successfully changed.');
+
+        // ensure user is not logged out after this request
+        $this->client->request('GET', '/profile');
+        $this->assertResponseSuccessFul();
 
         $this->client->request('GET', '/logout');
         $this->assertIsRedirectedTo($this->getAbsoluteUrl('/login'));
@@ -157,12 +283,12 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Sign')->form([
-            'emailAddress' => 'remi@mobilisation.eu',
-            'password' => 'new_password',
+            'emailAddress' => $email,
+            'password' => $newPassword,
         ]));
         $this->assertIsRedirectedTo('/');
 
-        // ensure user is not logged out
+        // ensure user is logged in
         $this->client->request('GET', '/profile');
         $this->assertResponseSuccessFul();
     }
