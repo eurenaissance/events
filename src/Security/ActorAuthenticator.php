@@ -116,6 +116,6 @@ class ActorAuthenticator extends AbstractFormLoginAuthenticator
 
     private static function createBadCredentialsException(): CustomUserMessageAuthenticationException
     {
-        return new CustomUserMessageAuthenticationException('security.actor.bad_credentials');
+        return new CustomUserMessageAuthenticationException('security.login.error.bad_credentials');
     }
 }

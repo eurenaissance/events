@@ -82,7 +82,7 @@ class RegistrationControllerTest extends HttpTestCase
             'password' => ['first' => 'test123', 'second' => 'test123'],
             'address' => '123 random street',
             'city' => CityFixtures::CITY_02_UUID,
-            'errors' => ['Email address is required.'],
+            'errors' => ['Please enter your email address.'],
         ];
 
         yield [
@@ -93,7 +93,7 @@ class RegistrationControllerTest extends HttpTestCase
             'password' => ['first' => 'test123', 'second' => 'test123'],
             'address' => '123 random street',
             'city' => CityFixtures::CITY_02_UUID,
-            'errors' => ['This email address is already registered.'],
+            'errors' => ['An actor is already registered with this email.'],
         ];
 
         yield [
@@ -104,7 +104,7 @@ class RegistrationControllerTest extends HttpTestCase
             'password' => ['first' => 'test123', 'second' => 'test123'],
             'address' => '123 random street',
             'city' => CityFixtures::CITY_02_UUID,
-            'errors' => ['This email address is already registered.'],
+            'errors' => ['An actor is already registered with this email.'],
         ];
 
         yield [
@@ -137,7 +137,7 @@ class RegistrationControllerTest extends HttpTestCase
                 'This date is not valid.',
                 'Passwords do not match.',
                 'This city is not valid.',
-                'Your address can not exceed 150 characters.',
+                'The address can not exceed 150 characters.',
             ],
         ];
     }
@@ -178,7 +178,7 @@ class RegistrationControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Resend confirmation')->form([
+        $this->client->submit($crawler->selectButton('Resend confirmation mail')->form([
             'emailAddress' => 'nicolas@mobilisation.eu',
         ]));
         $this->assertIsRedirectedTo('/register/resend-confirmation/check-email');
@@ -201,7 +201,7 @@ class RegistrationControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Resend confirmation')->form([
+        $this->client->submit($crawler->selectButton('Resend confirmation mail')->form([
             'emailAddress' => 'unknown@mobilisation.eu',
         ]));
         $this->assertIsRedirectedTo('/register/resend-confirmation/check-email');
@@ -243,7 +243,7 @@ class RegistrationControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Resend confirmation')->form([
+        $this->client->submit($crawler->selectButton('Resend confirmation mail')->form([
             'emailAddress' => $email,
         ]));
         $this->assertIsRedirectedTo($redirectedTo);

@@ -82,7 +82,7 @@ class CreationControllerTest extends HttpTestCase
             'name' => null,
             'city' => null,
             'errors' => [
-                'A group name is required.',
+                'Please enter a group name.',
                 'This city is not valid.',
             ],
         ];
@@ -96,7 +96,7 @@ class CreationControllerTest extends HttpTestCase
         yield [
             'name' => 'Thïs-îs-à-confirmèd-groûp',
             'city' => CityFixtures::CITY_02_UUID,
-            'errors' => ['A group named &quot;&quot;this-is-a-confirmed-group&quot;&quot; already exists.'],
+            'errors' => ['A group with a URL &quot;&quot;this-is-a-confirmed-group&quot;&quot; already exists.'],
         ];
     }
 

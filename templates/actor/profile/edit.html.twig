@@ -1,27 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'actor.profile'|trans %}
+{% block title 'actor.profile.edit.title'|trans %}
 
 {% block body %}
     {{ form_start(form) }}
-        {{ form_row(form.firstName) }}
-        {{ form_row(form.lastName) }}
-        {{ form_row(form.birthday) }}
-        {{ form_row(form.gender) }}
-        {{ form_row(form.emailAddress) }}
-        {{ form_row(form.address) }}
-        {{ form_row(form.country) }}
-        {{ form_row(form.zipCode) }}
+        {{ form_row(form.firstName, { label: 'actor.first_name'}) }}
+        {{ form_row(form.lastName, { label: 'actor.last_name'}) }}
+        {{ form_row(form.birthday, { label: 'actor.birthday'}) }}
+        {{ form_row(form.gender, { label: 'actor.gender', placeholder: 'common.gender.select' }) }}
+        {{ form_row(form.emailAddress, { label: 'actor.email_address'}) }}
+        {{ form_row(form.address, { label: 'actor.address'}) }}
+        {{ form_row(form.country, { label: 'actor.country'}) }}
+        {{ form_row(form.zipCode, { label: 'actor.zip_code'}) }}
+
+
         {# since `form.city` is a hidden type we need to explicitly show errors with `form_errors(form.city)` #}
         {{ form_errors(form.city) }}
         {{ form_widget(form.city) }}
 
         <button type="submit">
-            {{ 'actor.profile.save'|trans }}
+            {{ 'actor.profile.edit.submit'|trans }}
         </button>
     {{ form_end(form) }}
 
     <a href="{{ path('app_actor_profile_change_password') }}">
-        {{ 'actor.profile.change_password'|trans }}
+        {{ 'actor.profile.change_password.link'|trans }}
     </a>
 {% endblock %}

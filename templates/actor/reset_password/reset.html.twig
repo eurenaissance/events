@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'security.password_reset'|trans %}
+{% block title 'actor.reset_password.reset.title'|trans %}
 
 {% block body %}
     {{ form_start(form)}}
         {{ form_row(form.password) }}
 
         <button type="submit">
-            {{ 'security.password_reset'|trans }}
+            {{ 'actor.reset_password.reset.submit'|trans }}
         </button>
     {{ form_end(form) }}
 
     <a href="{{ path('app_login') }}">
-        {{- 'security.back_to_login'|trans -}}
+        {{- 'security.login.link.back'|trans -}}
     </a>
 {% endblock %}

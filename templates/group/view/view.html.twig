@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'group.show'|trans %}
+{% block title 'group.view.view.title'|trans({ '%group%': group.name }) %}
 
 {% block body %}
-    {{ 'group.view.title'|trans({ '%group%': group.name }) }}
+    {{ 'group.view.view.title'|trans({ '%group%': group.name }) }}
 {% endblock %}

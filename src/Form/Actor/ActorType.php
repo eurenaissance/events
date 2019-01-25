@@ -31,43 +31,34 @@ class ActorType extends AbstractType
     {
         $builder
             ->add('firstName', TextType::class, [
-                'label' => 'actor.first_name',
                 'empty_data' => '',
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'actor.last_name',
                 'empty_data' => '',
             ])
             ->add('birthday', BirthdayType::class, [
-                'label' => 'actor.birthday',
                 'widget' => 'choice',
                 'years' => $options['years'],
                 'placeholder' => [
-                    'year' => 'common.year.placeholder',
-                    'month' => 'common.month.placeholder',
-                    'day' => 'common.day.placeholder',
+                    'year' => 'common.date.year.placeholder',
+                    'month' => 'common.date.month.placeholder',
+                    'day' => 'common.date.day.placeholder',
                 ],
                 'invalid_message' => 'common.date.invalid',
                 'empty_data' => '',
             ])
-            ->add('emailAddress', EmailType::class, [
-                'label' => 'actor.email_address',
-            ])
+            ->add('emailAddress', EmailType::class)
             ->add('address', TextType::class, [
-                'label' => 'actor.address',
                 'required' => false,
                 'empty_data' => '',
             ])
             ->add('zipCode', TextType::class, [
-                'label' => 'actor.zip_code',
                 'mapped' => false,
             ])
             ->add('country', CountryType::class, [
-                'label' => 'actor.country',
                 'mapped' => false,
             ])
             ->add('city', HiddenType::class, [
-                'label' => 'actor.city',
                 'invalid_message' => 'common.city.invalid',
                 'error_bubbling' => false,
             ])

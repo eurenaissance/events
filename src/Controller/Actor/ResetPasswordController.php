@@ -33,7 +33,7 @@ class ResetPasswordController extends AbstractController
 
             if ($actor = $resetPasswordHandler->findActor($email)) {
                 if ($resetPasswordHandler->hasPendingToken($actor)) {
-                    $this->addFlash('info', 'security.password_request.pending_token');
+                    $this->addFlash('info', 'actor.reset_password.request.flash.pending_token');
 
                     return $this->redirectToRoute('app_login');
                 }
@@ -79,13 +79,13 @@ class ResetPasswordController extends AbstractController
         }
 
         if ($token->isConsumed()) {
-            $this->addFlash('info', 'security.password_reset.token_already_consumed');
+            $this->addFlash('info', 'actor.reset_password.reset.flash.token_already_consumed');
 
             return $this->redirectToRoute('app_login');
         }
 
         if ($token->isExpired()) {
-            $this->addFlash('info', 'security.password_reset.token_expired');
+            $this->addFlash('info', 'actor.reset_password.reset.flash.token_expired');
 
             return $this->redirectToRoute('app_login');
         }
@@ -95,7 +95,7 @@ class ResetPasswordController extends AbstractController
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $resetPasswordHandler->reset($token);
 
-            $this->addFlash('info', 'actor.reset_password.success');
+            $this->addFlash('info', 'actor.reset_password.reset.flash.success');
 
             return $this->redirectToRoute('app_login');
         }

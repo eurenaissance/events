@@ -123,7 +123,7 @@ class ProfileControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/profile');
         $this->assertResponseSuccessFul();
 
-        $form = $crawler->selectButton('Save')->form();
+        $form = $crawler->selectButton('Save my profile')->form();
         $this->assertTrue($form->get('emailAddress')->isDisabled());
         $this->assertSame($email, $form->get('emailAddress')->getValue());
         $this->assertSame($actualProfile['firstName'], $form->get('firstName')->getValue());
@@ -145,14 +145,14 @@ class ProfileControllerTest extends HttpTestCase
             ]
         );
 
-        $this->client->submit($crawler->selectButton('Save')->form($editedProfile));
+        $this->client->submit($crawler->selectButton('Save my profile')->form($editedProfile));
         $this->assertIsRedirectedTo('/profile');
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
         $this->assertResponseCOntains('Your profile has been successfully saved.');
 
-        $form = $crawler->selectButton('Save')->form();
+        $form = $crawler->selectButton('Save my profile')->form();
         $this->assertTrue($form->get('emailAddress')->isDisabled());
         $this->assertSame($email, $form->get('emailAddress')->getValue());
         $this->assertSame($editedProfile['firstName'], $form->get('firstName')->getValue());
@@ -189,10 +189,10 @@ class ProfileControllerTest extends HttpTestCase
             'errors' => [
                 'Please enter your first name.',
                 'Please enter your last name.',
-                'Please select a gender.',
+                'Please select your gender.',
                 'This date is not valid.',
                 'This city is not valid.',
-                'Your address can not exceed 150 characters.',
+                'The address can not exceed 150 characters.',
             ],
         ];
     }
@@ -216,7 +216,7 @@ class ProfileControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/profile');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Save')->form([
+        $this->client->submit($crawler->selectButton('Save my profile')->form([
             'firstName' => $firstName,
             'lastName' => $lastName,
             'gender' => $gender,
@@ -250,11 +250,11 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         /** @var \Symfony\Component\DomCrawler\Field\FormField[] $password */
-        $password = $crawler->selectButton('Change password')->form()->get('password');
+        $password = $crawler->selectButton('Change my password')->form()->get('password');
         $this->assertSame('', $password['first']->getValue());
         $this->assertSame('', $password['second']->getValue());
 
-        $this->client->submit($crawler->selectButton('Change password')->form([
+        $this->client->submit($crawler->selectButton('Change my password')->form([
             'password' => [
                 'first' => $newPassword,
                 'second' => $newPassword,
@@ -282,7 +282,7 @@ class ProfileControllerTest extends HttpTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign')->form([
+        $this->client->submit($crawler->selectButton('Sign in')->form([
             'emailAddress' => $email,
             'password' => $newPassword,
         ]));
@@ -320,7 +320,7 @@ class ProfileControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/profile/change-password');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Change password')->form([
+        $this->client->submit($crawler->selectButton('Change my password')->form([
             'password' => ['first' => $first, 'second' => $second],
         ]));
         $this->assertResponseSuccessFul();

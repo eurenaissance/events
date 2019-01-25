@@ -1,7 +1,7 @@
 {% extends 'mail/base.html.twig' %}
 
 {% block body %}
-    {{ 'common.welcome_actor'|trans({ '%actor%': actor.firstName }) }}
+    {{ 'common.welcome'|trans({ '%actor%': actor.firstName }) }}
     <br>
     {{ 'mail.actor.registration_complete.body'|trans }}
     <br/>

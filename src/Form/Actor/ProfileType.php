@@ -15,8 +15,6 @@ class ProfileType extends AbstractType
     {
         $builder
             ->add('gender', ChoiceType::class, [
-                'label' => 'actor.gender',
-                'placeholder' => 'common.gender.select',
                 'choices' => [
                     'common.gender.female' => 'female',
                     'common.gender.male' => 'male',

@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'security.reset_password.request.success'|trans %}
+{% block title 'actor.reset_password.check_email.title'|trans %}
 
 {% block body %}
-    {{ 'security.password_request.mail_sent'|trans }}
+    {{ 'actor.reset_password.check_email.mail_sent'|trans }}
 
     <a href="{{ path('app_login') }}">
-        {{- 'security.back_to_login'|trans -}}
+        {{- 'security.login.link.back'|trans -}}
     </a>
 {% endblock %}
