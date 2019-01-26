@@ -40,23 +40,19 @@ class CreationType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'group.name',
                 'empty_data' => '',
             ])
             ->add('address', TextType::class, [
-                'label' => 'group.address',
                 'required' => false,
+                'empty_data' => '',
             ])
             ->add('zipCode', TextType::class, [
-                'label' => 'group.zip_code',
                 'mapped' => false,
             ])
             ->add('country', CountryType::class, [
-                'label' => 'group.country',
                 'mapped' => false,
             ])
             ->add('city', HiddenType::class, [
-                'label' => 'group.city',
                 'invalid_message' => 'common.city.invalid',
                 'error_bubbling' => false,
             ])

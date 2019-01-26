@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title 'common.default_title'|trans %}</title>
+        <title>{% block title 'common.title.default'|trans %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
@@ -13,30 +13,39 @@
                     <div class="flash__inner">{{ message|trans }}</div>
                 </div>
             {% endfor %}
+
+            {% block extra_flash_messages '' %}
         {% endblock %}
 
         {% if is_granted('ROLE_ADMIN') %}
             <a href="{{ path('sonata_admin_dashboard') }}">
-                {{ 'security.administration'|trans }}
+                {{ 'admin.dashboard.link'|trans }}
             </a>
         {% elseif is_granted('ROLE_ACTOR') %}
-            {{ 'common.hello_actor'|trans({ '%actor%': app.user.firstName }) }}
+            {{ 'common.hello'|trans({ '%actor%': app.user.firstName }) }}
             ({{ app.user.emailAddress }})
             <ul>
                 <li>
                     <a href="{{ path('app_actor_profile_edit') }}">
-                        {{ 'actor.profile'|trans }}
+                        {{ 'actor.profile.edit.link.default'|trans }}
                     </a>
                 </li>
+                {% if is_granted('GROUP_CREATE') %}
+                    <li>
+                        <a href="{{ path('app_group_creation_create') }}">
+                            {{ 'group.creation.create.link.default'|trans }}
+                        </a>
+                    </li>
+                {% endif %}
                 <li>
                     <a href="{{ path('app_logout') }}">
-                        {{ 'security.logout'|trans }}
+                        {{ 'security.logout.link'|trans }}
                     </a>
                 </li>
                 {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
                     <li class="text--small">
                         <a href="{{ path('app_admin_impersonation_exit') }}">
-                            {{ 'security.quit_impersonation'|trans }}
+                            {{ 'admin.impersonation.quit.link'|trans }}
                         </a>
                     </li>
                 {% endif %}
@@ -45,12 +54,12 @@
             <ul>
                 <li>
                     <a href="{{ path('app_login') }}">
-                        {{ 'security.login'|trans }}
+                        {{ 'security.login.link.default'|trans }}
                     </a>
                 </li>
                 <li>
                     <a href="{{ path('app_actor_registration_register') }}">
-                        {{ 'actor.registration.register'|trans }}
+                        {{ 'actor.registration.register.link.default'|trans }}
                     </a>
                 </li>
             </ul>

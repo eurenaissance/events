@@ -6,7 +6,7 @@ use Symfony\Component\Security\Core\Exception\AccountStatusException;
 
 class ActorNotConfirmedException extends AccountStatusException
 {
-    private const MESSAGE_KEY = 'security.actor.not_confirmed';
+    private const MESSAGE_KEY = 'security.login.error.not_confirmed';
     private const URL_KEY = '%resend_confirmation_url%';
 
     private $resendConfirmationUrl;

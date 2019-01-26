@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'security.login'|trans %}
+{% block title 'security.login.title'|trans %}
 
 {% block body %}
     <form method="post">
@@ -28,11 +28,11 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
         <button type="submit">
-            {{- 'security.login'|trans -}}
+            {{- 'security.login.submit'|trans -}}
         </button>
     </form>
 
     <a href="{{ path('app_actor_reset_password_request') }}">
-        {{- 'security.reset_password.forgot_password'|trans -}}
+        {{- 'actor.reset_password.request.link.default'|trans -}}
     </a>
 {% endblock %}

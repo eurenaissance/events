@@ -15,10 +15,8 @@ class RepeatedPasswordType extends AbstractType
     {
         $resolver->setDefaults([
             'type' => PasswordType::class,
-            'first_options' => ['label' => 'actor.password'],
-            'second_options' => ['label' => 'actor.password_confirmation'],
             'validation_groups' => static::VALIDATION_GROUPS,
-            'invalid_message' => 'common.password.mismatch',
+            'invalid_message' => 'actor.password.mismatch',
         ]);
     }
 

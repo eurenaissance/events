@@ -14,11 +14,14 @@ class EmailRequestType extends AbstractType
     {
         $builder
             ->add('emailAddress', EmailType::class, [
-                'label' => 'actor.email_address',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank(),
-                    new Email(),
+                    new NotBlank([
+                        'message' => 'actor.email_address.not_blank',
+                    ]),
+                    new Email([
+                        'message' => 'actor.email_address.valid',
+                    ]),
                 ],
             ])
         ;

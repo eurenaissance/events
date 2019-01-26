@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'actor.registration.resend_confirmation'|trans %}
+{% block title 'actor.registration.resend_confirmation.title'|trans %}
 
 {% block body %}
     {{ form_start(form)}}
-        {{ form_row(form.emailAddress) }}
+        {{ form_row(form.emailAddress, { label: 'actor.email_address.label' }) }}
 
         <button type="submit">
-            {{ 'actor.registration.resend_confirmation'|trans }}
+            {{ 'actor.registration.resend_confirmation.submit'|trans }}
         </button>
     {{ form_end(form) }}
 
     <a href="{{ path('app_login') }}">
-        {{ 'security.back_to_login'|trans }}
+        {{ 'security.login.link.back'|trans }}
     </a>
 {% endblock %}

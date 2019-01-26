@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
  *
  * @UniqueEntity("name", message="group.name.unique")
- * @UniqueEntity("slug", errorPath="name", message="group.name.unique")
+ * @UniqueEntity("slug", errorPath="name", message="group.slug.unique")
  */
 class Group implements EntitySlugInterface
 {

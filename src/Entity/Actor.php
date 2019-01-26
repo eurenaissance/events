@@ -18,7 +18,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * })
  * @ORM\Entity(repositoryClass="App\Repository\ActorRepository")
  *
- * @UniqueEntity("emailAddress", message="common.email_address.unique", groups={"registration"})
+ * @UniqueEntity("emailAddress", message="actor.email_address.unique", groups={"registration"})
  */
 class Actor implements UserInterface, EquatableInterface
 {
@@ -31,9 +31,9 @@ class Actor implements UserInterface, EquatableInterface
      *
      * @ORM\Column
      *
-     * @Assert\Email(message="common.email_address.valid", groups={"registration", "profile"})
-     * @Assert\NotBlank(message="common.email_address.not_blank", groups={"registration", "profile"})
-     * @Assert\Length(max=255, maxMessage="common.email_address.max_length", groups={"registration", "profile"})
+     * @Assert\Email(message="actor.email_address.valid", groups={"registration", "profile"})
+     * @Assert\NotBlank(message="actor.email_address.not_blank", groups={"registration", "profile"})
+     * @Assert\Length(max=255, maxMessage="actor.email_address.max_length", groups={"registration", "profile"})
      */
     private $emailAddress;
 
@@ -42,8 +42,8 @@ class Actor implements UserInterface, EquatableInterface
      *
      * @ORM\Column(length=50)
      *
-     * @Assert\NotBlank(message="common.first_name.not_blank", groups={"registration", "profile"})
-     * @Assert\Length(max=50, maxMessage="common.firstName.max_length", groups={"registration", "profile"})
+     * @Assert\NotBlank(message="actor.first_name.not_blank", groups={"registration", "profile"})
+     * @Assert\Length(max=50, maxMessage="actor.firstName.max_length", groups={"registration", "profile"})
      */
     private $firstName;
 
@@ -52,8 +52,8 @@ class Actor implements UserInterface, EquatableInterface
      *
      * @ORM\Column(length=50)
      *
-     * @Assert\NotBlank(message="common.last_name.not_blank", groups={"registration", "profile"})
-     * @Assert\Length(max=50, maxMessage="common.lastName.max_length", groups={"registration", "profile"})
+     * @Assert\NotBlank(message="actor.last_name.not_blank", groups={"registration", "profile"})
+     * @Assert\Length(max=50, maxMessage="actor.lastName.max_length", groups={"registration", "profile"})
      */
     private $lastName;
 
@@ -62,8 +62,8 @@ class Actor implements UserInterface, EquatableInterface
      *
      * @ORM\Column(type="date")
      *
-     * @Assert\NotBlank(message="common.birthday.not_blank")
-     * @Assert\Date(message="common.birthday.date", groups={"registration", "profile"})
+     * @Assert\NotBlank(message="actor.birthday.not_blank", groups={"registration", "profile"})
+     * @Assert\Date(message="actor.birthday.date", groups={"registration", "profile"})
      */
     private $birthday;
 
@@ -72,8 +72,8 @@ class Actor implements UserInterface, EquatableInterface
      *
      * @ORM\Column(length=6, nullable=true)
      *
-     * @Assert\NotBlank(message="common.gender.not_blank", groups={"profile"})
-     * @Assert\Choice(message="common.gender.choice", choices={"female", "male", "other"}, groups={"profile"})
+     * @Assert\NotBlank(message="actor.gender.not_blank", groups={"profile"})
+     * @Assert\Choice(message="actor.gender.choice", choices={"female", "male", "other"}, groups={"profile"})
      */
     private $gender;
 
@@ -82,7 +82,7 @@ class Actor implements UserInterface, EquatableInterface
      *
      * @ORM\Column
      *
-     * @Assert\Length(min=6, minMessage="common.password.min_length", groups={"registration", "reset_password"})
+     * @Assert\Length(min=6, minMessage="actor.password.min_length", groups={"registration", "reset_password"})
      */
     private $password;
 

@@ -1,120 +1,249 @@
 #
 # Common
 #
-common.default_title: Mobilisation EU
-common.homepage: Homepage
-common.hello_actor: Hello %actor%!
-common.welcome_actor: Welcome %actor%!
-common.password.mismatch: Passwords do not match.
-common.password.min_length: Password must be at least {{ limit }} characters long.
-common.email_address.not_blank: Email address is required.
-common.email_address.valid: This email address is not valid.
-common.email_address.unique: This email address is already registered.
-common.first_name.not_blank: Please enter your first name.
-common.last_name.not_blank: Please enter your last name.
-common.date.invalid: This date is not valid.
-common.gender.not_blank: Please select a gender.
-common.gender.male: Male
-common.gender.female: Female
-common.gender.other: Other
-common.gender.select: Select a gender
-common.year.placeholder: YYYY
-common.month.placeholder: MM
-common.day.placeholder: DD
-common.city.invalid: This city is not valid.
-common.address.max_length: Your address can not exceed {{ limit }} characters.
+common:
+    title:
+        default: Mobilisation EU
+    homepage: Homepage
+    hello: Hello %actor%!
+    welcome: Welcome %actor%!
+
+    date:
+        invalid: This date is not valid.
+        year:
+            placeholder: YYYY
+        month:
+            placeholder: MM
+        day:
+            placeholder: DD
+
+    gender:
+        select: Select a gender
+        female: Female
+        male: Male
+        other: Other
+
+    address:
+        max_length: The address can not exceed {{ limit }} characters.
+
+    city:
+        invalid: This city is not valid.
+        not_blank: Please select a city.
+
+
+#
+# Security
+#
+
+# Login
+security:
+    login:
+        link:
+            default: Sign in
+            back: Back to login
+        title: Sign in
+        email: Email address
+        password: Password
+        submit: Sign in
+        error:
+            bad_credentials: Invalid credentials
+            not_confirmed: |
+                Your account is not confirmed yet.
+                Click <a href="%resend_confirmation_url%">here</a> to resend a confirmation mail.
+
+    logout:
+        link: Sign out
+
+
+#
+# Administration
+#
+admin:
+    dashboard:
+        link: Administration
+    impersonation:
+        quit:
+            link: Quit impersonation
+
 
 #
 # Actor
 #
-actor.first_name: First name
-actor.last_name: Last name
-actor.email_address: Email address
-actor.password: Mot de passe
-actor.password_confirmation: Confirmation du mot de passe
-actor.gender: Gender
-actor.birthday: Birth date
-actor.address: Address
-actor.country: Country
-actor.zip_code: Zip code
-actor.city: City
+actor:
+    email_address:
+        label: Email address
+        valid: This email address is not valid.
+        not_blank: Please enter your email address.
+        max_length: Email address should ne exceed {{ limit }} characters.
+        unique: An actor is already registered with this email.
+    first_name:
+        label: First name hue
+        not_blank: Please enter your first name.
+        max_length: First name should not exceed {{ limit }} characters.
+    last_name:
+        label: Last name
+        not_blank: Please enter your last name.
+        max_length: Last name should not exceed {{ limit }} characters.
+    birthday:
+        label: Birth date
+        not_blank: Please enter your birth date.
+        date: This birth date is not valid.
+    gender:
+        label: Gender
+        not_blank: Please select your gender.
+        choice: The gender "{{ value }}" is not valid.
+    password:
+        label: Password
+        confirmation: Password confirmation
+        not_blank: Please enter a password.
+        min_length: Password must be at least {{ limit }} characters long.
+        mismatch: Passwords do not match.
+    address:
+        label: Address
+    country:
+        label: Country
+    zip_code:
+        label: Zip code
+    city:
+        label: City
 
-actor.reset_password.success: Your password has been successfully reset.
+    registration:
+        register:
+            link:
+                default: Click here to register
+            title: Registration
+            submit: Register
 
-#
-# Registration
-#
-actor.registration: Registration
-actor.registration.register: Register
-actor.registration.success: Registration success
-actor.registration.mail_sent: A mail has been sent to confirm your account.
-actor.registration.resend_confirmation: Resend confirmation
-actor.registration.resend_confirmation.mail_sent: A new mail has been sent with a link to confirm your account. Please go check your mails.
-actor.registration.already_confirmed: Your account is already confirmed.
-actor.registration.pending_token: A mail has already been sent in the last 2 hours with a link to confirm your account. Please wait a while to ask for another confirmation mail.
-actor.registration.token_expired: This link is no longer valid. Please request a new confirmation mail to confirm your account.
-actor.registration.confirmed: Your registration is now complete.
+        success:
+            title: Registration success
+            mail_sent: A mail has been sent to confirm your account.
 
-#
-# Profile
-#
-actor.profile: Profile
-actor.back_to_profile: Back to profile
-actor.profile.save: Save profile
-actor.profile.edited: Your profile has been successfully saved.
-actor.profile.change_password: Change password
-actor.profile.password_changed: Your password has been successfully changed.
+        resend_confirmation:
+            title: Resend confirmation mail
+            submit: Resend confirmation mail
+            flash:
+                already_confirmed: Your account is already confirmed.
+                pending_token: A mail has already been sent in the last 2 hours with a link to confirm your account. Please wait a while to ask for another confirmation mail.
+            success:
+                title: Confirmation mail sent
+                mail_sent: A new mail has been sent with a link to confirm your account. Please go check your mails.
+
+        confirm:
+            flash:
+                already_confirmed: Your account is already confirmed.
+                token_expired: This link is no longer valid. Please request a new confirmation mail to confirm your account.
+                success: Your registration is now complete.
+
+    profile:
+        edit:
+            link:
+                default: My profile
+                back: Back to my profile
+            title: My profile - Edition
+            submit: Save my profile
+            flash:
+                success: Your profile has been successfully saved.
+
+        change_password:
+            link:
+                default: Change my password
+            title: My profile - Change my password
+            submit: Change my password
+            flash:
+                success: Your password has been successfully changed.
+
+    reset_password:
+        request:
+            link:
+                default: Forgot password?
+            title: Request a new password
+            submit: Request new password
+            flash:
+                pending_token: A mail has already been sent in the last 2 hours with a link to reset your password. Please wait a while to ask for another reset reset_password request.
+
+        check_email:
+            title: Password request sent
+            mail_sent: A mail has been sent with a link to reset your password. Please go check your mails.
+
+        reset:
+            title: Reset password
+            submit: Reset password
+            flash:
+                token_already_consumed: This link is no longer valid. Please request a new reset password link.
+                token_expired: This link is no longer valid. Please request a new reset password link.
+                success: Your password has been successfully reset.
+
 
 #
 # Group
 #
-group.creation: Create a group
-group.creation.create: Create
-group.creation.success: Your group has been created successfully.
-group.creation.need_login: Please sign in to create a group.
-group.creation.already_pending: You already have a pending group waiting for admin confirmation.
-group.name.not_blank: A group name is required.
-group.name.unique: A group named "{{ value }}" already exists.
-group.view.title: "Group: %group%"
-#
-# Security
-#
-security.login: Sign in
-security.login.email: Email address
-security.login.password: Password
-security.logout: Sign out
-security.back_to_login: Back to login
-security.actor.bad_credentials: Invalid credentials
-security.actor.not_confirmed: |
-    Your account is not confirmed yet.
-    Click <a href="%resend_confirmation_url%">here</a> to resend a confirmation mail.
+group:
+    name:
+        label: Name
+        not_blank: Please enter a group name.
+        min_length: The group name must be at least {{ limit }} characters long.
+        max_length: The group name should not exceed {{ limit }} characters.
+        unique: A group named "{{ value }}" already exists.
+    slug:
+        unique: A group with a URL "{{ value }}" already exists.
+    address:
+        label: Address
+    country:
+        label: Country
+    zip_code:
+        label: Zip code
+    city:
+        label: City
 
-security.password.forgot_password: Forgot password?
-security.password_request: Request new password
-security.password_request.success: Password reset requested
-security.password_request.mail_sent: A mail has been sent with a link to reset your password. Please go check your mails.
-security.password_reset: Reset password
-security.password_reset.token_already_consumed: This link is no longer valid. Please request a new reset password link.
-security.password_request.pending_token: A mail has already been sent in the last 2 hours with a link to reset your password. Please wait a while to ask for another reset reset_password request.
-security.password_reset.token_expired: This link is no longer valid. Please request a new reset password link.
-security.administration: Administration
-security.quit_impersonation: Quit impersonation
+    creation:
+        create:
+            link:
+                default: Create a group
+            title: Create a group
+            submit: Create
+            flash:
+                success: Your group has been created successfully.
+
+    view:
+        view:
+            title: "Group: %group%"
+            flash:
+                pending: Your group is waiting for admin approval.
+
 
 #
 # Mails
 #
-mail.common.click_here_to_sign_in: Click <a href="%url%">here</a> to sign in
-mail.actor.password_changed.subject: Your password has been successfully changed.
-mail.actor.password_changed.body: Your password has been successfully changed.
-mail.actor.registration_complete.subject: Welcome %actor%, your registration is now complete.
-mail.actor.registration_complete.body: Your registration is now complete.
-mail.actor.registration_confirmation.subject: Welcome %actor%, please confirm your registration.
-mail.actor.registration_confirmation.body: Click <a href="%url%">here</a> to confirm your registration.
-mail.actor.reset_password_request.subject: A password reset has been requested.
-mail.actor.reset_password_request.body: Click <a href="%url%">here</a> to reset your password.
-mail.actor.reset_password_success.subject: Your password has been successfully reset.
-mail.actor.reset_password_success.body: Your password has been successfully reset.
-mail.group.created.subject: Your group "%group%" has been created.
-mail.group.created.body: Your group "%group%" has been created. Please wait for an admin approval.
-mail.group.confirmed.subject: Your group "%group%" has been confirmed.
-mail.group.confirmed.body: Your group "%group%" has been confirmed.
+mail:
+    common:
+        click_here_to_sign_in: Click <a href="%url%">here</a> to sign in
+
+    actor:
+        registration_confirmation:
+            subject: Welcome %actor%, please confirm your registration.
+            body: Click <a href="%url%">here</a> to confirm your registration.
+
+        registration_complete:
+            subject: Welcome %actor%, your registration is now complete.
+            body: Your registration is now complete.
+
+        reset_password_request:
+            subject: A password reset has been requested.
+            body: Click <a href="%url%">here</a> to reset your password.
+
+        reset_password_success:
+            subject: Your password has been successfully reset.
+            body: Your password has been successfully reset.
+
+        password_changed:
+            subject: Your password has been successfully changed.
+            body: Your password has been successfully changed.
+
+    group:
+        created:
+            subject: Your group "%group%" has been created.
+            body: Your group "%group%" has been created. Please wait for an admin approval.
+
+        confirmed:
+            subject: Your group "%group%" has been confirmed.
+            body: Your group "%group%" has been confirmed.
