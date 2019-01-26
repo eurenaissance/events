@@ -6,6 +6,7 @@ use App\Entity\Actor;
 use App\Entity\Group;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 class GroupRepository extends ServiceEntityRepository
 {
@@ -39,11 +40,34 @@ class GroupRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findClosestFrom(Actor $actor, int $limit = 3): array
+    {
+        return $this
+            ->createConfirmedQueryBuilder('g')
+            ->innerJoin('g.city', 'c')
+            ->addSelect('ST_Distance_Sphere(c.coordinates, :coordinates) as HIDDEN distance')
+            ->setParameter('coordinates', $actor->getCoordinates(), 'point')
+            ->orderBy('distance', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     /**
      * For tests purpose only.
      */
     public function deleteAll(): void
     {
         $this->createQueryBuilder('g')->delete()->getQuery()->execute();
+    }
+
+    private function createConfirmedQueryBuilder(string $alias = 'g'): QueryBuilder
+    {
+        return $this
+            ->createQueryBuilder($alias)
+            ->where('g.refusedAt IS NULL')
+            ->andWhere('g.approvedAt IS NOT NULL')
+        ;
     }
 }

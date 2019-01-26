@@ -15,6 +15,8 @@ class CityFixtures extends Fixture
     public const CITY_04_UUID = '5b017472-e001-41f3-8b0e-f77c140b26ed';
     public const CITY_05_UUID = 'c79b2dd0-6380-467b-8b26-8cb0443a84cb';
     public const CITY_06_UUID = '61a309b5-6285-4439-8dc5-aa9b78574622';
+    public const CITY_07_UUID = 'd1d0b957-eb03-4c56-97ca-f92269995a54';
+    public const CITY_08_UUID = '955e1e01-468a-4b84-9ab5-25ac6bf65c8e';
 
     public function load(ObjectManager $manager)
     {
@@ -29,6 +31,9 @@ class CityFixtures extends Fixture
 
         // Ireland ZIP codes are only the beginning of the actual ZIP code
         $city6 = $this->create(self::CITY_06_UUID, 'IE', 'Dublin 8', 'D08', 53.3346, -6.2733);
+
+        $city7 = $this->create(self::CITY_07_UUID, 'FR', 'Clichy', '92110', 48.9002, 2.3095);
+        $city8 = $this->create(self::CITY_08_UUID, 'FR', 'Nice', '06000', 43.7031, 7.2661);
 
         $cities = [
             // AT #^\d{4}$#
@@ -112,6 +117,8 @@ class CityFixtures extends Fixture
         $this->setReference('city-4', $city4);
         $this->setReference('city-5', $city5);
         $this->setReference('city-6', $city6);
+        $this->setReference('city-7', $city7);
+        $this->setReference('city-8', $city8);
 
         $manager->persist($city1);
         $manager->persist($city2);
@@ -119,6 +126,8 @@ class CityFixtures extends Fixture
         $manager->persist($city4);
         $manager->persist($city5);
         $manager->persist($city6);
+        $manager->persist($city7);
+        $manager->persist($city8);
 
         $manager->flush();
     }

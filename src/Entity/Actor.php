@@ -82,7 +82,8 @@ class Actor implements UserInterface, EquatableInterface
      *
      * @ORM\Column
      *
-     * @Assert\Length(min=6, minMessage="actor.password.min_length", groups={"registration", "reset_password"})
+     * @Assert\NotBlank(message="actor.password.not_blank", groups={"registration", "reset_password", "change_password"})
+     * @Assert\Length(min=6, minMessage="actor.password.min_length", groups={"registration", "reset_password", "change_password"})
      */
     private $password;
 

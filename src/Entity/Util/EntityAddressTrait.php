@@ -3,7 +3,7 @@
 namespace App\Entity\Util;
 
 use App\Entity\City;
-use CrEOF\Spatial\PHP\Types\Geography\Point;
+use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 

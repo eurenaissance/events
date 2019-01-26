@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Util\EntityIdTrait;
 use App\Entity\Util\EntityUuidTrait;
-use CrEOF\Spatial\PHP\Types\Geography\Point;
+use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
