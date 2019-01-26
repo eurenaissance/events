@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Actor;
 use App\Entity\Group;
+use App\Entity\Util\EntityGeocodableInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
@@ -40,13 +41,17 @@ class GroupRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findClosestFrom(Actor $actor, int $limit = 3): array
+    public function findClosestFrom(EntityGeocodableInterface $entity, int $limit = 3): array
     {
+        if (!$coordinates = $entity->getCoordinates()) {
+            throw new \InvalidArgumentException('Cannot find closest groups from entity with no coordinates.');
+        }
+
         return $this
             ->createConfirmedQueryBuilder('g')
             ->innerJoin('g.city', 'c')
             ->addSelect('ST_Distance_Sphere(c.coordinates, :coordinates) as HIDDEN distance')
-            ->setParameter('coordinates', $actor->getCoordinates(), 'point')
+            ->setParameter('coordinates', $coordinates, 'point')
             ->orderBy('distance', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()

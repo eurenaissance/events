@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Util\EntityAddressTrait;
+use App\Entity\Util\EntityGeocodableInterface;
 use App\Entity\Util\EntityIdTrait;
 use App\Entity\Util\EntityUuidTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,7 +21,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @UniqueEntity("emailAddress", message="actor.email_address.unique", groups={"registration"})
  */
-class Actor implements UserInterface, EquatableInterface
+class Actor implements UserInterface, EquatableInterface, EntityGeocodableInterface
 {
     use EntityIdTrait;
     use EntityUuidTrait;
