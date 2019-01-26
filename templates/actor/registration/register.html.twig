@@ -4,15 +4,15 @@
 
 {% block body %}
     {{ form_start(form) }}
-        {{ form_row(form.firstName, { label: 'actor.first_name'}) }}
-        {{ form_row(form.lastName, { label: 'actor.last_name'}) }}
-        {{ form_row(form.birthday, { label: 'actor.birthday'}) }}
-        {{ form_row(form.emailAddress, { label: 'actor.email_address'}) }}
-        {{ form_row(form.password.first, { label: 'actor.password'}) }}
-        {{ form_row(form.password.second, { label: 'actor.password_confirmation'}) }}
-        {{ form_row(form.address, { label: 'actor.address'}) }}
-        {{ form_row(form.country, { label: 'actor.country'}) }}
-        {{ form_row(form.zipCode, { label: 'actor.zip_code'}) }}
+        {{ form_row(form.firstName, { label: 'actor.first_name' }) }}
+        {{ form_row(form.lastName, { label: 'actor.last_name' }) }}
+        {{ form_row(form.birthday, { label: 'actor.birthday' }) }}
+        {{ form_row(form.emailAddress, { label: 'actor.email_address' }) }}
+        {{ form_row(form.password.first, { label: 'actor.password' }) }}
+        {{ form_row(form.password.second, { label: 'actor.password_confirmation' }) }}
+        {{ form_row(form.address, { label: 'actor.address' }) }}
+        {{ form_row(form.country, { label: 'actor.country' }) }}
+        {{ form_row(form.zipCode, { label: 'actor.zip_code' }) }}
 
         {# since `form.city` is a hidden type we need to explicitely show errors with `form_errors(form.city)` #}
         {{ form_errors(form.city) }}
