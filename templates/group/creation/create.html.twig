@@ -4,10 +4,10 @@
 
 {% block body %}
     {{ form_start(form) }}
-        {{ form_row(form.name, { label: 'group.name' }) }}
-        {{ form_row(form.address, { label: 'group.address' }) }}
-        {{ form_row(form.country, { label: 'group.country' }) }}
-        {{ form_row(form.zipCode, { label: 'group.zip_code' }) }}
+        {{ form_row(form.name, { label: 'group.name.label' }) }}
+        {{ form_row(form.address, { label: 'group.address.label' }) }}
+        {{ form_row(form.country, { label: 'group.country.label' }) }}
+        {{ form_row(form.zipCode, { label: 'group.zip_code.label' }) }}
 
         {# since `form.city` is a hidden type we need to explicitely show errors with `form_errors(form.city)` #}
         {{ form_errors(form.city) }}

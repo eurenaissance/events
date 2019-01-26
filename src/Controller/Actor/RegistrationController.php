@@ -107,20 +107,20 @@ class RegistrationController extends AbstractController
         $this->denyAccessUnlessGranted('ACTOR_REGISTER');
 
         if ($token->isConsumed() || $token->getActor()->isConfirmed()) {
-            $this->addFlash('info', 'actor.registration.confirm.already_confirmed');
+            $this->addFlash('info', 'actor.registration.confirm.flash.already_confirmed');
 
             return $this->redirectToRoute('app_login');
         }
 
         if ($token->isExpired()) {
-            $this->addFlash('info', 'actor.registration.confirm.token_expired');
+            $this->addFlash('info', 'actor.registration.confirm.flash.token_expired');
 
             return $this->redirectToRoute('app_actor_register_resend_confirmation');
         }
 
         $registrationHandler->confirm($token);
 
-        $this->addFlash('info', 'actor.registration.confirm.success');
+        $this->addFlash('info', 'actor.registration.confirm.flash.success');
 
         return $this->redirectToRoute('app_login');
     }

@@ -27,13 +27,13 @@
             <ul>
                 <li>
                     <a href="{{ path('app_actor_profile_edit') }}">
-                        {{ 'actor.profile.edit.link'|trans }}
+                        {{ 'actor.profile.edit.link.default'|trans }}
                     </a>
                 </li>
                 {% if is_granted('GROUP_CREATE') %}
                     <li>
                         <a href="{{ path('app_group_creation_create') }}">
-                            {{ 'group.creation.create.link'|trans }}
+                            {{ 'group.creation.create.link.default'|trans }}
                         </a>
                     </li>
                 {% endif %}
@@ -54,12 +54,12 @@
             <ul>
                 <li>
                     <a href="{{ path('app_login') }}">
-                        {{ 'security.login'|trans }}
+                        {{ 'security.login.link.default'|trans }}
                     </a>
                 </li>
                 <li>
                     <a href="{{ path('app_actor_registration_register') }}">
-                        {{ 'actor.registration.register'|trans }}
+                        {{ 'actor.registration.register.link.default'|trans }}
                     </a>
                 </li>
             </ul>

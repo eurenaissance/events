@@ -8,7 +8,6 @@ use App\Tests\HttpTestCase;
 
 /**
  * @group functional
- * @group debug
  */
 class RegistrationControllerTest extends HttpTestCase
 {
