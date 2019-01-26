@@ -9,5 +9,21 @@
 {% endblock %}
 
 {% block body %}
-    {{ 'group.view.view.title'|trans({ '%group%': group.name }) }}
+    <h1>{{ group.name }}</h1>
+
+    {% if is_granted('GROUP_UNFOLLOW', group) %}
+        You are follower of this group! \o/
+
+        <a href="{{ path('app_group_unfollow', { slug: group.slug }) }}">
+            stop following this group
+        </a>
+    {% endif %}
+
+    {% if is_granted('GROUP_FOLLOW', group) %}
+        Interested in following this group ?
+
+        <a href="{{ path('app_group_follow', { slug: group.slug }) }}">
+            follow this group
+        </a>
+    {% endif %}
 {% endblock %}

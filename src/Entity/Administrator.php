@@ -3,9 +3,8 @@
 namespace App\Entity;
 
 use App\Entity\Util\EntityIdTrait;
+use App\Security\User\AdministratorInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -17,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @UniqueEntity(fields={"emailAddress"})
  */
-class Administrator implements UserInterface, TwoFactorInterface
+class Administrator implements AdministratorInterface
 {
     use EntityIdTrait;
 
@@ -26,9 +25,8 @@ class Administrator implements UserInterface, TwoFactorInterface
      *
      * @ORM\Column
      *
-     * @Assert\Email
      * @Assert\NotBlank
-     * @Assert\Length(max=255, maxMessage="common.email.max_length")
+     * @Assert\Email
      */
     private $emailAddress;
 
@@ -119,12 +117,9 @@ class Administrator implements UserInterface, TwoFactorInterface
         $this->emailAddress = $emailAddress;
     }
 
-    /**
-     * @param string|null $password
-     */
-    public function setPassword($password)
+    public function changePassword(string $encodedPassword): void
     {
-        $this->password = $password;
+        $this->password = $encodedPassword;
     }
 
     public function isGoogleAuthenticatorEnabled(): bool

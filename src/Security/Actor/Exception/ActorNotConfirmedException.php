@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Security\Exception;
+namespace App\Security\Actor\Exception;
 
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 

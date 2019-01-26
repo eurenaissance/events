@@ -1,0 +1,14 @@
+{% set group = membership.group %}
+{% set follower = membership.actor %}
+{% set animator = group.animator %}
+
+{% extends 'mail/base.html.twig' %}
+
+{% block body %}
+    {{ 'common.hello'|trans({ '%actor%': animator.firstName }) }}
+    <br>
+    {{ 'mail.group.new_follower.body'|trans({
+        '%group%': group.name,
+        '%follower%': follower.fullName
+    })|raw }}
+{% endblock %}

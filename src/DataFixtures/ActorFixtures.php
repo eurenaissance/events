@@ -3,11 +3,11 @@
 namespace App\DataFixtures;
 
 use App\Entity\Actor;
+use App\Security\PasswordEncoder;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ActorFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -19,100 +19,148 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
     public const ACTOR_04_UUID = '9b1f4321-8935-4ab5-b392-1e6f6913ace9';
     public const ACTOR_05_UUID = 'a43cc607-9c38-45dc-afda-82e06af69a6a';
     public const ACTOR_06_UUID = '99f7783e-e0ad-4fd7-b34e-4ff061635e51';
+    public const ACTOR_07_UUID = 'be5a9279-fca4-41fb-b4b7-13b266408cba';
+    public const ACTOR_08_UUID = '2a9051e9-7cea-460f-a714-052079d4aa2b';
+    public const ACTOR_09_UUID = 'bf485b41-dad1-4226-87b6-66b925c29a80';
+    public const ACTOR_10_UUID = '4001a167-a417-4bfe-87bb-a15a861d0b93';
+    public const ACTOR_11_UUID = '676f8e4f-b01d-4496-bce8-34bd2a1f4094';
 
     private $encoder;
 
-    public function __construct(UserPasswordEncoderInterface $encoder)
+    public function __construct(PasswordEncoder $encoder)
     {
         $this->encoder = $encoder;
     }
 
     public function load(ObjectManager $manager)
     {
-        // animator of only one and refused group
-        $actor1 = $this->create([
-            'uuid' => self::ACTOR_01_UUID,
-            'emailAddress' => 'remi@mobilisation.eu',
-            'firstName' => 'Rémi',
-            'lastName' => 'Gardien',
-            'birthday' => '1988-11-27',
-            'city' => 'city-2',
-            'registeredAt' => '2 days ago',
-            'confirmed' => true,
-        ]);
+        $actor1 = $this->create(
+            'actor-bois-colombes',
+            self::ACTOR_01_UUID,
+            'remi@mobilisation-eu.code',
+            'Rémi',
+            'Gardien',
+            '1988-11-27',
+            'city-bois-colombes'
+        );
+        $actor1->confirm();
 
-        // animator of only one and confirmed group
-        $actor2 = $this->create([
-            'uuid' => self::ACTOR_02_UUID,
-            'emailAddress' => 'titouan@mobilisation.eu',
-            'firstName' => 'Titouan',
-            'lastName' => 'Galopin',
-            'birthday' => '1994-12-01',
-            'gender' => 'male',
-            'city' => 'city-1',
-            'registeredAt' => '1 day ago',
-            'confirmed' => true,
-        ]);
+        $actor2 = $this->create(
+            'actor-clichy',
+            self::ACTOR_02_UUID,
+            'titouan@mobilisation-eu.code',
+            'Titouan',
+            'Galopin',
+            '1994-12-01',
+            'city-clichy',
+            'male'
+        );
+        $actor2->confirm();
 
-        // not confirmed yet and pending confirmation token
-        $actor3 = $this->create([
-            'uuid' => self::ACTOR_03_UUID,
-            'emailAddress' => 'marine@mobilisation.eu',
-            'firstName' => 'Marine',
-            'lastName' => 'Boudeau',
-            'birthday' => '1983-11-09',
-            'city' => 'city-1',
-            'gender' => 'female',
-            'registeredAt' => '1 hour ago',
-        ]);
+        $actor3 = $this->create(
+            'actor-paris',
+            self::ACTOR_03_UUID,
+            'marine@mobilisation-eu.code',
+            'Marine',
+            'Boudeau',
+            '1983-11-09',
+            'city-paris',
+            'female',
+            '123 random street'
+        );
+        $actor3->confirm();
 
-        // not confirmed yet and expired confirmation token
-        $actor4 = $this->create([
-            'uuid' => self::ACTOR_04_UUID,
-            'emailAddress' => 'nicolas@mobilisation.eu',
-            'firstName' => 'Nicolas',
-            'lastName' => 'Cage',
-            'birthday' => '1964-01-07',
-            'city' => 'city-6',
-            'address' => '2 random street',
-            'gender' => 'male',
-            'registeredAt' => '2 days ago',
-        ]);
+        $actor4 = $this->create(
+            'actor-asnieres',
+            self::ACTOR_04_UUID,
+            'francis@mobilisation-eu.code',
+            'Francis',
+            'Brioul',
+            '1971-04-18',
+            'city-asnieres',
+            'other'
+        );
+        $actor4->confirm();
 
-        // animator of only one and pending group
-        $actor5 = $this->create([
-            'uuid' => self::ACTOR_05_UUID,
-            'emailAddress' => 'john@mobilisation.eu',
-            'firstName' => 'John',
-            'lastName' => 'Doe',
-            'birthday' => '1975-01-12',
-            'address' => '3 random street',
-            'city' => 'city-7',
-            'gender' => 'male',
-            'registeredAt' => '2 days ago',
-            'confirmed' => true,
-        ]);
+        $actor5 = $this->create(
+            'actor-nice',
+            self::ACTOR_05_UUID,
+            'jacques@mobilisation-eu.code',
+            'Jacques',
+            'Picard',
+            '1975-10-07',
+            'city-nice'
+        );
+        $actor5->confirm();
+
+        $actor6 = $this->create(
+            'actor-lille',
+            self::ACTOR_06_UUID,
+            'thomas@mobilisation-eu.code',
+            'Thomas',
+            'Legros',
+            '1982-02-16',
+            'city-lille'
+        );
+        $actor6->confirm();
+
+        $actor7 = $this->create(
+            'actor-nantes',
+            self::ACTOR_07_UUID,
+            'manon@mobilisation-eu.code',
+            'Manon',
+            'Mercier',
+            '1984-01-28',
+            'city-nantes'
+        );
+        $actor7->confirm();
+
+        $actor8 = $this->create(
+            'actor-cannes',
+            self::ACTOR_08_UUID,
+            'nicolas@mobilisation-eu.code',
+            'Nicolas',
+            'Cage',
+            '1964-01-07',
+            'city-cannes',
+            'male',
+            '123 random street'
+        );
+        $actor8->confirm();
+
+        // not confirmed yet with pending confirmation token
+        $actor9 = $this->create(
+            'actor-nice-2',
+            self::ACTOR_09_UUID,
+            'leonard@mobilisation-eu.code',
+            'Léonard',
+            'Matthieu',
+            '1980-03-11',
+            'city-nice'
+        );
+
+        // not confirmed yet with expired confirmation token
+        $actor10 = $this->create(
+            'actor-clichy-2',
+            self::ACTOR_10_UUID,
+            'patrick@mobilisation-eu.code',
+            'Patrick',
+            'Marchand',
+            '1986-03-02',
+            'city-clichy'
+        );
 
         // no relation with any group
-        $actor6 = $this->create([
-            'uuid' => self::ACTOR_06_UUID,
-            'emailAddress' => 'jane@mobilisation.eu',
-            'firstName' => 'Jane',
-            'lastName' => 'Doe',
-            'birthday' => '1976-02-13',
-            'address' => '4 random street',
-            'city' => 'city-8',
-            'gender' => 'female',
-            'registeredAt' => '1 day ago',
-            'confirmed' => true,
-        ]);
-
-        $this->setReference('actor-1', $actor1);
-        $this->setReference('actor-2', $actor2);
-        $this->setReference('actor-3', $actor3);
-        $this->setReference('actor-4', $actor4);
-        $this->setReference('actor-5', $actor5);
-        $this->setReference('actor-6', $actor6);
+        $actor11 = $this->create(
+            'actor-paris-3',
+            self::ACTOR_11_UUID,
+            'didier@mobilisation-eu.code',
+            'Didier',
+            'Lemoine',
+            '1965-02-07',
+            'city-paris'
+        );
+        $actor11->confirm();
 
         $manager->persist($actor1);
         $manager->persist($actor2);
@@ -120,6 +168,11 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($actor4);
         $manager->persist($actor5);
         $manager->persist($actor6);
+        $manager->persist($actor7);
+        $manager->persist($actor8);
+        $manager->persist($actor9);
+        $manager->persist($actor10);
+        $manager->persist($actor11);
 
         $manager->flush();
     }
@@ -131,28 +184,36 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         ];
     }
 
-    private function create(array $data): Actor
-    {
-        $actor = new Actor(Uuid::fromString($data['uuid']));
+    private function create(
+        string $reference,
+        string $uuid,
+        string $email,
+        string $firstName,
+        string $lastName,
+        string $birthday,
+        string $cityReference,
+        ?string $gender = null,
+        ?string $address = null
+    ): Actor {
+        $actor = new Actor(Uuid::fromString($uuid));
 
-        $actor->setEmailAddress($data['emailAddress']);
-        $actor->setFirstName($data['firstName']);
-        $actor->setLastName($data['lastName']);
-        $actor->setBirthday(new \DateTimeImmutable($data['birthday']));
-        $actor->setPassword($this->encoder->encodePassword($actor, self::DEFAULT_PASSWORD));
-        $actor->setCity($this->getReference($data['city']));
+        $actor->setEmailAddress($email);
+        $actor->setFirstName($firstName);
+        $actor->setLastName($lastName);
+        $actor->setBirthday(new \DateTimeImmutable($birthday));
+        $actor->setCity($this->getReference($cityReference));
 
-        if (isset($data['gender'])) {
-            $actor->setGender($data['gender']);
+        if ($gender) {
+            $actor->setGender($gender);
         }
 
-        if (isset($data['address'])) {
-            $actor->setAddress($data['address']);
+        if ($address) {
+            $actor->setAddress($address);
         }
 
-        if (isset($data['confirmed']) && true === $data['confirmed']) {
-            $actor->confirm();
-        }
+        $this->encoder->encodePassword($actor, self::DEFAULT_PASSWORD);
+
+        $this->setReference($reference, $actor);
 
         return $actor;
     }

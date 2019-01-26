@@ -27,7 +27,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
 
         $this->client->submit($crawler->selectButton('Save')->form([
             'emailAddress' => 'first_admin@mobilisation-eu.code',
-            'password' => [
+            'plainPassword' => [
                 'first' => AdministratorFixtures::DEFAULT_PASSWORD,
                 'second' => AdministratorFixtures::DEFAULT_PASSWORD,
             ],

@@ -65,9 +65,14 @@ abstract class HttpTestCase extends WebTestCase
         $this->assertMatchesPattern($pattern, $response->headers->get('Location'));
     }
 
-    protected function assertResponseSuccessFul(): void
+    protected function assertResponseSuccessFul(string $message = null): void
     {
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $response = $this->client->getResponse();
+
+        $this->assertTrue($response->isSuccessful(), $message ?? sprintf(
+            'Expected status code 200, but got %d instead.',
+            $response->getStatusCode()
+        ));
     }
 
     protected function assertJsonResponse(array $expectedContent = null): void

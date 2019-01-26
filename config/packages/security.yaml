@@ -56,7 +56,7 @@ security:
                 always_use_default_target_path: true
             guard:
                 authenticators:
-                    - App\Security\AdministratorAuthenticator
+                    - App\Security\Administrator\Authenticator
             logout:
                 path: app_admin_logout
                 target: app_admin_login
@@ -68,8 +68,8 @@ security:
             switch_user: true
             guard:
                 authenticators:
-                    - App\Security\ActorAuthenticator
-            user_checker: App\Security\ActorChecker
+                    - App\Security\Actor\Authenticator
+            user_checker: App\Security\Actor\Checker
             logout:
                 path: app_logout
                 target: app_login

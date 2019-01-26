@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Actor;
 
+use App\Entity\Actor;
 use App\Entity\Util\EntityIdTrait;
 use App\Entity\Util\EntityUuidTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +11,7 @@ use Ramsey\Uuid\UuidInterface;
 /**
  * @ORM\MappedSuperclass
  */
-abstract class ActorToken
+abstract class AbstractToken
 {
     use EntityIdTrait;
     use EntityUuidTrait;
@@ -31,14 +32,14 @@ abstract class ActorToken
     protected $actor;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(type="datetime")
      */
     protected $expiredAt;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(type="datetime", nullable=true)
      */

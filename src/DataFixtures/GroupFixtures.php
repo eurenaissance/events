@@ -17,6 +17,10 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
     public const GROUP_04_UUID = '59502dcd-291b-4ebc-8440-29f912be291a';
     public const GROUP_05_UUID = 'cd14a575-f14d-4d2a-a3dd-0e799cf3adbe';
     public const GROUP_06_UUID = '9159df14-4052-4355-aec6-54d4eec67744';
+    public const GROUP_07_UUID = 'dfb92581-1b79-452b-9d5d-43c8a5060a97';
+    public const GROUP_08_UUID = '9dd181af-58a5-42f4-91d6-1e0b6c6723a5';
+    public const GROUP_09_UUID = '7d94e9cf-1f88-4fd4-82a8-6e4a8949f000';
+    public const GROUP_10_UUID = 'baa530cc-1ade-4275-9e8c-ba3530507c0e';
 
     private $slugify;
 
@@ -27,71 +31,107 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        // refused group
-        $group1 = $this->create([
-            'uuid' => self::GROUP_01_UUID,
-            'name' => 'This is a refused group',
-            'animator' => 'actor-1',
-            'address' => '456 random street',
-            'city' => 'city-2',
-        ]);
+        $group1 = $this->create(
+            'group-bois-colombes-refused',
+            self::GROUP_01_UUID,
+            'Development in Bois-Colombes',
+            'actor-bois-colombes',
+            'city-bois-colombes'
+        );
         $group1->refuse();
 
-        // pending group
-        $group2 = $this->create([
-            'uuid' => self::GROUP_02_UUID,
-            'name' => 'This is a pending group',
-            'animator' => 'actor-5',
-            'address' => '789 random street',
-            'city' => 'city-2',
-        ]);
+        $group2 = $this->create(
+            'group-clichy-ecology-approved',
+            self::GROUP_02_UUID,
+            'Ecology in Clichy',
+            'actor-clichy',
+            'city-clichy',
+            '789 random street'
+        );
+        $group2->approve();
 
-        // confirmed group
-        $group3 = $this->create([
-            'uuid' => self::GROUP_03_UUID,
-            'name' => 'This is a confirmed group',
-            'animator' => 'actor-2',
-            'address' => '789 random street',
-            'city' => 'city-1',
-        ]);
-        $group3->approve();
+        $group3 = $this->create(
+            'group-paris-development-refused',
+            self::GROUP_03_UUID,
+            'Development in Paris',
+            'actor-paris',
+            'city-paris',
+            '789 random street'
+        );
+        $group3->refuse();
 
-        // confirmed group
-        $group4 = $this->create([
-            'uuid' => self::GROUP_04_UUID,
-            'name' => 'Group of Bois-Colombes',
-            'animator' => 'actor-2',
-            'address' => '123 random street',
-            'city' => 'city-2',
-        ]);
+        $group4 = $this->create(
+            'group-paris-ecology-approved',
+            self::GROUP_04_UUID,
+            'Ecology in Paris',
+            'actor-paris',
+            'city-paris',
+            '123 random street'
+        );
         $group4->approve();
 
-        // confirmed group
-        $group5 = $this->create([
-            'uuid' => self::GROUP_05_UUID,
-            'name' => 'Group of Clichy',
-            'animator' => 'actor-2',
-            'address' => '234 random street',
-            'city' => 'city-7',
-        ]);
-        $group5->approve();
+        // pending group
+        $group5 = $this->create(
+            'group-paris-culture-pending',
+            self::GROUP_05_UUID,
+            'Culture in Paris',
+            'actor-paris',
+            'city-paris',
+            '234 random street'
+        );
 
-        // confirmed group
-        $group6 = $this->create([
-            'uuid' => self::GROUP_06_UUID,
-            'name' => 'Group of Nice',
-            'animator' => 'actor-2',
-            'address' => '345 random street',
-            'city' => 'city-8',
-        ]);
+        $group6 = $this->create(
+            'group-nice-ecology-approved',
+            self::GROUP_06_UUID,
+            'Ecology in Nice',
+            'actor-nice',
+            'city-nice',
+            '345 random street'
+        );
         $group6->approve();
 
-        $this->setReference('group-1', $group1);
-        $this->setReference('group-2', $group2);
-        $this->setReference('group-3', $group3);
-        $this->setReference('group-4', $group4);
-        $this->setReference('group-5', $group5);
-        $this->setReference('group-6', $group5);
+        // approved and then refused
+        $group7 = $this->create(
+            'group-lille-approved-and-refused',
+            self::GROUP_07_UUID,
+            'Development in Lille',
+            'actor-lille',
+            'city-lille',
+            '345 random street'
+        );
+        $group7->approve();
+        $group7->refuse();
+
+        $group8 = $this->create(
+            'group-nantes-approved',
+            self::GROUP_08_UUID,
+            'Ecology in Nantes',
+            'actor-nantes',
+            'city-nantes',
+            '345 random street'
+        );
+        $group8->approve();
+
+        $group9 = $this->create(
+            'group-cannes-approved',
+            self::GROUP_09_UUID,
+            'Culture in Cannes',
+            'actor-cannes',
+            'city-cannes',
+            '345 random street'
+        );
+        $group9->approve();
+
+        // animator from another city
+        $group10 = $this->create(
+            'group-asnieres-approved',
+            self::GROUP_10_UUID,
+            'Culture in Asnieres',
+            'actor-cannes',
+            'city-asnieres',
+            '345 random street'
+        );
+        $group10->approve();
 
         $manager->persist($group1);
         $manager->persist($group2);
@@ -99,6 +139,10 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($group4);
         $manager->persist($group5);
         $manager->persist($group6);
+        $manager->persist($group7);
+        $manager->persist($group8);
+        $manager->persist($group9);
+        $manager->persist($group10);
 
         $manager->flush();
     }
@@ -111,16 +155,27 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
         ];
     }
 
-    private function create(array $data): Group
-    {
-        $group = new Group(Uuid::fromString($data['uuid']));
+    private function create(
+        string $reference,
+        string $uuid,
+        string $name,
+        string $animatorReference,
+        string $cityReference,
+        string $address = null
+    ): Group {
+        $group = new Group(Uuid::fromString($uuid));
 
-        $group->setName($data['name']);
-        $group->setAnimator($this->getReference($data['animator']));
-        $group->setAddress($data['address']);
-        $group->setCity($this->getReference($data['city']));
+        $group->setName($name);
+        $group->setAnimator($this->getReference($animatorReference));
+        $group->setCity($this->getReference($cityReference));
+
+        if ($address) {
+            $group->setAddress($address);
+        }
 
         $this->slugify->createSlug($group);
+
+        $this->setReference($reference, $group);
 
         return $group;
     }

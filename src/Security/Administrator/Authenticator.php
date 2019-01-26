@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Security;
+namespace App\Security\Administrator;
 
-use App\Entity\Administrator;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\AdministratorRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -19,7 +18,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class AdministratorAuthenticator extends AbstractFormLoginAuthenticator
+class Authenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
 
@@ -27,17 +26,18 @@ class AdministratorAuthenticator extends AbstractFormLoginAuthenticator
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    private $administratorRepository;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
         UrlGeneratorInterface $urlGenerator,
         CsrfTokenManagerInterface $csrfTokenManager,
-        UserPasswordEncoderInterface $passwordEncoder
+        UserPasswordEncoderInterface $passwordEncoder,
+        AdministratorRepository $administratorRepository
     ) {
-        $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->administratorRepository = $administratorRepository;
     }
 
     public function supports(Request $request)
@@ -69,14 +69,9 @@ class AdministratorAuthenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this
-            ->entityManager
-            ->getRepository(Administrator::class)
-            ->findOneBy(['emailAddress' => $credentials['emailAddress']])
-        ;
+        $user = $this->administratorRepository->findOneByEmail($credentials['emailAddress']);
 
         if (!$user) {
-            // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Email Address could not be found.');
         }
 

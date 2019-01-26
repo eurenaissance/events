@@ -4,6 +4,8 @@ namespace App\Mailer;
 
 use App\Entity\Actor;
 use App\Entity\Group;
+use App\Entity\Group\CoAnimatorMembership;
+use App\Entity\Group\FollowerMembership;
 use Enqueue\Client\ProducerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -109,6 +111,34 @@ class Mailer
             ]),
             'body' => $this->render('mail/group/confirmed.html.twig', [
                 'group' => $group,
+            ]),
+        ]);
+    }
+
+    public function sendGroupNewFollowerMail(FollowerMembership $membership): void
+    {
+        $group = $membership->getGroup();
+
+        $this->send([
+            'to' => $group->getAnimator()->getEmailAddress(),
+            'subject' => $this->trans('mail.group.new_follower.subject', [
+                '%group%' => $group->getName(),
+            ]),
+            'body' => $this->render('mail/group/new_follower.html.twig', [
+                'membership' => $membership,
+            ]),
+        ]);
+    }
+
+    public function sendGroupNewCoAnimatorMail(CoAnimatorMembership $membership): void
+    {
+        $this->send([
+            'to' => $membership->getActor()->getEmailAddress(),
+            'subject' => $this->trans('mail.group.new_co_animator.subject', [
+                '%group%' => $membership->getGroup()->getName(),
+            ]),
+            'body' => $this->render('mail/group/new_co_animator.html.twig', [
+                'membership' => $membership,
             ]),
         ]);
     }

@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\City;
 use App\Repository\ActorRepository;
+use App\Repository\GroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Ramsey\Uuid\Uuid;
@@ -20,16 +21,21 @@ class GeocoderSetupCommand extends Command
     protected static $defaultName = 'app:geocoder:setup';
 
     private $manager;
-    private $actionRepository;
+    private $actorRepository;
+    private $groupRepository;
 
     private $imported = 0;
 
-    public function __construct(EntityManagerInterface $manager, ActorRepository $actorRepository)
-    {
+    public function __construct(
+        EntityManagerInterface $manager,
+        ActorRepository $actorRepository,
+        GroupRepository $groupRepository
+    ) {
         parent::__construct();
 
         $this->manager = $manager;
-        $this->actionRepository = $actorRepository;
+        $this->actorRepository = $actorRepository;
+        $this->groupRepository = $groupRepository;
     }
 
     protected function configure(): void
@@ -50,19 +56,27 @@ class GeocoderSetupCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (0 !== $this->actionRepository->count([])) {
+        if ($filterCountry = $input->getOption('country')) {
+            $output->writeln("└ Limiting the import to $filterCountry");
+        }
+
+        if ($this->hasActors($filterCountry)) {
             $output->writeln('This command cannot be run if some actors are already registered.');
 
             return 1;
+        }
+
+        if ($this->hasGroups($filterCountry)) {
+            $output->writeln('This command cannot be run if some groups are already registered.');
+
+            return;
         }
 
         $finder = new Finder();
         $finder->in(__DIR__.'/../Geocoder/data');
         $finder->sortByName();
         $finder->directories();
-
-        if ($filterCountry = $input->getOption('country')) {
-            $output->writeln("└ Limiting the import to $filterCountry");
+        if ($filterCountry) {
             $finder->name($filterCountry);
         }
 
@@ -129,5 +143,43 @@ class GeocoderSetupCommand extends Command
 
         $this->manager->flush();
         $this->manager->clear();
+    }
+
+    private function hasActors(?string $filterCountry): int
+    {
+        $qb = $this
+            ->actorRepository
+            ->createQueryBuilder('a')
+            ->select('COUNT(a)')
+        ;
+
+        if ($filterCountry) {
+            $qb
+                ->innerJoin('a.city', 'c')
+                ->where('c.country = :country')
+                ->setParameter('country', $filterCountry)
+            ;
+        }
+
+        return 0 !== $qb->getQuery()->getSingleScalarResult();
+    }
+
+    private function hasGroups(?string $filterCountry): int
+    {
+        $qb = $this
+            ->groupRepository
+            ->createQueryBuilder('g')
+            ->select('COUNT(g)')
+        ;
+
+        if ($filterCountry) {
+            $qb
+                ->innerJoin('g.city', 'c')
+                ->where('c.country = :country')
+                ->setParameter('country', $filterCountry)
+            ;
+        }
+
+        return 0 !== $qb->getQuery()->getSingleScalarResult();
     }
 }

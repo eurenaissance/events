@@ -14,7 +14,7 @@ class SecurityControllerTest extends HttpTestCase
     {
         // unknown email and known password
         yield [
-            'email' => 'unknown@mobilisation.eu',
+            'email' => 'unknown@mobilisation-eu.code',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
         ];
 

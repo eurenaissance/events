@@ -23,12 +23,4 @@ class ActorRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-
-    /**
-     * For tests purpose only.
-     */
-    public function deleteAll(): void
-    {
-        $this->createQueryBuilder('a')->delete()->getQuery()->execute();
-    }
 }

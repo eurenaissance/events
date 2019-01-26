@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Entity\Util;
+namespace App\Geocoder;
 
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
 
-interface EntityGeocodableInterface
+interface GeocodableInterface
 {
     public function getCoordinates(): ?Point;
 }

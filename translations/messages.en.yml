@@ -14,6 +14,12 @@ common:
     hello: Hello %actor%!
     welcome: Welcome %actor%!
 
+    password:
+        mismatch: Passwords do not match.
+        not_blank: Please enter a password.
+        min_length: Password must be at least {{ limit }} characters long.
+        max_length: Password should not exceed {{ limit }} characters.
+
     date:
         invalid: This date is not valid.
         year:
@@ -99,9 +105,6 @@ actor:
     password:
         label: Password
         confirmation: Password confirmation
-        not_blank: Please enter a password.
-        min_length: Password must be at least {{ limit }} characters long.
-        mismatch: Passwords do not match.
     address:
         label: Address
     country:
@@ -251,3 +254,11 @@ mail:
         confirmed:
             subject: Your group "%group%" has been confirmed.
             body: Your group "%group%" has been confirmed.
+
+        new_follower:
+            subject: Your group "%group%" has a new follower!
+            body: '%follower% just started to follow your group "%group%".'
+
+        new_co_animator:
+            subject: You have been promoted to co-animator in the group "%group%"!
+            body: You have been promoted to co-animator in the group "%group%"! You can now create events.

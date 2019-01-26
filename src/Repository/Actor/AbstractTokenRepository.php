@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Actor;
 
 use App\Entity\Actor;
-use App\Entity\ActorToken;
+use App\Entity\Actor\AbstractToken;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-abstract class ActorTokenRepository extends ServiceEntityRepository
+abstract class AbstractTokenRepository extends ServiceEntityRepository
 {
-    public function findPendingToken(Actor $actor): ?ActorToken
+    public function findPendingToken(Actor $actor): ?AbstractToken
     {
         return $this
             ->createQueryBuilder('token')

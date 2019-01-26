@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
+use App\Entity\Group\CoAnimatorMembership;
+use App\Entity\Group\FollowerMembership;
 use App\Entity\Util\EntityAddressTrait;
-use App\Entity\Util\EntityGeocodableInterface;
 use App\Entity\Util\EntityIdTrait;
+use App\Geocoder\GeocodableInterface;
+use App\Security\User\ActorInterface;
 use App\Entity\Util\EntityUuidTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -21,7 +25,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @UniqueEntity("emailAddress", message="actor.email_address.unique", groups={"registration"})
  */
-class Actor implements UserInterface, EquatableInterface, EntityGeocodableInterface
+class Actor implements ActorInterface, GeocodableInterface
 {
     use EntityIdTrait;
     use EntityUuidTrait;
@@ -59,7 +63,7 @@ class Actor implements UserInterface, EquatableInterface, EntityGeocodableInterf
     private $lastName;
 
     /**
-     * @var string|null
+     * @var \DateTimeInterface
      *
      * @ORM\Column(type="date")
      *
@@ -82,25 +86,43 @@ class Actor implements UserInterface, EquatableInterface, EntityGeocodableInterf
      * @var string|null
      *
      * @ORM\Column
-     *
-     * @Assert\NotBlank(message="actor.password.not_blank", groups={"registration", "reset_password", "change_password"})
-     * @Assert\Length(min=6, minMessage="actor.password.min_length", groups={"registration", "reset_password", "change_password"})
      */
     private $password;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      *
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $registeredAt;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface|null
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $confirmedAt;
+
+    /**
+     * @var Group[]|Collection
+     *class
+     * @ORM\OneToMany(targetEntity=Group::class, mappedBy="animator")
+     */
+    private $animatedGroups;
+
+    /**
+     * @var CoAnimatorMembership[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="actor")
+     */
+    private $coAnimatorMemberships;
+
+    /**
+     * @var FollowerMembership[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="actor")
+     */
+    private $followerMemberships;
 
     /**
      * @var string[]
@@ -111,6 +133,9 @@ class Actor implements UserInterface, EquatableInterface, EntityGeocodableInterf
     {
         $this->uuid = $uuid ?? self::createUuid();
         $this->registeredAt = new \DateTimeImmutable();
+        $this->animatedGroups = new ArrayCollection();
+        $this->coAnimatorMemberships = new ArrayCollection();
+        $this->followerMemberships = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -223,11 +248,6 @@ class Actor implements UserInterface, EquatableInterface, EntityGeocodableInterf
         $this->gender = $gender;
     }
 
-    public function setPassword(string $password): void
-    {
-        $this->password = $password;
-    }
-
     public function getRegisteredAt(): \DateTimeInterface
     {
         return $this->registeredAt;
@@ -241,5 +261,99 @@ class Actor implements UserInterface, EquatableInterface, EntityGeocodableInterf
     public function confirm(): void
     {
         $this->confirmedAt = new \DateTimeImmutable();
+    }
+
+    public function isAnimator(): bool
+    {
+        return $this->animatedGroups->isEmpty();
+    }
+
+    public function isAnimatorOf(Group $group): bool
+    {
+        return $this->animatedGroups->contains($group);
+    }
+
+    public function getAnimatedGroups(): Collection
+    {
+        return $this->animatedGroups;
+    }
+
+    public function isCoAnimator(): bool
+    {
+        return !$this->coAnimatorMemberships->isEmpty();
+    }
+
+    public function isCoAnimatorOf(Group $group): bool
+    {
+        return $this->getCoAnimatedGroups()->contains($group);
+    }
+
+    public function getCoAnimatorMemberships(): Collection
+    {
+        return $this->coAnimatorMemberships;
+    }
+
+    public function getCoAnimatorMembership(Group $group): CoAnimatorMembership
+    {
+        foreach ($this->coAnimatorMemberships as $membership) {
+            if ($group->equals($membership->getGroup())) {
+                return $membership;
+            }
+        }
+
+        throw new \InvalidArgumentException(sprintf(
+            'Actor "%s" is not co-animator group "%s".',
+            $this->getUuidAsString(),
+            $group->getUuidAsString()
+        ));
+    }
+
+    public function getCoAnimatedGroups(): ArrayCollection
+    {
+        return new ArrayCollection(array_map(function (CoAnimatorMembership $membership) {
+            return $membership->getGroup();
+        }, $this->coAnimatorMemberships->toArray()));
+    }
+
+    public function isFollower(): bool
+    {
+        return !$this->followerMemberships->isEmpty();
+    }
+
+    public function isFollowerOf(Group $group): bool
+    {
+        return $this->getFollowedGroups()->contains($group);
+    }
+
+    public function getFollowerMemberships(): Collection
+    {
+        return $this->followerMemberships;
+    }
+
+    public function getFollowerMembership(Group $group): FollowerMembership
+    {
+        foreach ($this->followerMemberships as $membership) {
+            if ($group->equals($membership->getGroup())) {
+                return $membership;
+            }
+        }
+
+        throw new \InvalidArgumentException(sprintf(
+            'Actor "%s" is not following group "%s".',
+            $this->getUuidAsString(),
+            $group->getUuidAsString()
+        ));
+    }
+
+    public function getFollowedGroups(): ArrayCollection
+    {
+        return new ArrayCollection(array_map(function (FollowerMembership $membership) {
+            return $membership->getGroup();
+        }, $this->followerMemberships->toArray()));
+    }
+
+    public function changePassword(string $encodedPassword): void
+    {
+        $this->password = $encodedPassword;
     }
 }

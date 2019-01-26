@@ -6,7 +6,7 @@ use App\Entity\Actor;
 use App\Mailer\Mailer;
 use Doctrine\ORM\EntityManagerInterface;
 
-class ChangePasswordHandler
+class ProfileHandler
 {
     private $entityManager;
     private $mailer;
@@ -17,7 +17,7 @@ class ChangePasswordHandler
         $this->mailer = $mailer;
     }
 
-    public function change(Actor $actor): void
+    public function changePassword(Actor $actor): void
     {
         $this->entityManager->flush();
 

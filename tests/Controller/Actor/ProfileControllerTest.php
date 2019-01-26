@@ -20,12 +20,12 @@ class ProfileControllerTest extends HttpTestCase
             'address' => '3 random street',
             'country' => 'FR',
             'zipCode' => '92270',
-            'city' => CityFixtures::CITY_02_UUID,
+            'city' => CityFixtures::CITY_04_UUID,
             'birthday' => ['year' => '1988', 'month' => '11', 'day' => '27'],
         ]];
         yield ['GET', '/profile/change-password'];
         yield ['POST', '/profile/change-password', [
-            'password' => ['first' => 'test@12345', 'second' => 'test@12345'],
+            'plainPassword' => ['first' => 'test@12345', 'second' => 'test@12345'],
         ]];
     }
 
@@ -41,7 +41,7 @@ class ProfileControllerTest extends HttpTestCase
     public function provideProfileEditions(): iterable
     {
         yield [
-            'remi@mobilisation.eu',
+            'remi@mobilisation-eu.code',
             [
                 'firstName' => 'Rémi',
                 'lastName' => 'Gardien',
@@ -49,14 +49,14 @@ class ProfileControllerTest extends HttpTestCase
                 'address' => '',
                 'country' => 'FR',
                 'zipCode' => '92270',
-                'city' => CityFixtures::CITY_02_UUID,
+                'city' => CityFixtures::CITY_04_UUID,
                 'birthday' => ['year' => '1988', 'month' => '11', 'day' => '27'],
             ],
             [
                 'firstName' => 'Rem',
                 'lastName' => 'Gar',
                 'gender' => 'male',
-                'address' => '3 random street',
+                'address' => '789 random street',
                 'country' => 'FR',
                 'zipCode' => '75000',
                 'city' => CityFixtures::CITY_01_UUID,
@@ -65,49 +65,49 @@ class ProfileControllerTest extends HttpTestCase
         ];
 
         yield [
-            'titouan@mobilisation.eu',
+            'titouan@mobilisation-eu.code',
             [
                 'firstName' => 'Titouan',
                 'lastName' => 'Galopin',
                 'gender' => 'male',
                 'address' => '',
                 'country' => 'FR',
-                'zipCode' => '75000',
-                'city' => CityFixtures::CITY_01_UUID,
+                'zipCode' => '92110',
+                'city' => CityFixtures::CITY_02_UUID,
                 'birthday' => ['year' => '1994', 'month' => '12', 'day' => '1'],
             ],
             [
                 'firstName' => 'El Titouan',
                 'lastName' => 'G.',
                 'gender' => 'male',
-                'address' => '',
+                'address' => '456 random street',
                 'country' => 'FR',
                 'zipCode' => '92270',
-                'city' => CityFixtures::CITY_02_UUID,
+                'city' => CityFixtures::CITY_04_UUID,
                 'birthday' => ['year' => '1995', 'month' => '5', 'day' => '5'],
             ],
         ];
 
         yield [
-            'jane@mobilisation.eu',
+            'nicolas@mobilisation-eu.code',
             [
-                'firstName' => 'Jane',
-                'lastName' => 'Doe',
-                'gender' => 'female',
-                'address' => '4 random street',
+                'firstName' => 'Nicolas',
+                'lastName' => 'Cage',
+                'gender' => 'male',
+                'address' => '123 random street',
                 'country' => 'FR',
-                'zipCode' => '06000',
-                'city' => CityFixtures::CITY_08_UUID,
-                'birthday' => ['year' => '1976', 'month' => '2', 'day' => '13'],
+                'zipCode' => '06400',
+                'city' => CityFixtures::CITY_06_UUID,
+                'birthday' => ['year' => '1964', 'month' => '1', 'day' => '7'],
             ],
             [
-                'firstName' => 'Jane',
-                'lastName' => 'Doe',
+                'firstName' => 'Nic',
+                'lastName' => 'Cag',
                 'gender' => 'other',
                 'address' => '',
                 'country' => 'FR',
-                'zipCode' => '35420',
-                'city' => CityFixtures::CITY_03_UUID,
+                'zipCode' => '06000',
+                'city' => CityFixtures::CITY_05_UUID,
                 'birthday' => ['year' => '2000', 'month' => '2', 'day' => '20'],
             ],
         ];
@@ -211,7 +211,7 @@ class ProfileControllerTest extends HttpTestCase
         ?string $cityUuid,
         array $errors
     ): void {
-        $this->authenticateActor('remi@mobilisation.eu');
+        $this->authenticateActor('remi@mobilisation-eu.code');
 
         $crawler = $this->client->request('GET', '/profile');
         $this->assertResponseSuccessFul();
@@ -232,11 +232,11 @@ class ProfileControllerTest extends HttpTestCase
 
     public function providePasswordChanges(): iterable
     {
-        yield ['remi@mobilisation.eu', 'Rémi', 'new_password!123'];
-        yield ['john@mobilisation.eu', 'John', 'n3W_P@sS'];
-        yield ['jane@mobilisation.eu', 'Jane', '654_pass_123'];
+        yield ['titouan@mobilisation-eu.code', 'Titouan', 'secret!321'];
+        yield ['marine@mobilisation-eu.code', 'Marine', '654_pass_123'];
+        yield ['nicolas@mobilisation-eu.code', 'Nicolas', 'n3W_P@sS'];
         // actor with pending reset password token
-        yield ['titouan@mobilisation.eu', 'Titouan', 'secret!321'];
+        yield ['remi@mobilisation-eu.code', 'Rémi', 'new_password!123'];
     }
 
     /**
@@ -250,12 +250,12 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         /** @var \Symfony\Component\DomCrawler\Field\FormField[] $password */
-        $password = $crawler->selectButton('Change my password')->form()->get('password');
+        $password = $crawler->selectButton('Change my password')->form()->get('plainPassword');
         $this->assertSame('', $password['first']->getValue());
         $this->assertSame('', $password['second']->getValue());
 
         $this->client->submit($crawler->selectButton('Change my password')->form([
-            'password' => [
+            'plainPassword' => [
                 'first' => $newPassword,
                 'second' => $newPassword,
             ],
@@ -313,15 +313,15 @@ class ProfileControllerTest extends HttpTestCase
      */
     public function testChangePasswordFailure(string $first, string $second, string $error): void
     {
-        $initialPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation.eu')->getPassword();
+        $initialPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation-eu.code')->getPassword();
 
-        $this->authenticateActor('remi@mobilisation.eu');
+        $this->authenticateActor('remi@mobilisation-eu.code');
 
         $crawler = $this->client->request('GET', '/profile/change-password');
         $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Change my password')->form([
-            'password' => ['first' => $first, 'second' => $second],
+            'plainPassword' => ['first' => $first, 'second' => $second],
         ]));
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($error);
@@ -330,7 +330,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->client->request('GET', '/profile');
         $this->assertResponseSuccessFul();
 
-        $finalPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation.eu')->getPassword();
+        $finalPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation-eu.code')->getPassword();
         $this->assertSame($initialPassword, $finalPassword);
     }
 }

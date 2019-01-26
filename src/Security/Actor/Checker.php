@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Security;
+namespace App\Security\Actor;
 
 use App\Entity\Actor;
-use App\Security\Exception\ActorNotConfirmedException;
+use App\Security\Actor\Exception\ActorNotConfirmedException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class ActorChecker implements UserCheckerInterface
+class Checker implements UserCheckerInterface
 {
     private $urlGenerator;
 

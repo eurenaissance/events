@@ -13,20 +13,29 @@ class SecurityControllerTest extends HttpTestCase
     public function provideLoginFailures(): iterable
     {
         yield [
-            'email' => 'unknown@mobilisation.eu',
-            'password' => ActorFixtures::DEFAULT_PASSWORD,
+            'email' => 'unknown@mobilisation-eu.code',
+            'plainPassword' => ActorFixtures::DEFAULT_PASSWORD,
             'errors' => ['Invalid credentials'],
         ];
 
         yield [
-            'email' => 'remi@mobilisation.eu',
-            'password' => 'bad_password',
+            'email' => 'remi@mobilisation-eu.code',
+            'plainPassword' => 'bad_password',
             'errors' => ['Invalid credentials'],
         ];
 
         yield [
-            'email' => 'marine@mobilisation.eu',
-            'password' => ActorFixtures::DEFAULT_PASSWORD,
+            'email' => 'patrick@mobilisation-eu.code',
+            'plainPassword' => ActorFixtures::DEFAULT_PASSWORD,
+            'errors' => [
+                'Your account is not confirmed yet.',
+                '/register/resend-confirmation',
+            ],
+        ];
+
+        yield [
+            'email' => 'leonard@mobilisation-eu.code',
+            'plainPassword' => ActorFixtures::DEFAULT_PASSWORD,
             'errors' => [
                 'Your account is not confirmed yet.',
                 '/register/resend-confirmation',
@@ -63,7 +72,7 @@ class SecurityControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Sign in')->form([
-            'emailAddress' => 'remi@mobilisation.eu',
+            'emailAddress' => 'remi@mobilisation-eu.code',
             'password' => ActorFixtures::DEFAULT_PASSWORD,
         ]));
         $this->assertIsRedirectedTo('/');
