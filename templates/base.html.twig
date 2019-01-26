@@ -13,6 +13,8 @@
                     <div class="flash__inner">{{ message|trans }}</div>
                 </div>
             {% endfor %}
+
+            {% block extra_flash_messages '' %}
         {% endblock %}
 
         {% if is_granted('ROLE_ADMIN') %}

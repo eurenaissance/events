@@ -24,8 +24,6 @@ class CreationController extends AbstractController
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $creationHandler->create($group);
 
-            $this->addFlash('info', 'gruop.creation.create.flash.success');
-
             return $this->redirectToRoute('app_group_view', ['slug' => $group->getSlug()]);
         }
 

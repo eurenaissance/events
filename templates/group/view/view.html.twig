@@ -2,6 +2,12 @@
 
 {% block title 'group.view.view.title'|trans({ '%group%': group.name }) %}
 
+{% block extra_flash_messages %}
+    <div class="flash notice-flashes">
+        <div class="flash__inner">{{ 'group.view.view.flash.pending'|trans }}</div>
+    </div>
+{% endblock %}
+
 {% block body %}
     {{ 'group.view.view.title'|trans({ '%group%': group.name }) }}
 {% endblock %}

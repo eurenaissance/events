@@ -55,6 +55,7 @@ class CreationControllerTest extends HttpTestCase
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
         $this->assertResponseContains('Group: My new group');
+        $this->assertResponseContains('Your group is waiting for admin approval.');
 
         $group = $this->getGroupRepository()->findOneBySlug('my-new-group');
         $this->assertNotNull($group);

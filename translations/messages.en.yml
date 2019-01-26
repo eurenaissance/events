@@ -147,6 +147,7 @@ group.creation.create.flash.success: Your group has been created successfully.
 
 # View
 group.view.view.title: "Group: %group%"
+group.view.view.flash.pending: Your group is waiting for admin approval.
 
 
 #
