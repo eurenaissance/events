@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Util\EntityAddressTrait;
+use App\Entity\Util\EntityGeocodableInterface;
 use App\Entity\Util\EntityIdTrait;
 use App\Entity\Util\EntityReviewTrait;
 use App\Entity\Util\EntitySlugInterface;
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("name", message="group.name.unique")
  * @UniqueEntity("slug", errorPath="name", message="group.slug.unique")
  */
-class Group implements EntitySlugInterface
+class Group implements EntitySlugInterface, EntityGeocodableInterface
 {
     use EntityIdTrait;
     use EntityUuidTrait;

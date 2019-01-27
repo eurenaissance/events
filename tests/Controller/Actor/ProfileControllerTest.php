@@ -96,8 +96,8 @@ class ProfileControllerTest extends HttpTestCase
                 'gender' => 'female',
                 'address' => '4 random street',
                 'country' => 'FR',
-                'zipCode' => '75000',
-                'city' => CityFixtures::CITY_01_UUID,
+                'zipCode' => '06000',
+                'city' => CityFixtures::CITY_08_UUID,
                 'birthday' => ['year' => '1976', 'month' => '2', 'day' => '13'],
             ],
             [
