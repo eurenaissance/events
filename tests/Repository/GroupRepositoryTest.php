@@ -15,13 +15,13 @@ class GroupRepositoryTest extends RepositoryTestCase
     public function provideClosestGroupsFromActor(): iterable
     {
         // Actor from Bois-Colombes
-        yield ['remi@mobilisation.eu', ['Bois-Colombes', 'Clichy', 'Paris', 'Nice']];
+        yield ['remi@mobilisation.eu', ['Bois-Colombes', 'Clichy', 'Paris']];
         // Actor from Paris
-        yield ['titouan@mobilisation.eu', ['Paris', 'Clichy', 'Bois-Colombes', 'Nice']];
+        yield ['titouan@mobilisation.eu', ['Paris', 'Clichy', 'Bois-Colombes']];
         // Actor from Clichy
-        yield ['john@mobilisation.eu', ['Clichy', 'Bois-Colombes', 'Paris', 'Nice']];
+        yield ['john@mobilisation.eu', ['Clichy', 'Bois-Colombes', 'Paris']];
         // Actor from Nice
-        yield ['jane@mobilisation.eu', ['Nice', 'Paris', 'Clichy', 'Bois-Colombes']];
+        yield ['jane@mobilisation.eu', ['Nice']];
     }
 
     /**

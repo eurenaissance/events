@@ -41,7 +41,7 @@ class GroupRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findClosestFrom(EntityGeocodableInterface $entity, int $limit = 3): array
+    public function findClosestFrom(EntityGeocodableInterface $entity, int $maxResults = 3, int $maxDistance = 150): array
     {
         if (!$coordinates = $entity->getCoordinates()) {
             throw new \InvalidArgumentException('Cannot find closest groups from entity with no coordinates.');
@@ -51,9 +51,11 @@ class GroupRepository extends ServiceEntityRepository
             ->createConfirmedQueryBuilder('g')
             ->innerJoin('g.city', 'c')
             ->addSelect('ST_Distance_Sphere(c.coordinates, :coordinates) as HIDDEN distance')
+            ->andWhere('ST_Distance_Sphere(c.coordinates, :coordinates) <= :maxDistance')
             ->setParameter('coordinates', $coordinates, 'point')
+            ->setParameter('maxDistance', $maxDistance * 1000)
             ->orderBy('distance', 'ASC')
-            ->setMaxResults($limit)
+            ->setMaxResults($maxResults)
             ->getQuery()
             ->getResult()
         ;
