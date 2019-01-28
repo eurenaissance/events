@@ -18,7 +18,7 @@ class GroupController extends AbstractController
      */
     public function approve(AdministrationHandler $administrationHandler, Group $group): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN_GROUPS');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN_GROUP_REVIEW');
 
         if ($group->isApproved()) {
             $this->addFlash('error', sprintf('Group "%s" has already been approved.', $group->getName()));
@@ -36,7 +36,7 @@ class GroupController extends AbstractController
      */
     public function refuse(AdministrationHandler $administrationHandler, Group $group): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN_GROUPS');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN_GROUP_REVIEW');
 
         if ($group->isRefused()) {
             $this->addFlash('error', sprintf('Group "%s" has already been refused.', $group->getName()));

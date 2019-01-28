@@ -1,9 +1,9 @@
-{% if object.googleAuthenticatorSecret %}
+<li>
     <a href="{{ path('app_admin_qr_code', { id: object.id }) }}"
+       class="sonata-action-element"
        title="QR code Google Authenticator"
-       class="btn btn-sm btn-default"
        target="_blank">
-        <i class="fa fa-qrcode" aria-hidden="true"></i>
+        <i class="fa fa-user-secret" aria-hidden="true"></i>
         QR code Google Authenticator
     </a>
-{% endif %}
+</li>

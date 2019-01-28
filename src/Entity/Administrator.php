@@ -58,7 +58,7 @@ class Administrator implements AdministratorInterface
 
     public function __toString(): string
     {
-        return $this->emailAddress ?: '';
+        return (string) $this->emailAddress;
     }
 
     public function getRoles()

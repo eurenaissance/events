@@ -1,0 +1,5 @@
+{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
+
+{% block field %}
+    {% include 'admin/actor/_show_memberships.html.twig' with { memberships: object.coAnimatorMemberships } %}
+{% endblock %}

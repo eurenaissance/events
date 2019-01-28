@@ -15,6 +15,8 @@ common:
     welcome: Welcome %actor%!
 
     password:
+        label: Password
+        confirmation: Password confirmation
         mismatch: Passwords do not match.
         not_blank: Please enter a password.
         min_length: Password must be at least {{ limit }} characters long.

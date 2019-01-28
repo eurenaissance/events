@@ -40,6 +40,17 @@ class AdministratorAdmin extends AbstractAdmin
         $this->googleAuthenticator = $googleAuthenticator;
     }
 
+    public function configureActionButtons($action, $object = null)
+    {
+        $list = parent::configureActionButtons($action, $object);
+
+        if ($object) {
+            $list['qrcode'] = ['template' => 'admin/administrator/_action_qrcode.html.twig'];
+        }
+
+        return $list;
+    }
+
     /**
      * @param Administrator $administrator
      */
@@ -53,6 +64,7 @@ class AdministratorAdmin extends AbstractAdmin
         $formMapper
             ->add('emailAddress', EmailType::class, [
                 'label' => 'Email address',
+                'disabled' => !$this->isCurrentRoute('create'),
             ])
             ->add('roles', ChoiceType::class, [
                 'label' => 'Roles',

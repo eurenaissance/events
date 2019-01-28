@@ -43,10 +43,10 @@ class CreationControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/group/create');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Create')->form([
+        $this->client->submit($crawler->selectButton('Create')->form(), [
             'name' => $groupName,
             'city' => CityFixtures::CITY_02_UUID,
-        ]));
+        ]);
         $this->assertIsRedirectedTo("/group/$groupSlug");
         $this->assertMailSent([
             'to' => $email,
@@ -145,10 +145,10 @@ class CreationControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/group/create');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Create')->form([
+        $this->client->submit($crawler->selectButton('Create')->form(), [
             'name' => $name,
             'city' => $city,
-        ]));
+        ]);
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
         $this->assertNull($this->getGroupRepository()->findOneBy([

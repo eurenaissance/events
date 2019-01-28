@@ -18,7 +18,7 @@ class AdministratorController extends AbstractController
      */
     public function qrCode(Administrator $administrator, QrCodeResponseFactory $qrCode): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN_ADMINISTRATORS');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN_ADMINISTRATOR_QRCODE');
 
         return $qrCode->createResponseFor($administrator);
     }

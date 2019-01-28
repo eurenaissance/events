@@ -9,25 +9,37 @@ security:
         App\Entity\Administrator: bcrypt
 
     role_hierarchy:
-        ROLE_ADMIN: ~
+        ROLE_ADMIN_ADMINISTRATORS:
+            - ROLE_ADMIN_ADMINISTRATOR_QRCODE
+            - ROLE_ADMIN_ADMINISTRATOR_EXPORT
+            - ROLE_ADMIN_ADMINISTRATOR_LIST
+            - ROLE_ADMIN_ADMINISTRATOR_EDIT
 
         ROLE_ADMIN_ACTORS:
             - ROLE_ALLOWED_TO_SWITCH
-            - ROLE_APP_ADMIN_ACTOR_EXPORT
-            - ROLE_APP_ADMIN_ACTOR_LIST
-            - ROLE_APP_ADMIN_ACTOR_VIEW
-            - ROLE_APP_ADMIN_ACTOR_EDIT
+            - ROLE_ADMIN_ACTOR_EXPORT
+            - ROLE_ADMIN_ACTOR_LIST
+            - ROLE_ADMIN_ACTOR_SHOW
 
         ROLE_ADMIN_GROUPS:
-            - ROLE_APP_ADMIN_GROUP_EXPORT
-            - ROLE_APP_ADMIN_GROUP_LIST
-            - ROLE_APP_ADMIN_GROUP_VIEW
-            - ROLE_APP_ADMIN_GROUP_EDIT
+            - ROLE_ADMIN_GROUP_REVIEW
+            - ROLE_ADMIN_GROUP_EXPORT
+            - ROLE_ADMIN_GROUP_LIST
+            - ROLE_ADMIN_GROUP_SHOW
+
+        ROLE_ADMIN_MOBILISATION:
+            - ROLE_ADMIN_ACTORS
+            - ROLE_ADMIN_GROUPS
+
+        ROLE_ADMIN_SYSTEM:
+            - ROLE_ADMIN_ADMINISTRATORS
+
+        ROLE_ADMIN:
+            - ROLE_ADMIN_MOBILISATION
 
         ROLE_SUPER_ADMIN:
             - ROLE_ADMIN
-            - ROLE_ADMIN_ACTORS
-            - ROLE_ADMIN_GROUPS
+            - ROLE_ADMIN_SYSTEM
 
     providers:
         app_actor_provider:

@@ -1,0 +1,11 @@
+<ul>
+    {% for membership in memberships %}
+        <li>
+            <a href="{{ path('admin_app_group_show', { id: membership.group.id }) }}">
+                {{ membership.group.name }}
+            </a>
+            <br>
+            since {{ membership.createdAt|date }}
+        </li>
+    {% endfor %}
+</ul>

@@ -12,6 +12,7 @@ use Enqueue\Client\TraceableProducer;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 use Webmozart\Assert\Assert;
@@ -48,19 +49,21 @@ abstract class HttpTestCase extends WebTestCase
             $patterns = [$patterns];
         }
 
+        $response = $this->client->getResponse();
+
         foreach ($patterns as $pattern) {
-            $this->assertContains($pattern, $this->client->getResponse()->getContent());
+            $this->assertContains($pattern, $response->getContent());
         }
     }
 
-    protected function assertIsRedirectedTo(string $pattern): void
+    protected function assertIsRedirectedTo(string $pattern, string $message = null): void
     {
         $response = $this->client->getResponse();
 
-        $this->assertTrue(
-            $response->isRedirection(),
-            'Expected redirection but got status code '.$response->getStatusCode().' instead.'
-        );
+        $this->assertTrue($response->isRedirection(), $message ?? sprintf(
+        'Expected redirection but got status code %d instead.',
+                $response->getStatusCode()
+        ));
 
         $this->assertMatchesPattern($pattern, $response->headers->get('Location'));
     }
@@ -71,6 +74,26 @@ abstract class HttpTestCase extends WebTestCase
 
         $this->assertTrue($response->isSuccessful(), $message ?? sprintf(
             'Expected status code 200, but got %d instead.',
+            $response->getStatusCode()
+        ));
+    }
+
+    protected function assertNotFoundResponse(string $message = null): void
+    {
+        $response = $this->client->getResponse();
+
+        $this->assertTrue($response->isNotFound(), $message ?? sprintf(
+            'Expected status code 404, but got %d instead.',
+            $response->getStatusCode()
+        ));
+    }
+
+    protected function assertAccessDeniedResponse(string $message = null): void
+    {
+        $response = $this->client->getResponse();
+
+        $this->assertTrue($response->isForbidden(), $message ?? sprintf(
+            'Expected status code 403, but got %d instead.',
             $response->getStatusCode()
         ));
     }
@@ -87,16 +110,6 @@ abstract class HttpTestCase extends WebTestCase
         if ($expectedContent) {
             $this->assertMatchesPattern(\GuzzleHttp\json_encode($expectedContent), $response->getContent());
         }
-    }
-
-    protected function assertNotFoundResponse(): void
-    {
-        $this->assertSame(404, $this->client->getResponse()->getStatusCode());
-    }
-
-    protected function assertAccessDeniedResponse(): void
-    {
-        $this->assertSame(403, $this->client->getResponse()->getStatusCode());
     }
 
     protected function assertMailSent(array $expectedMail): void
@@ -171,6 +184,18 @@ abstract class HttpTestCase extends WebTestCase
         Assert::notNull($admin, 'Administrator not found for email '.$email);
 
         $this->authenticate($admin, 'admin', 'main_context');
+    }
+
+    protected function getAdminFormUniqId(Form $form): string
+    {
+        $url = parse_url($form->getFormNode()->getAttribute('action'));
+        $this->assertArrayHasKey('query', $url, 'Could not find query parameters in action to determine form uniqid.');
+
+        $parameters = [];
+        parse_str($url['query'], $parameters);
+        $this->assertArrayHasKey('uniqid', $parameters, 'Could not find "uniqid" parameter in query to determine form uniqid.');
+
+        return $parameters['uniqid'];
     }
 
     private function authenticate(UserInterface $user, string $firewallName, string $firewallContext): void

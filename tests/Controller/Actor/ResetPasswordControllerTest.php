@@ -45,9 +45,9 @@ class ResetPasswordControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/reset-password');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Request new password')->form([
+        $this->client->submit($crawler->selectButton('Request new password')->form(), [
             'emailAddress' => $email,
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/reset-password/check-email');
         $this->assertMailSent([
             'to' => $email,
@@ -66,9 +66,9 @@ class ResetPasswordControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/reset-password');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Request new password')->form([
+        $this->client->submit($crawler->selectButton('Request new password')->form(), [
             'emailAddress' => 'remi@mobilisation-eu.code',
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/login');
         $this->assertNoMailSent();
 
@@ -94,12 +94,12 @@ class ResetPasswordControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', $resetPasswordUrl);
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Reset password')->form([
+        $this->client->submit($crawler->selectButton('Reset password')->form(), [
             'plainPassword' => [
                 'first' => $password,
                 'second' => $password,
             ],
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/login');
         $this->assertMailSent([
             'to' => 'remi@mobilisation-eu.code',
@@ -113,10 +113,10 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
         $this->assertResponseContains('Your password has been successfully reset.');
 
-        $this->client->submit($crawler->selectButton('Sign in')->form([
+        $this->client->submit($crawler->selectButton('Sign in')->form(), [
             'emailAddress' => 'remi@mobilisation-eu.code',
             'password' => $password,
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/');
 
         $this->client->followRedirect();
@@ -164,9 +164,9 @@ class ResetPasswordControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', $resetPasswordUrl);
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Reset password')->form([
+        $this->client->submit($crawler->selectButton('Reset password')->form(), [
             'plainPassword' => ['first' => $first, 'second' => $second],
-        ]));
+        ]);
         $this->assertResponseSuccessFul('Actor should not be redirected if reset form is not valid.');
         $this->assertResponseContains($error);
 

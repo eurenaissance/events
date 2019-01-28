@@ -33,10 +33,10 @@ class SecurityControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/admin/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form([
+        $this->client->submit($crawler->selectButton('Sign in')->form(), [
             'emailAddress' => $email,
             'password' => $password,
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/admin/login');
 
         $crawler = $this->client->followRedirect();
@@ -49,10 +49,10 @@ class SecurityControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/admin/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form([
+        $this->client->submit($crawler->selectButton('Sign in')->form(), [
             'emailAddress' => 'superadmin@mobilisation-eu.code',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/admin/dashboard');
 
         $crawler = $this->client->followRedirect();
@@ -65,10 +65,10 @@ class SecurityControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/admin/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form([
+        $this->client->submit($crawler->selectButton('Sign in')->form(), [
             'emailAddress' => 'admin@mobilisation-eu.code',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/admin/dashboard');
 
         $this->client->followRedirect();

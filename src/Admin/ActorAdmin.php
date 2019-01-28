@@ -5,16 +5,17 @@ namespace App\Admin;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Sonata\AdminBundle\Show\ShowMapper;
 
 class ActorAdmin extends AbstractAdmin
 {
     public function configureRoutes(RouteCollection $collection)
     {
-        $collection->remove('delete');
+        $collection
+            ->remove('edit')
+            ->remove('delete')
+        ;
     }
 
     public function configureActionButtons($action, $object = null)
@@ -28,20 +29,25 @@ class ActorAdmin extends AbstractAdmin
         return $list;
     }
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureShowFields(ShowMapper $show)
     {
-        $formMapper
-            ->add('emailAddress', EmailType::class, [
-                'label' => 'Email address',
-                'disabled' => true,
+        $show
+            ->add('emailAddress')
+            ->add('firstName')
+            ->add('lastName')
+            ->add('gender')
+            ->add('address')
+            ->add('city')
+            ->add('city.zipCode')
+            ->add('city.country')
+            ->add('animatedGroups', null, [
+                'route' => ['name' => 'show'],
             ])
-            ->add('firstName', TextType::class, [
-                'label' => 'First name',
-                'disabled' => true,
+            ->add('coAnimatorMemberships', null, [
+                'template' => 'admin/actor/_show_co_animator_memberships.html.twig',
             ])
-            ->add('lastName', TextType::class, [
-                'label' => 'Last name',
-                'disabled' => true,
+            ->add('followerMemberships', null, [
+                'template' => 'admin/actor/_show_follower_memberships.html.twig',
             ])
         ;
     }

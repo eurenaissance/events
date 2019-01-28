@@ -115,6 +115,7 @@ class ProfileControllerTest extends HttpTestCase
 
     /**
      * @dataProvider provideProfileEditions
+     * @group debug
      */
     public function testEditSuccess(string $email, array $actualProfile, array $editedProfile): void
     {
@@ -124,55 +125,23 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         $form = $crawler->selectButton('Save my profile')->form();
-        $this->assertTrue($form->get('emailAddress')->isDisabled());
-        $this->assertSame($email, $form->get('emailAddress')->getValue());
-        $this->assertSame($actualProfile['firstName'], $form->get('firstName')->getValue());
-        $this->assertSame($actualProfile['lastName'], $form->get('lastName')->getValue());
-        $this->assertSame($actualProfile['gender'], $form->get('gender')->getValue());
-        $this->assertSame($actualProfile['address'], $form->get('address')->getValue());
-        $this->assertSame($actualProfile['country'], $form->get('country')->getValue());
-        $this->assertSame($actualProfile['zipCode'], $form->get('zipCode')->getValue());
-        $this->assertSame($actualProfile['city'], $form->get('city')->getValue());
+        $emailField = $form->get('emailAddress');
+        $this->assertTrue($emailField->isDisabled());
+        $this->assertSame($email, $emailField->getValue());
+        $this->assertArraySubset($actualProfile, $form->getPhpValues());
 
-        /** @var \Symfony\Component\DomCrawler\Field\FormField[] $birthday */
-        $birthday = $form->get('birthday');
-        $this->assertSame(
-            $actualProfile['birthday'],
-            [
-                'year' => $birthday['year']->getValue(),
-                'month' => $birthday['month']->getValue(),
-                'day' => $birthday['day']->getValue(),
-            ]
-        );
-
-        $this->client->submit($crawler->selectButton('Save my profile')->form($editedProfile));
+        $this->client->submit($form, $editedProfile);
         $this->assertIsRedirectedTo('/profile');
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseCOntains('Your profile has been successfully saved.');
+        $this->assertResponseContains('Your profile has been successfully saved.');
 
         $form = $crawler->selectButton('Save my profile')->form();
-        $this->assertTrue($form->get('emailAddress')->isDisabled());
-        $this->assertSame($email, $form->get('emailAddress')->getValue());
-        $this->assertSame($editedProfile['firstName'], $form->get('firstName')->getValue());
-        $this->assertSame($editedProfile['lastName'], $form->get('lastName')->getValue());
-        $this->assertSame($editedProfile['gender'], $form->get('gender')->getValue());
-        $this->assertSame($editedProfile['address'], $form->get('address')->getValue());
-        $this->assertSame($editedProfile['country'], $form->get('country')->getValue());
-        $this->assertSame($editedProfile['zipCode'], $form->get('zipCode')->getValue());
-        $this->assertSame($editedProfile['city'], $form->get('city')->getValue());
-
-        /** @var \Symfony\Component\DomCrawler\Field\FormField[] $birthday */
-        $birthday = $form->get('birthday');
-        $this->assertSame(
-            $editedProfile['birthday'],
-            [
-                'year' => $birthday['year']->getValue(),
-                'month' => $birthday['month']->getValue(),
-                'day' => $birthday['day']->getValue(),
-            ]
-        );
+        $emailField = $form->get('emailAddress');
+        $this->assertTrue($emailField->isDisabled());
+        $this->assertSame($email, $emailField->getValue());
+        $this->assertArraySubset($editedProfile, $form->getPhpValues());
     }
 
     public function provideBadProfileEditions(): iterable
@@ -249,17 +218,10 @@ class ProfileControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/profile/change-password');
         $this->assertResponseSuccessFul();
 
-        /** @var \Symfony\Component\DomCrawler\Field\FormField[] $password */
-        $password = $crawler->selectButton('Change my password')->form()->get('plainPassword');
-        $this->assertSame('', $password['first']->getValue());
-        $this->assertSame('', $password['second']->getValue());
+        $form = $crawler->selectButton('Change my password')->form();
+        $this->assertArraySubset(['plainPassword' => ['first' => '', 'second' => '']], $form->getPhpValues());
 
-        $this->client->submit($crawler->selectButton('Change my password')->form([
-            'plainPassword' => [
-                'first' => $newPassword,
-                'second' => $newPassword,
-            ],
-        ]));
+        $this->client->submit($form, ['plainPassword' => ['first' => $newPassword, 'second' => $newPassword]]);
         $this->assertIsRedirectedTo('/profile');
         $this->assertMailSent([
             'to' => $email,
@@ -282,10 +244,10 @@ class ProfileControllerTest extends HttpTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form([
+        $this->client->submit($crawler->selectButton('Sign in')->form(), [
             'emailAddress' => $email,
             'password' => $newPassword,
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/');
 
         // ensure user is logged in
@@ -320,9 +282,9 @@ class ProfileControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/profile/change-password');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Change my password')->form([
+        $this->client->submit($crawler->selectButton('Change my password')->form(), [
             'plainPassword' => ['first' => $first, 'second' => $second],
-        ]));
+        ]);
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($error);
 

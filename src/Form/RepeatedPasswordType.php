@@ -20,6 +20,8 @@ class RepeatedPasswordType extends AbstractType
             'mapped' => false,
             'type' => PasswordType::class,
             'invalid_message' => 'common.password.mismatch',
+            'first_options' => ['label' => 'common.password.label'],
+            'second_options' => ['label' => 'common.password.confirmation'],
             'validation_groups' => self::VALIDATION_GROUPS,
             'constraints' => [
                 new NotBlank([

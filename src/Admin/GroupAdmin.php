@@ -6,17 +6,19 @@ use App\Entity\Group;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\Form\Type\DateRangeType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class GroupAdmin extends AbstractAdmin
 {
     public function configureRoutes(RouteCollection $collection)
     {
-        $collection->remove('delete');
+        $collection
+            ->remove('edit')
+            ->remove('delete')
+        ;
     }
 
     /**
@@ -43,22 +45,25 @@ class GroupAdmin extends AbstractAdmin
         return $list;
     }
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureShowFields(ShowMapper $show)
     {
-        $formMapper
-            ->add('name', TextType::class, [
-                'label' => 'Name',
-                'disabled' => true,
+        $show
+            ->add('name')
+            ->add('address')
+            ->add('city')
+            ->add('animator', null, [
+                'route' => ['name' => 'show'],
             ])
+            ->add('status')
         ;
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter)
     {
         $range = range(2018, (int) date('Y'));
         $years = array_combine($range, $range);
 
-        $datagridMapper
+        $filter
             ->add('name', null, [
                 'label' => 'Name',
                 'show_filter' => true,
@@ -74,9 +79,9 @@ class GroupAdmin extends AbstractAdmin
         ;
     }
 
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list)
     {
-        $listMapper
+        $list
             ->addIdentifier('name', null, [
                 'label' => 'Name',
             ])
@@ -85,6 +90,7 @@ class GroupAdmin extends AbstractAdmin
             ])
             ->add('animator', null, [
                 'label' => 'Animator',
+                'route' => ['name' => 'show'],
             ])
             ->add('createdAt', null, [
                 'label' => 'Created at',
