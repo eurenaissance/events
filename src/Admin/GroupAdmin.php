@@ -6,31 +6,17 @@ use App\Entity\Group;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\Form\Type\DateRangeType;
 
 class GroupAdmin extends AbstractAdmin
 {
-    public function configureRoutes(RouteCollection $collection)
-    {
-        $collection
-            ->remove('edit')
-            ->remove('delete')
-        ;
-    }
-
-    /**
-     * @param Group|null $object
-     *
-     * @return array
-     */
     public function configureActionButtons($action, $object = null)
     {
         $list = parent::configureActionButtons($action, $object);
 
-        if (!$object) {
+        if (!$object instanceof Group) {
             return $list;
         }
 
@@ -49,8 +35,10 @@ class GroupAdmin extends AbstractAdmin
     {
         $show
             ->add('name')
-            ->add('address')
-            ->add('city')
+            ->add('address', null, [
+                'virtual_field' => true,
+                'template' => 'admin/address/_show.html.twig',
+            ])
             ->add('animator', null, [
                 'route' => ['name' => 'show'],
             ])
@@ -83,21 +71,41 @@ class GroupAdmin extends AbstractAdmin
     {
         $list
             ->addIdentifier('name', null, [
-                'label' => 'Name',
-            ])
-            ->add('city', null, [
-                'label' => 'City',
+                'label' => 'Group name',
             ])
             ->add('animator', null, [
                 'label' => 'Animator',
                 'route' => ['name' => 'show'],
             ])
+            ->add('address', null, [
+                'label' => 'Address',
+                'sortable' => false,
+                'template' => 'admin/address/_list.html.twig',
+            ])
             ->add('createdAt', null, [
                 'label' => 'Created at',
+            ])
+            ->add('membersCount', null, [
+                'label' => 'Members',
+                'sortable' => true,
+                'sort_field_mapping' => ['fieldName' => 'id'],
+                'sort_parent_association_mappings' => [],
             ])
             ->add('status', null, [
                 'label' => 'Status',
                 'template' => 'admin/group/_list_status.html.twig',
+            ])
+            ->add('_action', null, [
+                'virtual_field' => true,
+                'actions' => [
+                    'approve' => [
+                        'template' => 'admin/group/_list_approve.html.twig',
+                    ],
+                    'refuse' => [
+                        'template' => 'admin/group/_list_refuse.html.twig',
+                    ],
+                    'show' => [],
+                ],
             ])
         ;
     }

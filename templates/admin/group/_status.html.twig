@@ -1,0 +1,16 @@
+{% if group.isRefused %}
+    <span class="label label-danger">
+        <i class="fa fa-remove" aria-hidden="true"></i>
+        Refused
+    </span>
+{% elseif group.isApproved %}
+    <span class="label label-success">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        Confirmed
+    </span>
+{% else %}
+    <span class="label label-primary">
+        <i class="fa fa-clock-o" aria-hidden="true"></i>
+        Pending
+    </span>
+{% endif %}

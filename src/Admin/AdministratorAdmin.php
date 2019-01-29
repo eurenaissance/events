@@ -17,15 +17,15 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class AdministratorAdmin extends AbstractAdmin
 {
-    private $passwordEncoderListener;
-    private $googleAuthenticator;
-
     private const ROLES = [
         'Super administrator' => 'ROLE_SUPER_ADMIN',
         'Dashboard administrator' => 'ROLE_ADMIN',
         'Actors administrator' => 'ROLE_ADMIN_ACTORS',
         'Groups administrator' => 'ROLE_ADMIN_GROUPS',
     ];
+
+    private $passwordEncoderListener;
+    private $googleAuthenticator;
 
     public function __construct(
         $code,

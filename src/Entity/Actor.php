@@ -31,6 +31,8 @@ class Actor implements ActorInterface, GeocodableInterface
     use EntityUuidTrait;
     use EntityAddressTrait;
 
+    public const GENDERS = ['male', 'female', 'other'];
+
     /**
      * @var string|null
      *
@@ -78,7 +80,7 @@ class Actor implements ActorInterface, GeocodableInterface
      * @ORM\Column(length=6, nullable=true)
      *
      * @Assert\NotBlank(message="actor.gender.not_blank", groups={"profile"})
-     * @Assert\Choice(message="actor.gender.choice", choices={"female", "male", "other"}, groups={"profile"})
+     * @Assert\Choice(message="actor.gender.choice", choices=Actor::GENDERS, groups={"profile"})
      */
     private $gender;
 
@@ -105,8 +107,9 @@ class Actor implements ActorInterface, GeocodableInterface
 
     /**
      * @var Group[]|Collection
-     *class
+     *
      * @ORM\OneToMany(targetEntity=Group::class, mappedBy="animator")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $animatedGroups;
 
@@ -114,6 +117,7 @@ class Actor implements ActorInterface, GeocodableInterface
      * @var CoAnimatorMembership[]|Collection
      *
      * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="actor")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $coAnimatorMemberships;
 
@@ -121,6 +125,7 @@ class Actor implements ActorInterface, GeocodableInterface
      * @var FollowerMembership[]|Collection
      *
      * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="actor")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $followerMemberships;
 
@@ -261,6 +266,11 @@ class Actor implements ActorInterface, GeocodableInterface
     public function confirm(): void
     {
         $this->confirmedAt = new \DateTimeImmutable();
+    }
+
+    public function getConfirmedAt(): ?\DateTimeInterface
+    {
+        return $this->confirmedAt;
     }
 
     public function isAnimator(): bool

@@ -74,7 +74,7 @@ class Group implements EntitySlugInterface, GeocodableInterface, EntityReviewInt
     /**
      * @var FollowerMembership[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="group")
+     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="group", fetch="EXTRA_LAZY")
      */
     private $followerMemberships;
 
@@ -134,5 +134,11 @@ class Group implements EntitySlugInterface, GeocodableInterface, EntityReviewInt
     public function getCoAnimatorMemberships(): Collection
     {
         return $this->coAnimatorMemberships;
+    }
+
+    public function getMembersCount(): int
+    {
+        // animator + memberships
+        return 1 + $this->coAnimatorMemberships->count() + $this->followerMemberships->count();
     }
 }

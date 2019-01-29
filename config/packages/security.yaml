@@ -15,6 +15,10 @@ security:
             - ROLE_ADMIN_ADMINISTRATOR_LIST
             - ROLE_ADMIN_ADMINISTRATOR_EDIT
 
+        ROLE_ADMIN_CITIES:
+            - ROLE_ADMIN_CITIES_LIST
+            - ROLE_ADMIN_CITIES_SHOW
+
         ROLE_ADMIN_ACTORS:
             - ROLE_ALLOWED_TO_SWITCH
             - ROLE_ADMIN_ACTOR_EXPORT

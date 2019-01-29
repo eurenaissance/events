@@ -23,9 +23,7 @@ class AdministratorSetupSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::REQUEST => [
-                ['onKernelRequest', 30],
-            ],
+            KernelEvents::REQUEST => [['onKernelRequest', 30]],
         ];
     }
 

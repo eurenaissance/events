@@ -23,9 +23,7 @@ class EntityRefusedSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::CONTROLLER => [
-                ['onKernelController', 10],
-            ],
+            KernelEvents::CONTROLLER => [['onKernelController', 10]],
         ];
     }
 

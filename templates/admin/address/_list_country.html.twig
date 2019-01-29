@@ -1,5 +1,5 @@
 {% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
 
 {% block field %}
-    {% include 'admin/group/_status.html.twig' with { group: object } %}
+    {{ object.country|country }}
 {% endblock %}

@@ -11,3 +11,4 @@ admin_controllers:
     resource: ../../src/Controller/Admin
     type: annotation
     prefix: /admin
+    defaults: { _locale: fr }

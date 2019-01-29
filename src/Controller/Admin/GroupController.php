@@ -21,14 +21,14 @@ class GroupController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN_GROUP_REVIEW');
 
         if ($group->isApproved()) {
-            $this->addFlash('error', sprintf('Group "%s" has already been approved.', $group->getName()));
+            $this->addFlash('warning', sprintf('Group "%s" has already been approved.', $group->getName()));
         } else {
             $administrationHandler->approve($group);
 
             $this->addFlash('success', sprintf('Group "%s" has been approved successfully.', $group->getName()));
         }
 
-        return $this->redirectToRoute('admin_app_group_edit', ['id' => $group->getId()]);
+        return $this->redirectToRoute('admin_app_group_show', ['id' => $group->getId()]);
     }
 
     /**
@@ -39,13 +39,13 @@ class GroupController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN_GROUP_REVIEW');
 
         if ($group->isRefused()) {
-            $this->addFlash('error', sprintf('Group "%s" has already been refused.', $group->getName()));
+            $this->addFlash('warning', sprintf('Group "%s" has already been refused.', $group->getName()));
         } else {
             $administrationHandler->refuse($group);
 
-            $this->addFlash('warning', sprintf('Group "%s" has been refused successfully.', $group->getName()));
+            $this->addFlash('danger', sprintf('Group "%s" has been refused successfully.', $group->getName()));
         }
 
-        return $this->redirectToRoute('admin_app_group_edit', ['id' => $group->getId()]);
+        return $this->redirectToRoute('admin_app_group_show', ['id' => $group->getId()]);
     }
 }
