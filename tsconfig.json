@@ -1,0 +1,14 @@
+{
+    "include": ["assets"],
+    "compilerOptions": {
+        "target": "es5",
+        "module": "es6",
+        "moduleResolution": "node",
+        "baseUrl": "src",
+        "sourceMap": true,
+        "outDir": "ts-build",
+        "jsx": "preserve",
+        "strict": true,
+        "allowSyntheticDefaultImports": true
+    }
+}

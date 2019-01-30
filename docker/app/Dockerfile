@@ -16,7 +16,8 @@ RUN apk add --no-cache --virtual .persistent-deps \
         postgresql-client \
         python \
         py-pip \
-        zlib
+        zlib \
+        yarn
 
 RUN set -xe \
     && apk add --no-cache --virtual .build-deps \

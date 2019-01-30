@@ -1,0 +1,44 @@
+// Color system
+$primary:       #6f80ff;
+$secondary:     #adb5bd;
+$success:       #02B875;
+$info:          #17a2b8;
+$warning:       #f0ad4e;
+$danger:        #d9534f;
+$light:         #f8f9fa;
+$dark:          #343a40;
+
+// Body
+$body-color: #343a40;
+
+// Fonts
+$font-roboto-slab: 'Roboto Slab', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-roboto-mono: 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Courier New', monospace;
+$font-family-base: $font-roboto-slab;
+
+$headings-font-weight: 'bold';
+
+// Tables
+$table-border-color: rgba(0,0,0,0.1);
+
+// Buttons
+$btn-padding-x-sm: 1rem;
+$btn-padding-x: 1.5rem;
+$btn-padding-x-lg: 2rem;
+
+$btn-font-size-sm: 0.775em;
+$btn-font-size: 0.875em;
+$btn-font-size-lg: 0.975em;
+
+// Forms
+$input-border-color: rgba(0,0,0,.1);
+$input-group-addon-bg: #e9ecef;
+
+// Badges
+$badge-font-weight: normal;
+$badge-padding-y: 0.6em;
+$badge-padding-x: 1.2em;
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';

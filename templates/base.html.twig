@@ -4,6 +4,11 @@
         <meta charset="UTF-8">
         <title>{% block title 'common.title.default'|trans %}</title>
         {% block stylesheets %}{% endblock %}
+
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500|Roboto+Slab&amp;subset=cyrillic,cyrillic-ext,greek,greek-ext" rel="stylesheet">
+
+        {{ encore_entry_link_tags('lib') }}
+        {{ encore_entry_link_tags('app') }}
     </head>
     <body>
 

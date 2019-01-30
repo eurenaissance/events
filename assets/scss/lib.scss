@@ -1,0 +1,262 @@
+/*
+ * Customized version of Bootstrap, lososely based on the Litera theme by Bootswatch.
+ */
+
+@import './variables';
+
+/*
+ * Bootstrap
+ */
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/type';
+@import '~bootstrap/scss/images';
+@import '~bootstrap/scss/code';
+@import '~bootstrap/scss/grid';
+@import '~bootstrap/scss/tables';
+@import '~bootstrap/scss/forms';
+@import '~bootstrap/scss/buttons';
+@import '~bootstrap/scss/transitions';
+@import '~bootstrap/scss/dropdown';
+@import '~bootstrap/scss/button-group';
+@import '~bootstrap/scss/input-group';
+@import '~bootstrap/scss/custom-forms';
+@import '~bootstrap/scss/nav';
+@import '~bootstrap/scss/card';
+@import '~bootstrap/scss/breadcrumb';
+@import '~bootstrap/scss/pagination';
+@import '~bootstrap/scss/badge';
+@import '~bootstrap/scss/alert';
+@import '~bootstrap/scss/close';
+@import '~bootstrap/scss/media';
+@import '~bootstrap/scss/list-group';
+@import '~bootstrap/scss/tooltip';
+@import '~bootstrap/scss/utilities/background';
+@import '~bootstrap/scss/utilities/clearfix';
+@import '~bootstrap/scss/utilities/display';
+@import '~bootstrap/scss/utilities/flex';
+@import '~bootstrap/scss/utilities/float';
+@import '~bootstrap/scss/utilities/screenreaders';
+@import '~bootstrap/scss/utilities/spacing';
+@import '~bootstrap/scss/utilities/text';
+@import '~bootstrap/scss/print';
+
+
+/*
+ * Theme
+ */
+
+// Buttons
+.btn {
+    border-radius: 4em;
+    font-family: $font-roboto-mono;
+
+    &-secondary,
+    &-secondary:hover,
+    &-warning,
+    &-warning:hover {
+        color: $white;
+    }
+}
+
+// Typography
+blockquote {
+    font-style: italic;
+}
+
+// Tables
+table, .table {
+    font-size: 0.875em;
+
+    &-primary,
+    &-secondary,
+    &-success,
+    &-info,
+    &-warning,
+    &-danger {
+        color: #fff;
+    }
+}
+
+.table {
+    &-primary {
+        &, > th, > td {
+            background-color: $primary;
+        }
+    }
+
+    &-secondary {
+        &, > th, > td {
+            background-color: $secondary;
+        }
+    }
+
+    &-light {
+        &, > th, > td {
+            background-color: $light;
+        }
+    }
+
+    &-dark {
+        &, > th, > td {
+            background-color: $dark;
+        }
+    }
+
+    &-success {
+        &, > th, > td {
+            background-color: $success;
+        }
+    }
+
+    &-info {
+        &, > th, > td {
+            background-color: $info;
+        }
+    }
+
+    &-danger {
+        &, > th, > td {
+            background-color: $danger;
+        }
+    }
+
+    &-warning {
+        &, > th, > td {
+            background-color: $warning;
+        }
+    }
+
+    &-active {
+        &, > th, > td {
+            background-color: $table-active-bg;
+        }
+    }
+
+    &-hover {
+
+        .table-primary:hover {
+            &, > th, > td {
+                background-color: darken($primary, 5%);
+            }
+        }
+
+        .table-secondary:hover {
+            &, > th, > td {
+                background-color: darken($secondary, 5%);
+            }
+        }
+
+        .table-light:hover {
+            &, > th, > td {
+                background-color: darken($light, 5%);
+            }
+        }
+
+        .table-dark:hover {
+            &, > th, > td {
+                background-color: darken($dark, 5%);
+            }
+        }
+
+        .table-success:hover {
+            &, > th, > td {
+                background-color: darken($success, 5%);
+            }
+        }
+
+        .table-info:hover {
+            &, > th, > td {
+                background-color: darken($info, 5%);
+            }
+        }
+
+        .table-danger:hover {
+            &, > th, > td {
+                background-color: darken($danger, 5%);
+            }
+        }
+
+        .table-warning:hover {
+            &, > th, > td {
+                background-color: darken($warning, 5%);
+            }
+        }
+
+        .table-active:hover {
+            &, > th, > td {
+                background-color: $table-active-bg;
+            }
+        }
+
+    }
+}
+
+// Navs ========================================================================
+
+.nav, .breadcrumb, .pagination {
+    font-size: 0.875em;
+    font-family: $font-roboto-mono;
+}
+
+.dropdown-menu {
+    font-size: 0.875em;
+}
+
+// Indicators ==================================================================
+
+.alert {
+    border: none;
+    color: $white;
+    font-size: 0.875em;
+
+    &, p {
+        font-family: $font-family-sans-serif;
+    }
+
+    a, .alert-link {
+        color: #fff;
+        font-weight: normal;
+        text-decoration: underline;
+    }
+
+    @each $color, $value in $theme-colors {
+        &-#{$color} {
+            @if $enable-gradients {
+                background: $value linear-gradient(0deg, mix($body-bg, $value, 15%), $value) repeat-x;
+            } @else {
+                background-color: $value;
+            }
+        }
+    }
+
+    &-light {
+        &,
+        & a,
+        & .alert-link {
+            color: $body-color;
+        }
+    }
+}
+
+.badge {
+    vertical-align: bottom;
+
+    &-secondary,
+    &-warning {
+        color: $white;
+    }
+}
+
+.tooltip {
+    font-size: 11px;
+}
+
+// Containers ==================================================================
+
+.list-group {
+    font-size: 0.875em;
+}

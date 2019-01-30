@@ -44,6 +44,7 @@ jobs:
                       set -x
                       export PHPUNIT_ARGS="-v --log-junit ./phpunit/junit.xml"
                       make up
+                      make build-assets
 
                       make test
                       make phpcs
