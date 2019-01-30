@@ -23,14 +23,6 @@ jobs:
             - checkout
             - restore_cache:
                   key: composer-{{ checksum "composer.lock" }}
-            - run:
-                name: "Build & up containers"
-                command: |
-                  make up
-            - run:
-                name: "Build assets"
-                command: |
-                  make assets
             - save_cache:
                   paths:
                       - ./vendor
@@ -51,6 +43,8 @@ jobs:
                   command: |
                       set -x
                       export PHPUNIT_ARGS="-v --log-junit ./phpunit/junit.xml"
+                      make up
+                      make build-assets
 
                       make test
                       make phpcs
