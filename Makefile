@@ -1,5 +1,5 @@
 DOCKER_COMPOSE?=docker-compose
-EXEC?=$(DOCKER_COMPOSE) exec -u $$(id -u):$$(id -g) app
+EXEC?=$(DOCKER_COMPOSE) exec app
 CONSOLE=$(EXEC) bin/console
 PHPCSFIXER?=$(EXEC) php -d memory_limit=1024m vendor/bin/php-cs-fixer
 
@@ -13,7 +13,7 @@ help:
 ## Project setup
 ##---------------------------------------------------------------------------
 .PHONY: dev start up up-without-xdebug stop build cc
-dev: build start install db-init assets var/public.key ## Build, start the application and load fixtures
+dev: build start install db-init build-assets var/public.key ## Build, start the application and load fixtures
 
 start: up ## Start the application
 
@@ -86,7 +86,7 @@ db-init: wait-for-db db-schema-drop db-migrate db-fixtures ## Init the database 
 ## Assets
 ##---------------------------------------------------------------------------
 
-assets: node_modules                                        ## Build the development version of the assets
+build-assets:                                                    ## Build the development version of the assets
 	$(EXEC) yarn install
 	$(EXEC) yarn dev
 
