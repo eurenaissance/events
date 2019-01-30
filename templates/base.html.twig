@@ -4,6 +4,9 @@
         <meta charset="UTF-8">
         <title>{% block title 'common.title.default'|trans %}</title>
         {% block stylesheets %}{% endblock %}
+
+        {{ encore_entry_link_tags('lib') }}
+        {{ encore_entry_link_tags('app') }}
     </head>
     <body>
 
