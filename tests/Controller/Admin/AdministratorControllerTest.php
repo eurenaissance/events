@@ -25,7 +25,7 @@ class AdministratorControllerTest extends HttpTestCase
      */
     public function testSimpleAdminCannotSeeAdministratorAdmin(string $uri): void
     {
-        $this->authenticateAdmin('admin@mobilisation-eu.code');
+        $this->authenticateAdmin('admin@mobilisation-eu.localhost');
 
         $this->client->request('GET', $uri);
         $this->assertAccessDeniedResponse();
@@ -36,7 +36,7 @@ class AdministratorControllerTest extends HttpTestCase
      */
     public function testSuperAdminCanSeeAdministratorAdmin(string $uri): void
     {
-        $this->authenticateAdmin('superadmin@mobilisation-eu.code');
+        $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $this->client->request('GET', $uri);
         $this->assertResponseSuccessFul();
@@ -47,7 +47,7 @@ class AdministratorControllerTest extends HttpTestCase
         // provide google authenticator secret
         yield [
             1,
-            'superadmin@mobilisation-eu.code',
+            'superadmin@mobilisation-eu.localhost',
             [
                 'googleAuthenticatorSecret' => '',
                 'roles' => [0 => 'ROLE_SUPER_ADMIN'],
@@ -61,7 +61,7 @@ class AdministratorControllerTest extends HttpTestCase
         // promote to super admin
         yield [
             2,
-            'admin@mobilisation-eu.code',
+            'admin@mobilisation-eu.localhost',
             [
                 'googleAuthenticatorSecret' => '53YNXH6LFUOBT7LC',
                 'roles' => [1 => 'ROLE_ADMIN'],
@@ -75,7 +75,7 @@ class AdministratorControllerTest extends HttpTestCase
         // remove all roles
         yield [
             2,
-            'admin@mobilisation-eu.code',
+            'admin@mobilisation-eu.localhost',
             [
                 'googleAuthenticatorSecret' => '53YNXH6LFUOBT7LC',
                 'roles' => [1 => 'ROLE_ADMIN'],
@@ -92,7 +92,7 @@ class AdministratorControllerTest extends HttpTestCase
      */
     public function testEditSuccess(int $id, string $email, array $actualProfile, array $editedProfile): void
     {
-        $this->authenticateAdmin('superadmin@mobilisation-eu.code');
+        $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $crawler = $this->client->request('GET', "/admin/app/administrator/$id/edit");
         $this->assertResponseSuccessFul();
@@ -118,7 +118,7 @@ class AdministratorControllerTest extends HttpTestCase
 
     public function testEditPasswordSuccess(): void
     {
-        $this->authenticateAdmin('superadmin@mobilisation-eu.code');
+        $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $crawler = $this->client->request('GET', '/admin/app/administrator/2/edit');
         $this->assertResponseSuccessFul();
@@ -137,7 +137,7 @@ class AdministratorControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('Item "admin@mobilisation-eu.code" has been successfully updated.');
+        $this->assertResponseContains('Item "admin@mobilisation-eu.localhost" has been successfully updated.');
 
         $this->client->request('GET', '/admin/logout');
         $this->assertIsRedirectedTo($this->getAbsoluteUrl('/admin/login'));
@@ -146,7 +146,7 @@ class AdministratorControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Sign in')->form(), [
-            'emailAddress' => 'admin@mobilisation-eu.code',
+            'emailAddress' => 'admin@mobilisation-eu.localhost',
             'password' => 'new_pass_123',
         ]);
         $this->assertIsRedirectedTo('/admin/dashboard');
@@ -168,7 +168,7 @@ class AdministratorControllerTest extends HttpTestCase
      */
     public function testEditPasswordFailure(?string $firstPassword, ?string $secondPassword, string $error): void
     {
-        $this->authenticateAdmin('superadmin@mobilisation-eu.code');
+        $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $crawler = $this->client->request('GET', '/admin/app/administrator/2/edit');
         $this->assertResponseSuccessFul();
@@ -184,7 +184,7 @@ class AdministratorControllerTest extends HttpTestCase
         ]);
         $this->assertResponseSuccessFul();
         $this->assertResponseContains([
-            'An error has occurred during update of item "admin@mobilisation-eu.code".',
+            'An error has occurred during update of item "admin@mobilisation-eu.localhost".',
             $error,
         ]);
     }

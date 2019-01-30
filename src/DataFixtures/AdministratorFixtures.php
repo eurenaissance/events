@@ -20,8 +20,8 @@ class AdministratorFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $superAdministartor = $this->create('superadmin@mobilisation-eu.code', ['ROLE_SUPER_ADMIN']);
-        $administrator = $this->create('admin@mobilisation-eu.code', [], '53YNXH6LFUOBT7LC');
+        $superAdministartor = $this->create('superadmin@mobilisation-eu.localhost', ['ROLE_SUPER_ADMIN']);
+        $administrator = $this->create('admin@mobilisation-eu.localhost', [], '53YNXH6LFUOBT7LC');
 
         $manager->persist($superAdministartor);
         $manager->persist($administrator);

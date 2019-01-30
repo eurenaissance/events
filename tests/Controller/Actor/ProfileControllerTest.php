@@ -41,7 +41,7 @@ class ProfileControllerTest extends HttpTestCase
     public function provideProfileEditions(): iterable
     {
         yield [
-            'remi@mobilisation-eu.code',
+            'remi@mobilisation-eu.localhost',
             [
                 'firstName' => 'Rémi',
                 'lastName' => 'Gardien',
@@ -65,7 +65,7 @@ class ProfileControllerTest extends HttpTestCase
         ];
 
         yield [
-            'titouan@mobilisation-eu.code',
+            'titouan@mobilisation-eu.localhost',
             [
                 'firstName' => 'Titouan',
                 'lastName' => 'Galopin',
@@ -89,7 +89,7 @@ class ProfileControllerTest extends HttpTestCase
         ];
 
         yield [
-            'nicolas@mobilisation-eu.code',
+            'nicolas@mobilisation-eu.localhost',
             [
                 'firstName' => 'Nicolas',
                 'lastName' => 'Cage',
@@ -180,7 +180,7 @@ class ProfileControllerTest extends HttpTestCase
         ?string $cityUuid,
         array $errors
     ): void {
-        $this->authenticateActor('remi@mobilisation-eu.code');
+        $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $crawler = $this->client->request('GET', '/profile');
         $this->assertResponseSuccessFul();
@@ -201,11 +201,11 @@ class ProfileControllerTest extends HttpTestCase
 
     public function providePasswordChanges(): iterable
     {
-        yield ['titouan@mobilisation-eu.code', 'Titouan', 'secret!321'];
-        yield ['marine@mobilisation-eu.code', 'Marine', '654_pass_123'];
-        yield ['nicolas@mobilisation-eu.code', 'Nicolas', 'n3W_P@sS'];
+        yield ['titouan@mobilisation-eu.localhost', 'Titouan', 'secret!321'];
+        yield ['marine@mobilisation-eu.localhost', 'Marine', '654_pass_123'];
+        yield ['nicolas@mobilisation-eu.localhost', 'Nicolas', 'n3W_P@sS'];
         // actor with pending reset password token
-        yield ['remi@mobilisation-eu.code', 'Rémi', 'new_password!123'];
+        yield ['remi@mobilisation-eu.localhost', 'Rémi', 'new_password!123'];
     }
 
     /**
@@ -275,9 +275,9 @@ class ProfileControllerTest extends HttpTestCase
      */
     public function testChangePasswordFailure(string $first, string $second, string $error): void
     {
-        $initialPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation-eu.code')->getPassword();
+        $initialPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation-eu.localhost')->getPassword();
 
-        $this->authenticateActor('remi@mobilisation-eu.code');
+        $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $crawler = $this->client->request('GET', '/profile/change-password');
         $this->assertResponseSuccessFul();
@@ -292,7 +292,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->client->request('GET', '/profile');
         $this->assertResponseSuccessFul();
 
-        $finalPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation-eu.code')->getPassword();
+        $finalPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation-eu.localhost')->getPassword();
         $this->assertSame($initialPassword, $finalPassword);
     }
 }

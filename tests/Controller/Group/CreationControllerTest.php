@@ -25,12 +25,12 @@ class CreationControllerTest extends HttpTestCase
     public function provideActorsForCreateSuccess(): iterable
     {
         // animator of a refused group
-        yield ['remi@mobilisation-eu.code', 'Rémi', 'My new group', 'my-new-group'];
+        yield ['remi@mobilisation-eu.localhost', 'Rémi', 'My new group', 'my-new-group'];
         // animator of a confirmed group
-        yield ['titouan@mobilisation-eu.code', 'Titouan', 'A cool group', 'a-cool-group'];
+        yield ['titouan@mobilisation-eu.localhost', 'Titouan', 'A cool group', 'a-cool-group'];
         // no relation with any group
-        yield ['didier@mobilisation-eu.code', 'Didier', 'Best new group', 'best-new-group'];
-        yield ['francis@mobilisation-eu.code', 'Francis', 'My new group', 'my-new-group'];
+        yield ['didier@mobilisation-eu.localhost', 'Didier', 'Best new group', 'best-new-group'];
+        yield ['francis@mobilisation-eu.localhost', 'Francis', 'My new group', 'my-new-group'];
     }
 
     /**
@@ -69,7 +69,7 @@ class CreationControllerTest extends HttpTestCase
 
     public function testActorWithPendingGroupCannotCreateGroup(): void
     {
-        $this->authenticateActor('marine@mobilisation-eu.code');
+        $this->authenticateActor('marine@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/group/create');
         $this->assertAccessDeniedResponse();
@@ -140,7 +140,7 @@ class CreationControllerTest extends HttpTestCase
      */
     public function testCreateFailure(?string $name, ?string $city, array $errors): void
     {
-        $this->authenticateActor('remi@mobilisation-eu.code');
+        $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $crawler = $this->client->request('GET', '/group/create');
         $this->assertResponseSuccessFul();
@@ -152,7 +152,7 @@ class CreationControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
         $this->assertNull($this->getGroupRepository()->findOneBy([
-            'animator' => $this->getActorRepository()->findOneByEmail('remi@mobilisation-eu.code'),
+            'animator' => $this->getActorRepository()->findOneByEmail('remi@mobilisation-eu.localhost'),
             'name' => $name,
         ]));
     }

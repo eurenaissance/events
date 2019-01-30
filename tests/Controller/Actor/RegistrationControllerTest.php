@@ -15,7 +15,7 @@ class RegistrationControllerTest extends HttpTestCase
     {
         yield ['GET', '/register'];
         yield ['POST', '/register', [
-            'emailAddress' => 'new@mobilisation-eu.code',
+            'emailAddress' => 'new@mobilisation-eu.localhost',
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
@@ -36,7 +36,7 @@ class RegistrationControllerTest extends HttpTestCase
      */
     public function testLoggedInUserCannotRegister(string $method, string $uri, array $parameters = []): void
     {
-        $this->authenticateActor('remi@mobilisation-eu.code');
+        $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $this->client->request($method, $uri, $parameters);
         $this->assertAccessDeniedResponse();
@@ -48,7 +48,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Register')->form(), [
-            'emailAddress' => 'new@mobilisation-eu.code',
+            'emailAddress' => 'new@mobilisation-eu.localhost',
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
@@ -58,7 +58,7 @@ class RegistrationControllerTest extends HttpTestCase
         ]);
         $this->assertIsRedirectedTo('/register/check-email');
         $this->assertMailSent([
-            'to' => 'new@mobilisation-eu.code',
+            'to' => 'new@mobilisation-eu.localhost',
             'subject' => 'Welcome Rémi, please confirm your registration.',
             'body' => "@string@
                         .contains('Welcome Rémi!')
@@ -68,13 +68,13 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
         $this->assertResponseContains('A mail has been sent to confirm your account.');
-        $this->assertActorConfirmed('new@mobilisation-eu.code', false);
+        $this->assertActorConfirmed('new@mobilisation-eu.localhost', false);
     }
 
     public function provideBadRegistrations(): iterable
     {
         yield [
-            'emailAddress' => 'remi@mobilisation-eu.code',
+            'emailAddress' => 'remi@mobilisation-eu.localhost',
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
@@ -88,7 +88,7 @@ class RegistrationControllerTest extends HttpTestCase
         ];
 
         yield [
-            'emailAddress' => 'REMI@MOBILISATION-EU.CODE',
+            'emailAddress' => 'REMI@mobilisation-eu.localhost',
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
@@ -167,17 +167,17 @@ class RegistrationControllerTest extends HttpTestCase
 
     public function testResendConfirmationSuccess(): void
     {
-        $this->assertActorConfirmed('patrick@mobilisation-eu.code', false);
+        $this->assertActorConfirmed('patrick@mobilisation-eu.localhost', false);
 
         $crawler = $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Resend confirmation mail')->form(), [
-            'emailAddress' => 'patrick@mobilisation-eu.code',
+            'emailAddress' => 'patrick@mobilisation-eu.localhost',
         ]);
         $this->assertIsRedirectedTo('/register/resend-confirmation/check-email');
         $this->assertMailSent([
-            'to' => 'patrick@mobilisation-eu.code',
+            'to' => 'patrick@mobilisation-eu.localhost',
             'subject' => 'Welcome Patrick, please confirm your registration.',
             'body' => "@string@
                         .contains('Welcome Patrick!')
@@ -187,7 +187,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
         $this->assertResponseContains('A new mail has been sent with a link to confirm your account.');
-        $this->assertActorConfirmed('patrick@mobilisation-eu.code', false);
+        $this->assertActorConfirmed('patrick@mobilisation-eu.localhost', false);
     }
 
     public function testResendConfirmationUnknownEmail(): void
@@ -196,7 +196,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Resend confirmation mail')->form(), [
-            'emailAddress' => 'unknown@mobilisation-eu.code',
+            'emailAddress' => 'unknown@mobilisation-eu.localhost',
         ]);
         $this->assertIsRedirectedTo('/register/resend-confirmation/check-email');
         $this->assertNoMailSent();
@@ -209,14 +209,14 @@ class RegistrationControllerTest extends HttpTestCase
     public function provideResendConfirmationFailures(): iterable
     {
         yield [
-            'email' => 'leonard@mobilisation-eu.code',
+            'email' => 'leonard@mobilisation-eu.localhost',
             'alreadyConfirmed' => false,
             'redirectedTo' => '/login',
             'errors' => ['A mail has already been sent in the last 2 hours'],
         ];
 
         yield [
-            'email' => 'remi@mobilisation-eu.code',
+            'email' => 'remi@mobilisation-eu.localhost',
             'alreadyConfirmed' => true,
             'redirectedTo' => '/login',
             'errors' => ['Your account is already confirmed.'],
@@ -251,12 +251,12 @@ class RegistrationControllerTest extends HttpTestCase
 
     public function testConfirmSuccess(): void
     {
-        $this->assertActorConfirmed('leonard@mobilisation-eu.code', false);
+        $this->assertActorConfirmed('leonard@mobilisation-eu.localhost', false);
 
         $this->client->request('GET', '/register/confirm/'.ConfirmTokenFixtures::TOKEN_04_UUID);
         $this->assertIsRedirectedTo('/login');
         $this->assertMailSent([
-            'to' => 'leonard@mobilisation-eu.code',
+            'to' => 'leonard@mobilisation-eu.localhost',
             'subject' => 'Welcome Léonard, your registration is now complete.',
             'body' => "@string@
                         .contains('Welcome Léonard!')
@@ -267,14 +267,14 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
         $this->assertResponseContains('Your registration is now complete.');
-        $this->assertActorConfirmed('leonard@mobilisation-eu.code', true);
+        $this->assertActorConfirmed('leonard@mobilisation-eu.localhost', true);
     }
 
     public function provideConfirmationFailures(): iterable
     {
         // token is already consumed
         yield [
-            'email' => 'remi@mobilisation-eu.code',
+            'email' => 'remi@mobilisation-eu.localhost',
             'alreadyConfirmed' => true,
             'token' => ConfirmTokenFixtures::TOKEN_01_UUID,
             'redirectedTo' => '/login',
@@ -283,7 +283,7 @@ class RegistrationControllerTest extends HttpTestCase
 
         // token is expired but user is now confirmed
         yield [
-            'email' => 'titouan@mobilisation-eu.code',
+            'email' => 'titouan@mobilisation-eu.localhost',
             'alreadyConfirmed' => true,
             'token' => ConfirmTokenFixtures::TOKEN_02_UUID,
             'redirectedTo' => '/login',
@@ -292,7 +292,7 @@ class RegistrationControllerTest extends HttpTestCase
 
         // token is expired
         yield [
-            'email' => 'patrick@mobilisation-eu.code',
+            'email' => 'patrick@mobilisation-eu.localhost',
             'alreadyConfirmed' => false,
             'token' => ConfirmTokenFixtures::TOKEN_05_UUID,
             'redirectedTo' => '/register/resend-confirmation',

@@ -37,7 +37,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor1 = $this->create(
             'actor-bois-colombes',
             self::ACTOR_01_UUID,
-            'remi@mobilisation-eu.code',
+            'remi@mobilisation-eu.localhost',
             'Rémi',
             'Gardien',
             '1988-11-27',
@@ -48,7 +48,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor2 = $this->create(
             'actor-clichy',
             self::ACTOR_02_UUID,
-            'titouan@mobilisation-eu.code',
+            'titouan@mobilisation-eu.localhost',
             'Titouan',
             'Galopin',
             '1994-12-01',
@@ -60,7 +60,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor3 = $this->create(
             'actor-paris',
             self::ACTOR_03_UUID,
-            'marine@mobilisation-eu.code',
+            'marine@mobilisation-eu.localhost',
             'Marine',
             'Boudeau',
             '1983-11-09',
@@ -73,7 +73,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor4 = $this->create(
             'actor-asnieres',
             self::ACTOR_04_UUID,
-            'francis@mobilisation-eu.code',
+            'francis@mobilisation-eu.localhost',
             'Francis',
             'Brioul',
             '1971-04-18',
@@ -85,7 +85,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor5 = $this->create(
             'actor-nice',
             self::ACTOR_05_UUID,
-            'jacques@mobilisation-eu.code',
+            'jacques@mobilisation-eu.localhost',
             'Jacques',
             'Picard',
             '1975-10-07',
@@ -96,7 +96,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor6 = $this->create(
             'actor-lille',
             self::ACTOR_06_UUID,
-            'thomas@mobilisation-eu.code',
+            'thomas@mobilisation-eu.localhost',
             'Thomas',
             'Legros',
             '1982-02-16',
@@ -107,7 +107,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor7 = $this->create(
             'actor-nantes',
             self::ACTOR_07_UUID,
-            'manon@mobilisation-eu.code',
+            'manon@mobilisation-eu.localhost',
             'Manon',
             'Mercier',
             '1984-01-28',
@@ -118,7 +118,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor8 = $this->create(
             'actor-cannes',
             self::ACTOR_08_UUID,
-            'nicolas@mobilisation-eu.code',
+            'nicolas@mobilisation-eu.localhost',
             'Nicolas',
             'Cage',
             '1964-01-07',
@@ -132,7 +132,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor9 = $this->create(
             'actor-nice-2',
             self::ACTOR_09_UUID,
-            'leonard@mobilisation-eu.code',
+            'leonard@mobilisation-eu.localhost',
             'Léonard',
             'Matthieu',
             '1980-03-11',
@@ -143,7 +143,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor10 = $this->create(
             'actor-clichy-2',
             self::ACTOR_10_UUID,
-            'patrick@mobilisation-eu.code',
+            'patrick@mobilisation-eu.localhost',
             'Patrick',
             'Marchand',
             '1986-03-02',
@@ -154,7 +154,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor11 = $this->create(
             'actor-paris-3',
             self::ACTOR_11_UUID,
-            'didier@mobilisation-eu.code',
+            'didier@mobilisation-eu.localhost',
             'Didier',
             'Lemoine',
             '1965-02-07',

@@ -13,19 +13,19 @@ class SecurityControllerTest extends HttpTestCase
     public function provideLoginFailures(): iterable
     {
         yield [
-            'email' => 'unknown@mobilisation-eu.code',
+            'email' => 'unknown@mobilisation-eu.localhost',
             'plainPassword' => ActorFixtures::DEFAULT_PASSWORD,
             'errors' => ['Invalid credentials'],
         ];
 
         yield [
-            'email' => 'remi@mobilisation-eu.code',
+            'email' => 'remi@mobilisation-eu.localhost',
             'plainPassword' => 'bad_password',
             'errors' => ['Invalid credentials'],
         ];
 
         yield [
-            'email' => 'patrick@mobilisation-eu.code',
+            'email' => 'patrick@mobilisation-eu.localhost',
             'plainPassword' => ActorFixtures::DEFAULT_PASSWORD,
             'errors' => [
                 'Your account is not confirmed yet.',
@@ -34,7 +34,7 @@ class SecurityControllerTest extends HttpTestCase
         ];
 
         yield [
-            'email' => 'leonard@mobilisation-eu.code',
+            'email' => 'leonard@mobilisation-eu.localhost',
             'plainPassword' => ActorFixtures::DEFAULT_PASSWORD,
             'errors' => [
                 'Your account is not confirmed yet.',
@@ -72,7 +72,7 @@ class SecurityControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Sign in')->form([
-            'emailAddress' => 'remi@mobilisation-eu.code',
+            'emailAddress' => 'remi@mobilisation-eu.localhost',
             'password' => ActorFixtures::DEFAULT_PASSWORD,
         ]));
         $this->assertIsRedirectedTo('/');

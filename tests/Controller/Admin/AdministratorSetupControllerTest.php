@@ -12,9 +12,9 @@ class AdministratorSetupControllerTest extends HttpTestCase
 {
     public function provideSetupSuccess(): iterable
     {
-        yield ['first_admin@mobilisation-eu.code', 'test123'];
-        yield ['superadmin@mobilisation-eu.code', 'secret!123'];
-        yield ['remi@mobilisation-eu.code', '654test'];
+        yield ['first_admin@mobilisation-eu.localhost', 'test123'];
+        yield ['superadmin@mobilisation-eu.localhost', 'secret!123'];
+        yield ['remi@mobilisation-eu.localhost', '654test'];
     }
 
     /**
@@ -63,10 +63,10 @@ class AdministratorSetupControllerTest extends HttpTestCase
         yield ['superadmin@mobilisation-eu', 'test123', 'test123', ['This value is not a valid email address.']];
         yield ['', 'test123', 'test123', ['This value should not be blank.']];
         yield [null, 'test123', 'test123', ['This value should not be blank.']];
-        yield ['superadmin@mobilisation-eu.code', 'test123', '321test', ['Passwords do not match.']];
-        yield ['superadmin@mobilisation-eu.code', 'test', 'test', ['Password must be at least 6 characters long.']];
-        yield ['superadmin@mobilisation-eu.code', '', '', ['Please enter a password.']];
-        yield ['superadmin@mobilisation-eu.code', null, null, ['Please enter a password.']];
+        yield ['superadmin@mobilisation-eu.localhost', 'test123', '321test', ['Passwords do not match.']];
+        yield ['superadmin@mobilisation-eu.localhost', 'test', 'test', ['Password must be at least 6 characters long.']];
+        yield ['superadmin@mobilisation-eu.localhost', '', '', ['Please enter a password.']];
+        yield ['superadmin@mobilisation-eu.localhost', null, null, ['Please enter a password.']];
     }
 
     /**
@@ -102,7 +102,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
 
     public function testSetupIsDisabledForActors(): void
     {
-        $this->authenticateActor('remi@mobilisation-eu.code');
+        $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/admin/setup');
         $this->assertAccessDeniedResponse();
@@ -110,7 +110,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
 
     public function testSetupIsDisabledForAdministrators(): void
     {
-        $this->authenticateAdmin('superadmin@mobilisation-eu.code');
+        $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/admin/setup');
         $this->assertAccessDeniedResponse();

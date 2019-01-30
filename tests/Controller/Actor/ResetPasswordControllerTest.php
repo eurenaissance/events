@@ -24,7 +24,7 @@ class ResetPasswordControllerTest extends HttpTestCase
      */
     public function testLoggedInUserIsRedirectedToChangePassword(string $method, string $uri, array $parameters = []): void
     {
-        $this->authenticateActor('remi@mobilisation-eu.code');
+        $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $this->client->request($method, $uri, $parameters);
         $this->assertIsRedirectedTo('/profile/change-password');
@@ -32,9 +32,9 @@ class ResetPasswordControllerTest extends HttpTestCase
 
     public function provideRequestSuccess(): iterable
     {
-        yield ['titouan@mobilisation-eu.code', 'Titouan'];
-        yield ['marine@mobilisation-eu.code', 'Marine'];
-        yield ['nicolas@mobilisation-eu.code', 'Nicolas'];
+        yield ['titouan@mobilisation-eu.localhost', 'Titouan'];
+        yield ['marine@mobilisation-eu.localhost', 'Marine'];
+        yield ['nicolas@mobilisation-eu.localhost', 'Nicolas'];
     }
 
     /**
@@ -67,7 +67,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         $this->client->submit($crawler->selectButton('Request new password')->form(), [
-            'emailAddress' => 'remi@mobilisation-eu.code',
+            'emailAddress' => 'remi@mobilisation-eu.localhost',
         ]);
         $this->assertIsRedirectedTo('/login');
         $this->assertNoMailSent();
@@ -102,7 +102,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         ]);
         $this->assertIsRedirectedTo('/login');
         $this->assertMailSent([
-            'to' => 'remi@mobilisation-eu.code',
+            'to' => 'remi@mobilisation-eu.localhost',
             'subject' => 'Your password has been successfully reset.',
             'body' => "@string@
                         .contains('Hello Rémi!')
@@ -114,7 +114,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->assertResponseContains('Your password has been successfully reset.');
 
         $this->client->submit($crawler->selectButton('Sign in')->form(), [
-            'emailAddress' => 'remi@mobilisation-eu.code',
+            'emailAddress' => 'remi@mobilisation-eu.localhost',
             'password' => $password,
         ]);
         $this->assertIsRedirectedTo('/');
@@ -158,7 +158,7 @@ class ResetPasswordControllerTest extends HttpTestCase
     public function testResetFailure(?string $first, ?string $second, string $error): void
     {
         $actorRepository = $this->getActorRepository();
-        $initialPassword = $actorRepository->findOneByEmail('remi@mobilisation-eu.code')->getPassword();
+        $initialPassword = $actorRepository->findOneByEmail('remi@mobilisation-eu.localhost')->getPassword();
 
         $resetPasswordUrl = sprintf('/reset-password/%s', ResetPasswordTokenFixtures::TOKEN_01_UUID);
         $crawler = $this->client->request('GET', $resetPasswordUrl);
@@ -171,7 +171,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->assertResponseContains($error);
 
         $actorRepository->clear();
-        $finalPassword = $actorRepository->findOneByEmail('remi@mobilisation-eu.code')->getPassword();
+        $finalPassword = $actorRepository->findOneByEmail('remi@mobilisation-eu.localhost')->getPassword();
         $this->assertSame($initialPassword, $finalPassword);
     }
 

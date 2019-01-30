@@ -37,13 +37,13 @@ class ViewControllerTest extends HttpTestCase
 
     public function provideActorsForRefusedGroup(): iterable
     {
-        yield ['remi@mobilisation-eu.code']; // animator of the refused group
-        yield ['titouan@mobilisation-eu.code']; // animator of another confirmed group
-        yield ['marine@mobilisation-eu.code']; // animator of another pending group
-        yield ['didier@mobilisation-eu.code']; // no relation with any group
-        yield ['francis@mobilisation-eu.code'];
-        yield ['jacques@mobilisation-eu.code'];
-        yield ['nicolas@mobilisation-eu.code'];
+        yield ['remi@mobilisation-eu.localhost']; // animator of the refused group
+        yield ['titouan@mobilisation-eu.localhost']; // animator of another confirmed group
+        yield ['marine@mobilisation-eu.localhost']; // animator of another pending group
+        yield ['didier@mobilisation-eu.localhost']; // no relation with any group
+        yield ['francis@mobilisation-eu.localhost'];
+        yield ['jacques@mobilisation-eu.localhost'];
+        yield ['nicolas@mobilisation-eu.localhost'];
     }
 
     /**
@@ -59,12 +59,12 @@ class ViewControllerTest extends HttpTestCase
 
     public function provideActorsForPendingGroup(): iterable
     {
-        yield ['remi@mobilisation-eu.code']; // animator of another refused group
-        yield ['titouan@mobilisation-eu.code']; // animator of another confirmed group
-        yield ['didier@mobilisation-eu.code']; // no relation with any group
-        yield ['francis@mobilisation-eu.code'];
-        yield ['jacques@mobilisation-eu.code'];
-        yield ['nicolas@mobilisation-eu.code'];
+        yield ['remi@mobilisation-eu.localhost']; // animator of another refused group
+        yield ['titouan@mobilisation-eu.localhost']; // animator of another confirmed group
+        yield ['didier@mobilisation-eu.localhost']; // no relation with any group
+        yield ['francis@mobilisation-eu.localhost'];
+        yield ['jacques@mobilisation-eu.localhost'];
+        yield ['nicolas@mobilisation-eu.localhost'];
     }
 
     /**
@@ -80,7 +80,7 @@ class ViewControllerTest extends HttpTestCase
 
     public function testAnimatorCanViewHisPendingGroup(): void
     {
-        $this->authenticateActor('marine@mobilisation-eu.code');
+        $this->authenticateActor('marine@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/group/culture-in-paris');
         $this->assertResponseSuccessFul();
@@ -89,13 +89,13 @@ class ViewControllerTest extends HttpTestCase
 
     public function provideActorsForConfirmedGroup(): iterable
     {
-        yield ['remi@mobilisation-eu.code']; // animator of another refused group
-        yield ['titouan@mobilisation-eu.code']; // animator of another confirmed group
-        yield ['marine@mobilisation-eu.code']; // animator of the confirmed group
-        yield ['didier@mobilisation-eu.code']; // no relation with any group
-        yield ['francis@mobilisation-eu.code'];
-        yield ['jacques@mobilisation-eu.code'];
-        yield ['nicolas@mobilisation-eu.code'];
+        yield ['remi@mobilisation-eu.localhost']; // animator of another refused group
+        yield ['titouan@mobilisation-eu.localhost']; // animator of another confirmed group
+        yield ['marine@mobilisation-eu.localhost']; // animator of the confirmed group
+        yield ['didier@mobilisation-eu.localhost']; // no relation with any group
+        yield ['francis@mobilisation-eu.localhost'];
+        yield ['jacques@mobilisation-eu.localhost'];
+        yield ['nicolas@mobilisation-eu.localhost'];
     }
 
     /**
