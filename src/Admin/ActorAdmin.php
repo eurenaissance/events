@@ -3,12 +3,17 @@
 namespace App\Admin;
 
 use App\Entity\Actor;
+use App\Form\Actor\ActorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
+use Sonata\Form\Type\DateRangePickerType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class ActorAdmin extends AbstractAdmin
 {
@@ -72,16 +77,56 @@ class ActorAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $yearsBirthday = ActorType::getBirthdayYears();
+        $rangeRegisteredAt = range(2018, (int) date('Y'));
+        $yearsRegisteredAt = array_combine($rangeRegisteredAt, $rangeRegisteredAt);
+
+
         $datagridMapper
-            ->add('emailAddress', null, [
-                'label' => 'Email address',
+            ->add('animators', CallbackFilter::class, [
+                'virtual_field' => true,
+                'label' => 'Animators only',
                 'show_filter' => true,
+                'field_type' => CheckboxType::class,
+                'callback' => [$this, 'applyAnimatorsFilter'],
             ])
             ->add('fullName', CallbackFilter::class, [
                 'label' => 'Full name',
                 'show_filter' => true,
                 'advanced_filter' => false,
                 'callback' => [$this, 'applyFullNameFilter'],
+            ])
+            ->add('emailAddress', null, [
+                'label' => 'Email address',
+                'show_filter' => true,
+            ])
+            ->add('birthday', DateRangeFilter::class, [
+                'label' => 'Birth date',
+                'field_type' => DateRangePickerType::class,
+                'field_options' => [
+                    'field_options_start' => [
+                        'datepicker_use_button' => false,
+                        'years' => $yearsBirthday,
+                    ],
+                    'field_options_end' => [
+                        'datepicker_use_button' => false,
+                        'years' => $yearsBirthday,
+                    ],
+                ],
+            ])
+            ->add('registeredAt', DateRangeFilter::class, [
+                'label' => 'Registered at',
+                'field_type' => DateRangePickerType::class,
+                'field_options' => [
+                    'field_options_start' => [
+                        'datepicker_use_button' => false,
+                        'years' => $yearsRegisteredAt,
+                    ],
+                    'field_options_end' => [
+                        'datepicker_use_button' => false,
+                        'years' => $yearsRegisteredAt,
+                    ],
+                ],
             ])
         ;
     }
@@ -131,30 +176,45 @@ class ActorAdmin extends AbstractAdmin
         return $genders;
     }
 
-    /**
-     * @param ProxyQuery|\Doctrine\ORM\QueryBuilder $queryBuilder
-     */
-    public function applyFullNameFilter(ProxyQuery $queryBuilder, string $alias, string $field, array $value): bool
+    public function applyFullNameFilter(ProxyQuery $query, string $alias, string $field, array $value): bool
     {
         if (!$value['value']) {
             return false;
         }
 
         $canonicalFullName = mb_strtolower($value['value']);
+        $qb = $query->getQueryBuilder();
 
         // AND WHERE CONCAT(LOWER(a.firstName), CONCAT(' ', LOWER(a.lastName))) LIKE '%:canonicalFullName%'
-        $queryBuilder->andWhere(
-            $queryBuilder->expr()->like(
-                $queryBuilder->expr()->concat(
-                    $queryBuilder->expr()->lower("$alias.firstName"),
-                    $queryBuilder->expr()->concat(
-                        $queryBuilder->expr()->literal(' '),
-                        $queryBuilder->expr()->lower("$alias.lastName")
+        $qb->andWhere(
+            $qb->expr()->like(
+                $qb->expr()->lower(
+                    $qb->expr()->concat(
+                        "$alias.firstName",
+                        $qb->expr()->concat(
+                            $qb->expr()->literal(' '),
+                            "$alias.lastName"
+                        )
                     )
                 ),
-                $queryBuilder->expr()->literal("%$canonicalFullName%")
+                $qb->expr()->literal("%$canonicalFullName%")
             )
         );
+
+        return true;
+    }
+
+    public function applyAnimatorsFilter(ProxyQuery $query, string $alias, string $field, array $value): bool
+    {
+        if (!$value['value'] || false === $value['value']) {
+            return false;
+        }
+
+        $query
+            ->getQueryBuilder()
+            ->innerJoin("$alias.animatedGroups", 'a')
+            ->innerJoin("$alias.coAnimatorMemberships", 'cm')
+        ;
 
         return true;
     }

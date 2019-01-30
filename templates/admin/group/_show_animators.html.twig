@@ -1,0 +1,58 @@
+{% set animator = object.animator %}
+{% set coAnimatorMemberships = object.coAnimatorMemberships %}
+
+{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
+
+{% block field %}
+    {% if coAnimatorMemberships|length %}
+        <div class="table-responsive">
+            <table class="table table-hover no-margin">
+                <thead>
+                    <tr class="sonata-ba-list-field-header">
+                        <th class="sonata-ba-list-field-header-text" style="max-width: 20px;">#</th>
+                        <th class="sonata-ba-list-field-header-text">Name</th>
+                        <th class="sonata-ba-list-field-header-text">Email address</th>
+                        <th class="sonata-ba-list-field-header-text">Since</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr class="info sonata-ba-list-field-header">
+                        <td class="sonata-ba-list-field sonata-ba-list-field-text" style="max-width: 20px;">
+                            <b>1</b>
+                        </td>
+                        <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                            <a href="{{ path('admin_app_actor_show', { id: animator.id }) }}">
+                                {{ animator.fullName }}
+                            </a>
+                        </td>
+                        <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                            {{ animator.emailAddress }}
+                        </td>
+                        <td class="sonata-ba-list-field sonata-ba-list-field-text"></td>
+                    </tr>
+                    {% for membership in coAnimatorMemberships %}
+                        {% set actor = membership.actor %}
+
+                        <tr>
+                            <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                                <b>{{ loop.index + 1 }}</b>
+                            </td>
+                            <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                                <a href="{{ path('admin_app_actor_show', { id: actor.id }) }}">
+                                    {{ actor.fullName }}
+                                </a>
+                            </td>
+                            <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                                {{ actor.emailAddress }}
+                            </td>
+                            <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                                {{ membership.createdAt|date }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

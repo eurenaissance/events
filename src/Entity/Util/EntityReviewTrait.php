@@ -58,4 +58,14 @@ trait EntityReviewTrait
 
         return 'pending';
     }
+
+    public function getApprovedAt(): ?\DateTimeInterface
+    {
+        return $this->approvedAt;
+    }
+
+    public function getRefusedAt(): ?\DateTimeInterface
+    {
+        return $this->refusedAt;
+    }
 }

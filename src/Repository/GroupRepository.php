@@ -64,7 +64,9 @@ class GroupRepository extends ServiceEntityRepository
     public function findWithoutFilters(array $criteria): array
     {
         $filters = $this->getEntityManager()->getFilters();
-        $filters->disable('refused');
+        if ($filters->isEnabled('refused')) {
+            $filters->disable('refused');
+        }
 
         $groups = $this->findBy($criteria);
 

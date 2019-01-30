@@ -78,12 +78,17 @@ class ActorType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setDefaults([
+            'data_class' => Actor::class,
+            'years' => self::getBirthdayYears(),
+        ]);
+    }
+
+    public static function getBirthdayYears(): array
+    {
         $currentYear = (int) date('Y');
         $years = range($currentYear - self::BIRTHDAY_MIN_YEARS, $currentYear - self::BIRTHDAY_MAX_YEARS);
 
-        $resolver->setDefaults([
-            'data_class' => Actor::class,
-            'years' => array_combine($years, $years),
-        ]);
+        return array_combine($years, $years);
     }
 }
