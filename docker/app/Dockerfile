@@ -3,6 +3,7 @@ FROM php:7.2-fpm-alpine3.7
 
 ENV APCU_VERSION=5.1.9 \
     XDEBUG_VERSION=2.6.0 \
+    NODE_VERSION=10.15.1 \
     COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apk add --no-cache --virtual .persistent-deps \
@@ -57,7 +58,12 @@ RUN set -xe \
     && apk add --no-cache --virtual .php-phpexts-rundeps $runDeps \
     && apk del .build-deps \
     && pip install supervisor \
-    && mkdir -p /run/nginx/
+    && mkdir -p /run/nginx/ \
+
+    && curl -L -o /tmp/nodejs.tar.gz https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz \
+    && tar xfvz /tmp/nodejs.tar.gz -C /usr/local --strip-components=1 \
+    && rm -f /tmp/nodejs.tar.gz \
+    && npm install yarn -g
 
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/alpine/amd64/$version \

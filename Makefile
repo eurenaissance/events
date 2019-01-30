@@ -13,7 +13,7 @@ help:
 ## Project setup
 ##---------------------------------------------------------------------------
 .PHONY: dev start up up-without-xdebug stop build cc
-dev: build start install db-init var/public.key ## Build, start the application and load fixtures
+dev: build start install db-init assets var/public.key ## Build, start the application and load fixtures
 
 start: up ## Start the application
 
@@ -81,6 +81,14 @@ db-fixtures: ## Load fixtures
 	$(CONSOLE) doctrine:fixtures:load -n
 
 db-init: wait-for-db db-schema-drop db-migrate db-fixtures ## Init the database with fixtures
+
+##
+## Assets
+##---------------------------------------------------------------------------
+
+assets: node_modules                                        ## Build the development version of the assets
+	$(EXEC) yarn install
+	$(EXEC) yarn dev
 
 ##
 ## Tests
