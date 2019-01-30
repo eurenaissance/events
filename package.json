@@ -8,8 +8,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "bootstrap": "^4.2.1",
-        "bootswatch": "^4.2.1"
+        "bootstrap": "^4.2.1"
     },
     "devDependencies": {
         "@babel/preset-react": "^7.0.0",
