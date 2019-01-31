@@ -193,6 +193,11 @@ group:
         min_length: The group name must be at least {{ limit }} characters long.
         max_length: The group name should not exceed {{ limit }} characters.
         unique: A group named "{{ value }}" already exists.
+    description:
+        label: Description
+        not_blank: Please provide a short description.
+        min_length: The description must be at least {{ limit }} characters long.
+        max_length: The group name should not exceed {{ limit }} characters.
     slug:
         unique: A group with a URL "{{ value }}" already exists.
     address:

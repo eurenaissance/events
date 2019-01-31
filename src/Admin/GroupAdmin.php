@@ -44,6 +44,9 @@ class GroupAdmin extends AbstractAdmin
                 ->add('name', null, [
                     'label' => 'Name',
                 ])
+                ->add('description', null, [
+                    'label' => 'Description',
+                ])
                 ->add('address', null, [
                     'label' => 'Address',
                     'virtual_field' => true,

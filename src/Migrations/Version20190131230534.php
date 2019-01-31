@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190127184253 extends AbstractMigration
+final class Version20190131230534 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -33,7 +33,7 @@ final class Version20190127184253 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE cities_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE co_animator_memberships_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE follower_memberships_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE groups (id BIGINT NOT NULL, animator_id BIGINT NOT NULL, city_id BIGINT NOT NULL, name VARCHAR(50) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, uuid UUID NOT NULL, address VARCHAR(150) DEFAULT NULL, slug VARCHAR(255) NOT NULL, approved_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, refused_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE groups (id BIGINT NOT NULL, animator_id BIGINT NOT NULL, city_id BIGINT NOT NULL, name VARCHAR(50) NOT NULL, description TEXT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, uuid UUID NOT NULL, address VARCHAR(150) DEFAULT NULL, slug VARCHAR(255) NOT NULL, approved_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, refused_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_F06D39705E237E06 ON groups (name)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_F06D3970D17F50A6 ON groups (uuid)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_F06D3970989D9B62 ON groups (slug)');

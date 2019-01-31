@@ -18,6 +18,7 @@ class CreationControllerTest extends HttpTestCase
 
         $this->client->request('POST', '/group/create', [
             'name' => 'My new group',
+            'description' => 'Description of my new group',
             'city' => CityFixtures::CITY_02_UUID,
         ]);
         $this->assertIsRedirectedTo('/login');
@@ -26,19 +27,51 @@ class CreationControllerTest extends HttpTestCase
     public function provideActorsForCreateSuccess(): iterable
     {
         // animator of a refused group
-        yield ['remi@mobilisation-eu.localhost', 'Rémi', 'My new group', 'my-new-group'];
+        yield [
+            'remi@mobilisation-eu.localhost',
+            'Rémi',
+            'My new group',
+            'my-new-group',
+            'Description of my very new group.',
+        ];
+
         // animator of a confirmed group
-        yield ['titouan@mobilisation-eu.localhost', 'Titouan', 'A cool group', 'a-cool-group'];
+        yield [
+            'titouan@mobilisation-eu.localhost',
+            'Titouan',
+            'A cool group',
+            'a-cool-group',
+            'Description of a very cool group.',
+        ];
+
         // no relation with any group
-        yield ['didier@mobilisation-eu.localhost', 'Didier', 'Best new group', 'best-new-group'];
-        yield ['francis@mobilisation-eu.localhost', 'Francis', 'My new group', 'my-new-group'];
+        yield [
+            'didier@mobilisation-eu.localhost',
+            'Didier',
+            'Best new group',
+            'best-new-group',
+            'Description of the group.',
+        ];
+
+        yield [
+            'francis@mobilisation-eu.localhost',
+            'Francis',
+            'My new group',
+            'my-new-group',
+            'Description of the new group.',
+        ];
     }
 
     /**
      * @dataProvider provideActorsForCreateSuccess
      */
-    public function testCreateSuccess(string $email, string $firstName, string $groupName, string $groupSlug): void
-    {
+    public function testCreateSuccess(
+        string $email,
+        string $firstName,
+        string $groupName,
+        string $groupSlug,
+        string $groupDescription
+    ): void {
         $this->authenticateActor($email);
 
         $crawler = $this->client->request('GET', '/group/create');
@@ -46,6 +79,7 @@ class CreationControllerTest extends HttpTestCase
 
         $this->client->submit($crawler->selectButton('Create')->form(), [
             'name' => $groupName,
+            'description' => $groupDescription,
             'city' => CityFixtures::CITY_02_UUID,
         ]);
         $this->assertIsRedirectedTo("/group/$groupSlug");
@@ -79,6 +113,7 @@ class CreationControllerTest extends HttpTestCase
 
         $this->client->request('POST', '/group/create', [
             'name' => 'My new group',
+            'description' => 'A very cool description.',
             'city' => CityFixtures::CITY_02_UUID,
         ]);
         $this->assertAccessDeniedResponse();
@@ -88,9 +123,11 @@ class CreationControllerTest extends HttpTestCase
     {
         yield [
             'name' => null,
+            'description' => null,
             'city' => null,
             'errors' => [
                 'Please enter a group name.',
+                'Please provide a short description.',
                 'This city is not valid.',
             ],
         ];
@@ -98,20 +135,29 @@ class CreationControllerTest extends HttpTestCase
         // a confirmed group with this name already exists
         yield [
             'name' => 'Ecology in Paris',
+            'description' => 'Too short',
             'city' => CityFixtures::CITY_02_UUID,
-            'errors' => ['A group named &quot;&quot;Ecology in Paris&quot;&quot; already exists.'],
+            'errors' => [
+                'A group named &quot;&quot;Ecology in Paris&quot;&quot; already exists.',
+                'The description must be at least 10 characters long.',
+            ],
         ];
 
         // a confirmed group with this slug already exists
         yield [
             'name' => 'Ecolôgy-în Pârïs ',
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi posuere orci sed turpis lacinia vestibulum. Donec pulvinar augue quis ex aliquet consequat. Nullam ligula arcu, ornare id pellentesque eget, condimentum id risus. Nullam auctor ut diam non ullamcorper. Proin commodo dui vel enim accumsan, elementum tincidunt lectus venenatis.',
             'city' => CityFixtures::CITY_02_UUID,
-            'errors' => ['A group with a URL &quot;&quot;ecology-in-paris&quot;&quot; already exists.'],
+            'errors' => [
+                'A group with a URL &quot;&quot;ecology-in-paris&quot;&quot; already exists.',
+                'The group name should not exceed 300 characters.',
+            ],
         ];
 
         // a pending group with this name already exists
         yield [
             'name' => 'Culture in Paris',
+            'description' => 'A very cool description.',
             'city' => CityFixtures::CITY_02_UUID,
             'errors' => ['A group named &quot;&quot;Culture in Paris&quot;&quot; already exists.'],
         ];
@@ -119,6 +165,7 @@ class CreationControllerTest extends HttpTestCase
         // a pending group with this slug already exists
         yield [
             'name' => 'Cûltüré in-Pârïs-',
+            'description' => 'A very cool description.',
             'city' => CityFixtures::CITY_02_UUID,
             'errors' => ['A group with a URL &quot;&quot;culture-in-paris&quot;&quot; already exists.'],
         ];
@@ -126,6 +173,7 @@ class CreationControllerTest extends HttpTestCase
         // a refused group with this name already exists
         yield [
             'name' => 'Development in Bois-Colombes',
+            'description' => 'A very cool description.',
             'city' => CityFixtures::CITY_02_UUID,
             'errors' => ['A group named &quot;&quot;Development in Bois-Colombes&quot;&quot; already exists.'],
         ];
@@ -133,6 +181,7 @@ class CreationControllerTest extends HttpTestCase
         // a refused group with this slug already exists
         yield [
             'name' => 'Dévelôpmént-in bôïs côlômbès ',
+            'description' => 'A very cool description.',
             'city' => CityFixtures::CITY_02_UUID,
             'errors' => ['A group with a URL &quot;&quot;development-in-bois-colombes&quot;&quot; already exists.'],
         ];
@@ -141,7 +190,7 @@ class CreationControllerTest extends HttpTestCase
     /**
      * @dataProvider provideBadCreations
      */
-    public function testCreateFailure(?string $name, ?string $city, array $errors): void
+    public function testCreateFailure(?string $name, ?string $description, ?string $city, array $errors): void
     {
         $this->authenticateActor('remi@mobilisation-eu.localhost');
 
@@ -150,6 +199,7 @@ class CreationControllerTest extends HttpTestCase
 
         $this->client->submit($crawler->selectButton('Create')->form(), [
             'name' => $name,
+            'description' => $description,
             'city' => $city,
         ]);
         $this->assertResponseSuccessFul();

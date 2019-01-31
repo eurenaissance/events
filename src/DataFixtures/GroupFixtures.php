@@ -35,6 +35,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
             'group-bois-colombes-refused',
             self::GROUP_01_UUID,
             'Development in Bois-Colombes',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             'actor-bois-colombes',
             'city-bois-colombes'
         );
@@ -44,6 +45,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
             'group-clichy-ecology-approved',
             self::GROUP_02_UUID,
             'Ecology in Clichy',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             'actor-clichy',
             'city-clichy',
             '789 random street'
@@ -54,6 +56,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
             'group-paris-development-refused',
             self::GROUP_03_UUID,
             'Development in Paris',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             'actor-paris',
             'city-paris',
             '789 random street'
@@ -64,6 +67,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
             'group-paris-ecology-approved',
             self::GROUP_04_UUID,
             'Ecology in Paris',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             'actor-paris',
             'city-paris',
             '123 random street'
@@ -75,6 +79,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
             'group-paris-culture-pending',
             self::GROUP_05_UUID,
             'Culture in Paris',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             'actor-paris',
             'city-paris',
             '234 random street'
@@ -84,6 +89,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
             'group-nice-ecology-approved',
             self::GROUP_06_UUID,
             'Ecology in Nice',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             'actor-nice',
             'city-nice',
             '345 random street'
@@ -95,6 +101,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
             'group-lille-approved-and-refused',
             self::GROUP_07_UUID,
             'Development in Lille',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             'actor-lille',
             'city-lille',
             '345 random street'
@@ -106,6 +113,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
             'group-nantes-approved',
             self::GROUP_08_UUID,
             'Ecology in Nantes',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             'actor-nantes',
             'city-nantes',
             '345 random street'
@@ -116,6 +124,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
             'group-cannes-approved',
             self::GROUP_09_UUID,
             'Culture in Cannes',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             'actor-cannes',
             'city-cannes',
             '345 random street'
@@ -127,6 +136,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
             'group-asnieres-approved',
             self::GROUP_10_UUID,
             'Culture in Asnieres',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             'actor-cannes',
             'city-asnieres',
             '345 random street'
@@ -159,6 +169,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
         string $reference,
         string $uuid,
         string $name,
+        string $description,
         string $animatorReference,
         string $cityReference,
         string $address = null
@@ -166,6 +177,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
         $group = new Group(Uuid::fromString($uuid));
 
         $group->setName($name);
+        $group->setDescription($description);
         $group->setAnimator($this->getReference($animatorReference));
         $group->setCity($this->getReference($cityReference));
 

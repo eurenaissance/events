@@ -50,6 +50,21 @@ class Group implements EntitySlugInterface, GeocodableInterface, EntityReviewInt
     private $name;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(type="text")
+     *
+     * @Assert\NotBlank(message="group.description.not_blank")
+     * @Assert\Length(
+     *     min=10,
+     *     max=300,
+     *     minMessage="group.description.min_length",
+     *     maxMessage="group.description.max_length"
+     * )
+     */
+    private $description;
+
+    /**
      * @var \DateTimeInterface
      *
      * @ORM\Column(type="datetime")
@@ -109,6 +124,16 @@ class Group implements EntitySlugInterface, GeocodableInterface, EntityReviewInt
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
     }
 
     public function getCreatedAt(): \DateTimeInterface

@@ -5,6 +5,7 @@
 {% block body %}
     {{ form_start(form) }}
         {{ form_row(form.name, { label: 'group.name.label' }) }}
+        {{ form_row(form.description, { label: 'group.description.label' }) }}
         {{ form_row(form.address, { label: 'group.address.label' }) }}
         {{ form_row(form.country, { label: 'group.country.label' }) }}
         {{ form_row(form.zipCode, { label: 'group.zip_code.label' }) }}
