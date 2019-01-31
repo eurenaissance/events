@@ -70,6 +70,6 @@ class SecurityControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('Hello Rémi!');
+        $this->assertResponseContains('Rémi Gardien');
     }
 }

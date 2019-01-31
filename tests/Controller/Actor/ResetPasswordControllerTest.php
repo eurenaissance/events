@@ -99,7 +99,7 @@ class ResetPasswordControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('Hello Titouan!');
+        $this->assertResponseContains('Titouan Galopin');
     }
 
     public function provideBadPasswordChanges(): iterable
