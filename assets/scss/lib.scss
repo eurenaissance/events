@@ -24,15 +24,11 @@
 @import '~bootstrap/scss/button-group';
 @import '~bootstrap/scss/input-group';
 @import '~bootstrap/scss/custom-forms';
-@import '~bootstrap/scss/nav';
-@import '~bootstrap/scss/card';
 @import '~bootstrap/scss/breadcrumb';
 @import '~bootstrap/scss/pagination';
 @import '~bootstrap/scss/badge';
 @import '~bootstrap/scss/alert';
 @import '~bootstrap/scss/close';
-@import '~bootstrap/scss/media';
-@import '~bootstrap/scss/list-group';
 @import '~bootstrap/scss/tooltip';
 @import '~bootstrap/scss/utilities/background';
 @import '~bootstrap/scss/utilities/clearfix';
@@ -195,19 +191,7 @@ table, .table {
     }
 }
 
-// Navs ========================================================================
-
-.nav, .breadcrumb, .pagination {
-    font-size: 0.875em;
-    font-family: $font-roboto-mono;
-}
-
-.dropdown-menu {
-    font-size: 0.875em;
-}
-
-// Indicators ==================================================================
-
+// Alerts
 .alert {
     border: none;
     color: $white;
@@ -242,6 +226,7 @@ table, .table {
     }
 }
 
+// Badges
 .badge {
     vertical-align: bottom;
 
@@ -249,14 +234,4 @@ table, .table {
     &-warning {
         color: $white;
     }
-}
-
-.tooltip {
-    font-size: 11px;
-}
-
-// Containers ==================================================================
-
-.list-group {
-    font-size: 0.875em;
 }
