@@ -3,36 +3,45 @@
 {% block title 'security.login.title'|trans %}
 
 {% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="login_error">
-                {{ error.messageKey|trans(error.messageData)|raw }}
-            </div>
-        {% endif %}
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-5 col-xl-4">
+            <form method="post">
+                {% if error %}
+                    <div class="login_error">
+                        {{ error.messageKey|trans(error.messageData)|raw }}
+                    </div>
+                {% endif %}
 
-        <label for="emailAddress">{{ 'security.login.email'|trans }}</label>
-        <input type="email"
-               value="{{ last_username }}"
-               name="emailAddress"
-               id="emailAddress"
-               placeholder="{{ 'security.login.email'|trans }}"
-               required autofocus>
+                <div class="form-group">
+                    <label for="emailAddress">{{ 'security.login.email'|trans }}</label>
+                    <input type="email"
+                           value="{{ last_username }}"
+                           name="emailAddress"
+                           id="emailAddress"
+                           class="form-control"
+                           placeholder="{{ 'security.login.email'|trans }}"
+                           required autofocus />
+                </div>
 
-        <label for="inputPassword">{{ 'security.login.password'|trans }}</label>
-        <input type="password"
-               name="password"
-               id="inputPassword"
-               placeholder="{{ 'security.login.password'|trans }}"
-               required>
+                <div class="form-group">
+                    <label for="inputPassword">{{ 'security.login.password'|trans }}</label>
+                    <input type="password"
+                           name="password"
+                           id="inputPassword"
+                           class="form-control"
+                           placeholder="{{ 'security.login.password'|trans }}"
+                           required>
+                </div>
 
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        <button type="submit">
-            {{- 'security.login.submit'|trans -}}
-        </button>
-    </form>
-
-    <a href="{{ path('app_actor_reset_password_request') }}">
-        {{- 'actor.reset_password.request.link.default'|trans -}}
-    </a>
+                <button type="submit" class="btn btn-primary">
+                    {{- 'security.login.submit'|trans -}}
+                </button>
+                <a href="{{ path('app_actor_reset_password_request') }}" class="btn btn-link">
+                    {{- 'actor.reset_password.request.link.default'|trans -}}
+                </a>
+            </form>
+        </div>
+    </div>
 {% endblock %}
