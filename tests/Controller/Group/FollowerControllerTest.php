@@ -37,6 +37,7 @@ class FollowerControllerTest extends HttpTestCase
 
         $this->client->request('GET', "/group/$groupSlug/follow");
         $this->assertAccessDeniedResponse();
+        $this->assertNoMailSent();
 
         $this->assertIfActorIsMemberOfGroup($actorEmail, $groupSlug, $isMember);
     }
@@ -67,6 +68,7 @@ class FollowerControllerTest extends HttpTestCase
 
         $this->client->request('GET', "/group/$groupSlug/follow");
         $this->assertNotFoundResponse();
+        $this->assertNoMailSent();
 
         $this->assertGroupMembersCount($groupSlug, $actualMembersCount);
     }
@@ -88,28 +90,65 @@ class FollowerControllerTest extends HttpTestCase
 
         $this->client->request('GET', "/group/$groupSlug/follow");
         $this->assertIsRedirectedTo('/login');
+        $this->assertNoMailSent();
 
         $this->assertGroupMembersCount($groupSlug, $actualMembersCount);
     }
 
     public function provideActorCanFollowGroups(): iterable
     {
-        yield ['remi@mobilisation-eu.localhost', 'ecology-in-nice'];
-        yield ['remi@mobilisation-eu.localhost', 'culture-in-cannes'];
-        yield ['remi@mobilisation-eu.localhost', 'ecology-in-nantes'];
+        yield [
+            'remi@mobilisation-eu.localhost',
+            'Rémi Gardien',
+            'ecology-in-nice',
+            'Ecology in Nice',
+            'jacques@mobilisation-eu.localhost',
+            'Jacques',
+        ];
+
+        yield [
+            'remi@mobilisation-eu.localhost',
+            'Rémi Gardien',
+            'culture-in-cannes',
+            'Culture in Cannes',
+            'nicolas@mobilisation-eu.localhost',
+            'Nicolas',
+        ];
+
+        yield [
+            'remi@mobilisation-eu.localhost',
+            'Rémi Gardien',
+            'ecology-in-nantes',
+            'Ecology in Nantes',
+            'manon@mobilisation-eu.localhost',
+            'Manon',
+        ];
     }
 
     /**
      * @dataProvider provideActorCanFollowGroups
      */
-    public function testActorCanFollowGroup(string $actorEmail, string $groupSlug): void
-    {
+    public function testActorCanFollowGroup(
+        string $actorEmail,
+        string $actorFullName,
+        string $groupSlug,
+        string $groupName,
+        string $animatorEmail,
+        string $animatorName
+    ): void {
         $this->assertIfActorIsMemberOfGroup($actorEmail, $groupSlug, false);
 
         $this->authenticateActor($actorEmail);
 
         $this->client->request('GET', "/group/$groupSlug/follow");
         $this->assertIsRedirectedTo("/group/$groupSlug");
+        $this->assertMailSent([
+            'to' => $animatorEmail,
+            'subject' => "Your group \"$groupName\" has a new follower!",
+            'body' => "@string@
+                        .contains('Hello $animatorName!')
+                        .contains('$actorFullName just started to follow your group \"$groupName\".')",
+        ]);
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
@@ -143,6 +182,7 @@ class FollowerControllerTest extends HttpTestCase
 
         $this->client->request('GET', "/group/$groupSlug/unfollow");
         $this->assertAccessDeniedResponse();
+        $this->assertNoMailSent();
 
         $this->assertIfActorIsMemberOfGroup($actorEmail, $groupSlug, $isMember);
     }
@@ -161,6 +201,7 @@ class FollowerControllerTest extends HttpTestCase
 
         $this->client->request('GET', "/group/$groupSlug/unfollow");
         $this->assertNotFoundResponse();
+        $this->assertNoMailSent();
 
         $this->assertGroupMembersCount($groupSlug, $actualMembersCount);
     }
@@ -174,6 +215,7 @@ class FollowerControllerTest extends HttpTestCase
 
         $this->client->request('GET', "/group/$groupSlug/unfollow");
         $this->assertIsRedirectedTo('/login');
+        $this->assertNoMailSent();
 
         $this->assertGroupMembersCount($groupSlug, $actualMembersCount);
     }

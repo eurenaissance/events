@@ -14,22 +14,54 @@ class AnimatorControllerTest extends HttpTestCase
 {
     public function provideAnimatorCanPromoteFollowers(): iterable
     {
-        yield ['marine@mobilisation-eu.localhost', 'ecology-in-paris', '472508fa-4e4d-4330-8fda-5fefc92b1a8a'];
-        yield ['titouan@mobilisation-eu.localhost', 'ecology-in-clichy', '472508fa-4e4d-4330-8fda-5fefc92b1a8a'];
-        yield ['nicolas@mobilisation-eu.localhost', 'culture-in-asnieres', '472508fa-4e4d-4330-8fda-5fefc92b1a8a'];
+        yield [
+            'marine@mobilisation-eu.localhost',
+            'ecology-in-paris',
+            'Ecology in Paris',
+            '472508fa-4e4d-4330-8fda-5fefc92b1a8a',
+            'Rémi',
+        ];
+
+        yield [
+            'titouan@mobilisation-eu.localhost',
+            'ecology-in-clichy',
+            'Ecology in Clichy',
+            '472508fa-4e4d-4330-8fda-5fefc92b1a8a',
+            'Rémi',
+        ];
+
+        yield [
+            'nicolas@mobilisation-eu.localhost',
+            'culture-in-asnieres',
+            'Culture in Asnieres',
+            '472508fa-4e4d-4330-8fda-5fefc92b1a8a',
+            'Rémi',
+        ];
     }
 
     /**
      * @dataProvider provideAnimatorCanPromoteFollowers
      */
-    public function testAnimatorCanPromoteFollower(string $animatorEmail, string $groupSlug, string $followerUuid): void
-    {
+    public function testAnimatorCanPromoteFollower(
+        string $animatorEmail,
+        string $groupSlug,
+        string $groupName,
+        string $followerUuid,
+        string $followerName
+    ): void {
         $this->assertActorIsFollowerOfGroup($followerUuid, $groupSlug);
 
         $this->authenticateActor($animatorEmail);
 
         $this->client->request('GET', "/group/$groupSlug/promote/$followerUuid");
         $this->assertIsRedirectedTo("/group/$groupSlug");
+        $this->assertMailSent([
+            'to' => 'remi@mobilisation-eu.localhost',
+            'subject' => "You have been promoted to co-animator in the group \"$groupName\"!",
+            'body' => "@string@
+                        .contains('Hello $followerName!')
+                        .contains('You have been promoted to co-animator')",
+        ]);
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
@@ -58,6 +90,7 @@ class AnimatorControllerTest extends HttpTestCase
 
         $this->client->request('GET', "/group/$groupSlug/promote/$followerUuid");
         $this->assertNotFoundResponse();
+        $this->assertNoMailSent();
 
         $this->assertActorIsFollowerOfGroup($followerUuid, $groupSlug);
     }
@@ -78,6 +111,7 @@ class AnimatorControllerTest extends HttpTestCase
 
         $this->client->request('GET', "/group/$groupSlug/promote/$followerUuid");
         $this->assertIsRedirectedTo('/login');
+        $this->assertNoMailSent();
 
         $this->assertActorIsFollowerOfGroup($followerUuid, $groupSlug);
     }
@@ -103,6 +137,7 @@ class AnimatorControllerTest extends HttpTestCase
 
         $this->client->request('GET', "/group/$groupSlug/promote/$followerUuid");
         $this->assertAccessDeniedResponse();
+        $this->assertNoMailSent();
 
         $this->assertActorIsFollowerOfGroup($followerUuid, $groupSlug);
     }
@@ -128,6 +163,7 @@ class AnimatorControllerTest extends HttpTestCase
 
         $this->client->request('GET', "/group/$groupSlug/demote/$coAnimatorUuid");
         $this->assertIsRedirectedTo("/group/$groupSlug");
+        $this->assertNoMailSent();
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
@@ -156,6 +192,7 @@ class AnimatorControllerTest extends HttpTestCase
 
         $this->client->request('GET', "/group/$groupSlug/demote/$followerUuid");
         $this->assertNotFoundResponse();
+        $this->assertNoMailSent();
 
         $this->assertActorIsCoAnimatorOfGroup($followerUuid, $groupSlug);
     }
@@ -176,6 +213,7 @@ class AnimatorControllerTest extends HttpTestCase
 
         $this->client->request('GET', "/group/$groupSlug/demote/$coAnimatorUuid");
         $this->assertIsRedirectedTo('/login');
+        $this->assertNoMailSent();
 
         $this->assertActorIsCoAnimatorOfGroup($coAnimatorUuid, $groupSlug);
     }
@@ -201,6 +239,7 @@ class AnimatorControllerTest extends HttpTestCase
 
         $this->client->request('GET', "/group/$groupSlug/demote/$coAnimatorUuid");
         $this->assertAccessDeniedResponse();
+        $this->assertNoMailSent();
 
         $this->assertActorIsCoAnimatorOfGroup($coAnimatorUuid, $groupSlug);
     }
