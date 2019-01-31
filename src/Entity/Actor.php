@@ -116,7 +116,7 @@ class Actor implements ActorInterface, GeocodableInterface
     /**
      * @var CoAnimatorMembership[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="actor")
+     * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="actor", cascade={"detach"})
      * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $coAnimatorMemberships;
@@ -124,7 +124,7 @@ class Actor implements ActorInterface, GeocodableInterface
     /**
      * @var FollowerMembership[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="actor")
+     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="actor", cascade={"detach"})
      * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $followerMemberships;
@@ -283,6 +283,17 @@ class Actor implements ActorInterface, GeocodableInterface
         return $this->animatedGroups->contains($group);
     }
 
+    public function hasPendingGroup(): bool
+    {
+        foreach ($this->animatedGroups as $group) {
+            if ($group->isPending()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getAnimatedGroups(): Collection
     {
         return $this->animatedGroups;
@@ -360,6 +371,11 @@ class Actor implements ActorInterface, GeocodableInterface
         return new ArrayCollection(array_map(function (FollowerMembership $membership) {
             return $membership->getGroup();
         }, $this->followerMemberships->toArray()));
+    }
+
+    public function isMemberOfGroup(Group $group): bool
+    {
+        return $this->isAnimatorOf($group) || $this->isCoAnimatorOf($group) || $this->isFollowerOf($group);
     }
 
     public function changePassword(string $encodedPassword): void

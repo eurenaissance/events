@@ -67,14 +67,14 @@ class Group implements EntitySlugInterface, GeocodableInterface, EntityReviewInt
     /**
      * @var CoAnimatorMembership[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="group")
+     * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="group", cascade={"all"})
      */
     private $coAnimatorMemberships;
 
     /**
      * @var FollowerMembership[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="group", fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="group", fetch="EXTRA_LAZY", cascade={"all"})
      */
     private $followerMemberships;
 
@@ -140,5 +140,29 @@ class Group implements EntitySlugInterface, GeocodableInterface, EntityReviewInt
     {
         // animator + memberships
         return 1 + $this->coAnimatorMemberships->count() + $this->followerMemberships->count();
+    }
+
+    public function getCoAnimators(): ArrayCollection
+    {
+        return new ArrayCollection(
+            array_map(
+                function (CoAnimatorMembership $membership) {
+                    return $membership->getActor();
+                },
+                $this->coAnimatorMemberships->toArray()
+            )
+        );
+    }
+
+    public function getFollowers(): ArrayCollection
+    {
+        return new ArrayCollection(
+            array_map(
+                function (FollowerMembership $membership) {
+                    return $membership->getActor();
+                },
+                $this->followerMemberships->toArray()
+            )
+        );
     }
 }

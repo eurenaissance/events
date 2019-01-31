@@ -4,20 +4,12 @@ namespace App\Security\Voter\Group;
 
 use App\Entity\Actor;
 use App\Entity\Group;
-use App\Repository\GroupRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class UnfollowVoter extends Voter
 {
     private const ROLE = 'GROUP_UNFOLLOW';
-
-    private $groupRepository;
-
-    public function __construct(GroupRepository $groupRepository)
-    {
-        $this->groupRepository = $groupRepository;
-    }
 
     protected function supports($attribute, $subject)
     {
@@ -32,10 +24,6 @@ class UnfollowVoter extends Voter
             return false;
         }
 
-        if ($user->isAnimatorOf($subject)) {
-            return false;
-        }
-
-        return $user->isFollowerOf($subject);
+        return $subject->isApproved() && $user->isFollowerOf($subject);
     }
 }

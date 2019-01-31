@@ -3,6 +3,7 @@
 namespace Test\App\Controller;
 
 use App\DataFixtures\CityFixtures;
+use App\Entity\Group;
 use App\Tests\HttpTestCase;
 
 /**
@@ -61,8 +62,10 @@ class CreationControllerTest extends HttpTestCase
         $this->assertResponseContains("<h1>$groupName</h1>");
         $this->assertResponseContains('Your group is waiting for admin approval.');
 
-        $group = $this->getGroupRepository()->findOneBySlug($groupSlug);
-        $this->assertNotNull($group);
+        $groups = $this->getGroupRepository()->findWithoutFilters(['slug' => $groupSlug]);
+        $this->assertCount(1, $groups);
+        /** @var Group $group */
+        $group = $groups[0];
         $this->assertSame($email, $group->getAnimator()->getEmailAddress());
         $this->assertTrue($group->isPending());
     }

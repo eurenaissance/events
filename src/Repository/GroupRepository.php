@@ -19,8 +19,8 @@ class GroupRepository extends ServiceEntityRepository
     public function findOneBySlug(string $slug): ?Group
     {
         return $this
-            ->createQueryBuilder('g')
-            ->where('g.slug = :slug')
+            ->createConfirmedQueryBuilder('g')
+            ->andWhere('g.slug = :slug')
             ->setParameter('slug', $slug)
             ->getQuery()
             ->getOneOrNullResult()
@@ -64,13 +64,15 @@ class GroupRepository extends ServiceEntityRepository
     public function findWithoutFilters(array $criteria): array
     {
         $filters = $this->getEntityManager()->getFilters();
-        if ($filters->isEnabled('refused')) {
+        if ($enabled = $filters->isEnabled('refused')) {
             $filters->disable('refused');
         }
 
         $groups = $this->findBy($criteria);
 
-        $filters->enable('refused');
+        if ($enabled) {
+            $filters->enable('refused');
+        }
 
         return $groups;
     }
@@ -79,8 +81,8 @@ class GroupRepository extends ServiceEntityRepository
     {
         return $this
             ->createQueryBuilder($alias)
-            ->where('g.refusedAt IS NULL')
-            ->andWhere('g.approvedAt IS NOT NULL')
+            ->where("$alias.refusedAt IS NULL")
+            ->andWhere("$alias.approvedAt IS NOT NULL")
         ;
     }
 }

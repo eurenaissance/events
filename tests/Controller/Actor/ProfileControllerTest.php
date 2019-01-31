@@ -115,7 +115,6 @@ class ProfileControllerTest extends HttpTestCase
 
     /**
      * @dataProvider provideProfileEditions
-     * @group debug
      */
     public function testEditSuccess(string $email, array $actualProfile, array $editedProfile): void
     {

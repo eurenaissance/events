@@ -16,9 +16,6 @@ class EditVoter extends Voter
         return self::ROLE === $attribute && $subject instanceof Group;
     }
 
-    /**
-     * @param Group $subject
-     */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         $user = $token->getUser();

@@ -16,9 +16,6 @@ class ViewVoter extends Voter
         return self::ROLE === $attribute && $subject instanceof Group;
     }
 
-    /**
-     * @param Group $subject
-     */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         $user = $token->getUser();
@@ -27,6 +24,6 @@ class ViewVoter extends Voter
             return false;
         }
 
-        return $subject->isApproved() || ($subject->isPending() && $subject->getAnimator()->isEqualTo($user));
+        return $subject->isApproved() || ($subject->isPending() && $user->isAnimatorOf($subject));
     }
 }

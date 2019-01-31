@@ -9,7 +9,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\Form\Type\DateRangePickerType;
@@ -80,7 +79,6 @@ class ActorAdmin extends AbstractAdmin
         $yearsBirthday = ActorType::getBirthdayYears();
         $rangeRegisteredAt = range(2018, (int) date('Y'));
         $yearsRegisteredAt = array_combine($rangeRegisteredAt, $rangeRegisteredAt);
-
 
         $datagridMapper
             ->add('animators', CallbackFilter::class, [

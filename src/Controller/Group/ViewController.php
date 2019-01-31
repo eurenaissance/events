@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ViewController extends AbstractController
 {
     /**
-     * @Route("/group/{slug}", name="app_group_view", methods="GET")
+     * @Route("/{slug}", name="app_group_view", methods="GET")
      */
     public function view(Group $group): Response
     {

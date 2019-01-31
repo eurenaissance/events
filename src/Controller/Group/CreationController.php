@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CreationController extends AbstractController
 {
     /**
-     * @Route("/group/create", name="app_group_creation_create", methods={"GET", "POST"})
+     * @Route("/create", name="app_group_creation_create", methods={"GET", "POST"})
      */
     public function create(Request $request, CreationHandler $creationHandler): Response
     {

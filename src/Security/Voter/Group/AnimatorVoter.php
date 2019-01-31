@@ -7,9 +7,9 @@ use App\Entity\Group;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-class FollowVoter extends Voter
+class AnimatorVoter extends Voter
 {
-    private const ROLE = 'GROUP_FOLLOW';
+    private const ROLE = 'GROUP_ANIMATOR';
 
     protected function supports($attribute, $subject)
     {
@@ -24,6 +24,6 @@ class FollowVoter extends Voter
             return false;
         }
 
-        return $subject->isApproved() && !$user->isMemberOfGroup($subject);
+        return $user->isAnimatorOf($subject);
     }
 }

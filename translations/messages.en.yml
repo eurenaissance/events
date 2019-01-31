@@ -89,7 +89,7 @@ actor:
         max_length: Email address should ne exceed {{ limit }} characters.
         unique: An actor is already registered with this email.
     first_name:
-        label: First name hue
+        label: First name
         not_blank: Please enter your first name.
         max_length: First name should not exceed {{ limit }} characters.
     last_name:
