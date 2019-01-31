@@ -1,7 +1,7 @@
 @import './variables';
 
 .header {
-    padding: 30px 0 55px 0;
+    padding: 30px 0 50px 0;
 
     &__row {
         display: flex;
@@ -30,6 +30,99 @@
             font-size: 16px;
             padding: 5px;
             margin: 0 5px;
+        }
+    }
+}
+
+.footer {
+    font-family: $font-roboto-mono;
+    font-size: 14px;
+    color: #666;
+    margin: 140px 0 70px 0;
+
+    &__row {
+        display: flex;
+        align-items: center;
+    }
+
+    &__copyright {
+        flex-grow: 1;
+    }
+
+    &__links a {
+        display: inline-block;
+        padding: 5px;
+        margin: 0 5px;
+    }
+}
+
+.home {
+    &__intro {
+        background: url('/res/home/default.jpg') 50% 50% no-repeat;
+        background-size: cover;
+        color: #fff;
+        padding: 50px;
+        text-align: center;
+
+        &__title {
+            font-size: 44px;
+            font-weight: bold;
+        }
+
+        &__subtitle {
+            font-family: $font-roboto-mono;
+            font-size: 22px;
+            font-weight: normal;
+            margin-bottom: 30px;
+        }
+    }
+
+    &__events {
+        margin-top: 40px;
+    }
+}
+
+.card {
+    background: $white;
+    border-radius: 14px;
+    box-shadow: 0 2px 11px 1px rgba(194, 194, 194, 0.5);
+    padding: 30px;
+    font-family: $font-roboto-mono;
+    font-size: 13px;
+    color: #666;
+
+    &__title {
+        font-family: $font-roboto-slab;
+        font-size: 22px;
+        margin: 0 0 10px 0;
+
+        &, & a {
+            color: $black;
+        }
+    }
+
+    &__subtitle {
+        margin: 0 0 8px 0;
+    }
+
+    &__user {
+        margin: 40px 0 0 0;
+        display: flex;
+        align-items: center;
+
+        &__image img {
+            width: 48px;
+            height: 48px;
+            border-radius: 24px;
+        }
+
+        &__profile {
+            padding-left: 15px;
+
+            a {
+                color: $black;
+                font-weight: 500;
+            }
         }
     }
 }
