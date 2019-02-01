@@ -2,15 +2,41 @@
 
 {% block title 'group.view.view.title'|trans({ '%group%': group.name }) %}
 
-{% block extra_flash_messages %}
-    <div class="flash notice-flashes">
-        <div class="flash__inner">{{ 'group.view.view.flash.pending'|trans }}</div>
-    </div>
-{% endblock %}
-
 {% block body %}
     <h1>{{ group.name }}</h1>
 
+    <hr class="mt-5">
+
+    <div class="row">
+        <div class="col-md-8">
+            {% if group.isPending %}
+                <div class="alert alert-primary">
+                    <p class="mb-0">
+                        {{ 'group.view.view.flash.pending'|trans }}
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-4 border-left">
+            <p>
+                {{ group.city.name }}, {{ group.city.country|country }}
+                <br>
+                A {{ distance_between(group, app.user) }}km de vous
+            </p>
+            <h5>Animé par:</h5>
+            <p>
+                {{ group.animator.fullName }}
+                {% for coAnimator in group.coAnimators %}
+                    <br>
+                    {{ coAnimator.fullName }}
+                {% endfor %}
+            </p>
+            <hr class="mt-4">
+            <p>
+                {{ group.description|raw }}
+            </p>
+        </div>
+    </div>
     {% if is_granted('GROUP_UNFOLLOW', group) %}
         You are follower of this group! \o/
 
