@@ -58,6 +58,12 @@
     }
 }
 
+@each $color, $value in $theme-colors {
+    .btn-lg.btn-outline-#{$color} {
+        border-width: 2px;
+    }
+}
+
 // Typography
 blockquote {
     font-style: italic;
