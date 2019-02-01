@@ -93,12 +93,21 @@ class Group implements EntitySlugInterface, GeocodableInterface, EntityReviewInt
      */
     private $followerMemberships;
 
+    /**
+     * @var Event[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="group")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
+     */
+    private $events;
+
     public function __construct(UuidInterface $uuid = null)
     {
         $this->uuid = $uuid ?? self::createUuid();
         $this->createdAt = new \DateTimeImmutable();
         $this->coAnimatorMemberships = new ArrayCollection();
         $this->followerMemberships = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -189,5 +198,10 @@ class Group implements EntitySlugInterface, GeocodableInterface, EntityReviewInt
                 $this->followerMemberships->toArray()
             )
         );
+    }
+
+    public function getEvents(): Collection
+    {
+        return $this->events;
     }
 }

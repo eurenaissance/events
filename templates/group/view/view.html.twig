@@ -35,21 +35,32 @@
             <p>
                 {{ group.description|raw }}
             </p>
+
+            {% if is_granted('EVENT_CREATE', group) %}
+            <p>
+                <a href="{{ path('app_event_creation_create', { slug: group.slug }) }}" class="btn btn-link">
+                    Create an event
+                </a>
+            </p>
+            {% endif %}
+
+            {% if is_granted('GROUP_UNFOLLOW', group) %}
+                <p>
+                    You are follower of this group! \o/
+
+                    <a href="{{ path('app_group_unfollow', { slug: group.slug }) }}">
+                        stop following this group
+                    </a>
+                </p>
+            {% endif %}
+
+            {% if is_granted('GROUP_FOLLOW', group) %}
+                Interested in following this group ?
+
+                <a href="{{ path('app_group_follow', { slug: group.slug }) }}">
+                    follow this group
+                </a>
+            {% endif %}
         </div>
     </div>
-    {% if is_granted('GROUP_UNFOLLOW', group) %}
-        You are follower of this group! \o/
-
-        <a href="{{ path('app_group_unfollow', { slug: group.slug }) }}">
-            stop following this group
-        </a>
-    {% endif %}
-
-    {% if is_granted('GROUP_FOLLOW', group) %}
-        Interested in following this group ?
-
-        <a href="{{ path('app_group_follow', { slug: group.slug }) }}">
-            follow this group
-        </a>
-    {% endif %}
 {% endblock %}

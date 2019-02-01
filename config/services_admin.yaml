@@ -27,6 +27,12 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: 'Mobilisation', label: 'Groups' }
 
+    admin.event:
+        class: App\Admin\EventAdmin
+        arguments: [~, App\Entity\Event, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: 'Mobilisation', label: 'Events' }
+
     admin.extension.read_only:
         class: App\Admin\Extension\ReadOnlyExtension
         tags:

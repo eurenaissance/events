@@ -1,0 +1,10 @@
+{% set creator = event.creator %}
+{% set group = event.group %}
+
+{% extends 'mail/base.html.twig' %}
+
+{% block body %}
+    {{ 'common.hello'|trans({ '%actor%': creator.firstName }) }}
+    <br>
+    {{ 'mail.event.created.body'|trans({ '%group%': group.name })|raw }}
+{% endblock %}

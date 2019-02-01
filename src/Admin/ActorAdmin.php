@@ -48,6 +48,9 @@ class ActorAdmin extends AbstractAdmin
                     'catalogue' => 'messages',
                     'choices' => $this->getGenders(),
                 ])
+                ->add('birthday', null, [
+                    'label' => 'Birth date',
+                ])
                 ->add('address', null, [
                     'template' => 'admin/address/_show.html.twig',
                 ])
