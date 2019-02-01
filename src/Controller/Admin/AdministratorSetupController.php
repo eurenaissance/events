@@ -18,7 +18,7 @@ class AdministratorSetupController extends AbstractController
     public function setup(Request $request, AdministratorRepository $administratorRepository): Response
     {
         if ($administratorRepository->hasAdministrator()) {
-            return $this->redirectToRoute('app_admin_login');
+            throw $this->createAccessDeniedException('Setup is now disabled.');
         }
 
         $form = $this->createForm(AdministratorSetupType::class, $administrator = new Administrator());

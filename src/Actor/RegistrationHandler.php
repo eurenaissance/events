@@ -3,9 +3,9 @@
 namespace App\Actor;
 
 use App\Entity\Actor;
-use App\Entity\ActorConfirmToken;
+use App\Entity\Actor\ConfirmToken;
 use App\Mailer\Mailer;
-use App\Repository\ActorConfirmTokenRepository;
+use App\Repository\Actor\ConfirmTokenRepository;
 use App\Repository\ActorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -20,7 +20,7 @@ class RegistrationHandler
         EntityManagerInterface $entityManager,
         Mailer $mailer,
         ActorRepository $actorRepository,
-        ActorConfirmTokenRepository $confirmTokenRepository
+        ConfirmTokenRepository $confirmTokenRepository
     ) {
         $this->entityManager = $entityManager;
         $this->mailer = $mailer;
@@ -30,7 +30,7 @@ class RegistrationHandler
 
     public function register(Actor $actor): void
     {
-        $token = ActorConfirmToken::generate($actor);
+        $token = ConfirmToken::generate($actor);
 
         $this->entityManager->persist($actor);
         $this->entityManager->persist($token);
@@ -51,7 +51,7 @@ class RegistrationHandler
 
     public function resendConfirmation(Actor $actor): void
     {
-        $token = ActorConfirmToken::generate($actor);
+        $token = ConfirmToken::generate($actor);
 
         $this->entityManager->persist($token);
         $this->entityManager->flush();
@@ -59,7 +59,7 @@ class RegistrationHandler
         $this->mailer->sendActorRegistrationConfirmationMail($actor, $token->getUuidAsString());
     }
 
-    public function confirm(ActorConfirmToken $token): void
+    public function confirm(ConfirmToken $token): void
     {
         $actor = $token->getActor();
 

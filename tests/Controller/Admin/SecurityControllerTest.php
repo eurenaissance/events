@@ -14,13 +14,13 @@ class SecurityControllerTest extends HttpTestCase
     {
         // unknown email and known password
         yield [
-            'email' => 'unknown@mobilisation.eu',
+            'email' => 'unknown@mobilisation-eu.localhost',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
         ];
 
         // valid email account and bad password
         yield [
-            'email' => 'superadmin@mobilisation-eu.code',
+            'email' => 'superadmin@mobilisation-eu.localhost',
             'password' => 'bad_password',
         ];
     }
@@ -33,10 +33,10 @@ class SecurityControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/admin/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form([
+        $this->client->submit($crawler->selectButton('Sign in')->form(), [
             'emailAddress' => $email,
             'password' => $password,
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/admin/login');
 
         $crawler = $this->client->followRedirect();
@@ -49,10 +49,10 @@ class SecurityControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/admin/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form([
-            'emailAddress' => 'superadmin@mobilisation-eu.code',
+        $this->client->submit($crawler->selectButton('Sign in')->form(), [
+            'emailAddress' => 'superadmin@mobilisation-eu.localhost',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/admin/dashboard');
 
         $crawler = $this->client->followRedirect();
@@ -65,10 +65,10 @@ class SecurityControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/admin/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form([
-            'emailAddress' => 'admin@mobilisation-eu.code',
+        $this->client->submit($crawler->selectButton('Sign in')->form(), [
+            'emailAddress' => 'admin@mobilisation-eu.localhost',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/admin/dashboard');
 
         $this->client->followRedirect();

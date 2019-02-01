@@ -3,6 +3,7 @@
 namespace Test\App\Controller;
 
 use App\DataFixtures\CityFixtures;
+use App\Entity\Group;
 use App\Tests\HttpTestCase;
 
 /**
@@ -17,6 +18,7 @@ class CreationControllerTest extends HttpTestCase
 
         $this->client->request('POST', '/group/create', [
             'name' => 'My new group',
+            'description' => 'Description of my new group',
             'city' => CityFixtures::CITY_02_UUID,
         ]);
         $this->assertIsRedirectedTo('/login');
@@ -24,29 +26,66 @@ class CreationControllerTest extends HttpTestCase
 
     public function provideActorsForCreateSuccess(): iterable
     {
-        yield ['remi@mobilisation.eu', 'Rémi']; // animator of a refused group
-        yield ['titouan@mobilisation.eu', 'Titouan']; // animator of a confirmed group
-        yield ['jane@mobilisation.eu', 'Jane']; // no relation with any group
+        // animator of a refused group
+        yield [
+            'remi@mobilisation-eu.localhost',
+            'Rémi',
+            'My new group',
+            'my-new-group',
+            'Description of my very new group.',
+        ];
+
+        // animator of a confirmed group
+        yield [
+            'titouan@mobilisation-eu.localhost',
+            'Titouan',
+            'A cool group',
+            'a-cool-group',
+            'Description of a very cool group.',
+        ];
+
+        // no relation with any group
+        yield [
+            'didier@mobilisation-eu.localhost',
+            'Didier',
+            'Best new group',
+            'best-new-group',
+            'Description of the group.',
+        ];
+
+        yield [
+            'francis@mobilisation-eu.localhost',
+            'Francis',
+            'My new group',
+            'my-new-group',
+            'Description of the new group.',
+        ];
     }
 
     /**
      * @dataProvider provideActorsForCreateSuccess
      */
-    public function testCreateSuccess(string $email, string $firstName): void
-    {
+    public function testCreateSuccess(
+        string $email,
+        string $firstName,
+        string $groupName,
+        string $groupSlug,
+        string $groupDescription
+    ): void {
         $this->authenticateActor($email);
 
         $crawler = $this->client->request('GET', '/group/create');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Create')->form([
-            'name' => 'My new group',
+        $this->client->submit($crawler->selectButton('Create')->form(), [
+            'name' => $groupName,
+            'description' => $groupDescription,
             'city' => CityFixtures::CITY_02_UUID,
-        ]));
-        $this->assertIsRedirectedTo('/group/my-new-group');
+        ]);
+        $this->assertIsRedirectedTo("/group/$groupSlug");
         $this->assertMailSent([
             'to' => $email,
-            'subject' => 'Your group "My new group" has been created.',
+            'subject' => "Your group \"$groupName\" has been created.",
             'body' => "@string@
                         .contains('Hello $firstName!')
                         .contains('Please wait for an admin approval.')",
@@ -54,24 +93,27 @@ class CreationControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('Group: My new group');
+        $this->assertResponseContains("<h1>$groupName</h1>");
         $this->assertResponseContains('Your group is waiting for admin approval.');
 
-        $group = $this->getGroupRepository()->findOneBySlug('my-new-group');
-        $this->assertNotNull($group);
+        $groups = $this->getGroupRepository()->findWithoutFilters(['slug' => $groupSlug]);
+        $this->assertCount(1, $groups);
+        /** @var Group $group */
+        $group = $groups[0];
         $this->assertSame($email, $group->getAnimator()->getEmailAddress());
         $this->assertTrue($group->isPending());
     }
 
     public function testActorWithPendingGroupCannotCreateGroup(): void
     {
-        $this->authenticateActor('john@mobilisation.eu');
+        $this->authenticateActor('marine@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/group/create');
         $this->assertAccessDeniedResponse();
 
         $this->client->request('POST', '/group/create', [
             'name' => 'My new group',
+            'description' => 'A very cool description.',
             'city' => CityFixtures::CITY_02_UUID,
         ]);
         $this->assertAccessDeniedResponse();
@@ -81,44 +123,89 @@ class CreationControllerTest extends HttpTestCase
     {
         yield [
             'name' => null,
+            'description' => null,
             'city' => null,
             'errors' => [
                 'Please enter a group name.',
+                'Please provide a short description.',
                 'This city is not valid.',
             ],
         ];
 
+        // a confirmed group with this name already exists
         yield [
-            'name' => 'This is a confirmed group',
+            'name' => 'Ecology in Paris',
+            'description' => 'Too short',
             'city' => CityFixtures::CITY_02_UUID,
-            'errors' => ['A group named &quot;&quot;This is a confirmed group&quot;&quot; already exists.'],
+            'errors' => [
+                'A group named &quot;&quot;Ecology in Paris&quot;&quot; already exists.',
+                'The description must be at least 10 characters long.',
+            ],
         ];
 
+        // a confirmed group with this slug already exists
         yield [
-            'name' => 'Thïs-îs-à-confirmèd-groûp',
+            'name' => 'Ecolôgy-în Pârïs ',
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi posuere orci sed turpis lacinia vestibulum. Donec pulvinar augue quis ex aliquet consequat. Nullam ligula arcu, ornare id pellentesque eget, condimentum id risus. Nullam auctor ut diam non ullamcorper. Proin commodo dui vel enim accumsan, elementum tincidunt lectus venenatis.',
             'city' => CityFixtures::CITY_02_UUID,
-            'errors' => ['A group with a URL &quot;&quot;this-is-a-confirmed-group&quot;&quot; already exists.'],
+            'errors' => [
+                'A group with a URL &quot;&quot;ecology-in-paris&quot;&quot; already exists.',
+                'The group name should not exceed 300 characters.',
+            ],
+        ];
+
+        // a pending group with this name already exists
+        yield [
+            'name' => 'Culture in Paris',
+            'description' => 'A very cool description.',
+            'city' => CityFixtures::CITY_02_UUID,
+            'errors' => ['A group named &quot;&quot;Culture in Paris&quot;&quot; already exists.'],
+        ];
+
+        // a pending group with this slug already exists
+        yield [
+            'name' => 'Cûltüré in-Pârïs-',
+            'description' => 'A very cool description.',
+            'city' => CityFixtures::CITY_02_UUID,
+            'errors' => ['A group with a URL &quot;&quot;culture-in-paris&quot;&quot; already exists.'],
+        ];
+
+        // a refused group with this name already exists
+        yield [
+            'name' => 'Development in Bois-Colombes',
+            'description' => 'A very cool description.',
+            'city' => CityFixtures::CITY_02_UUID,
+            'errors' => ['A group named &quot;&quot;Development in Bois-Colombes&quot;&quot; already exists.'],
+        ];
+
+        // a refused group with this slug already exists
+        yield [
+            'name' => 'Dévelôpmént-in bôïs côlômbès ',
+            'description' => 'A very cool description.',
+            'city' => CityFixtures::CITY_02_UUID,
+            'errors' => ['A group with a URL &quot;&quot;development-in-bois-colombes&quot;&quot; already exists.'],
         ];
     }
 
     /**
      * @dataProvider provideBadCreations
      */
-    public function testCreateFailure(?string $name, ?string $city, array $errors): void
+    public function testCreateFailure(?string $name, ?string $description, ?string $city, array $errors): void
     {
-        $this->authenticateActor('nicolas@mobilisation.eu');
+        $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $crawler = $this->client->request('GET', '/group/create');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Create')->form([
+        $this->client->submit($crawler->selectButton('Create')->form(), [
             'name' => $name,
+            'description' => $description,
             'city' => $city,
-        ]));
+        ]);
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
         $this->assertNull($this->getGroupRepository()->findOneBy([
-            'animator' => $this->getActorRepository()->findOneByEmail('nicolas@mobilisation.eu'),
+            'animator' => $this->getActorRepository()->findOneByEmail('remi@mobilisation-eu.localhost'),
             'name' => $name,
         ]));
     }

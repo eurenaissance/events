@@ -31,16 +31,6 @@ trait EntityReviewTrait
         $this->refusedAt = new \DateTimeImmutable();
     }
 
-    public function getApprovedAt(): \DateTimeInterface
-    {
-        return $this->approvedAt;
-    }
-
-    public function getRefusedAt(): \DateTimeInterface
-    {
-        return $this->refusedAt;
-    }
-
     public function isApproved(): bool
     {
         return null !== $this->approvedAt && null === $this->refusedAt;
@@ -67,5 +57,15 @@ trait EntityReviewTrait
         }
 
         return 'pending';
+    }
+
+    public function getApprovedAt(): ?\DateTimeInterface
+    {
+        return $this->approvedAt;
+    }
+
+    public function getRefusedAt(): ?\DateTimeInterface
+    {
+        return $this->refusedAt;
     }
 }

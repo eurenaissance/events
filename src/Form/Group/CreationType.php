@@ -9,6 +9,7 @@ use App\Util\Slugify;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -40,6 +41,9 @@ class CreationType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
+                'empty_data' => '',
+            ])
+            ->add('description', TextareaType::class, [
                 'empty_data' => '',
             ])
             ->add('address', TextType::class, [

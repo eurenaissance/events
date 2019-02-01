@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Entity\Util\EntityGeocodableInterface;
+use App\Geocoder\GeocodableInterface;
 use App\Entity\Util\EntityIdTrait;
 use App\Entity\Util\EntityUuidTrait;
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * })
  * @ORM\Entity(repositoryClass="App\Repository\CityRepository")
  */
-class City implements EntityGeocodableInterface
+class City implements GeocodableInterface
 {
     use EntityIdTrait;
     use EntityUuidTrait;

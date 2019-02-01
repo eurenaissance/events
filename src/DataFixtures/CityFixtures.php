@@ -16,26 +16,44 @@ class CityFixtures extends Fixture
     public const CITY_05_UUID = 'c79b2dd0-6380-467b-8b26-8cb0443a84cb';
     public const CITY_06_UUID = '61a309b5-6285-4439-8dc5-aa9b78574622';
     public const CITY_07_UUID = 'd1d0b957-eb03-4c56-97ca-f92269995a54';
-    public const CITY_08_UUID = '955e1e01-468a-4b84-9ab5-25ac6bf65c8e';
+    public const CITY_08_UUID = 'a92fc7e8-d3df-4bf1-ab6a-42b4f4a0cd43';
+    public const CITY_09_UUID = '98cccdf2-ced1-4e40-935d-e562a0d9d391';
+    public const CITY_10_UUID = '19f5a6f0-ea04-421a-bfea-4ead09e30506';
 
     public function load(ObjectManager $manager)
     {
-        // Simple case
-        $city1 = $this->create(self::CITY_01_UUID, 'FR', 'Paris', '75000', 48.8534, 2.3488);
-        $city2 = $this->create(self::CITY_02_UUID, 'FR', 'Bois-Colombes', '92270', 48.9194, 2.2748);
+        $city1 = $this->create('paris', self::CITY_01_UUID, 'FR', 'Paris', '75000', 48.8534, 2.3488);
+        $city2 = $this->create('clichy', self::CITY_02_UUID, 'FR', 'Clichy', '92110', 48.9002, 2.3095);
+        $city3 = $this->create('asnieres', self::CITY_03_UUID, 'FR', 'Asnières-sur-Seine', '92600', 48.9167, 2.2833);
+        $city4 = $this->create('bois-colombes', self::CITY_04_UUID, 'FR', 'Bois-Colombes', '92270', 48.9194, 2.2748);
+        $city5 = $this->create('nice', self::CITY_05_UUID, 'FR', 'Nice', '06000', 43.7031, 7.2661);
+        $city6 = $this->create('cannes', self::CITY_06_UUID, 'FR', 'Cannes', '06400', 43.5513, 7.0128);
+        $city7 = $this->create('lille', self::CITY_07_UUID, 'FR', 'Lille', '59000', 50.633, 3.0586);
+        $city8 = $this->create('nantes', self::CITY_08_UUID, 'FR', 'Nantes', '44000', 47.2173, -1.5534);
+        $city9 = $this->create('saint-herblain', self::CITY_09_UUID, 'FR', 'Saint-Herblain', '44800', 47.2176, -1.6484);
+        $city10 = $this->create('coueron', self::CITY_10_UUID, 'FR', 'Couëron', '44220', 47.2151, -1.7217);
 
-        // Multiple cities for a single ZIP code
-        $city3 = $this->create(self::CITY_03_UUID, 'FR', 'Villamée', '35420', 48.4602, -1.219);
-        $city4 = $this->create(self::CITY_04_UUID, 'FR', 'Saint-Georges-de-Reintembault', '35420', 48.5074, -1.2433);
-        $city5 = $this->create(self::CITY_05_UUID, 'FR', 'Louvigné-du-Désert', '35420', 48.4805, -1.1254);
-
-        // Ireland ZIP codes are only the beginning of the actual ZIP code
-        $city6 = $this->create(self::CITY_06_UUID, 'IE', 'Dublin 8', 'D08', 53.3346, -6.2733);
-
-        $city7 = $this->create(self::CITY_07_UUID, 'FR', 'Clichy', '92110', 48.9002, 2.3095);
-        $city8 = $this->create(self::CITY_08_UUID, 'FR', 'Nice', '06000', 43.7031, 7.2661);
+        $manager->persist($city1);
+        $manager->persist($city2);
+        $manager->persist($city3);
+        $manager->persist($city4);
+        $manager->persist($city5);
+        $manager->persist($city6);
+        $manager->persist($city7);
+        $manager->persist($city8);
+        $manager->persist($city9);
+        $manager->persist($city10);
 
         $cities = [
+            // Multiple cities for a single ZIP code
+            ['FR', 'Villamée', '35420', 48.4602, -1.219],
+            ['FR', 'Saint-Georges-de-Reintembault', '35420', 48.5074, -1.2433],
+            ['FR', 'Louvigné-du-Désert', '35420', 48.4805, -1.1254],
+
+            // Ireland ZIP codes are only the beginning of the actual ZIP code
+            ['IE', 'Dublin 8', 'D08', 53.3346, -6.2733],
+
+            // Countries from EU
             // AT #^\d{4}$#
             ['AT', 'Lieseregg', '9851', 46.8333, 13.5],
             ['AT', 'Kras', '9851', 46.9026, 13.5034],
@@ -111,28 +129,11 @@ class CityFixtures extends Fixture
             $manager->persist(new City(Uuid::uuid4(), ...$city));
         }
 
-        $this->setReference('city-1', $city1);
-        $this->setReference('city-2', $city2);
-        $this->setReference('city-3', $city3);
-        $this->setReference('city-4', $city4);
-        $this->setReference('city-5', $city5);
-        $this->setReference('city-6', $city6);
-        $this->setReference('city-7', $city7);
-        $this->setReference('city-8', $city8);
-
-        $manager->persist($city1);
-        $manager->persist($city2);
-        $manager->persist($city3);
-        $manager->persist($city4);
-        $manager->persist($city5);
-        $manager->persist($city6);
-        $manager->persist($city7);
-        $manager->persist($city8);
-
         $manager->flush();
     }
 
     private function create(
+        string $reference,
         string $uuid,
         string $country,
         string $name,
@@ -140,6 +141,10 @@ class CityFixtures extends Fixture
         float $latitude,
         float $longitude
     ): City {
-        return new City(Uuid::fromString($uuid), $country, $name, $zipCode, $latitude, $longitude);
+        $city = new City(Uuid::fromString($uuid), $country, $name, $zipCode, $latitude, $longitude);
+
+        $this->setReference("city-$reference", $city);
+
+        return $city;
     }
 }

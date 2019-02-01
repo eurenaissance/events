@@ -1,0 +1,6 @@
+{% if object.address %}
+    {{ object.address }}
+    <br>
+{% endif %}
+
+{% include 'admin/address/_city.html.twig' with { city: object.city } %}

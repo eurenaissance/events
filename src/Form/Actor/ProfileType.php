@@ -2,6 +2,7 @@
 
 namespace App\Form\Actor;
 
+use App\Entity\Actor;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,11 +16,10 @@ class ProfileType extends AbstractType
     {
         $builder
             ->add('gender', ChoiceType::class, [
-                'choices' => [
-                    'common.gender.female' => 'female',
-                    'common.gender.male' => 'male',
-                    'common.gender.other' => 'other',
-                ],
+                'choices' => Actor::GENDERS,
+                'choice_label' => function ($choice) {
+                    return "common.gender.$choice";
+                },
                 'empty_data' => '',
             ])
         ;

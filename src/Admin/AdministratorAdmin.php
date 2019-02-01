@@ -3,25 +3,20 @@
 namespace App\Admin;
 
 use App\Entity\Administrator;
+use App\Form\EventListener\PasswordEncoderListener;
+use App\Form\RepeatedPasswordType;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdministratorAdmin extends AbstractAdmin
 {
-    private $encoder;
-    private $googleAuthenticator;
-
     private const ROLES = [
         'Super administrator' => 'ROLE_SUPER_ADMIN',
         'Dashboard administrator' => 'ROLE_ADMIN',
@@ -29,17 +24,31 @@ class AdministratorAdmin extends AbstractAdmin
         'Groups administrator' => 'ROLE_ADMIN_GROUPS',
     ];
 
+    private $passwordEncoderListener;
+    private $googleAuthenticator;
+
     public function __construct(
         $code,
         $class,
         $baseControllerName,
-        UserPasswordEncoderInterface $encoder,
+        PasswordEncoderListener $passwordEncoderListener,
         GoogleAuthenticator $googleAuthenticator
     ) {
         parent::__construct($code, $class, $baseControllerName);
 
-        $this->encoder = $encoder;
+        $this->passwordEncoderListener = $passwordEncoderListener;
         $this->googleAuthenticator = $googleAuthenticator;
+    }
+
+    public function configureActionButtons($action, $object = null)
+    {
+        $list = parent::configureActionButtons($action, $object);
+
+        if ($object) {
+            $list['qrcode'] = ['template' => 'admin/administrator/_action_qrcode.html.twig'];
+        }
+
+        return $list;
     }
 
     /**
@@ -55,6 +64,7 @@ class AdministratorAdmin extends AbstractAdmin
         $formMapper
             ->add('emailAddress', EmailType::class, [
                 'label' => 'Email address',
+                'disabled' => !$this->isCurrentRoute('create'),
             ])
             ->add('roles', ChoiceType::class, [
                 'label' => 'Roles',
@@ -62,11 +72,8 @@ class AdministratorAdmin extends AbstractAdmin
                 'multiple' => true,
                 'choices' => self::ROLES,
             ])
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
+            ->add('plainPassword', RepeatedPasswordType::class, [
                 'required' => $this->isCurrentRoute('create'),
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ['label' => 'Confirmation'],
             ])
         ;
 
@@ -78,20 +85,8 @@ class AdministratorAdmin extends AbstractAdmin
         }
 
         $formMapper
-            ->get('password')
-            ->addModelTransformer(new CallbackTransformer(
-                function () {
-                    return '';
-                },
-                function ($plainPassword) {
-                    /** @var Administrator $administrator */
-                    $administrator = $this->getSubject();
-
-                    return \is_string($plainPassword) && !empty($plainPassword)
-                        ? $this->encoder->encodePassword($administrator, $plainPassword)
-                        : $administrator->getPassword();
-                }
-            ))
+            ->getFormBuilder()
+            ->addEventSubscriber($this->passwordEncoderListener)
         ;
     }
 

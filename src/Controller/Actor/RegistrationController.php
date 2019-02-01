@@ -4,7 +4,7 @@ namespace App\Controller\Actor;
 
 use App\Actor\RegistrationHandler;
 use App\Entity\Actor;
-use App\Entity\ActorConfirmToken;
+use App\Entity\Actor\ConfirmToken;
 use App\Form\Actor\EmailRequestType;
 use App\Form\Actor\RegistrationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -102,7 +102,7 @@ class RegistrationController extends AbstractController
      *     methods="GET"
      * )
      */
-    public function confirm(ActorConfirmToken $token, RegistrationHandler $registrationHandler): Response
+    public function confirm(ConfirmToken $token, RegistrationHandler $registrationHandler): Response
     {
         $this->denyAccessUnlessGranted('ACTOR_REGISTER');
 

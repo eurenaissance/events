@@ -3,10 +3,10 @@
 namespace App\Actor;
 
 use App\Entity\Actor;
-use App\Entity\ActorResetPasswordToken;
+use App\Entity\Actor\ResetPasswordToken;
 use App\Mailer\Mailer;
 use App\Repository\ActorRepository;
-use App\Repository\ActorResetPasswordTokenRepository;
+use App\Repository\Actor\ResetPasswordTokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ResetPasswordHandler
@@ -20,7 +20,7 @@ class ResetPasswordHandler
         EntityManagerInterface $entityManager,
         Mailer $mailer,
         ActorRepository $actorRepository,
-        ActorResetPasswordTokenRepository $actorResetPasswordTokenRepository
+        ResetPasswordTokenRepository $actorResetPasswordTokenRepository
     ) {
         $this->entityManager = $entityManager;
         $this->mailer = $mailer;
@@ -40,7 +40,7 @@ class ResetPasswordHandler
 
     public function request(Actor $actor): void
     {
-        $token = ActorResetPasswordToken::generate($actor);
+        $token = ResetPasswordToken::generate($actor);
 
         $this->entityManager->persist($token);
         $this->entityManager->flush();
@@ -48,7 +48,7 @@ class ResetPasswordHandler
         $this->mailer->sendActorResetPasswordRequestMail($actor, $token->getUuidAsString());
     }
 
-    public function reset(ActorResetPasswordToken $token): void
+    public function reset(ResetPasswordToken $token): void
     {
         $token->consume();
 

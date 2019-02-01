@@ -2,7 +2,7 @@
 
 namespace Test\App\Controller\Actor;
 
-use App\DataFixtures\ActorResetPasswordTokenFixtures;
+use App\DataFixtures\Actor\ResetPasswordTokenFixtures;
 use App\Tests\HttpTestCase;
 
 /**
@@ -14,9 +14,9 @@ class ResetPasswordControllerTest extends HttpTestCase
     {
         yield ['GET', '/reset-password'];
         yield ['GET', '/reset-password/check-email'];
-        yield ['GET', '/reset-password/'.ActorResetPasswordTokenFixtures::TOKEN_01_UUID];
-        yield ['GET', '/reset-password/'.ActorResetPasswordTokenFixtures::TOKEN_02_UUID];
-        yield ['GET', '/reset-password/'.ActorResetPasswordTokenFixtures::TOKEN_03_UUID];
+        yield ['GET', '/reset-password/'.ResetPasswordTokenFixtures::TOKEN_01_UUID];
+        yield ['GET', '/reset-password/'.ResetPasswordTokenFixtures::TOKEN_02_UUID];
+        yield ['GET', '/reset-password/'.ResetPasswordTokenFixtures::TOKEN_03_UUID];
     }
 
     /**
@@ -24,26 +24,36 @@ class ResetPasswordControllerTest extends HttpTestCase
      */
     public function testLoggedInUserIsRedirectedToChangePassword(string $method, string $uri, array $parameters = []): void
     {
-        $this->authenticateActor('remi@mobilisation.eu');
+        $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $this->client->request($method, $uri, $parameters);
         $this->assertIsRedirectedTo('/profile/change-password');
     }
 
-    public function testRequestSuccess(): void
+    public function provideRequestSuccess(): iterable
+    {
+        yield ['titouan@mobilisation-eu.localhost', 'Titouan'];
+        yield ['marine@mobilisation-eu.localhost', 'Marine'];
+        yield ['nicolas@mobilisation-eu.localhost', 'Nicolas'];
+    }
+
+    /**
+     * @dataProvider provideRequestSuccess
+     */
+    public function testRequestSuccess(string $email, string $firstName): void
     {
         $crawler = $this->client->request('GET', '/reset-password');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Request new password')->form([
-            'emailAddress' => 'remi@mobilisation.eu',
-        ]));
+        $this->client->submit($crawler->selectButton('Request new password')->form(), [
+            'emailAddress' => $email,
+        ]);
         $this->assertIsRedirectedTo('/reset-password/check-email');
         $this->assertMailSent([
-            'to' => 'remi@mobilisation.eu',
+            'to' => $email,
             'subject' => 'A password reset has been requested.',
             'body' => "@string@
-                        .contains('Hello Rémi!')
+                        .contains('Hello $firstName!')
                         .matchRegex('#href=\"http://localhost/reset-password/".self::UUID_PATTERN."#\"')",
         ]);
 
@@ -56,9 +66,9 @@ class ResetPasswordControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/reset-password');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Request new password')->form([
-            'emailAddress' => 'titouan@mobilisation.eu',
-        ]));
+        $this->client->submit($crawler->selectButton('Request new password')->form(), [
+            'emailAddress' => 'remi@mobilisation-eu.localhost',
+        ]);
         $this->assertIsRedirectedTo('/login');
         $this->assertNoMailSent();
 
@@ -66,24 +76,36 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->assertResponseContains('A mail has already been sent in the last 2 hours');
     }
 
-    public function testResetSuccess(): void
+    public function provideResetSuccess(): iterable
     {
-        $resetPasswordUrl = sprintf('/reset-password/%s', ActorResetPasswordTokenFixtures::TOKEN_01_UUID);
+        yield ['test!321'];
+        yield ['test!123'];
+        yield ['password with spaces'];
+        // current password of the user
+        yield ['secret!12345'];
+    }
+
+    /**
+     * @dataProvider provideResetSuccess
+     */
+    public function testResetSuccess(string $password): void
+    {
+        $resetPasswordUrl = sprintf('/reset-password/%s', ResetPasswordTokenFixtures::TOKEN_01_UUID);
         $crawler = $this->client->request('GET', $resetPasswordUrl);
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Reset password')->form([
-            'password' => [
-                'first' => 'test!321',
-                'second' => 'test!321',
+        $this->client->submit($crawler->selectButton('Reset password')->form(), [
+            'plainPassword' => [
+                'first' => $password,
+                'second' => $password,
             ],
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/login');
         $this->assertMailSent([
-            'to' => 'titouan@mobilisation.eu',
+            'to' => 'remi@mobilisation-eu.localhost',
             'subject' => 'Your password has been successfully reset.',
             'body' => "@string@
-                        .contains('Hello Titouan!')
+                        .contains('Hello Rémi!')
                         .contains('Your password has been successfully reset.')",
         ]);
 
@@ -91,15 +113,16 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
         $this->assertResponseContains('Your password has been successfully reset.');
 
-        $this->client->submit($crawler->selectButton('Sign in')->form([
-            'emailAddress' => 'titouan@mobilisation.eu',
-            'password' => 'test!321',
-        ]));
+        $this->client->submit($crawler->selectButton('Sign in')->form(), [
+            'emailAddress' => 'remi@mobilisation-eu.localhost',
+            'password' => $password,
+        ]);
         $this->assertIsRedirectedTo('/');
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('Titouan Galopin');
+
+        $this->assertResponseContains('Rémi Gardien');
     }
 
     public function provideBadPasswordChanges(): iterable
@@ -115,26 +138,40 @@ class ResetPasswordControllerTest extends HttpTestCase
             'second' => '123test',
             'error' => 'Passwords do not match.',
         ];
+
+        yield [
+            'first' => '',
+            'second' => '',
+            'error' => 'Please enter a password',
+        ];
+
+        yield [
+            'first' => null,
+            'second' => null,
+            'error' => 'Please enter a password',
+        ];
     }
 
     /**
      * @dataProvider provideBadPasswordChanges
      */
-    public function testResetFailure(string $first, string $second, string $error): void
+    public function testResetFailure(?string $first, ?string $second, string $error): void
     {
-        $initialPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation.eu')->getPassword();
+        $actorRepository = $this->getActorRepository();
+        $initialPassword = $actorRepository->findOneByEmail('remi@mobilisation-eu.localhost')->getPassword();
 
-        $resetPasswordUrl = sprintf('/reset-password/%s', ActorResetPasswordTokenFixtures::TOKEN_01_UUID);
+        $resetPasswordUrl = sprintf('/reset-password/%s', ResetPasswordTokenFixtures::TOKEN_01_UUID);
         $crawler = $this->client->request('GET', $resetPasswordUrl);
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Reset password')->form([
-            'password' => ['first' => $first, 'second' => $second],
-        ]));
-        $this->assertResponseSuccessFul();
+        $this->client->submit($crawler->selectButton('Reset password')->form(), [
+            'plainPassword' => ['first' => $first, 'second' => $second],
+        ]);
+        $this->assertResponseSuccessFul('Actor should not be redirected if reset form is not valid.');
         $this->assertResponseContains($error);
 
-        $finalPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation.eu')->getPassword();
+        $actorRepository->clear();
+        $finalPassword = $actorRepository->findOneByEmail('remi@mobilisation-eu.localhost')->getPassword();
         $this->assertSame($initialPassword, $finalPassword);
     }
 
@@ -142,13 +179,13 @@ class ResetPasswordControllerTest extends HttpTestCase
     {
         // consumed token
         yield [
-            'token' => ActorResetPasswordTokenFixtures::TOKEN_02_UUID,
+            'token' => ResetPasswordTokenFixtures::TOKEN_02_UUID,
             'error' => 'This link is no longer valid.',
         ];
 
         // expired token
         yield [
-            'token' => ActorResetPasswordTokenFixtures::TOKEN_03_UUID,
+            'token' => ResetPasswordTokenFixtures::TOKEN_03_UUID,
             'error' => 'This link is no longer valid.',
         ];
     }

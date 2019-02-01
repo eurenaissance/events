@@ -1,0 +1,22 @@
+{% set coAnimatorMemberships = object.coAnimatorMemberships %}
+{% set followerMemberships = object.followerMemberships %}
+
+<td class="no-padding">
+    <h5 class="page-header" style="margin: 10px 0px 0px 0px; padding-left: 10px; font-size: 17px;">
+        Co animator memberships
+    </h5>
+    {% if coAnimatorMemberships|length %}
+        {% include 'admin/actor/_memberships.html.twig' with { memberships: object.coAnimatorMemberships } %}
+    {% else %}
+        <div class="well well-sm" style="margin: 10px;">This actor does not co-animate any group.</div>
+    {% endif %}
+
+    <h5 class="page-header" style="margin: 10px 0px 0px 0px; padding-left: 10px; font-size: 17px;">
+        Follower memberships
+    </h5>
+    {% if followerMemberships|length %}
+        {% include 'admin/actor/_memberships.html.twig' with { memberships: object.followerMemberships } %}
+    {% else %}
+        <div class="well well-sm" style="margin: 10px;">This actor does not follow any group.</div>
+    {% endif %}
+</td>

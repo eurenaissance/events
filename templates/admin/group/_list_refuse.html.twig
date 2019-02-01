@@ -1,0 +1,8 @@
+{% if not object.isRefused %}
+    <a href="{{ path('app_admin_group_refuse', { group: object.id }) }}"
+       class="btn btn-sm btn-danger"
+       title="Refuse">
+        <i class="fa fa-remove" aria-hidden="true"></i>
+        Refuse
+    </a>
+{% endif %}

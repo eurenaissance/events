@@ -7,7 +7,13 @@ api_controllers:
     type: annotation
     prefix: /api
 
+group_controllers:
+    resource: ../../src/Controller/Group
+    type: annotation
+    prefix: /group
+
 admin_controllers:
     resource: ../../src/Controller/Admin
     type: annotation
     prefix: /admin
+    defaults: { _locale: fr }

@@ -2,6 +2,7 @@ sonata_admin:
     title: 'Sonata Admin'
     title_logo: bundles/sonataadmin/logo_title.png
     persist_filters: true
+    show_mosaic_button: false
     security:
         role_admin: ROLE_ADMIN
         role_super_admin: ROLE_SUPER_ADMIN
@@ -15,3 +16,6 @@ sonata_block:
             contexts: [admin]
         sonata.admin.block.search_result:
             contexts: [admin]
+twig:
+    form_themes:
+        - '@SonataCore/Form/datepicker.html.twig'

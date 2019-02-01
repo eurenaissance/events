@@ -1,0 +1,5 @@
+{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
+
+{% block field %}
+    {% include 'admin/group/_status.html.twig' with { group: object } %}
+{% endblock %}

@@ -1,11 +1,5 @@
 {% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
 
 {% block field %}
-    {% if object.isRefused %}
-        <span class="label label-danger">Refused</span>
-    {% elseif object.isApproved %}
-        <span class="label label-success">Confirmed</span>
-    {% else %}
-        <span class="label label-primary">Pending</span>
-    {% endif %}
+    {% include 'admin/group/_status.html.twig' with { group: object } %}
 {% endblock %}

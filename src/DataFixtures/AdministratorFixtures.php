@@ -3,9 +3,9 @@
 namespace App\DataFixtures;
 
 use App\Entity\Administrator;
+use App\Security\PasswordEncoder;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdministratorFixtures extends Fixture
 {
@@ -13,22 +13,15 @@ class AdministratorFixtures extends Fixture
 
     private $encoder;
 
-    public function __construct(UserPasswordEncoderInterface $encoder)
+    public function __construct(PasswordEncoder $encoder)
     {
         $this->encoder = $encoder;
     }
 
     public function load(ObjectManager $manager)
     {
-        $superAdministartor = $this->create([
-            'emailAddress' => 'superadmin@mobilisation-eu.code',
-            'roles' => ['ROLE_SUPER_ADMIN'],
-        ]);
-
-        $administrator = $this->create([
-            'emailAddress' => 'admin@mobilisation-eu.code',
-            'googleAuthenticatorSecret' => '53YNXH6LFUOBT7LC',
-        ]);
+        $superAdministartor = $this->create('superadmin@mobilisation-eu.localhost', ['ROLE_SUPER_ADMIN']);
+        $administrator = $this->create('admin@mobilisation-eu.localhost', [], '53YNXH6LFUOBT7LC');
 
         $manager->persist($superAdministartor);
         $manager->persist($administrator);
@@ -36,22 +29,21 @@ class AdministratorFixtures extends Fixture
         $manager->flush();
     }
 
-    private function create(array $data): Administrator
+    private function create(string $email, array $roles = [], string $googleAuthenticatorSecret = null): Administrator
     {
         $administrator = new Administrator();
 
-        $administrator->setEmailAddress($data['emailAddress']);
-        $administrator->setPassword($this->encoder->encodePassword($administrator, self::DEFAULT_PASSWORD));
+        $administrator->setEmailAddress($email);
 
-        if (isset($data['roles'])) {
-            foreach ($data['roles'] as $role) {
-                $administrator->addRole($role);
-            }
+        foreach ($roles as $role) {
+            $administrator->addRole($role);
         }
 
-        if (isset($data['googleAuthenticatorSecret'])) {
-            $administrator->setGoogleAuthenticatorSecret($data['googleAuthenticatorSecret']);
+        if ($googleAuthenticatorSecret) {
+            $administrator->setGoogleAuthenticatorSecret($googleAuthenticatorSecret);
         }
+
+        $this->encoder->encodePassword($administrator, self::DEFAULT_PASSWORD);
 
         return $administrator;
     }

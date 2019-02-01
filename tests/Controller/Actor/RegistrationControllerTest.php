@@ -2,7 +2,7 @@
 
 namespace Test\App\Controller\Actor;
 
-use App\DataFixtures\ActorConfirmTokenFixtures;
+use App\DataFixtures\Actor\ConfirmTokenFixtures;
 use App\DataFixtures\CityFixtures;
 use App\Tests\HttpTestCase;
 
@@ -15,11 +15,11 @@ class RegistrationControllerTest extends HttpTestCase
     {
         yield ['GET', '/register'];
         yield ['POST', '/register', [
-            'emailAddress' => 'new@mobilisation.eu',
+            'emailAddress' => 'new@mobilisation-eu.localhost',
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'password' => ['first' => 'test123', 'second' => 'test123'],
+            'plainPassword' => ['first' => 'test123', 'second' => 'test123'],
             'address' => '3 random street',
             'country' => 'FR',
             'zipCode' => '92270',
@@ -28,7 +28,7 @@ class RegistrationControllerTest extends HttpTestCase
         yield ['GET', '/register/check-email'];
         yield ['GET', '/register/resend-confirmation'];
         yield ['GET', '/register/resend-confirmation/check-email'];
-        yield ['GET', '/register/confirm/'.ActorConfirmTokenFixtures::TOKEN_04_UUID];
+        yield ['GET', '/register/confirm/'.ConfirmTokenFixtures::TOKEN_04_UUID];
     }
 
     /**
@@ -36,7 +36,7 @@ class RegistrationControllerTest extends HttpTestCase
      */
     public function testLoggedInUserCannotRegister(string $method, string $uri, array $parameters = []): void
     {
-        $this->authenticateActor('remi@mobilisation.eu');
+        $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $this->client->request($method, $uri, $parameters);
         $this->assertAccessDeniedResponse();
@@ -47,18 +47,18 @@ class RegistrationControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/register');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Register')->form([
-            'emailAddress' => 'new@mobilisation.eu',
+        $this->client->submit($crawler->selectButton('Register')->form(), [
+            'emailAddress' => 'new@mobilisation-eu.localhost',
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'password' => ['first' => 'test123', 'second' => 'test123'],
+            'plainPassword' => ['first' => 'test123', 'second' => 'test123'],
             'address' => null,
             'city' => CityFixtures::CITY_02_UUID,
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/register/check-email');
         $this->assertMailSent([
-            'to' => 'new@mobilisation.eu',
+            'to' => 'new@mobilisation-eu.localhost',
             'subject' => 'Welcome Rémi, please confirm your registration.',
             'body' => "@string@
                         .contains('Welcome Rémi!')
@@ -68,42 +68,37 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
         $this->assertResponseContains('A mail has been sent to confirm your account.');
-        $this->assertActorConfirmed('new@mobilisation.eu', false);
+        $this->assertActorConfirmed('new@mobilisation-eu.localhost', false);
     }
 
     public function provideBadRegistrations(): iterable
     {
         yield [
-            'emailAddress' => null,
+            'emailAddress' => 'remi@mobilisation-eu.localhost',
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'password' => ['first' => 'test123', 'second' => 'test123'],
+            'plainPassword' => ['first' => null, 'second' => null],
             'address' => '123 random street',
             'city' => CityFixtures::CITY_02_UUID,
-            'errors' => ['Please enter your email address.'],
+            'errors' => [
+                'An actor is already registered with this email.',
+                'Please enter a password.',
+            ],
         ];
 
         yield [
-            'emailAddress' => 'remi@mobilisation.eu',
+            'emailAddress' => 'REMI@mobilisation-eu.localhost',
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'password' => ['first' => 'test123', 'second' => 'test123'],
+            'plainPassword' => ['first' => '', 'second' => ''],
             'address' => '123 random street',
             'city' => CityFixtures::CITY_02_UUID,
-            'errors' => ['An actor is already registered with this email.'],
-        ];
-
-        yield [
-            'emailAddress' => 'REMI@MOBILISATION.eu',
-            'firstName' => 'Rémi',
-            'lastName' => 'Gardien',
-            'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'password' => ['first' => 'test123', 'second' => 'test123'],
-            'address' => '123 random street',
-            'city' => CityFixtures::CITY_02_UUID,
-            'errors' => ['An actor is already registered with this email.'],
+            'errors' => [
+                'An actor is already registered with this email.',
+                'Please enter a password.',
+            ],
         ];
 
         yield [
@@ -111,7 +106,7 @@ class RegistrationControllerTest extends HttpTestCase
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'password' => ['first' => '123', 'second' => '123'],
+            'plainPassword' => ['first' => '123', 'second' => '123'],
             'address' => '123 random street',
             'city' => 'abcdef',
             'errors' => [
@@ -122,15 +117,15 @@ class RegistrationControllerTest extends HttpTestCase
         ];
 
         yield [
-            'emailAddress' => 'new@mobilisation',
+            'emailAddress' => null,
             'firstName' => null,
             'lastName' => null,
             'birthday' => ['year' => null, 'month' => 11, 'day' => 27],
-            'password' => ['first' => 'test123', 'second' => '123test'],
+            'plainPassword' => ['first' => 'test123', 'second' => '123test'],
             'address' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquet ligula ut elit consectetur, quis vulputate felis vestibulum. Vivamus rutrum metus leo, in dignissim lectus fringilla nec.',
             'city' => null,
             'errors' => [
-                'This email address is not valid.',
+                'Please enter your email address.',
                 'Please enter your first name.',
                 'Please enter your last name.',
                 'This date is not valid.',
@@ -157,42 +152,42 @@ class RegistrationControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/register');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Register')->form([
+        $this->client->submit($crawler->selectButton('Register')->form(), [
             'emailAddress' => $emailAddress,
             'firstName' => $firstName,
             'lastName' => $lastName,
             'birthday' => $birthday,
-            'password' => $password,
+            'plainPassword' => $password,
             'address' => $address,
             'city' => $cityUuid,
-        ]));
-        $this->assertResponseSuccessFul();
+        ]);
+        $this->assertResponseSuccessFul('User should not be redirected in order to see registration form errors.');
         $this->assertResponseContains($errors);
     }
 
     public function testResendConfirmationSuccess(): void
     {
-        $this->assertActorConfirmed('nicolas@mobilisation.eu', false);
+        $this->assertActorConfirmed('patrick@mobilisation-eu.localhost', false);
 
         $crawler = $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Resend confirmation mail')->form([
-            'emailAddress' => 'nicolas@mobilisation.eu',
-        ]));
+        $this->client->submit($crawler->selectButton('Resend confirmation mail')->form(), [
+            'emailAddress' => 'patrick@mobilisation-eu.localhost',
+        ]);
         $this->assertIsRedirectedTo('/register/resend-confirmation/check-email');
         $this->assertMailSent([
-            'to' => 'nicolas@mobilisation.eu',
-            'subject' => 'Welcome Nicolas, please confirm your registration.',
+            'to' => 'patrick@mobilisation-eu.localhost',
+            'subject' => 'Welcome Patrick, please confirm your registration.',
             'body' => "@string@
-                        .contains('Welcome Nicolas!')
+                        .contains('Welcome Patrick!')
                         .matchRegex('#href=\"http://localhost/register/confirm/".self::UUID_PATTERN."#\"')",
         ]);
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
         $this->assertResponseContains('A new mail has been sent with a link to confirm your account.');
-        $this->assertActorConfirmed('nicolas@mobilisation.eu', false);
+        $this->assertActorConfirmed('patrick@mobilisation-eu.localhost', false);
     }
 
     public function testResendConfirmationUnknownEmail(): void
@@ -200,9 +195,9 @@ class RegistrationControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Resend confirmation mail')->form([
-            'emailAddress' => 'unknown@mobilisation.eu',
-        ]));
+        $this->client->submit($crawler->selectButton('Resend confirmation mail')->form(), [
+            'emailAddress' => 'unknown@mobilisation-eu.localhost',
+        ]);
         $this->assertIsRedirectedTo('/register/resend-confirmation/check-email');
         $this->assertNoMailSent();
 
@@ -214,14 +209,14 @@ class RegistrationControllerTest extends HttpTestCase
     public function provideResendConfirmationFailures(): iterable
     {
         yield [
-            'email' => 'marine@mobilisation.eu',
+            'email' => 'leonard@mobilisation-eu.localhost',
             'alreadyConfirmed' => false,
             'redirectedTo' => '/login',
             'errors' => ['A mail has already been sent in the last 2 hours'],
         ];
 
         yield [
-            'email' => 'remi@mobilisation.eu',
+            'email' => 'remi@mobilisation-eu.localhost',
             'alreadyConfirmed' => true,
             'redirectedTo' => '/login',
             'errors' => ['Your account is already confirmed.'],
@@ -242,9 +237,9 @@ class RegistrationControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Resend confirmation mail')->form([
+        $this->client->submit($crawler->selectButton('Resend confirmation mail')->form(), [
             'emailAddress' => $email,
-        ]));
+        ]);
         $this->assertIsRedirectedTo($redirectedTo);
         $this->assertNoMailSent();
 
@@ -256,15 +251,15 @@ class RegistrationControllerTest extends HttpTestCase
 
     public function testConfirmSuccess(): void
     {
-        $this->assertActorConfirmed('marine@mobilisation.eu', false);
+        $this->assertActorConfirmed('leonard@mobilisation-eu.localhost', false);
 
-        $this->client->request('GET', '/register/confirm/'.ActorConfirmTokenFixtures::TOKEN_04_UUID);
+        $this->client->request('GET', '/register/confirm/'.ConfirmTokenFixtures::TOKEN_04_UUID);
         $this->assertIsRedirectedTo('/login');
         $this->assertMailSent([
-            'to' => 'marine@mobilisation.eu',
-            'subject' => 'Welcome Marine, your registration is now complete.',
+            'to' => 'leonard@mobilisation-eu.localhost',
+            'subject' => 'Welcome Léonard, your registration is now complete.',
             'body' => "@string@
-                        .contains('Welcome Marine!')
+                        .contains('Welcome Léonard!')
                         .contains('Your registration is now complete.')
                         .contains('href=\"http://localhost/login\"')",
         ]);
@@ -272,34 +267,34 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
         $this->assertResponseContains('Your registration is now complete.');
-        $this->assertActorConfirmed('marine@mobilisation.eu', true);
+        $this->assertActorConfirmed('leonard@mobilisation-eu.localhost', true);
     }
 
     public function provideConfirmationFailures(): iterable
     {
         // token is already consumed
         yield [
-            'email' => 'remi@mobilisation.eu',
+            'email' => 'remi@mobilisation-eu.localhost',
             'alreadyConfirmed' => true,
-            'token' => ActorConfirmTokenFixtures::TOKEN_01_UUID,
+            'token' => ConfirmTokenFixtures::TOKEN_01_UUID,
             'redirectedTo' => '/login',
             'errors' => ['Your account is already confirmed.'],
         ];
 
         // token is expired but user is now confirmed
         yield [
-            'email' => 'titouan@mobilisation.eu',
+            'email' => 'titouan@mobilisation-eu.localhost',
             'alreadyConfirmed' => true,
-            'token' => ActorConfirmTokenFixtures::TOKEN_02_UUID,
+            'token' => ConfirmTokenFixtures::TOKEN_02_UUID,
             'redirectedTo' => '/login',
             'errors' => ['Your account is already confirmed.'],
         ];
 
         // token is expired
         yield [
-            'email' => 'nicolas@mobilisation.eu',
+            'email' => 'patrick@mobilisation-eu.localhost',
             'alreadyConfirmed' => false,
-            'token' => ActorConfirmTokenFixtures::TOKEN_05_UUID,
+            'token' => ConfirmTokenFixtures::TOKEN_05_UUID,
             'redirectedTo' => '/register/resend-confirmation',
             'errors' => ['This link is no longer valid.'],
         ];
@@ -328,6 +323,9 @@ class RegistrationControllerTest extends HttpTestCase
 
     private function assertActorConfirmed(string $email, bool $expected): void
     {
-        $this->assertSame($expected, $this->getActorRepository()->findOneByEmail($email)->isConfirmed());
+        $actorRepository = $this->getActorRepository();
+        $actorRepository->clear();
+
+        $this->assertSame($expected, $actorRepository->findOneByEmail($email)->isConfirmed());
     }
 }

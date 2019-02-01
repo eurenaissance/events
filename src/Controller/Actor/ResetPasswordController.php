@@ -3,7 +3,7 @@
 namespace App\Controller\Actor;
 
 use App\Actor\ResetPasswordHandler;
-use App\Entity\ActorResetPasswordToken;
+use App\Entity\Actor\ResetPasswordToken;
 use App\Form\Actor\PasswordType;
 use App\Form\Actor\EmailRequestType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -71,7 +71,7 @@ class ResetPasswordController extends AbstractController
      */
     public function reset(
         Request $request,
-        ActorResetPasswordToken $token,
+        ResetPasswordToken $token,
         ResetPasswordHandler $resetPasswordHandler
     ): Response {
         if ($this->getUser()) {

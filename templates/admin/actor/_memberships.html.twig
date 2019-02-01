@@ -1,0 +1,42 @@
+{% if memberships|length %}
+    <div class="table-responsive">
+        <table class="table table-hover no-margin">
+            <thead>
+                <tr class="sonata-ba-list-field-header">
+                    <th class="sonata-ba-list-field-header-text" style="max-width: 20px;">#</th>
+                    <th class="sonata-ba-list-field-header-text">Group name</th>
+                    <th class="sonata-ba-list-field-header-text">Since</th>
+                    <th class="sonata-ba-list-field-header-text">Group address</th>
+                    <th class="sonata-ba-list-field-header-text">Group status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for membership in memberships %}
+                    {% set group = membership.group %}
+
+                    <tr class="{% if group.isRefused %}warning{% endif %}">
+                        <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                            <b>{{ loop.index }}</b>
+                        </td>
+                        <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                            <a href="{{ path('admin_app_group_show', { id: group.id }) }}">
+                                {{ group.name }}
+                            </a>
+                        </td>
+                        <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                            {{ membership.createdAt|date }}
+                        </td>
+                        <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                            {% include 'admin/address/_address.html.twig' with { object: group } %}
+                        </td>
+                        <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                            {% include 'admin/group/_status.html.twig' with { group: group } %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="well well-sm" style="margin: 10px;">No membership for this actor.</div>
+{% endif %}

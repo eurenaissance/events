@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Actor;
 use App\Entity\Group;
-use App\Entity\Util\EntityGeocodableInterface;
+use App\Geocoder\GeocodableInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
@@ -19,8 +19,8 @@ class GroupRepository extends ServiceEntityRepository
     public function findOneBySlug(string $slug): ?Group
     {
         return $this
-            ->createQueryBuilder('g')
-            ->where('g.slug = :slug')
+            ->createConfirmedQueryBuilder('g')
+            ->andWhere('g.slug = :slug')
             ->setParameter('slug', $slug)
             ->getQuery()
             ->getOneOrNullResult()
@@ -41,7 +41,7 @@ class GroupRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findClosestFrom(EntityGeocodableInterface $entity, int $maxResults = 3, int $maxDistance = 150): array
+    public function findClosestFrom(GeocodableInterface $entity, int $maxResults = 3, int $maxDistance = 150): array
     {
         if (!$coordinates = $entity->getCoordinates()) {
             throw new \InvalidArgumentException('Cannot find closest groups from entity with no coordinates.');
@@ -61,20 +61,28 @@ class GroupRepository extends ServiceEntityRepository
         ;
     }
 
-    /**
-     * For tests purpose only.
-     */
-    public function deleteAll(): void
+    public function findWithoutFilters(array $criteria): array
     {
-        $this->createQueryBuilder('g')->delete()->getQuery()->execute();
+        $filters = $this->getEntityManager()->getFilters();
+        if ($enabled = $filters->isEnabled('refused')) {
+            $filters->disable('refused');
+        }
+
+        $groups = $this->findBy($criteria);
+
+        if ($enabled) {
+            $filters->enable('refused');
+        }
+
+        return $groups;
     }
 
     private function createConfirmedQueryBuilder(string $alias = 'g'): QueryBuilder
     {
         return $this
             ->createQueryBuilder($alias)
-            ->where('g.refusedAt IS NULL')
-            ->andWhere('g.approvedAt IS NOT NULL')
+            ->where("$alias.refusedAt IS NULL")
+            ->andWhere("$alias.approvedAt IS NOT NULL")
         ;
     }
 }

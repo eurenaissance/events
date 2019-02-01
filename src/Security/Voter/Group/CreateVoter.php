@@ -3,20 +3,12 @@
 namespace App\Security\Voter\Group;
 
 use App\Entity\Actor;
-use App\Repository\GroupRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class CreateVoter extends Voter
 {
     private const ROLE = 'GROUP_CREATE';
-
-    private $groupRepository;
-
-    public function __construct(GroupRepository $groupRepository)
-    {
-        $this->groupRepository = $groupRepository;
-    }
 
     protected function supports($attribute, $subject)
     {
@@ -31,6 +23,6 @@ class CreateVoter extends Voter
             return false;
         }
 
-        return !$this->groupRepository->hasPendingGroup($user);
+        return !$user->hasPendingGroup();
     }
 }
