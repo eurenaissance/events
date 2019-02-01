@@ -42,7 +42,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->assertAccessDeniedResponse();
     }
 
-    public function testRegister(): void
+    public function testRegisterSuccess(): void
     {
         $crawler = $this->client->request('GET', '/register');
         $this->assertResponseSuccessFul();
@@ -254,7 +254,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->assertActorConfirmed('leonard@mobilisation-eu.localhost', false);
 
         $this->client->request('GET', '/register/confirm/'.ConfirmTokenFixtures::TOKEN_04_UUID);
-        $this->assertIsRedirectedTo('/login');
+        $this->assertIsRedirectedTo('/register/confirmed');
         $this->assertMailSent([
             'to' => 'leonard@mobilisation-eu.localhost',
             'subject' => 'Welcome Léonard, your registration is now complete.',
@@ -266,7 +266,12 @@ class RegistrationControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('Your registration is now complete.');
+        $this->assertResponseContains([
+            'Your registration is now complete.',
+            'Closest groups',
+            'Ecology in Nice',
+            'Culture in Cannes',
+        ]);
         $this->assertActorConfirmed('leonard@mobilisation-eu.localhost', true);
     }
 

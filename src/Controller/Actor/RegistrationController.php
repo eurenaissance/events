@@ -7,6 +7,8 @@ use App\Entity\Actor;
 use App\Entity\Actor\ConfirmToken;
 use App\Form\Actor\EmailRequestType;
 use App\Form\Actor\RegistrationType;
+use App\Repository\GroupRepository;
+use App\Security\AuthenticationUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -102,11 +104,15 @@ class RegistrationController extends AbstractController
      *     methods="GET"
      * )
      */
-    public function confirm(ConfirmToken $token, RegistrationHandler $registrationHandler): Response
-    {
+    public function confirm(
+        ConfirmToken $token,
+        RegistrationHandler $registrationHandler,
+        AuthenticationUtils $authenticationUtils
+    ): Response {
         $this->denyAccessUnlessGranted('ACTOR_REGISTER');
 
-        if ($token->isConsumed() || $token->getActor()->isConfirmed()) {
+        $actor = $token->getActor();
+        if ($token->isConsumed() || $actor->isConfirmed()) {
             $this->addFlash('info', 'actor.registration.confirm.flash.already_confirmed');
 
             return $this->redirectToRoute('app_login');
@@ -119,9 +125,20 @@ class RegistrationController extends AbstractController
         }
 
         $registrationHandler->confirm($token);
+        $authenticationUtils->authenticateActor($actor);
 
-        $this->addFlash('info', 'actor.registration.confirm.flash.success');
+        return $this->redirectToRoute('app_actor_register_confirmed');
+    }
 
-        return $this->redirectToRoute('app_login');
+    /**
+     * @Route("/confirmed", name="app_actor_register_confirmed", methods="GET")
+     */
+    public function confirmed(GroupRepository $groupRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ACTOR');
+
+        return $this->render('actor/registration/confirmed.html.twig', [
+            'closest_groups' => $groupRepository->findClosestFrom($this->getUser(), 3),
+        ]);
     }
 }
