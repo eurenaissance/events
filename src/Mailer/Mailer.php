@@ -3,6 +3,7 @@
 namespace App\Mailer;
 
 use App\Entity\Actor;
+use App\Entity\Event;
 use App\Entity\Group;
 use App\Entity\Group\CoAnimatorMembership;
 use App\Entity\Group\FollowerMembership;
@@ -139,6 +140,19 @@ class Mailer
             ]),
             'body' => $this->render('mail/group/new_co_animator.html.twig', [
                 'membership' => $membership,
+            ]),
+        ]);
+    }
+
+    public function sendEventCreatedMail(Event $event): void
+    {
+        $this->send([
+            'to' => $event->getCreator()->getEmailAddress(),
+            'subject' => $this->trans('mail.event.created.subject', [
+                '%event%' => $event->getName(),
+            ]),
+            'body' => $this->render('mail/event/created.html.twig', [
+                'event' => $event,
             ]),
         ]);
     }

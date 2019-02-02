@@ -1,0 +1,49 @@
+<p>
+    {{ group.city.name }}, {{ group.city.country|country }}
+    <br>
+    A {{ distance_between(group, app.user) }}km de vous
+</p>
+<h5>Animé par:</h5>
+<p>
+    {{ group.animator.fullName }}
+    {% for coAnimator in group.coAnimators %}
+        <br>
+        {{ coAnimator.fullName }}
+    {% endfor %}
+</p>
+<hr class="mt-4">
+<p>
+    {{ group.description|raw }}
+</p>
+
+{% if is_granted('GROUP_MEMBERS', group) %}
+    <a href="{{ path('app_group_view_members', { slug: group.slug }) }}" class="btn btn-link">
+        View members
+    </a>
+{% endif %}
+
+{% if is_granted('EVENT_CREATE', group) %}
+    <a href="{{ path('app_event_creation_create', { slug: group.slug }) }}" class="btn btn-link">
+        Create an event
+    </a>
+{% endif %}
+
+{% if is_granted('GROUP_UNFOLLOW', group) %}
+    <p>
+        You are follower of this group! \o/
+        <br>
+        <a href="{{ path('app_group_unfollow', { slug: group.slug }) }}">
+            stop following this group
+        </a>
+    </p>
+{% endif %}
+
+{% if is_granted('GROUP_FOLLOW', group) %}
+    <p>
+        Interested in following this group ?
+        <br>
+        <a href="{{ path('app_group_follow', { slug: group.slug }) }}">
+            follow this group
+        </a>
+    </p>
+{% endif %}

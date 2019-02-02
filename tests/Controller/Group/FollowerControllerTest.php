@@ -20,10 +20,6 @@ class FollowerControllerTest extends HttpTestCase
         yield ['titouan@mobilisation-eu.localhost', 'ecology-in-paris', true];
         // follower of the group
         yield ['remi@mobilisation-eu.localhost', 'ecology-in-paris', true];
-        // group is still pending
-        yield ['marine@mobilisation-eu.localhost', 'culture-in-paris', true];
-        yield ['titouan@mobilisation-eu.localhost', 'culture-in-paris', false];
-        yield ['remi@mobilisation-eu.localhost', 'culture-in-paris', false];
     }
 
     /**
@@ -52,6 +48,11 @@ class FollowerControllerTest extends HttpTestCase
         yield ['nicolas@mobilisation-eu.localhost', 'development-in-lille', 3];
         // no relation with the refused group
         yield ['titouan@mobilisation-eu.localhost', 'development-in-lille', 3];
+        // animator of the pending group
+        yield ['marine@mobilisation-eu.localhost', 'culture-in-paris', 1];
+        // no relation with the pending group
+        yield ['titouan@mobilisation-eu.localhost', 'culture-in-paris', 1];
+        yield ['remi@mobilisation-eu.localhost', 'culture-in-paris', 1];
     }
 
     /**
@@ -165,10 +166,6 @@ class FollowerControllerTest extends HttpTestCase
         yield ['marine@mobilisation-eu.localhost', 'ecology-in-clichy', true];
         // no relation with the group
         yield ['nicolas@mobilisation-eu.localhost', 'ecology-in-clichy', false];
-        // group is still pending
-        yield ['marine@mobilisation-eu.localhost', 'culture-in-paris', true];
-        yield ['titouan@mobilisation-eu.localhost', 'culture-in-paris', false];
-        yield ['remi@mobilisation-eu.localhost', 'culture-in-paris', false];
     }
 
     /**
@@ -244,28 +241,20 @@ class FollowerControllerTest extends HttpTestCase
 
     private function assertIfActorIsMemberOfGroup(string $actorEmail, string $groupSlug, bool $isMember): void
     {
-        /** @var FilterCollection $filters */
-        $filters = $this->get(EntityManagerInterface::class)->getFilters();
+        /** @var EntityManagerInterface $entityManager */
+        $entityManager = $this->get(EntityManagerInterface::class);
+        $filters = $entityManager->getFilters();
+
         if ($enabled = $filters->isEnabled('refused')) {
             $filters->disable('refused');
         }
 
-        $actorRepository = $this->getActorRepository();
-        $groupRepository = $this->getGroupRepository();
+        $entityManager->clear();
 
-        $actorRepository->clear();
-        $groupRepository->clear();
+        $actor = $this->getActorRepository()->findOneByEmail($actorEmail);
+        $group = $this->getGroupRepository()->findOneBySlug($groupSlug);
 
-        $actor = $actorRepository->findOneByEmail($actorEmail);
-        $groups = $groupRepository->findWithoutFilters(['slug' => $groupSlug]);
-        /** @var Group $group */
-        $group = $groups[0];
-        $this->assertSame(
-            $isMember,
-            $actor->isFollowerOf($group)
-            || $actor->isCoAnimatorOf($group)
-            || $actor->isAnimatorOf($group)
-        );
+        $this->assertSame($isMember, $actor->isMemberOfGroup($group));
 
         if ($enabled) {
             $filters->enable('refused');

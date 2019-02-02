@@ -27,14 +27,22 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: 'Mobilisation', label: 'Groups' }
 
+    admin.event:
+        class: App\Admin\EventAdmin
+        arguments: [~, App\Entity\Event, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: 'Mobilisation', label: 'Events' }
+
     admin.extension.read_only:
         class: App\Admin\Extension\ReadOnlyExtension
         tags:
             - { name: sonata.admin.extension, target: admin.actor }
             - { name: sonata.admin.extension, target: admin.group }
+            - { name: sonata.admin.extension, target: admin.event }
 
     admin.extension.city:
         class: App\Admin\Extension\CityExtension
         tags:
             - { name: sonata.admin.extension, target: admin.actor }
             - { name: sonata.admin.extension, target: admin.group }
+            - { name: sonata.admin.extension, target: admin.event }

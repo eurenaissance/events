@@ -82,16 +82,24 @@ class Group implements EntitySlugInterface, GeocodableInterface, EntityReviewInt
     /**
      * @var CoAnimatorMembership[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="group", cascade={"all"})
+     * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="group")
      */
     private $coAnimatorMemberships;
 
     /**
      * @var FollowerMembership[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="group", fetch="EXTRA_LAZY", cascade={"all"})
+     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="group", fetch="EXTRA_LAZY")
      */
     private $followerMemberships;
+
+    /**
+     * @var Event[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="group", fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"beginAt" = "ASC"})
+     */
+    private $events;
 
     public function __construct(UuidInterface $uuid = null)
     {
@@ -99,6 +107,7 @@ class Group implements EntitySlugInterface, GeocodableInterface, EntityReviewInt
         $this->createdAt = new \DateTimeImmutable();
         $this->coAnimatorMemberships = new ArrayCollection();
         $this->followerMemberships = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -189,5 +198,10 @@ class Group implements EntitySlugInterface, GeocodableInterface, EntityReviewInt
                 $this->followerMemberships->toArray()
             )
         );
+    }
+
+    public function getEvents(): Collection
+    {
+        return $this->events;
     }
 }

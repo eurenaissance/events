@@ -31,9 +31,15 @@ security:
             - ROLE_ADMIN_GROUP_LIST
             - ROLE_ADMIN_GROUP_SHOW
 
+        ROLE_ADMIN_EVENTS:
+            - ROLE_ADMIN_EVENT_EXPORT
+            - ROLE_ADMIN_EVENT_LIST
+            - ROLE_ADMIN_EVENT_SHOW
+
         ROLE_ADMIN_MOBILISATION:
             - ROLE_ADMIN_ACTORS
             - ROLE_ADMIN_GROUPS
+            - ROLE_ADMIN_EVENTS
 
         ROLE_ADMIN_SYSTEM:
             - ROLE_ADMIN_ADMINISTRATORS
@@ -47,9 +53,7 @@ security:
 
     providers:
         app_actor_provider:
-            entity:
-                class: App\Entity\Actor
-                property: emailAddress
+            id: App\Security\Actor\Provider
         app_administrator_provider:
             entity:
                 class: App\Entity\Administrator

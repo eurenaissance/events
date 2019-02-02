@@ -116,18 +116,24 @@ class Actor implements ActorInterface, GeocodableInterface
     /**
      * @var CoAnimatorMembership[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="actor", cascade={"detach"})
-     * @ORM\OrderBy({"createdAt" = "DESC"})
+     * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="actor")
      */
     private $coAnimatorMemberships;
 
     /**
      * @var FollowerMembership[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="actor", cascade={"detach"})
-     * @ORM\OrderBy({"createdAt" = "DESC"})
+     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="actor")
      */
     private $followerMemberships;
+
+    /**
+     * @var Event[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="creator")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
+     */
+    private $events;
 
     /**
      * @var string[]
@@ -141,6 +147,7 @@ class Actor implements ActorInterface, GeocodableInterface
         $this->animatedGroups = new ArrayCollection();
         $this->coAnimatorMemberships = new ArrayCollection();
         $this->followerMemberships = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -376,6 +383,11 @@ class Actor implements ActorInterface, GeocodableInterface
     public function isMemberOfGroup(Group $group): bool
     {
         return $this->isAnimatorOf($group) || $this->isCoAnimatorOf($group) || $this->isFollowerOf($group);
+    }
+
+    public function getEvents(): Collection
+    {
+        return $this->events;
     }
 
     public function changePassword(string $encodedPassword): void

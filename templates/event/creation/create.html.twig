@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'event.creation.create.title'|trans %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_row(form.name, { label: 'event.name.label' }) }}
+    {{ form_row(form.description, { label: 'event.description.label' }) }}
+    {{ form_row(form.beginAt, { label: 'event.beginAt.label' }) }}
+    {{ form_row(form.finishAt, { label: 'event.finishAt.label' }) }}
+    {{ form_row(form.address, { label: 'event.address.label' }) }}
+    {{ form_row(form.country, { label: 'event.country.label' }) }}
+    {{ form_row(form.zipCode, { label: 'event.zip_code.label' }) }}
+
+    {# since `form.city` is a hidden type we need to explicitely show errors with `form_errors(form.city)` #}
+    {{ form_errors(form.city) }}
+    {{ form_widget(form.city) }}
+
+    <button type="submit">
+        {{ 'event.creation.create.submit'|trans }}
+    </button>
+    {{ form_end(form) }}
+{% endblock %}

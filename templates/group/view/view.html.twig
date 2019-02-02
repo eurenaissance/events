@@ -16,40 +16,30 @@
                     </p>
                 </div>
             {% endif %}
+
+            <h3>Upcoming events:</h3>
+            {% for event in upcoming_events %}
+                {% include 'group/view/_event.html.twig' %}
+                <hr>
+            {% endfor %}
+
+
+            <h3 id="finished-events">Finished events:</h3>
+
+            {% for event in finished_events %}
+                {% include 'group/view/_event.html.twig' %}
+                <hr>
+            {% endfor %}
+
+            {% include '_components/pagination.html.twig' with {
+                total_pages: finished_events_total_pages,
+                route_parameters: { slug: group.slug, _fragment: 'finished-events' },
+                page_parameter: constant('App\\Controller\\Group\\ViewController::FINISHED_EVENTS_PAGE_PARAMETER')
+            } %}
+
         </div>
         <div class="col-md-4 border-left">
-            <p>
-                {{ group.city.name }}, {{ group.city.country|country }}
-                <br>
-                A {{ distance_between(group, app.user) }}km de vous
-            </p>
-            <h5>Animé par:</h5>
-            <p>
-                {{ group.animator.fullName }}
-                {% for coAnimator in group.coAnimators %}
-                    <br>
-                    {{ coAnimator.fullName }}
-                {% endfor %}
-            </p>
-            <hr class="mt-4">
-            <p>
-                {{ group.description|raw }}
-            </p>
+            {% include 'group/view/_sidebar.html.twig' %}
         </div>
     </div>
-    {% if is_granted('GROUP_UNFOLLOW', group) %}
-        You are follower of this group! \o/
-
-        <a href="{{ path('app_group_unfollow', { slug: group.slug }) }}">
-            stop following this group
-        </a>
-    {% endif %}
-
-    {% if is_granted('GROUP_FOLLOW', group) %}
-        Interested in following this group ?
-
-        <a href="{{ path('app_group_follow', { slug: group.slug }) }}">
-            follow this group
-        </a>
-    {% endif %}
 {% endblock %}

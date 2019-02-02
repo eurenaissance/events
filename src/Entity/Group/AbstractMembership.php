@@ -20,7 +20,7 @@ abstract class AbstractMembership
     /**
      * @var Actor
      *
-     * @ORM\ManyToOne(targetEntity=Actor::class, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity=Actor::class)
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $actor;
@@ -28,7 +28,7 @@ abstract class AbstractMembership
     /**
      * @var Group
      *
-     * @ORM\ManyToOne(targetEntity=Group::class, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity=Group::class)
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $group;

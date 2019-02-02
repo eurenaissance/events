@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'event.view.view.title'|trans({ '%event%': event.name }) %}
+
+{% block body %}
+    <h1>{{ event.name }}</h1>
+
+    <hr class="mt-5">
+
+    <div class="row">
+        <div class="col-md-8">
+        </div>
+        <div class="col-md-4 border-left">
+            <p>
+                {{ event.city.name }}, {{ event.city.country|country }}
+                <br>
+                A {{ distance_between(event, app.user) }}km de vous
+            </p>
+            <h5>Organisé par:</h5>
+            <p>
+                {{ event.creator.fullName }}
+            </p>
+            <hr class="mt-4">
+            <p>
+                {{ event.description|raw }}
+            </p>
+        </div>
+    </div>
+{% endblock %}

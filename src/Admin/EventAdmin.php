@@ -3,7 +3,6 @@
 namespace App\Admin;
 
 use App\Entity\Actor;
-use App\Entity\Group;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -14,27 +13,8 @@ use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 use Sonata\Form\Type\DateRangePickerType;
 
-class GroupAdmin extends AbstractAdmin
+class EventAdmin extends AbstractAdmin
 {
-    public function configureActionButtons($action, $object = null)
-    {
-        $list = parent::configureActionButtons($action, $object);
-
-        if (!$object instanceof Group) {
-            return $list;
-        }
-
-        if (!$object->isApproved()) {
-            $list['approve'] = ['template' => 'admin/group/_action_approve.html.twig'];
-        }
-
-        if (!$object->isRefused()) {
-            $list['refuse'] = ['template' => 'admin/group/_action_refuse.html.twig'];
-        }
-
-        return $list;
-    }
-
     protected function configureShowFields(ShowMapper $show)
     {
         $show
@@ -45,29 +25,24 @@ class GroupAdmin extends AbstractAdmin
                 ->add('description', null, [
                     'label' => 'Description',
                 ])
+                ->add('beginAt', null, [
+                    'label' => 'Begin at',
+                ])
+                ->add('finishAt', null, [
+                    'label' => 'Finish at',
+                ])
                 ->add('address', null, [
                     'label' => 'Address',
                     'virtual_field' => true,
                     'template' => 'admin/address/_show.html.twig',
                 ])
-                ->add('animators', null, [
-                    'label' => 'Animators',
-                    'template' => 'admin/group/_show_animators.html.twig',
+                ->add('creator', null, [
+                    'label' => 'Creator',
                 ])
             ->end()
             ->with('System informations', ['class' => 'col-md-4'])
-                ->add('status', null, [
-                    'label' => 'Status',
-                    'template' => 'admin/group/_show_status.html.twig',
-                ])
                 ->add('createdAt', null, [
                     'label' => 'Created at',
-                ])
-                ->add('approvedAt', null, [
-                    'label' => 'Approved at',
-                ])
-                ->add('refusedAt', null, [
-                    'label' => 'Refused at',
                 ])
             ->end()
         ;
@@ -75,8 +50,10 @@ class GroupAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $filter)
     {
-        $range = range(2018, (int) date('Y'));
-        $years = array_combine($range, $range);
+        $rangeCreatedAt = range(2018, (int) date('Y'));
+        $yearsCreatedAt = array_combine($rangeCreatedAt, $rangeCreatedAt);
+        $rangeDates = range(2018, (int) date('Y', strtotime('+5 years')));
+        $yearsDates = array_combine($rangeDates, $rangeDates);
 
         $filter
             ->add('name', CallbackFilter::class, [
@@ -85,8 +62,8 @@ class GroupAdmin extends AbstractAdmin
                 'advanced_filter' => false,
                 'callback' => [$this, 'applyNameFilter'],
             ])
-            ->add('animator', ModelAutocompleteFilter::class, [
-                'label' => 'Animator or Co-Animator',
+            ->add('creator', ModelAutocompleteFilter::class, [
+                'label' => 'Creator',
                 'show_filter' => true,
                 'advanced_filter' => false,
                 'field_options' => [
@@ -96,17 +73,48 @@ class GroupAdmin extends AbstractAdmin
                     },
                 ],
             ])
-            ->add('createdAt', DateRangeFilter::class, [
-                'label' => 'Created at',
+            ->add('beginAt', DateRangeFilter::class, [
+                'label' => 'Begin at',
+                'advanced_filter' => false,
                 'field_type' => DateRangePickerType::class,
                 'field_options' => [
                     'field_options_start' => [
                         'datepicker_use_button' => false,
-                        'years' => $years,
+                        'years' => $yearsDates,
                     ],
                     'field_options_end' => [
                         'datepicker_use_button' => false,
-                        'years' => $years,
+                        'years' => $yearsDates,
+                    ],
+                ],
+            ])
+            ->add('finishAt', DateRangeFilter::class, [
+                'label' => 'Finish at',
+                'advanced_filter' => false,
+                'field_type' => DateRangePickerType::class,
+                'field_options' => [
+                    'field_options_start' => [
+                        'datepicker_use_button' => false,
+                        'years' => $yearsDates,
+                    ],
+                    'field_options_end' => [
+                        'datepicker_use_button' => false,
+                        'years' => $yearsDates,
+                    ],
+                ],
+            ])
+            ->add('createdAt', DateRangeFilter::class, [
+                'label' => 'Created at',
+                'advanced_filter' => false,
+                'field_type' => DateRangePickerType::class,
+                'field_options' => [
+                    'field_options_start' => [
+                        'datepicker_use_button' => false,
+                        'years' => $yearsCreatedAt,
+                    ],
+                    'field_options_end' => [
+                        'datepicker_use_button' => false,
+                        'years' => $yearsCreatedAt,
                     ],
                 ],
             ])
@@ -119,8 +127,8 @@ class GroupAdmin extends AbstractAdmin
             ->addIdentifier('name', null, [
                 'label' => 'Group name',
             ])
-            ->add('animator', null, [
-                'label' => 'Animator',
+            ->add('creator', null, [
+                'label' => 'Creator',
                 'route' => ['name' => 'show'],
                 'sortable' => true,
                 'sort_field_mapping' => ['fieldName' => 'id'],
@@ -131,25 +139,18 @@ class GroupAdmin extends AbstractAdmin
                 'sortable' => false,
                 'template' => 'admin/address/_list.html.twig',
             ])
+            ->add('beginAt', null, [
+                'label' => 'Begin at',
+            ])
+            ->add('finishAt', null, [
+                'label' => 'Finish at',
+            ])
             ->add('createdAt', null, [
                 'label' => 'Created at',
-            ])
-            ->add('membersCount', null, [
-                'label' => 'Members',
-            ])
-            ->add('status', null, [
-                'label' => 'Status',
-                'template' => 'admin/group/_list_status.html.twig',
             ])
             ->add('_action', null, [
                 'virtual_field' => true,
                 'actions' => [
-                    'approve' => [
-                        'template' => 'admin/group/_list_approve.html.twig',
-                    ],
-                    'refuse' => [
-                        'template' => 'admin/group/_list_refuse.html.twig',
-                    ],
                     'show' => [],
                 ],
             ])
