@@ -118,7 +118,7 @@ class Event implements EntitySlugInterface, GeocodableInterface
 
     public function createSlugSource(): string
     {
-        return (string) $this->name;
+        return sprintf('%s - %s', $this->beginAt->format('Y-m-d'), $this->name);
     }
 
     public function getName(): ?string

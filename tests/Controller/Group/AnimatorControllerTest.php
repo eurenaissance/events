@@ -15,22 +15,6 @@ class AnimatorControllerTest extends HttpTestCase
     public function provideAnimatorCanPromoteFollowers(): iterable
     {
         yield [
-            'marine@mobilisation-eu.localhost',
-            'ecology-in-paris',
-            'Ecology in Paris',
-            '472508fa-4e4d-4330-8fda-5fefc92b1a8a',
-            'Rémi',
-        ];
-
-        yield [
-            'titouan@mobilisation-eu.localhost',
-            'ecology-in-clichy',
-            'Ecology in Clichy',
-            '472508fa-4e4d-4330-8fda-5fefc92b1a8a',
-            'Rémi',
-        ];
-
-        yield [
             'nicolas@mobilisation-eu.localhost',
             'culture-in-asnieres',
             'Culture in Asnieres',
@@ -41,6 +25,7 @@ class AnimatorControllerTest extends HttpTestCase
 
     /**
      * @dataProvider provideAnimatorCanPromoteFollowers
+     * @group debug
      */
     public function testAnimatorCanPromoteFollower(
         string $animatorEmail,

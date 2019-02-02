@@ -22,6 +22,7 @@ class AdministratorAdmin extends AbstractAdmin
         'Dashboard administrator' => 'ROLE_ADMIN',
         'Actors administrator' => 'ROLE_ADMIN_ACTORS',
         'Groups administrator' => 'ROLE_ADMIN_GROUPS',
+        'Events administrator' => 'ROLE_ADMIN_EVENTS',
     ];
 
     private $passwordEncoderListener;

@@ -117,7 +117,6 @@ class Actor implements ActorInterface, GeocodableInterface
      * @var CoAnimatorMembership[]|Collection
      *
      * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="actor", cascade={"detach"})
-     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $coAnimatorMemberships;
 
@@ -125,7 +124,6 @@ class Actor implements ActorInterface, GeocodableInterface
      * @var FollowerMembership[]|Collection
      *
      * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="actor", cascade={"detach"})
-     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $followerMemberships;
 

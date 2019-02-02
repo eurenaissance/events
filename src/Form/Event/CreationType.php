@@ -112,7 +112,7 @@ class CreationType extends AbstractType
         $resolver
             ->setDefaults([
                 'data_class' => Event::class,
-                'years' => self::getDatesYears(),
+                'years' => $this->getDatesYears(),
                 'group' => null,
             ])
             ->setRequired('group')
@@ -125,9 +125,9 @@ class CreationType extends AbstractType
         return null;
     }
 
-    public static function getDatesYears(): array
+    private function getDatesYears(): array
     {
-        $years = range(2018, 2025);
+        $years = range((int) date('Y'), (int) date('Y', strtotime('+5 years')));
 
         return array_combine($years, $years);
     }

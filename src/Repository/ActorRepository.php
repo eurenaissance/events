@@ -13,6 +13,20 @@ class ActorRepository extends ServiceEntityRepository
         parent::__construct($registry, Actor::class);
     }
 
+    public function loadActor(string $email): ?Actor
+    {
+        return $this
+            ->createQueryBuilder('a')
+            ->select('a, cm, fm')
+            ->leftJoin('a.coAnimatorMemberships', 'cm')
+            ->leftJoin('a.followerMemberships', 'fm')
+            ->where('a.emailAddress = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     public function findOneByEmail(string $email): ?Actor
     {
         return $this

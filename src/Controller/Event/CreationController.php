@@ -27,7 +27,7 @@ class CreationController extends AbstractController
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $creationHandler->create($event);
 
-            return $this->redirectToRoute('app_group_view', ['slug' => $group->getSlug()]);
+            return $this->redirectToRoute('app_event_view', ['slug' => $event->getSlug()]);
         }
 
         return $this->render('event/creation/create.html.twig', [

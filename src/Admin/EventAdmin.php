@@ -6,14 +6,12 @@ use App\Entity\Actor;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 use Sonata\Form\Type\DateRangePickerType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class EventAdmin extends AbstractAdmin
 {
@@ -67,16 +65,17 @@ class EventAdmin extends AbstractAdmin
             ->add('creator', ModelAutocompleteFilter::class, [
                 'label' => 'Creator',
                 'show_filter' => true,
-                'operator_type' => HiddenType::class,
                 'advanced_filter' => false,
-            ], ModelAutocompleteType::class, [
-                'property' => ['emailAddress', 'fullName'],
-                'to_string_callback' => function (Actor $actor) {
-                    return sprintf('%s (%s)', $actor->getFullName(), $actor->getEmailAddress());
-                },
+                'field_options' => [
+                    'property' => ['emailAddress', 'fullName'],
+                    'to_string_callback' => function (Actor $actor) {
+                        return sprintf('%s (%s)', $actor->getFullName(), $actor->getEmailAddress());
+                    },
+                ],
             ])
             ->add('beginAt', DateRangeFilter::class, [
                 'label' => 'Begin at',
+                'advanced_filter' => false,
                 'field_type' => DateRangePickerType::class,
                 'field_options' => [
                     'field_options_start' => [
@@ -91,6 +90,7 @@ class EventAdmin extends AbstractAdmin
             ])
             ->add('finishAt', DateRangeFilter::class, [
                 'label' => 'Finish at',
+                'advanced_filter' => false,
                 'field_type' => DateRangePickerType::class,
                 'field_options' => [
                     'field_options_start' => [
@@ -105,6 +105,7 @@ class EventAdmin extends AbstractAdmin
             ])
             ->add('createdAt', DateRangeFilter::class, [
                 'label' => 'Created at',
+                'advanced_filter' => false,
                 'field_type' => DateRangePickerType::class,
                 'field_options' => [
                     'field_options_start' => [

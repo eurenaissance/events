@@ -38,9 +38,11 @@ services:
         tags:
             - { name: sonata.admin.extension, target: admin.actor }
             - { name: sonata.admin.extension, target: admin.group }
+            - { name: sonata.admin.extension, target: admin.event }
 
     admin.extension.city:
         class: App\Admin\Extension\CityExtension
         tags:
             - { name: sonata.admin.extension, target: admin.actor }
             - { name: sonata.admin.extension, target: admin.group }
+            - { name: sonata.admin.extension, target: admin.event }

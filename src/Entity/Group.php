@@ -82,22 +82,22 @@ class Group implements EntitySlugInterface, GeocodableInterface, EntityReviewInt
     /**
      * @var CoAnimatorMembership[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="group", cascade={"all"})
+     * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="group", cascade={"detach"})
      */
     private $coAnimatorMemberships;
 
     /**
      * @var FollowerMembership[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="group", fetch="EXTRA_LAZY", cascade={"all"})
+     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="group", cascade={"detach"}, fetch="EXTRA_LAZY")
      */
     private $followerMemberships;
 
     /**
      * @var Event[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="group")
-     * @ORM\OrderBy({"createdAt" = "DESC"})
+     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="group", fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({"beginAt" = "ASC"})
      */
     private $events;
 

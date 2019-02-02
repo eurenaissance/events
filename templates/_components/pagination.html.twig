@@ -1,0 +1,44 @@
+{% if route is not defined or route is null %}
+    {% set route = app.request.get('_route') %}
+{% endif %}
+{% if route_parameters is not defined or route_parameters is null %}
+    {% set route_parameters = {} %}
+{% endif %}
+{% if page_parameter is not defined or page_parameter is null %}
+    {% set page_parameter = 'page' %}
+{% endif %}
+{% set current_page = app.request.get(page_parameter, 1) %}
+
+<div class="col-lg-3">
+    <ul class="pagination">
+        <li class="page-item{% if 1 == current_page %} disabled{% endif %}">
+            {% if 1 == current_page %}
+                <span class="page-link">&laquo;</span>
+            {% else %}
+                <a class="page-link" href="{{ path(route, route_parameters|merge({ (page_parameter): 1 })) }}">
+                    &laquo;
+                </a>
+            {% endif %}
+        </li>
+        {% for page in 1..total_pages %}
+            <li class="page-item{% if page == current_page %} active{% endif %}">
+                {% if page == current_page %}
+                    <span class="page-link">{{ page }}</span>
+                {% else %}
+                    <a class="page-link" href="{{ path(route, route_parameters|merge({ (page_parameter): page })) }}">
+                        {{ page }}
+                    </a>
+                {% endif %}
+            </li>
+        {% endfor %}
+        <li class="page-item{% if total_pages == current_page %} disabled{% endif %}">
+            {% if total_pages == current_page %}
+                <span class="page-link">&raquo;</span>
+            {% else %}
+                <a class="page-link" href="{{ path(route, route_parameters|merge({ (page_parameter): total_pages })) }}">
+                    &raquo;
+                </a>
+            {% endif %}
+        </li>
+    </ul>
+</div>
