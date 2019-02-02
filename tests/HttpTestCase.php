@@ -12,6 +12,7 @@ use Enqueue\Client\TraceableProducer;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
@@ -206,6 +207,15 @@ abstract class HttpTestCase extends WebTestCase
         $this->assertArrayHasKey('uniqid', $parameters, 'Could not find "uniqid" parameter in query to determine form uniqid.');
 
         return $parameters['uniqid'];
+    }
+
+    protected function submitAdminForm(string $button, array $fieldValues = []): Crawler
+    {
+        $form = $this->client->getCrawler()->selectButton($button)->form();
+
+        return $this->client->submit($form, [
+            $this->getAdminFormUniqId($form) => $fieldValues,
+        ]);
     }
 
     private function authenticate(UserInterface $user, string $firewallName, string $firewallContext): void

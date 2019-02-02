@@ -31,10 +31,10 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $this->client->request('GET', '/admin/login');
         $this->assertIsRedirectedTo('/admin/setup');
 
-        $crawler = $this->client->followRedirect();
+        $this->client->followRedirect();
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Save')->form(), [
+        $this->client->submitForm('Save', [
             'emailAddress' => $email,
             'plainPassword' => [
                 'first' => $password,
@@ -43,11 +43,11 @@ class AdministratorSetupControllerTest extends HttpTestCase
         ]);
         $this->assertIsRedirectedTo('/admin/login');
 
-        $crawler = $this->client->followRedirect();
+        $this->client->followRedirect();
         $this->assertResponseSuccessFul();
         $this->assertTrue($administratorRepository->hasAdministrator());
 
-        $this->client->submit($crawler->selectButton('Sign in')->form(), [
+        $this->client->submitForm('Sign in', [
             'emailAddress' => $email,
             'password' => $password,
         ]);
@@ -80,10 +80,10 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $administratorRepository->deleteAll();
         $this->assertFalse($administratorRepository->hasAdministrator());
 
-        $crawler = $this->client->request('GET', '/admin/setup');
+        $this->client->request('GET', '/admin/setup');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Save')->form(), [
+        $this->client->submitForm('Save', [
             'emailAddress' => $email,
             'plainPassword' => [
                 'first' => $firstPassword,
