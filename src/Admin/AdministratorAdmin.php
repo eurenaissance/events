@@ -29,9 +29,9 @@ class AdministratorAdmin extends AbstractAdmin
     private $googleAuthenticator;
 
     public function __construct(
-        $code,
-        $class,
-        $baseControllerName,
+        string $code,
+        string $class,
+        string $baseControllerName,
         PasswordEncoderListener $passwordEncoderListener,
         GoogleAuthenticator $googleAuthenticator
     ) {

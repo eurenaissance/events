@@ -338,9 +338,14 @@ class Actor implements ActorInterface, GeocodableInterface
 
     public function getCoAnimatedGroups(): ArrayCollection
     {
-        return new ArrayCollection(array_map(function (CoAnimatorMembership $membership) {
-            return $membership->getGroup();
-        }, $this->coAnimatorMemberships->toArray()));
+        return new ArrayCollection(
+            array_map(
+                function (CoAnimatorMembership $membership) {
+                    return $membership->getGroup();
+                },
+                $this->coAnimatorMemberships->toArray()
+            )
+        );
     }
 
     public function isFollower(): bool
@@ -375,9 +380,14 @@ class Actor implements ActorInterface, GeocodableInterface
 
     public function getFollowedGroups(): ArrayCollection
     {
-        return new ArrayCollection(array_map(function (FollowerMembership $membership) {
-            return $membership->getGroup();
-        }, $this->followerMemberships->toArray()));
+        return new ArrayCollection(
+            array_map(
+                function (FollowerMembership $membership) {
+                    return $membership->getGroup();
+                },
+                $this->followerMemberships->toArray()
+            )
+        );
     }
 
     public function isMemberOfGroup(Group $group): bool
