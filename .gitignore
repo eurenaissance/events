@@ -1,3 +1,6 @@
+/storage/public/*
+!/storage/public/fixtures
+
 ###> symfony/framework-bundle ###
 .env.local
 /public/bundles/

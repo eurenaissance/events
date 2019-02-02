@@ -15,6 +15,7 @@ services:
         autowire: true
         autoconfigure: true
         bind:
+            string $appSecret: '%kernel.secret%'
             string $appCountry: '%app_country%'
             array $defaultSender: '%default_sender%'
 
@@ -25,3 +26,27 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+
+    # Image provider
+    Intervention\Image\ImageManager: ~
+
+    app.image_provider.source:
+        class: 'League\Flysystem\Filesystem'
+        arguments:
+            - !service
+                class: 'League\Flysystem\Adapter\Local'
+                arguments: ['%kernel.project_dir%/storage/public']
+
+    app.image_provider.cache:
+        class: 'League\Flysystem\Filesystem'
+        arguments:
+            - !service
+                class: 'Danhunsaker\Flysystem\Redis\RedisAdapter'
+                arguments: ['@snc_redis.default']
+
+    League\Glide\Server:
+        factory: ['League\Glide\ServerFactory', 'create']
+        arguments:
+            -   source: '@app.image_provider.source'
+                cache: '@app.image_provider.cache'

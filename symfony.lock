@@ -41,6 +41,9 @@
             "ref": "56eaa387b5e48ebcc7c95a893b47dfa1ad51449c"
         }
     },
+    "danhunsaker/flysystem-redis": {
+        "version": "v1.0.4"
+    },
     "dasprid/enum": {
         "version": "1.0.0"
     },
@@ -206,6 +209,9 @@
     "guzzlehttp/psr7": {
         "version": "1.5.2"
     },
+    "intervention/image": {
+        "version": "2.4.2"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -223,6 +229,15 @@
     },
     "league/csv": {
         "version": "9.1.4"
+    },
+    "league/flysystem": {
+        "version": "1.0.50"
+    },
+    "league/flysystem-memory": {
+        "version": "1.0.1"
+    },
+    "league/glide": {
+        "version": "1.4.0"
     },
     "makasim/temp-file": {
         "version": "0.2.0"
