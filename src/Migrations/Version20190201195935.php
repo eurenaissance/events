@@ -95,6 +95,9 @@ final class Version20190201195935 extends AbstractMigration
         $this->addSql('ALTER TABLE co_animator_memberships ADD CONSTRAINT FK_1DEA70D8FE54D947 FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE follower_memberships ADD CONSTRAINT FK_CA3C50D510DAF24A FOREIGN KEY (actor_id) REFERENCES actors (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE follower_memberships ADD CONSTRAINT FK_CA3C50D5FE54D947 FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('CREATE SEQUENCE configuration_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE TABLE configuration (id BIGINT NOT NULL, party_name VARCHAR(50) NOT NULL, party_logo VARCHAR(100) NOT NULL, party_website VARCHAR(100) NOT NULL, color_primary VARCHAR(8) NOT NULL, font_primary VARCHAR(50) NOT NULL, font_mono VARCHAR(50) NOT NULL, meta_description VARCHAR(200) NOT NULL, meta_image VARCHAR(100) NOT NULL, meta_google_analytics_id VARCHAR(30) DEFAULT NULL, home_picture VARCHAR(100) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('INSERT INTO configuration (id, party_name, party_logo, party_website, color_primary, font_primary, font_mono, meta_description, meta_image, home_picture) VALUES (1, \'Your party\', \'fixtures/logo/default.jpg\', \'https://your-party-website.com\', \'6f80ff\', \'Roboto Slab\', \'Roboto Mono\', \'Your party slogan\', \'fixtures/home/default.jpg\', \'fixtures/home/default.jpg\')');
     }
 
     public function down(Schema $schema): void
@@ -114,6 +117,7 @@ final class Version20190201195935 extends AbstractMigration
         $this->addSql('ALTER TABLE groups DROP CONSTRAINT FK_F06D39708BAC62AF');
         $this->addSql('ALTER TABLE actors DROP CONSTRAINT FK_DF2BF0E58BAC62AF');
         $this->addSql('ALTER TABLE events DROP CONSTRAINT FK_5387574A8BAC62AF');
+        $this->addSql('DROP SEQUENCE configuration_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE groups_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE actor_confirm_tokens_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE actor_reset_password_tokens_id_seq CASCADE');
@@ -123,6 +127,7 @@ final class Version20190201195935 extends AbstractMigration
         $this->addSql('DROP SEQUENCE events_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE co_animator_memberships_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE follower_memberships_id_seq CASCADE');
+        $this->addSql('DROP TABLE configuration');
         $this->addSql('DROP TABLE groups');
         $this->addSql('DROP TABLE actor_confirm_tokens');
         $this->addSql('DROP TABLE actor_reset_password_tokens');
