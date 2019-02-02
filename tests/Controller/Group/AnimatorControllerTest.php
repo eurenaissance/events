@@ -5,7 +5,6 @@ namespace Test\App\Controller;
 use App\Entity\Group;
 use App\Tests\HttpTestCase;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\FilterCollection;
 
 /**
  * @group functional
@@ -25,7 +24,6 @@ class AnimatorControllerTest extends HttpTestCase
 
     /**
      * @dataProvider provideAnimatorCanPromoteFollowers
-     * @group debug
      */
     public function testAnimatorCanPromoteFollower(
         string $animatorEmail,
@@ -39,7 +37,7 @@ class AnimatorControllerTest extends HttpTestCase
         $this->authenticateActor($animatorEmail);
 
         $this->client->request('GET', "/group/$groupSlug/promote/$followerUuid");
-        $this->assertIsRedirectedTo("/group/$groupSlug");
+        $this->assertIsRedirectedTo("/group/$groupSlug/members");
         $this->assertMailSent([
             'to' => 'remi@mobilisation-eu.localhost',
             'subject' => "You have been promoted to co-animator in the group \"$groupName\"!",
@@ -57,8 +55,12 @@ class AnimatorControllerTest extends HttpTestCase
 
     public function provideActorCannotPromoteIfGroupIsNotApproved(): iterable
     {
-        // animator of the group
+        // animator of refused group
         yield ['thomas@mobilisation-eu.localhost', 'development-in-lille', '2a9051e9-7cea-460f-a714-052079d4aa2b'];
+        // co-animator of refused group
+        yield ['remi@mobilisation-eu.localhost', 'development-in-lille', '2a9051e9-7cea-460f-a714-052079d4aa2b'];
+        // no relation with refused group
+        yield ['manon@mobilisation-eu.localhost', 'development-in-lille', '2a9051e9-7cea-460f-a714-052079d4aa2b'];
     }
 
     /**
@@ -78,6 +80,45 @@ class AnimatorControllerTest extends HttpTestCase
         $this->assertNoMailSent();
 
         $this->assertActorIsFollowerOfGroup($followerUuid, $groupSlug);
+    }
+
+    public function provideActorCannotPromoteOrDemoteIfGroupIsPending(): iterable
+    {
+        // animator of the pending group
+        yield ['marine@mobilisation-eu.localhost', 'culture-in-paris', '2a9051e9-7cea-460f-a714-052079d4aa2b'];
+        // no relation with the pending group
+        yield ['titouan@mobilisation-eu.localhost', 'culture-in-paris', '2a9051e9-7cea-460f-a714-052079d4aa2b'];
+        yield ['remi@mobilisation-eu.localhost', 'culture-in-paris', '2a9051e9-7cea-460f-a714-052079d4aa2b'];
+    }
+
+    /**
+     * @dataProvider provideActorCannotPromoteOrDemoteIfGroupIsPending
+     */
+    public function testActorCannotPromoteIfGroupIsPending(
+        string $actorEmail,
+        string $groupSlug,
+        string $actorUuid
+    ): void {
+        $this->authenticateActor($actorEmail);
+
+        $this->client->request('GET', "/group/$groupSlug/promote/$actorUuid");
+        $this->assertNotFoundResponse();
+        $this->assertNoMailSent();
+    }
+
+    /**
+     * @dataProvider provideActorCannotPromoteOrDemoteIfGroupIsPending
+     */
+    public function testActorCannotDemoteIfGroupIsPending(
+        string $actorEmail,
+        string $groupSlug,
+        string $actorUuid
+    ): void {
+        $this->authenticateActor($actorEmail);
+
+        $this->client->request('GET', "/group/$groupSlug/demote/$actorUuid");
+        $this->assertNotFoundResponse();
+        $this->assertNoMailSent();
     }
 
     public function provideAnonymousCannotPromoteFollowers(): iterable
@@ -147,7 +188,7 @@ class AnimatorControllerTest extends HttpTestCase
         $this->authenticateActor($animatorEmail);
 
         $this->client->request('GET', "/group/$groupSlug/demote/$coAnimatorUuid");
-        $this->assertIsRedirectedTo("/group/$groupSlug");
+        $this->assertIsRedirectedTo("/group/$groupSlug/members");
         $this->assertNoMailSent();
 
         $this->client->followRedirect();
@@ -241,22 +282,19 @@ class AnimatorControllerTest extends HttpTestCase
 
     private function assertIfActorIsPromotedInGroup(string $actorUuid, string $groupSlug, bool $promoted): void
     {
-        /** @var FilterCollection $filters */
-        $filters = $this->get(EntityManagerInterface::class)->getFilters();
+        /** @var EntityManagerInterface $entityManager */
+        $entityManager = $this->get(EntityManagerInterface::class);
+        $filters = $entityManager->getFilters();
+
         if ($enabled = $filters->isEnabled('refused')) {
             $filters->disable('refused');
         }
 
-        $actorRepository = $this->getActorRepository();
-        $groupRepository = $this->getGroupRepository();
+        $entityManager->clear();
 
-        $actorRepository->clear();
-        $groupRepository->clear();
+        $actor = $this->getActorRepository()->findOneByUuid($actorUuid);
+        $group = $this->getGroupRepository()->findOneBySlug($groupSlug);
 
-        $actor = $actorRepository->findOneByUuid($actorUuid);
-        $groups = $groupRepository->findWithoutFilters(['slug' => $groupSlug]);
-        /** @var Group $group */
-        $group = $groups[0];
         $this->assertSame($promoted, $actor->isCoAnimatorOf($group));
         $this->assertSame(!$promoted, $actor->isFollowerOf($group));
 

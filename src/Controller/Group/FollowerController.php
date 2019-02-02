@@ -4,6 +4,7 @@ namespace App\Controller\Group;
 
 use App\Entity\Group;
 use App\Group\FollowerMembershipHandler;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,6 +13,7 @@ class FollowerController extends AbstractController
 {
     /**
      * @Route("/{slug}/follow", name="app_group_follow", methods="GET")
+     * @Entity("group", expr="repository.findApprovedBySlug(slug)")
      */
     public function follow(FollowerMembershipHandler $followerMembershipHandler, Group $group): Response
     {
@@ -26,6 +28,7 @@ class FollowerController extends AbstractController
 
     /**
      * @Route("/{slug}/unfollow", name="app_group_unfollow", methods="GET")
+     * @Entity("group", expr="repository.findApprovedBySlug(slug)")
      */
     public function unfollow(FollowerMembershipHandler $followerMembershipHandler, Group $group): Response
     {

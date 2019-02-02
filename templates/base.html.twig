@@ -76,8 +76,9 @@
         <div class="container">
             {% block flash_message %}
                 {% for message in app.flashes('info') %}
-                    <div class="flash notice-flashes">
-                        <div class="flash__inner">{{ message|trans }}</div>
+                    <div class="alert alert-dismissible alert-primary">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <p class="mb-0">{{ message|trans }}</p>
                     </div>
                 {% endfor %}
 

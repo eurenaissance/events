@@ -19,7 +19,7 @@ class AnimatorController extends AbstractController
      *     methods="GET",
      *     requirements={"uuid": "%pattern_uuid%"}
      * )
-     * @Entity("group", expr="repository.findOneBySlug(slug)")
+     * @Entity("group", expr="repository.findApprovedBySlug(slug)")
      * @Entity("actor", expr="repository.findOneByUuid(uuid)")
      */
     public function promote(
@@ -33,7 +33,7 @@ class AnimatorController extends AbstractController
 
         $this->addFlash('info', 'group.animator.promote.flash.success');
 
-        return $this->redirectToRoute('app_group_view', ['slug' => $group->getSlug()]);
+        return $this->redirectToRoute('app_group_view_members', ['slug' => $group->getSlug()]);
     }
 
     /**
@@ -43,7 +43,7 @@ class AnimatorController extends AbstractController
      *     methods="GET",
      *     requirements={"uuid": "%pattern_uuid%"}
      * )
-     * @Entity("group", expr="repository.findOneBySlug(slug)")
+     * @Entity("group", expr="repository.findApprovedBySlug(slug)")
      * @Entity("actor", expr="repository.findOneByUuid(uuid)")
      */
     public function demote(
@@ -57,6 +57,6 @@ class AnimatorController extends AbstractController
 
         $this->addFlash('info', 'group.animator.demote.flash.success');
 
-        return $this->redirectToRoute('app_group_view', ['slug' => $group->getSlug()]);
+        return $this->redirectToRoute('app_group_view_members', ['slug' => $group->getSlug()]);
     }
 }

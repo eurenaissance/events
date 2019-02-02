@@ -7,14 +7,12 @@ use App\Entity\Group;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 use Sonata\Form\Type\DateRangePickerType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class GroupAdmin extends AbstractAdmin
 {
@@ -90,13 +88,13 @@ class GroupAdmin extends AbstractAdmin
             ->add('animator', ModelAutocompleteFilter::class, [
                 'label' => 'Animator or Co-Animator',
                 'show_filter' => true,
-                'operator_type' => HiddenType::class,
                 'advanced_filter' => false,
-            ], ModelAutocompleteType::class, [
-                'property' => ['emailAddress', 'fullName'],
-                'to_string_callback' => function (Actor $actor) {
-                    return sprintf('%s (%s)', $actor->getFullName(), $actor->getEmailAddress());
-                },
+                'field_options' => [
+                    'property' => ['emailAddress', 'fullName'],
+                    'to_string_callback' => function (Actor $actor) {
+                        return sprintf('%s (%s)', $actor->getFullName(), $actor->getEmailAddress());
+                    },
+                ],
             ])
             ->add('createdAt', DateRangeFilter::class, [
                 'label' => 'Created at',

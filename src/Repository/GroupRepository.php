@@ -19,7 +19,18 @@ class GroupRepository extends ServiceEntityRepository
     public function findOneBySlug(string $slug): ?Group
     {
         return $this
-            ->createConfirmedQueryBuilder('g')
+            ->createQueryBuilder('g')
+            ->where('g.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function findApprovedBySlug(string $slug): ?Group
+    {
+        return $this
+            ->createApprovedQueryBuilder('g')
             ->andWhere('g.slug = :slug')
             ->setParameter('slug', $slug)
             ->getQuery()
@@ -48,7 +59,7 @@ class GroupRepository extends ServiceEntityRepository
         }
 
         return $this
-            ->createConfirmedQueryBuilder('g')
+            ->createApprovedQueryBuilder('g')
             ->innerJoin('g.city', 'c')
             ->addSelect('ST_Distance_Sphere(c.coordinates, :coordinates) as HIDDEN distance')
             ->andWhere('ST_Distance_Sphere(c.coordinates, :coordinates) <= :maxDistance')
@@ -77,11 +88,10 @@ class GroupRepository extends ServiceEntityRepository
         return $groups;
     }
 
-    private function createConfirmedQueryBuilder(string $alias = 'g'): QueryBuilder
+    private function createApprovedQueryBuilder(string $alias = 'g'): QueryBuilder
     {
         return $this
             ->createQueryBuilder($alias)
-            ->where("$alias.refusedAt IS NULL")
             ->andWhere("$alias.approvedAt IS NOT NULL")
         ;
     }

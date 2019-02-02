@@ -22,6 +22,6 @@ class ActorController extends AbstractController
 
         $authenticationUtils->authenticateAdministrator($impersonatingUser);
 
-        return $this->redirectToRoute('admin_app_actor_edit', ['id' => $impersonatedUser->getId()]);
+        return $this->redirectToRoute('admin_app_actor_show', ['id' => $impersonatedUser->getId()]);
     }
 }

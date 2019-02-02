@@ -116,14 +116,14 @@ class Actor implements ActorInterface, GeocodableInterface
     /**
      * @var CoAnimatorMembership[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="actor", cascade={"detach"})
+     * @ORM\OneToMany(targetEntity=CoAnimatorMembership::class, mappedBy="actor")
      */
     private $coAnimatorMemberships;
 
     /**
      * @var FollowerMembership[]|Collection
      *
-     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="actor", cascade={"detach"})
+     * @ORM\OneToMany(targetEntity=FollowerMembership::class, mappedBy="actor")
      */
     private $followerMemberships;
 

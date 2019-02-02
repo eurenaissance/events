@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'group.view.members.title'|trans({ '%group%': group.name }) %}
+
+{% block body %}
+    <h1>{{ group.name }}</h1>
+
+    <hr class="mt-5">
+
+    <div class="row">
+        <div class="col-md-8">
+
+            <h3>Co-animators:</h3>
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">First name</th>
+                    <th scope="col">Last name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Since</th>
+                    {% if is_granted('GROUP_ANIMATOR', group) %}
+                        <th scope="col">Actions</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                    {% for membership in group.coAnimatorMemberships %}
+                        {% set actor = membership.actor %}
+                        <tr>
+                            <td>{{ actor.firstName }}</td>
+                            <td>{{ actor.lastName }}</td>
+                            <td>{{ actor.emailAddress }}</td>
+                            <td>{{ membership.createdAt|date }}</td>
+                            {% if is_granted('GROUP_ANIMATOR', group) %}
+                                <td>
+                                    <a href="{{ path('app_group_demote', { slug: group.slug, uuid: actor.uuid }) }}" class="btn btn-warning btn-sm">
+                                        Demote
+                                    </a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+            <h3 id="followers">Followers:</h3>
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">First name</th>
+                    <th scope="col">Last name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Since</th>
+                    {% if is_granted('GROUP_ANIMATOR', group) %}
+                        <th scope="col">Actions</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                    {% for membership in follower_memberships %}
+                        {% set actor = membership.actor %}
+                        <tr>
+                            <td>{{ actor.firstName }}</td>
+                            <td>{{ actor.lastName }}</td>
+                            <td>{{ actor.emailAddress }}</td>
+                            <td>{{ membership.createdAt|date }}</td>
+                            {% if is_granted('GROUP_ANIMATOR', group) %}
+                                <td>
+                                    <a href="{{ path('app_group_promote', { slug: group.slug, uuid: actor.uuid }) }}" class="btn btn-success btn-sm">
+                                        Promote
+                                    </a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% include '_components/pagination.html.twig' with {
+                total_pages: follower_memberships_total_pages,
+                route_parameters: { slug: group.slug, _fragment: 'followers' },
+                page_parameter: constant('App\\Controller\\Group\\MembersController::FOLLOWER_MEMBERSHIPS_PAGE_PARAMETER')
+            } %}
+
+        </div>
+
+        <div class="col-md-4 border-left">
+            {% include 'group/view/_sidebar.html.twig' %}
+        </div>
+    </div>
+{% endblock %}
