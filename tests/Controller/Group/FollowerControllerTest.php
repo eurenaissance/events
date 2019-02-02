@@ -5,7 +5,6 @@ namespace Test\App\Controller;
 use App\Entity\Group;
 use App\Tests\HttpTestCase;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\FilterCollection;
 
 /**
  * @group functional
@@ -219,19 +218,18 @@ class FollowerControllerTest extends HttpTestCase
 
     private function assertGroupMembersCount(string $groupSlug, int $expectedMembersCount): void
     {
-        /** @var FilterCollection $filters */
-        $filters = $this->get(EntityManagerInterface::class)->getFilters();
+        /** @var EntityManagerInterface $entityManager */
+        $entityManager = $this->get(EntityManagerInterface::class);
+        $filters = $entityManager->getFilters();
+
         if ($enabled = $filters->isEnabled('refused')) {
             $filters->disable('refused');
         }
 
-        $groupRepository = $this->getGroupRepository();
+        $entityManager->clear();
 
-        $groupRepository->clear();
+        $group = $this->getGroupRepository()->findOneBySlug($groupSlug);
 
-        $groups = $groupRepository->findWithoutFilters(['slug' => $groupSlug]);
-        /** @var Group $group */
-        $group = $groups[0];
         $this->assertSame($expectedMembersCount, $group->getMembersCount());
 
         if ($enabled) {

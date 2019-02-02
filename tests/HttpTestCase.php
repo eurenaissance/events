@@ -120,8 +120,11 @@ abstract class HttpTestCase extends WebTestCase
 
         foreach ($this->getMessagesForTopic('mail') as $mail) {
             if ($expectedMail['to'] === $mail['to']) {
-                $this->assertMatchesPattern($expectedMail['subject'], $mail['subject']);
-                $this->assertMatchesPattern($expectedMail['body'], $mail['body']);
+                foreach (['subject', 'body'] as $patternComparison) {
+                    if (isset($expectedMail[$patternComparison])) {
+                        $this->assertMatchesPattern($expectedMail[$patternComparison], $mail[$patternComparison]);
+                    }
+                }
 
                 foreach (['from', 'cc', 'bcc'] as $strictComparison) {
                     if (isset($expectedMail[$strictComparison])) {
@@ -129,11 +132,18 @@ abstract class HttpTestCase extends WebTestCase
                     }
                 }
 
+                $this->addToAssertionCount(1);
+
                 return;
             }
         }
 
         $this->fail(sprintf('No mail for "%s" could be found.', $expectedMail['to']));
+    }
+
+    protected function assertMailSentTo(string $email): void
+    {
+        $this->assertMailSent(['to' => $email]);
     }
 
     protected function assertNoMailSent(): void
