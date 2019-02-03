@@ -5,14 +5,14 @@
 {% block body %}
 <div class="home">
     <div class="home__intro" style="background-image: url('{{ image_asset('fixtures/home/default.jpg') }}');">
-        <h2 class="home__intro__title">
-            Mobilisez-vous pour l’Europe
-        </h2>
         <h3 class="home__intro__subtitle">
-            Discutez, échangez, reflechissez et partez engager les autres citoyens.
+            {{ 'home.intro.sub'|trans }}
         </h3>
-        <a href="" class="btn btn-primary btn-lg">
-            Je m'inscris
+        <h2 class="home__intro__title">
+            {{ 'home.intro.main'|trans }}
+        </h2>
+        <a href="{{ path('app_actor_registration_register') }}" class="btn btn-primary btn-lg">
+            {{ 'home.intro.button'|trans }}
         </a>
     </div>
 
@@ -36,7 +36,7 @@
 
                     <div class="card__user">
                         <div class="card__user__image">
-                            <img src="{{ asset('res/fixtures/user.jpg') }}" />
+                            <img src="{{ image_asset('fixtures/users/default.jpg', {'w': 100}) }}" />
                         </div>
                         <div class="card__user__profile">
                             Organisé par <a href="">Titouan G</a>
@@ -64,7 +64,7 @@
 
                     <div class="card__user">
                         <div class="card__user__image">
-                            <img src="{{ asset('res/fixtures/user.jpg') }}" />
+                            <img src="{{ image_asset('fixtures/users/default.jpg', {'w': 100}) }}" />
                         </div>
                         <div class="card__user__profile">
                             Organisé par <a href="">Titouan G</a>
@@ -92,7 +92,7 @@
 
                     <div class="card__user">
                         <div class="card__user__image">
-                            <img src="{{ asset('res/fixtures/user.jpg') }}" />
+                            <img src="{{ image_asset('fixtures/users/default.jpg', {'w': 100}) }}" />
                         </div>
                         <div class="card__user__profile">
                             Organisé par <a href="">Titouan G</a>

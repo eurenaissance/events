@@ -29,14 +29,14 @@
                     </div>
                     <nav class="header__search">
                         <a href="">
-                            {{ 'common.header.find_event'|trans }}
+                            {{ 'layout.header.find_event'|trans }}
                         </a>
                         <a href="">
-                            {{ 'common.header.find_group'|trans }}
+                            {{ 'layout.header.find_group'|trans }}
                         </a>
                         {% if is_granted('GROUP_CREATE') %}
                             <a href="{{ path('app_group_creation_create') }}" class="text-primary">
-                                {{ 'common.header.create_group'|trans }}
+                                {{ 'layout.header.create_group'|trans }}
                             </a>
                         {% endif %}
                     </nav>
@@ -50,23 +50,23 @@
 
                             {% if is_granted('ROLE_ADMIN') %}
                                 <a href="{{ path('sonata_admin_dashboard') }}">
-                                    {{ 'admin.dashboard.link'|trans }}
+                                    {{ 'layout.header.admin.dashboard'|trans }}
                                 </a>
                             {% elseif is_granted('ROLE_PREVIOUS_ADMIN') %}
                                 <a href="{{ path('app_admin_impersonation_exit') }}">
-                                    {{ 'admin.impersonation.quit.link'|trans }}
+                                    {{ 'layout.header.admin.quit_impersonation'|trans }}
                                 </a>
                             {% endif %}
 
                             <a href="{{ path('app_logout') }}">
-                                {{ 'security.logout'|trans }}
+                                {{ 'layout.header.user.logout'|trans }}
                             </a>
                         {% else %}
                             <a href="{{ path('app_login') }}">
-                                {{ 'security.login.link.default'|trans }}
+                                {{ 'layout.header.user.login'|trans }}
                             </a>
                             <a href="{{ path('app_actor_registration_register') }}">
-                                {{ 'actor.registration.register.link.default'|trans }}
+                                {{ 'layout.header.user.register'|trans }}
                             </a>
                         {% endif %}
                     </nav>
@@ -74,19 +74,20 @@
             </div>
         </header>
 
+        {% block intro '' %}
+
         <div class="container">
             {% block flash_message %}
                 {% for message in app.flashes('info') %}
-                    <div class="alert alert-dismissible alert-primary">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <p class="mb-0">{{ message|trans }}</p>
+                    <div class="alert alert-primary">
+                        {{ message|trans }}
                     </div>
                 {% endfor %}
 
                 {% block extra_flash_messages '' %}
             {% endblock %}
 
-            {% block body %}{% endblock %}
+            {% block body '' %}
         </div>
 
         <footer class="footer">
@@ -97,19 +98,19 @@
                     </div>
                     <div class="footer__links">
                         <a href="">
-                            Mentions légales
+                            {{ 'layout.footer.network'|trans }}
                         </a>
                         <a href="">
-                            Conditions d’utilisation
+                            {{ 'layout.footer.legalities'|trans }}
                         </a>
                         <a href="">
-                            Politique de confidentialité
+                            {{ 'layout.footer.terms'|trans }}
                         </a>
                         <a href="">
-                            FAQ
+                            {{ 'layout.footer.privacy'|trans }}
                         </a>
                         <a href="">
-                            Contact
+                            {{ 'layout.footer.contact'|trans }}
                         </a>
                     </div>
                 </div>

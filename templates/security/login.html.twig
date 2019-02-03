@@ -1,9 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'security.login.title'|trans %}
+{% block page_title 'login.title'|trans %}
+
+{% block intro %}
+    <div class="intro">
+        <div class="container">
+            <h2 class="intro__title">
+                {{ 'login.main'|trans }}
+            </h2>
+
+            {{ 'login.sub'|trans }}
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mt-5">
         <div class="col-md-7 col-lg-5 col-xl-4">
             <form method="post">
                 {% if error %}
@@ -13,34 +25,37 @@
                 {% endif %}
 
                 <div class="form-group">
-                    <label for="emailAddress">{{ 'security.login.email'|trans }}</label>
                     <input type="email"
                            value="{{ last_username }}"
                            name="emailAddress"
                            id="emailAddress"
                            class="form-control"
-                           placeholder="{{ 'security.login.email'|trans }}"
+                           placeholder="{{ 'login.fields.email'|trans }}"
                            required autofocus />
                 </div>
 
                 <div class="form-group">
-                    <label for="inputPassword">{{ 'security.login.password'|trans }}</label>
                     <input type="password"
                            name="password"
                            id="inputPassword"
                            class="form-control"
-                           placeholder="{{ 'security.login.password'|trans }}"
+                           placeholder="{{ 'login.fields.password'|trans }}"
                            required>
                 </div>
 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                <button type="submit" class="btn btn-primary">
-                    {{- 'security.login.submit'|trans -}}
-                </button>
-                <a href="{{ path('app_actor_reset_password_request') }}" class="btn btn-link">
-                    {{- 'actor.reset_password.request.link.default'|trans -}}
-                </a>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-lg btn-block btn-primary">
+                        {{- 'login.button'|trans -}}
+                    </button>
+                </div>
+
+                <div class="text-center mt-5">
+                    <a href="{{ path('app_actor_reset_password_request') }}" class="btn btn-link">
+                        {{- 'login.forgot_password'|trans -}}
+                    </a>
+                </div>
             </form>
         </div>
     </div>
