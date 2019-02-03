@@ -287,6 +287,62 @@ class AnimatorControllerTest extends HttpTestCase
         $this->assertActorIsFollowerOfGroup($coAnimatorUuid, $groupSlug);
     }
 
+    public function provideAnimatorCanDemoteCoAnimatorFromView(): iterable
+    {
+        yield [
+            'marine@mobilisation-eu.localhost',
+            'ecology-in-paris',
+            '7ba7b43a-4a65-4862-b49a-91776043575b',
+            'titouan@mobilisation-eu.localhost',
+        ];
+
+        yield [
+            'marine@mobilisation-eu.localhost',
+            'ecology-in-paris',
+            '9b1f4321-8935-4ab5-b392-1e6f6913ace9',
+            'francis@mobilisation-eu.localhost',
+        ];
+
+        yield [
+            'titouan@mobilisation-eu.localhost',
+            'ecology-in-clichy',
+            'b4e514ac-5ccb-4687-aed1-14d3678b5491',
+            'marine@mobilisation-eu.localhost',
+        ];
+    }
+
+    /**
+     * @dataProvider provideAnimatorCanDemoteCoAnimatorFromView
+     */
+    public function testAnimatorCanDemoteCoAnimatorFromView(
+        string $animatorEmail,
+        string $groupSlug,
+        string $coAnimatorUuid,
+        string $coAnimatorEmail
+    ): void {
+        $this->authenticateActor($animatorEmail);
+
+        $crawler = $this->client->request('GET', "/group/$groupSlug/members");
+        $this->assertResponseSuccessFul();
+
+        $this->assertCount(1, $coAnimatorRow = $crawler->filter("#co-animators tr:contains(\"$coAnimatorEmail\")"));
+        $this->assertCount(0, $crawler->filter("#followers tr:contains(\"$coAnimatorEmail\")"));
+        $this->assertCount(1, $linkCrawler = $coAnimatorRow->selectLink('Demote'));
+
+        $link = $linkCrawler->link();
+        $this->assertSame($this->getAbsoluteUrl("/group/$groupSlug/demote/$coAnimatorUuid"), $link->getUri());
+
+        $this->client->click($link);
+        $this->assertIsRedirectedTo("/group/$groupSlug/members");
+        $this->assertNoMailSent();
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseSuccessFul();
+        $this->assertCount(1, $crawler->filter('.alert:contains("group.animator.demote.flash.success")'));
+        $this->assertCount(0, $crawler->filter("#co-animators tr:contains(\"$coAnimatorEmail\")"));
+        $this->assertCount(1, $crawler->filter("#followers tr:contains(\"$coAnimatorEmail\")"));
+    }
+
     public function provideActorCannotDemoteIfGroupIsNotApproved(): iterable
     {
         // animator of the group
