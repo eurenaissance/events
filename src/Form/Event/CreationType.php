@@ -57,7 +57,7 @@ class CreationType extends AbstractType
                     'day' => 'common.date.day.placeholder',
                 ],
                 'invalid_message' => 'common.date.invalid',
-                'empty_data' => '',
+                'empty_data' => null,
             ])
             ->add('finishAt', DateType::class, [
                 'widget' => 'choice',
@@ -68,7 +68,7 @@ class CreationType extends AbstractType
                     'day' => 'common.date.day.placeholder',
                 ],
                 'invalid_message' => 'common.date.invalid',
-                'empty_data' => '',
+                'empty_data' => null,
             ])
             ->add('address', TextType::class, [
                 'required' => false,

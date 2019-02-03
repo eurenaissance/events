@@ -6,5 +6,5 @@
 {% block body %}
     {{ 'common.hello'|trans({ '%actor%': creator.firstName }) }}
     <br>
-    {{ 'mail.event.created.body'|trans({ '%group%': group.name })|raw }}
+    {{ 'mail.event.created.body'|trans({ '%event%': event.name, '%group%': group.name })|raw }}
 {% endblock %}

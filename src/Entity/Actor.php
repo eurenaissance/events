@@ -245,7 +245,7 @@ class Actor implements ActorInterface, GeocodableInterface
         return $this->birthday;
     }
 
-    public function setBirthday(\DateTimeInterface $birthday): void
+    public function setBirthday(?\DateTimeInterface $birthday): void
     {
         $this->birthday = $birthday;
     }

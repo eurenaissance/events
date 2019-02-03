@@ -110,13 +110,14 @@ class RegistrationControllerTest extends HttpTestCase
                 'emailAddress' => 'unknown@test',
                 'firstName' => 'Rémi',
                 'lastName' => 'Gardien',
-                'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
+                'birthday' => [],
                 'plainPassword' => ['first' => '123', 'second' => '123'],
                 'address' => '123 random street',
                 'city' => 'abcdef',
             ],
             [
                 'This email address is not valid.',
+                'Please enter your birth date.',
                 'Password must be at least 6 characters long.',
                 'This city is not valid.',
             ],
@@ -153,7 +154,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         $this->client->submitForm('Register', $fieldValues);
-        $this->assertResponseSuccessFul('User should not be redirected in order to see registration form errors.');
+        $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
     }
 
