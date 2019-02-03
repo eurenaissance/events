@@ -51,7 +51,7 @@ class SecurityControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form([
+        $this->client->submit($crawler->selectButton('Log in')->form([
             'emailAddress' => $email,
             'password' => $password,
         ]));
@@ -59,7 +59,7 @@ class SecurityControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertEquals($email, $crawler->selectButton('Sign in')->form()->get('emailAddress')->getValue());
+        $this->assertEquals($email, $crawler->selectButton('Log in')->form()->get('emailAddress')->getValue());
 
         foreach ($errors as $error) {
             $this->assertContains($error, $crawler->filter('.login_error')->html());
@@ -71,7 +71,7 @@ class SecurityControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form([
+        $this->client->submit($crawler->selectButton('Log in')->form([
             'emailAddress' => 'remi@mobilisation-eu.localhost',
             'password' => ActorFixtures::DEFAULT_PASSWORD,
         ]));

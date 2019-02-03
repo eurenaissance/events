@@ -1,7 +1,7 @@
 @import './variables';
 
 .header {
-    padding: 30px 0 50px 0;
+    padding: 30px 0;
 
     &__row {
         display: flex;
@@ -64,15 +64,15 @@
         padding: 50px;
         text-align: center;
 
-        &__title {
-            font-size: 44px;
-            font-weight: bold;
-        }
-
         &__subtitle {
             font-family: $font-roboto-mono;
             font-size: 22px;
             font-weight: normal;
+        }
+
+        &__title {
+            font-size: 52px;
+            font-weight: bold;
             margin-bottom: 30px;
         }
     }
@@ -124,5 +124,31 @@
                 font-weight: 500;
             }
         }
+    }
+}
+
+.intro {
+    text-align: center;
+    padding: 50px 0;
+    margin-bottom: 30px;
+    font-family: $font-roboto-mono;
+    font-weight: 400;
+    font-size: 24px;
+
+    &--primary {
+        background: $primary;
+        color: $white;
+    }
+
+    &--secondary {
+        background: $secondary;
+        color: $white;
+    }
+
+    &__title {
+        margin: 0 0 10px 0;
+        padding: 0;
+        font-family: $font-roboto-slab;
+        font-size: 36px;
     }
 }

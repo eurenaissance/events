@@ -1,16 +1,85 @@
 #
+# Layout
+#
+layout:
+    header:
+        find_event: Find an event
+        find_group: Find a group
+        create_group: Create a group
+        admin:
+            dashboard: Administration
+            quit_impersonation: Quit impersonation
+        user:
+            login: Log in
+            register: Register
+            logout: Log out
+
+    footer:
+        network: Renaissance
+        legalities: Legalities
+        terms: Terms of usage
+        privacy: Privacy policy
+        contact: Contact
+
+#
+# Home
+#
+home:
+    intro:
+        sub: Don't wait for a better Europe.
+        main: Change it!
+        button: I'm in
+
+#
+# Register
+#
+register:
+    title: Join the movement
+    main: Join to the European transformation
+    sub: Let's rethink Europe together
+    fields:
+        personal: Personal information
+        firstName: First name
+        lastName: Last name
+        email: E-mail address
+        password: Password
+        passwordConfirm: Password confirmation
+        postalAddress: Postal address
+        streetAddress: Street address
+        postalCode: Postal code
+        city: City
+        country: Country
+        birthdate: Birth date
+
+#
+# Login
+#
+login:
+    title: Log in
+    main: Welcome back!
+    sub: Let's rethink Europe together
+    fields:
+        email: E-mail address
+        password: Password
+    button: Log in
+    forgot_password: I forgot my password
+
+
+
+
+
+
+#
+# TODO Migrate / remove the following translations
+#
+
+#
 # Common
 #
 common:
     title:
         default: Mobilisation EU
 
-    header:
-        find_event: Find an event
-        find_group: Find a group
-        create_group: Create a group
-
-    homepage: Homepage
     hello: Hello %actor%!
     welcome: Welcome %actor%!
 
@@ -65,18 +134,6 @@ security:
             not_confirmed: |
                 Your account is not confirmed yet.
                 Click <a href="%resend_confirmation_url%">here</a> to resend a confirmation mail.
-
-
-#
-# Administration
-#
-admin:
-    dashboard:
-        link: Administration
-    impersonation:
-        quit:
-            link: Quit impersonation
-
 
 #
 # Actor

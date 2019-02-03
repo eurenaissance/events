@@ -1,25 +1,81 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'actor.registration.register.title'|trans %}
+{% block page_title 'register.title'|trans %}
+
+{% block intro %}
+    <div class="intro intro--primary">
+        <div class="container">
+            <h2 class="intro__title">
+                {{ 'register.main'|trans }}
+            </h2>
+
+            {{ 'register.sub'|trans }}
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
-        {{ form_row(form.firstName, { label: 'actor.first_name.label' }) }}
-        {{ form_row(form.lastName, { label: 'actor.last_name.label' }) }}
-        {{ form_row(form.birthday, { label: 'actor.birthday.label' }) }}
-        {{ form_row(form.emailAddress, { label: 'actor.email_address.label' }) }}
-        {{ form_row(form.plainPassword.first, { label: 'actor.password.label' }) }}
-        {{ form_row(form.plainPassword.second, { label: 'actor.password.confirmation' }) }}
-        {{ form_row(form.address, { label: 'actor.address.label' }) }}
-        {{ form_row(form.country, { label: 'actor.country.label' }) }}
-        {{ form_row(form.zipCode, { label: 'actor.zip_code.label' }) }}
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            {{ form_start(form) }}
 
-        {# since `form.city` is a hidden type we need to explicitely show errors with `form_errors(form.city)` #}
-        {{ form_errors(form.city) }}
-        {{ form_widget(form.city) }}
+            <h5 class="mb-3">
+                {{ 'register.fields.personal'|trans }}
+            </h5>
+            <div class="row">
+                <div class="col-md">
+                    {{ form_row(form.firstName, { label: 'register.fields.firstName' }) }}
+                </div>
+                <div class="col-md">
+                    {{ form_row(form.lastName, { label: 'register.fields.lastName' }) }}
+                </div>
+            </div>
 
-        <button type="submit">
-            {{ 'actor.registration.register.submit'|trans }}
-        </button>
-    {{ form_end(form) }}
+            {{ form_row(form.emailAddress, { label: 'register.fields.email' }) }}
+
+            <div class="row">
+                <div class="col-md">
+                    {{ form_row(form.plainPassword.first, { label: 'register.fields.password' }) }}
+                </div>
+                <div class="col-md">
+                    {{ form_row(form.plainPassword.second, { label: 'register.fields.passwordConfirm' }) }}
+                </div>
+            </div>
+
+            <h5 class="mb-3 mt-4">
+                {{ 'register.fields.postalAddress'|trans }}
+            </h5>
+
+            {{ form_row(form.address, { label: 'register.fields.streetAddress' }) }}
+
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_row(form.zipCode, { label: 'register.fields.postalCode' }) }}
+                </div>
+                <div class="col-md-8">
+                    {{ form_row(form.city, { label: 'register.fields.city' }) }}
+                </div>
+            </div>
+
+            {{ form_row(form.country, { label: 'register.fields.country' }) }}
+
+            <h5 class="mb-3 mt-5">
+                {{ 'register.fields.birthdate'|trans }}
+            </h5>
+
+            {{ form_row(form.birthday, { label: false }) }}
+
+            {# since `form.city` is a hidden type we need to explicitely show errors with `form_errors(form.city)` #}
+            {{ form_errors(form.city) }}
+            {{ form_widget(form.city) }}
+
+            <div class="mt-5 text-center">
+                <button type="submit" class="btn btn-lg btn-block btn-primary">
+                    {{ 'actor.registration.register.submit'|trans }}
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}
