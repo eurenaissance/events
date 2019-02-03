@@ -17,9 +17,6 @@ class ActorRepository extends ServiceEntityRepository
     {
         return $this
             ->createQueryBuilder('a')
-            ->select('a, cm, fm')
-            ->leftJoin('a.coAnimatorMemberships', 'cm')
-            ->leftJoin('a.followerMemberships', 'fm')
             ->where('a.emailAddress = :email')
             ->setParameter('email', $email)
             ->getQuery()
