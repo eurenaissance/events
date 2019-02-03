@@ -34,7 +34,7 @@ class MembersController extends AbstractController
             $followerMembershipsPage
         );
 
-        return $this->render('group/view/members.html.twig', [
+        return $this->render('group/members/members.html.twig', [
             'group' => $group,
             'follower_memberships' => $followerMemberships,
             'follower_memberships_page' => $followerMembershipsPage,

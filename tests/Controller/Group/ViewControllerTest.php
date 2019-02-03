@@ -53,8 +53,17 @@ class ViewControllerTest extends HttpTestCase
     {
         $this->authenticateActor($email);
 
-        $this->client->request('GET', '/group/development-in-bois-colombes');
-        $this->assertNotFoundResponse();
+        $groupSlugs = [
+            // group has been refused
+            'development-in-bois-colombes',
+            // group was approved then refused
+            'development-in-lille',
+        ];
+
+        foreach ($groupSlugs as $groupSlug) {
+            $this->client->request('GET', "/group/$groupSlug");
+            $this->assertNotFoundResponse();
+        }
     }
 
     public function provideActorsForPendingGroup(): iterable
@@ -115,7 +124,7 @@ class ViewControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
     }
 
-    public function provideActorsCanSeeGroupInformations(): iterable
+    public function provideActorsCanSeeGroupInformation(): iterable
     {
         // follower of the group
         yield [
@@ -294,9 +303,9 @@ class ViewControllerTest extends HttpTestCase
     }
 
     /**
-     * @dataProvider provideActorsCanSeeGroupInformations
+     * @dataProvider provideActorsCanSeeGroupInformation
      */
-    public function testActorsCanSeeGroupInformations(
+    public function testActorsCanSeeGroupInformation(
         string $email,
         string $groupSlug,
         string $groupName,

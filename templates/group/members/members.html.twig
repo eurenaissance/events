@@ -1,3 +1,6 @@
+{% set animator = group.animator %}
+{% set co_animator_memberships = group.coAnimatorMemberships %}
+
 {% extends 'base.html.twig' %}
 
 {% block title 'group.view.members.title'|trans({ '%group%': group.name }) %}
@@ -10,7 +13,7 @@
     <div class="row">
         <div class="col-md-8">
 
-            <h3>Co-animators:</h3>
+            <h3>Animators ({{ 1 + co_animator_memberships|length }})</h3>
 
             <table class="table table-hover" id="co-animators">
                 <thead>
@@ -25,7 +28,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                    {% for membership in group.coAnimatorMemberships %}
+                    <tr class="table-primary">
+                        {% set animator = group.animator %}
+                        <td>{{ animator.firstName }}</td>
+                        <td>{{ animator.lastName }}</td>
+                        <td>{{ animator.emailAddress }}</td>
+                        <td>{{ group.createdAt|date }}</td>
+                        {% if is_granted('GROUP_ANIMATOR', group) %}
+                            <td>
+                            </td>
+                        {% endif %}
+                    </tr>
+                    {% for membership in co_animator_memberships %}
                         {% set actor = membership.actor %}
                         <tr>
                             <td>{{ actor.firstName }}</td>
@@ -45,7 +59,7 @@
             </table>
 
 
-            <h3>Followers:</h3>
+            <h3>Followers ({{ follower_memberships|length }})</h3>
 
             <table class="table table-hover" id="followers">
                 <thead>
