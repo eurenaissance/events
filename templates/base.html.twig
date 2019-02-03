@@ -1,5 +1,6 @@
 {% set current_route = app.request.attributes.get('_route') %}
 {% set current_route_params = app.request.attributes.get('_route_params') %}
+{% set instance_configuration = get_instance_configuration() %}
 
 <!DOCTYPE html>
 <html>
@@ -10,7 +11,7 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
         <meta name="referrer" content="origin" />
 
-        <title>{% block title 'common.title.default'|trans %}</title>
+        <title>{% block title %}{% block page_title '' %} | {{ instance_configuration.partyName }}{% endblock %}</title>
 
         <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500|Roboto+Slab:400,700&amp;subset=cyrillic,cyrillic-ext,greek,greek-ext" rel="stylesheet">
         {{ encore_entry_link_tags('lib') }}
@@ -23,7 +24,7 @@
                 <div class="header__row">
                     <div class="header__logo">
                         <a href="{{ path('app_homepage') }}">
-                            {{ include('_components/logo.html.twig') }}
+                            <img src="{{ image_asset(instance_configuration.partyLogo) }}" />
                         </a>
                     </div>
                     <nav class="header__search">
@@ -92,7 +93,7 @@
             <div class="container">
                 <div class="footer__row">
                     <div class="footer__copyright">
-                        © Renaissance
+                        © {{ instance_configuration.partyName }}
                     </div>
                     <div class="footer__links">
                         <a href="">
