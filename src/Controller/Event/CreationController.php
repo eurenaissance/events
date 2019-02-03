@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\Entity\Group;
 use App\Event\CreationHandler;
 use App\Form\Event\CreationType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,7 @@ class CreationController extends AbstractController
 {
     /**
      * @Route("/group/{slug}/event/create", name="app_event_creation_create", methods={"GET", "POST"})
+     * @Entity("group", expr="repository.findApprovedBySlug(slug)")
      */
     public function create(Group $group, Request $request, CreationHandler $creationHandler): Response
     {

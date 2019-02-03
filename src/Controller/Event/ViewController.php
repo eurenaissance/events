@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ViewController extends AbstractController
 {
     /**
-     * @Route("/events/{slug}", name="app_event_view", methods="GET")
+     * @Route("/event/{slug}", name="app_event_view", methods="GET")
      */
     public function view(Event $event): Response
     {

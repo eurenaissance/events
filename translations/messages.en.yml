@@ -283,6 +283,18 @@ group:
 
 
 #
+# Events
+#
+event:
+    name:
+        not_blank: Please enter an event name.
+    description:
+        not_blank: Please provide a short description.
+    creation:
+        create:
+            submit: Create
+
+#
 # Mails
 #
 mail:

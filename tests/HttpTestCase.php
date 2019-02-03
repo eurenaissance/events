@@ -6,6 +6,7 @@ use App\Entity\Actor;
 use App\Entity\Administrator;
 use App\Repository\ActorRepository;
 use App\Repository\AdministratorRepository;
+use App\Repository\EventRepository;
 use App\Repository\GroupRepository;
 use Coduo\PHPMatcher\PHPUnit\PHPMatcherAssertions;
 use Enqueue\Client\TraceableProducer;
@@ -174,6 +175,11 @@ abstract class HttpTestCase extends WebTestCase
         return $this->get(GroupRepository::class);
     }
 
+    protected function getEventRepository(): EventRepository
+    {
+        return $this->get(EventRepository::class);
+    }
+
     protected function getAbsoluteUrl(string $path): string
     {
         return $this->client->getRequest()->getSchemeAndHttpHost().$path;
@@ -216,6 +222,17 @@ abstract class HttpTestCase extends WebTestCase
         return $this->client->submit($form, [
             $this->getAdminFormUniqId($form) => $fieldValues,
         ]);
+    }
+
+    protected function createFormDate(string $time): array
+    {
+        $date = new \DateTime($time);
+
+        return [
+            'year' => (int) $date->format('Y'),
+            'month' => (int) $date->format('m'),
+            'day' => (int) $date->format('d'),
+        ];
     }
 
     private function authenticate(UserInterface $user, string $firewallName, string $firewallContext): void
