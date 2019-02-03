@@ -15,6 +15,17 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    public function findOneBySlug(string $slug): ?Event
+    {
+        return $this
+            ->createQueryBuilder('e')
+            ->where('e.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     public function findUpcoming(Group $group, int $maxResults = 10): array
     {
         return $this

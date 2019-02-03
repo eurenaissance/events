@@ -44,10 +44,10 @@ class RegistrationControllerTest extends HttpTestCase
 
     public function testRegisterSuccess(): void
     {
-        $crawler = $this->client->request('GET', '/register');
+        $this->client->request('GET', '/register');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Register')->form(), [
+        $this->client->submitForm('Register', [
             'emailAddress' => 'new@mobilisation-eu.localhost',
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
@@ -74,57 +74,66 @@ class RegistrationControllerTest extends HttpTestCase
     public function provideBadRegistrations(): iterable
     {
         yield [
-            'emailAddress' => 'remi@mobilisation-eu.localhost',
-            'firstName' => 'Rémi',
-            'lastName' => 'Gardien',
-            'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'plainPassword' => ['first' => null, 'second' => null],
-            'address' => '123 random street',
-            'city' => CityFixtures::CITY_02_UUID,
-            'errors' => [
+            [
+                'emailAddress' => 'remi@mobilisation-eu.localhost',
+                'firstName' => 'Rémi',
+                'lastName' => 'Gardien',
+                'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
+                'plainPassword' => ['first' => null, 'second' => null],
+                'address' => '123 random street',
+                'city' => CityFixtures::CITY_02_UUID,
+            ],
+            [
                 'An actor is already registered with this email.',
                 'Please enter a password.',
             ],
         ];
 
         yield [
-            'emailAddress' => 'REMI@mobilisation-eu.localhost',
-            'firstName' => 'Rémi',
-            'lastName' => 'Gardien',
-            'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'plainPassword' => ['first' => '', 'second' => ''],
-            'address' => '123 random street',
-            'city' => CityFixtures::CITY_02_UUID,
-            'errors' => [
+            [
+                'emailAddress' => 'REMI@mobilisation-eu.localhost',
+                'firstName' => 'Rémi',
+                'lastName' => 'Gardien',
+                'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
+                'plainPassword' => ['first' => '', 'second' => ''],
+                'address' => '123 random street',
+                'city' => CityFixtures::CITY_02_UUID,
+            ],
+            [
                 'An actor is already registered with this email.',
                 'Please enter a password.',
             ],
         ];
 
         yield [
-            'emailAddress' => 'unknown@test',
-            'firstName' => 'Rémi',
-            'lastName' => 'Gardien',
-            'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
-            'plainPassword' => ['first' => '123', 'second' => '123'],
-            'address' => '123 random street',
-            'city' => 'abcdef',
-            'errors' => [
+            [
+                'emailAddress' => 'unknown@test',
+                'firstName' => 'Rémi',
+                'lastName' => 'Gardien',
+                'birthday' => [],
+                'plainPassword' => ['first' => '123', 'second' => '123'],
+                'address' => '123 random street',
+                'city' => 'abcdef',
+            ],
+            [
                 'This email address is not valid.',
+                'Please enter your birth date.',
                 'Password must be at least 6 characters long.',
                 'This city is not valid.',
             ],
         ];
 
         yield [
-            'emailAddress' => null,
-            'firstName' => null,
-            'lastName' => null,
-            'birthday' => ['year' => null, 'month' => 11, 'day' => 27],
-            'plainPassword' => ['first' => 'test123', 'second' => '123test'],
-            'address' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquet ligula ut elit consectetur, quis vulputate felis vestibulum. Vivamus rutrum metus leo, in dignissim lectus fringilla nec.',
-            'city' => null,
-            'errors' => [
+            [
+                'emailAddress' => null,
+                'firstName' => null,
+                'lastName' => null,
+                'birthday' => ['year' => null, 'month' => 11, 'day' => 27],
+                'plainPassword' => ['first' => 'test123', 'second' => '123test'],
+                'address' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquet ligula ut elit consectetur, quis vulputate felis vestibulum. Vivamus rutrum metus leo, in dignissim lectus fringilla nec.',
+                'city' => null,
+            ],
+            [
                 'Please enter your email address.',
                 'Please enter your first name.',
                 'Please enter your last name.',
@@ -139,29 +148,13 @@ class RegistrationControllerTest extends HttpTestCase
     /**
      * @dataProvider provideBadRegistrations
      */
-    public function testRegisterFailure(
-        ?string $emailAddress,
-        ?string $firstName,
-        ?string $lastName,
-        array $birthday,
-        array $password,
-        ?string $address,
-        ?string $cityUuid,
-        array $errors
-    ): void {
-        $crawler = $this->client->request('GET', '/register');
+    public function testRegisterFailure(array $fieldValues, array $errors): void
+    {
+        $this->client->request('GET', '/register');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Register')->form(), [
-            'emailAddress' => $emailAddress,
-            'firstName' => $firstName,
-            'lastName' => $lastName,
-            'birthday' => $birthday,
-            'plainPassword' => $password,
-            'address' => $address,
-            'city' => $cityUuid,
-        ]);
-        $this->assertResponseSuccessFul('User should not be redirected in order to see registration form errors.');
+        $this->client->submitForm('Register', $fieldValues);
+        $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
     }
 
@@ -169,10 +162,10 @@ class RegistrationControllerTest extends HttpTestCase
     {
         $this->assertActorConfirmed('patrick@mobilisation-eu.localhost', false);
 
-        $crawler = $this->client->request('GET', '/register/resend-confirmation');
+        $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Resend confirmation mail')->form(), [
+        $this->client->submitForm('Resend confirmation mail', [
             'emailAddress' => 'patrick@mobilisation-eu.localhost',
         ]);
         $this->assertIsRedirectedTo('/register/resend-confirmation/check-email');
@@ -192,10 +185,10 @@ class RegistrationControllerTest extends HttpTestCase
 
     public function testResendConfirmationUnknownEmail(): void
     {
-        $crawler = $this->client->request('GET', '/register/resend-confirmation');
+        $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Resend confirmation mail')->form(), [
+        $this->client->submitForm('Resend confirmation mail', [
             'emailAddress' => 'unknown@mobilisation-eu.localhost',
         ]);
         $this->assertIsRedirectedTo('/register/resend-confirmation/check-email');
@@ -234,12 +227,10 @@ class RegistrationControllerTest extends HttpTestCase
     ): void {
         $this->assertActorConfirmed($email, $alreadyConfirmed);
 
-        $crawler = $this->client->request('GET', '/register/resend-confirmation');
+        $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Resend confirmation mail')->form(), [
-            'emailAddress' => $email,
-        ]);
+        $this->client->submitForm('Resend confirmation mail', ['emailAddress' => $email]);
         $this->assertIsRedirectedTo($redirectedTo);
         $this->assertNoMailSent();
 

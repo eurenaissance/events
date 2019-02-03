@@ -17,26 +17,29 @@
                 </div>
             {% endif %}
 
-            <h3>Upcoming events:</h3>
-            {% for event in upcoming_events %}
-                {% include 'group/view/_event.html.twig' %}
-                <hr>
-            {% endfor %}
+            <div id="upcoming-events">
+                <h3>Upcoming events:</h3>
+                {% for event in upcoming_events %}
+                    {% include 'group/view/_event.html.twig' %}
+                    <hr>
+                {% endfor %}
+            </div>
 
 
-            <h3 id="finished-events">Finished events:</h3>
+            <div id="finished-events">
+                <h3>Finished events:</h3>
 
-            {% for event in finished_events %}
-                {% include 'group/view/_event.html.twig' %}
-                <hr>
-            {% endfor %}
+                {% for event in finished_events %}
+                    {% include 'group/view/_event.html.twig' %}
+                    <hr>
+                {% endfor %}
 
-            {% include '_components/pagination.html.twig' with {
-                total_pages: finished_events_total_pages,
-                route_parameters: { slug: group.slug, _fragment: 'finished-events' },
-                page_parameter: constant('App\\Controller\\Group\\ViewController::FINISHED_EVENTS_PAGE_PARAMETER')
-            } %}
-
+                {% include '_components/pagination.html.twig' with {
+                    total_pages: finished_events_total_pages,
+                    route_parameters: { slug: group.slug, _fragment: 'finished-events' },
+                    page_parameter: constant('App\\Controller\\Group\\ViewController::FINISHED_EVENTS_PAGE_PARAMETER')
+                } %}
+            </div>
         </div>
         <div class="col-md-4 border-left">
             {% include 'group/view/_sidebar.html.twig' %}

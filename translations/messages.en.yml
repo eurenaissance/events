@@ -283,6 +283,39 @@ group:
 
 
 #
+# Events
+#
+event:
+    name:
+        label: Name
+        not_blank: Please enter an event name.
+        min_length: The event name must be at least {{ limit }} characters long.
+        max_length: The event name should not exceed {{ limit }} characters.
+        unique: An event named "{{ value }}" already exists.
+    description:
+        label: Description
+        not_blank: Please provide a short description.
+        min_length: The description must be at least {{ limit }} characters long.
+        max_length: The event name should not exceed {{ limit }} characters.
+    begin_at:
+        not_blank: Please enter a start date.
+    finish_at:
+        not_blank: Please enter a finish date.
+    slug:
+        unique: An event with a URL "{{ value }}" already exists.
+    address:
+        label: Address
+    country:
+        label: Country
+    zip_code:
+        label: Zip code
+    city:
+        label: City
+    creation:
+        create:
+            submit: Create
+
+#
 # Mails
 #
 mail:
@@ -326,3 +359,8 @@ mail:
         new_co_animator:
             subject: You have been promoted to co-animator in the group "%group%"!
             body: You have been promoted to co-animator in the group "%group%"! You can now create events.
+
+    event:
+        created:
+            subject: Your event "%event%" has been created.
+            body: Your event "%event%" in the group "%group%" has been created.

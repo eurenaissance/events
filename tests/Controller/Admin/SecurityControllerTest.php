@@ -30,10 +30,10 @@ class SecurityControllerTest extends HttpTestCase
      */
     public function testLoginFailure(string $email, string $password): void
     {
-        $crawler = $this->client->request('GET', '/admin/login');
+        $this->client->request('GET', '/admin/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form(), [
+        $this->client->submitForm('Sign in', [
             'emailAddress' => $email,
             'password' => $password,
         ]);
@@ -46,10 +46,10 @@ class SecurityControllerTest extends HttpTestCase
 
     public function testLoginSuccess(): void
     {
-        $crawler = $this->client->request('GET', '/admin/login');
+        $this->client->request('GET', '/admin/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form(), [
+        $this->client->submitForm('Sign in', [
             'emailAddress' => 'superadmin@mobilisation-eu.localhost',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
         ]);
@@ -62,10 +62,10 @@ class SecurityControllerTest extends HttpTestCase
 
     public function testLoginTwoFactor(): void
     {
-        $crawler = $this->client->request('GET', '/admin/login');
+        $this->client->request('GET', '/admin/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form(), [
+        $this->client->submitForm('Sign in', [
             'emailAddress' => 'admin@mobilisation-eu.localhost',
             'password' => AdministratorFixtures::DEFAULT_PASSWORD,
         ]);

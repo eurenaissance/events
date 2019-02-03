@@ -45,7 +45,7 @@ class ActorType extends AbstractType
                     'day' => 'common.date.day.placeholder',
                 ],
                 'invalid_message' => 'common.date.invalid',
-                'empty_data' => '',
+                'empty_data' => null,
             ])
             ->add('emailAddress', EmailType::class)
             ->add('address', TextType::class, [

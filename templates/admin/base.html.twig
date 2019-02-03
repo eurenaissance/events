@@ -2,6 +2,19 @@
 
 {% block sonata_top_nav_menu_user_block '' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+        .main-header .logo { padding-top: 7px; }
+    </style>
+{% endblock %}
+
+{% block logo %}
+    <a class="logo" href="{{ path('sonata_admin_dashboard') }}">
+        {{ include('_components/logo.html.twig') }}
+    </a>
+{% endblock %}
+
 {% block side_bar_before_nav %}
     <ul class="sidebar-menu">
         <li>

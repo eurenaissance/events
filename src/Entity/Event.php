@@ -118,6 +118,10 @@ class Event implements EntitySlugInterface, GeocodableInterface
 
     public function createSlugSource(): string
     {
+        if (!$this->beginAt) {
+            return $this->name;
+        }
+
         return sprintf('%s - %s', $this->beginAt->format('Y-m-d'), $this->name);
     }
 
@@ -146,7 +150,7 @@ class Event implements EntitySlugInterface, GeocodableInterface
         return $this->beginAt;
     }
 
-    public function setBeginAt(\DateTimeInterface $beginAt): void
+    public function setBeginAt(?\DateTimeInterface $beginAt): void
     {
         $this->beginAt = $beginAt;
     }
@@ -156,7 +160,7 @@ class Event implements EntitySlugInterface, GeocodableInterface
         return $this->finishAt;
     }
 
-    public function setFinishAt(\DateTimeInterface $finishAt): void
+    public function setFinishAt(?\DateTimeInterface $finishAt): void
     {
         $this->finishAt = $finishAt;
     }

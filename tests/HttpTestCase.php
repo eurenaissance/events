@@ -6,12 +6,14 @@ use App\Entity\Actor;
 use App\Entity\Administrator;
 use App\Repository\ActorRepository;
 use App\Repository\AdministratorRepository;
+use App\Repository\EventRepository;
 use App\Repository\GroupRepository;
 use Coduo\PHPMatcher\PHPUnit\PHPMatcherAssertions;
 use Enqueue\Client\TraceableProducer;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
@@ -120,8 +122,11 @@ abstract class HttpTestCase extends WebTestCase
 
         foreach ($this->getMessagesForTopic('mail') as $mail) {
             if ($expectedMail['to'] === $mail['to']) {
-                $this->assertMatchesPattern($expectedMail['subject'], $mail['subject']);
-                $this->assertMatchesPattern($expectedMail['body'], $mail['body']);
+                foreach (['subject', 'body'] as $patternComparison) {
+                    if (isset($expectedMail[$patternComparison])) {
+                        $this->assertMatchesPattern($expectedMail[$patternComparison], $mail[$patternComparison]);
+                    }
+                }
 
                 foreach (['from', 'cc', 'bcc'] as $strictComparison) {
                     if (isset($expectedMail[$strictComparison])) {
@@ -129,11 +134,18 @@ abstract class HttpTestCase extends WebTestCase
                     }
                 }
 
+                $this->addToAssertionCount(1);
+
                 return;
             }
         }
 
         $this->fail(sprintf('No mail for "%s" could be found.', $expectedMail['to']));
+    }
+
+    protected function assertMailSentTo(string $email): void
+    {
+        $this->assertMailSent(['to' => $email]);
     }
 
     protected function assertNoMailSent(): void
@@ -161,6 +173,11 @@ abstract class HttpTestCase extends WebTestCase
     protected function getGroupRepository(): GroupRepository
     {
         return $this->get(GroupRepository::class);
+    }
+
+    protected function getEventRepository(): EventRepository
+    {
+        return $this->get(EventRepository::class);
     }
 
     protected function getAbsoluteUrl(string $path): string
@@ -196,6 +213,26 @@ abstract class HttpTestCase extends WebTestCase
         $this->assertArrayHasKey('uniqid', $parameters, 'Could not find "uniqid" parameter in query to determine form uniqid.');
 
         return $parameters['uniqid'];
+    }
+
+    protected function submitAdminForm(string $button, array $fieldValues = []): Crawler
+    {
+        $form = $this->client->getCrawler()->selectButton($button)->form();
+
+        return $this->client->submit($form, [
+            $this->getAdminFormUniqId($form) => $fieldValues,
+        ]);
+    }
+
+    protected function createFormDate(string $time): array
+    {
+        $date = new \DateTime($time);
+
+        return [
+            'year' => (int) $date->format('Y'),
+            'month' => (int) $date->format('m'),
+            'day' => (int) $date->format('d'),
+        ];
     }
 
     private function authenticate(UserInterface $user, string $firewallName, string $firewallContext): void

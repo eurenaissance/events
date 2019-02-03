@@ -146,14 +146,16 @@ class ProfileControllerTest extends HttpTestCase
     public function provideBadProfileEditions(): iterable
     {
         yield [
-            'firstName' => null,
-            'lastName' => null,
-            'gender' => null,
-            'birthday' => ['year' => null, 'month' => '11', 'day' => '27'],
-            'address' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquet ligula ut elit consectetur, quis vulputate felis vestibulum. Vivamus rutrum metus leo, in dignissim lectus fringilla nec.',
-            'country' => 'FR',
-            'zipCode' => null,
-            'city' => 'abcdef',
+            [
+                'firstName' => null,
+                'lastName' => null,
+                'gender' => null,
+                'birthday' => ['year' => null, 'month' => '11', 'day' => '27'],
+                'address' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquet ligula ut elit consectetur, quis vulputate felis vestibulum. Vivamus rutrum metus leo, in dignissim lectus fringilla nec.',
+                'country' => 'FR',
+                'zipCode' => null,
+                'city' => 'abcdef',
+            ],
             'errors' => [
                 'Please enter your first name.',
                 'Please enter your last name.',
@@ -168,32 +170,14 @@ class ProfileControllerTest extends HttpTestCase
     /**
      * @dataProvider provideBadProfileEditions
      */
-    public function testEditFailure(
-        ?string $firstName,
-        ?string $lastName,
-        ?string $gender,
-        ?array $birthday,
-        ?string $address,
-        ?string $country,
-        ?string $zipCode,
-        ?string $cityUuid,
-        array $errors
-    ): void {
+    public function testEditFailure(array $fieldValues, array $errors): void
+    {
         $this->authenticateActor('remi@mobilisation-eu.localhost');
 
-        $crawler = $this->client->request('GET', '/profile');
+        $this->client->request('GET', '/profile');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Save my profile')->form([
-            'firstName' => $firstName,
-            'lastName' => $lastName,
-            'gender' => $gender,
-            'birthday' => $birthday,
-            'address' => $address,
-            'country' => $country,
-            'zipCode' => $zipCode,
-            'city' => $cityUuid,
-        ]));
+        $this->client->submitForm('Save my profile', $fieldValues);
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
     }
@@ -220,7 +204,12 @@ class ProfileControllerTest extends HttpTestCase
         $form = $crawler->selectButton('Change my password')->form();
         $this->assertArraySubset(['plainPassword' => ['first' => '', 'second' => '']], $form->getPhpValues());
 
-        $this->client->submit($form, ['plainPassword' => ['first' => $newPassword, 'second' => $newPassword]]);
+        $this->client->submit($form, [
+            'plainPassword' => [
+                'first' => $newPassword,
+                'second' => $newPassword,
+            ],
+        ]);
         $this->assertIsRedirectedTo('/profile');
         $this->assertMailSent([
             'to' => $email,
@@ -240,10 +229,10 @@ class ProfileControllerTest extends HttpTestCase
         $this->client->request('GET', '/logout');
         $this->assertIsRedirectedTo($this->getAbsoluteUrl('/login'));
 
-        $crawler = $this->client->followRedirect();
+        $this->client->followRedirect();
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Log in')->form(), [
+        $this->client->submitForm('Log in', [
             'emailAddress' => $email,
             'password' => $newPassword,
         ]);
@@ -278,11 +267,14 @@ class ProfileControllerTest extends HttpTestCase
 
         $this->authenticateActor('remi@mobilisation-eu.localhost');
 
-        $crawler = $this->client->request('GET', '/profile/change-password');
+        $this->client->request('GET', '/profile/change-password');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Change my password')->form(), [
-            'plainPassword' => ['first' => $first, 'second' => $second],
+        $this->client->submitForm('Change my password', [
+            'plainPassword' => [
+                'first' => $first,
+                'second' => $second,
+            ],
         ]);
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($error);

@@ -56,11 +56,11 @@
                                 <a href="{{ path('app_admin_impersonation_exit') }}">
                                     {{ 'layout.header.admin.quit_impersonation'|trans }}
                                 </a>
+                            {% else %}
+                                <a href="{{ path('app_logout') }}">
+                                    {{ 'layout.header.user.logout'|trans }}
+                                </a>
                             {% endif %}
-
-                            <a href="{{ path('app_logout') }}">
-                                {{ 'layout.header.user.logout'|trans }}
-                            </a>
                         {% else %}
                             <a href="{{ path('app_login') }}">
                                 {{ 'layout.header.user.login'|trans }}

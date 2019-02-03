@@ -120,18 +120,15 @@ class AdministratorControllerTest extends HttpTestCase
     {
         $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
-        $crawler = $this->client->request('GET', '/admin/app/administrator/2/edit');
+        $this->client->request('GET', '/admin/app/administrator/2/edit');
         $this->assertResponseSuccessFul();
 
-        $form = $crawler->selectButton('Update')->form();
-        $this->client->submit($form, [
-            $this->getAdminFormUniqId($form) => [
-                'plainPassword' => [
-                    'first' => 'new_pass_123',
-                    'second' => 'new_pass_123',
-                ],
-                'googleAuthenticatorSecret' => '',
+        $this->submitAdminForm('Update', [
+            'plainPassword' => [
+                'first' => 'new_pass_123',
+                'second' => 'new_pass_123',
             ],
+            'googleAuthenticatorSecret' => '',
         ]);
         $this->assertIsRedirectedTo('/admin/app/administrator/2/edit');
 
@@ -142,10 +139,10 @@ class AdministratorControllerTest extends HttpTestCase
         $this->client->request('GET', '/admin/logout');
         $this->assertIsRedirectedTo($this->getAbsoluteUrl('/admin/login'));
 
-        $crawler = $this->client->followRedirect();
+        $this->client->followRedirect();
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form(), [
+        $this->client->submitForm('Sign in', [
             'emailAddress' => 'admin@mobilisation-eu.localhost',
             'password' => 'new_pass_123',
         ]);
@@ -173,13 +170,10 @@ class AdministratorControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/admin/app/administrator/2/edit');
         $this->assertResponseSuccessFul();
 
-        $form = $crawler->selectButton('Update')->form();
-        $this->client->submit($form, [
-            $this->getAdminFormUniqId($form) => [
-                'plainPassword' => [
-                    'first' => $firstPassword,
-                    'second' => $secondPassword,
-                ],
+        $this->submitAdminForm('Update', [
+            'plainPassword' => [
+                'first' => $firstPassword,
+                'second' => $secondPassword,
             ],
         ]);
         $this->assertResponseSuccessFul();

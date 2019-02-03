@@ -13,30 +13,38 @@ class SecurityControllerTest extends HttpTestCase
     public function provideLoginFailures(): iterable
     {
         yield [
-            'email' => 'unknown@mobilisation-eu.localhost',
-            'plainPassword' => ActorFixtures::DEFAULT_PASSWORD,
-            'errors' => ['Invalid credentials'],
+            [
+                'emailAddress' => 'unknown@mobilisation-eu.localhost',
+                'password' => ActorFixtures::DEFAULT_PASSWORD,
+            ],
+            ['Invalid credentials'],
         ];
 
         yield [
-            'email' => 'remi@mobilisation-eu.localhost',
-            'plainPassword' => 'bad_password',
-            'errors' => ['Invalid credentials'],
+            [
+                'emailAddress' => 'remi@mobilisation-eu.localhost',
+                'password' => 'bad_password',
+            ],
+            ['Invalid credentials'],
         ];
 
         yield [
-            'email' => 'patrick@mobilisation-eu.localhost',
-            'plainPassword' => ActorFixtures::DEFAULT_PASSWORD,
-            'errors' => [
+            [
+                'emailAddress' => 'patrick@mobilisation-eu.localhost',
+                'password' => ActorFixtures::DEFAULT_PASSWORD,
+            ],
+            [
                 'Your account is not confirmed yet.',
                 '/register/resend-confirmation',
             ],
         ];
 
         yield [
-            'email' => 'leonard@mobilisation-eu.localhost',
-            'plainPassword' => ActorFixtures::DEFAULT_PASSWORD,
-            'errors' => [
+            [
+                'emailAddress' => 'leonard@mobilisation-eu.localhost',
+                'password' => ActorFixtures::DEFAULT_PASSWORD,
+            ],
+            [
                 'Your account is not confirmed yet.',
                 '/register/resend-confirmation',
             ],
@@ -46,20 +54,19 @@ class SecurityControllerTest extends HttpTestCase
     /**
      * @dataProvider provideLoginFailures
      */
-    public function testLoginFailure(string $email, string $password, array $errors): void
+    public function testLoginFailure(array $fieldValues, array $errors): void
     {
-        $crawler = $this->client->request('GET', '/login');
+        $this->client->request('GET', '/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Log in')->form([
-            'emailAddress' => $email,
-            'password' => $password,
-        ]));
+        $this->client->submitForm('Log in', $fieldValues);
         $this->assertIsRedirectedTo('/login');
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertEquals($email, $crawler->selectButton('Log in')->form()->get('emailAddress')->getValue());
+
+        $form = $crawler->selectButton('Log in')->form();
+        $this->assertEquals($fieldValues['emailAddress'], $form->get('emailAddress')->getValue());
 
         foreach ($errors as $error) {
             $this->assertContains($error, $crawler->filter('.login_error')->html());
@@ -68,13 +75,13 @@ class SecurityControllerTest extends HttpTestCase
 
     public function testLogin(): void
     {
-        $crawler = $this->client->request('GET', '/login');
+        $this->client->request('GET', '/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Log in')->form([
+        $this->client->submitForm('Log in', [
             'emailAddress' => 'remi@mobilisation-eu.localhost',
             'password' => ActorFixtures::DEFAULT_PASSWORD,
-        ]));
+        ]);
         $this->assertIsRedirectedTo('/');
 
         $this->client->followRedirect();
