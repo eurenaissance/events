@@ -97,6 +97,30 @@ class MembersControllerTest extends HttpTestCase
         $this->assertAccessDeniedResponse();
     }
 
+    public function provideAnimatorCanViewMembersOfGroup(): iterable
+    {
+        // animator of the group
+        yield ['marine@mobilisation-eu.localhost', 'ecology-in-paris'];
+        yield ['titouan@mobilisation-eu.localhost', 'ecology-in-clichy'];
+        yield ['nicolas@mobilisation-eu.localhost', 'culture-in-asnieres'];
+        yield ['manon@mobilisation-eu.localhost', 'ecology-in-nantes'];
+        // co-animator of the group
+        yield ['titouan@mobilisation-eu.localhost', 'ecology-in-paris'];
+        yield ['francis@mobilisation-eu.localhost', 'ecology-in-paris'];
+        yield ['marine@mobilisation-eu.localhost', 'ecology-in-clichy'];
+    }
+
+    /**
+     * @dataProvider provideAnimatorCanViewMembersOfGroup
+     */
+    public function testAnimatorCanViewMembersOfGroup(string $email, string $groupSlug): void
+    {
+        $this->authenticateActor($email);
+
+        $this->client->request('GET', "/group/$groupSlug/members");
+        $this->assertResponseSuccessFul();
+    }
+
     public function provideActorsCanSeeMembersFromView(): iterable
     {
         // animator of the group
@@ -139,6 +163,42 @@ class MembersControllerTest extends HttpTestCase
                 ['Rémi', 'Gardien', 'remi@mobilisation-eu.localhost'],
                 ['Marine', 'Boudeau', 'marine@mobilisation-eu.localhost'],
             ],
+            true,
+        ];
+
+        yield [
+            'titouan@mobilisation-eu.localhost',
+            'ecology-in-clichy',
+            [
+                ['Titouan', 'Galopin', 'titouan@mobilisation-eu.localhost'],
+                ['Marine', 'Boudeau', 'marine@mobilisation-eu.localhost'],
+            ],
+            [
+                ['Rémi', 'Gardien', 'remi@mobilisation-eu.localhost'],
+            ],
+            true,
+        ];
+
+        yield [
+            'marine@mobilisation-eu.localhost',
+            'ecology-in-clichy',
+            [
+                ['Titouan', 'Galopin', 'titouan@mobilisation-eu.localhost'],
+                ['Marine', 'Boudeau', 'marine@mobilisation-eu.localhost'],
+            ],
+            [
+                ['Rémi', 'Gardien', 'remi@mobilisation-eu.localhost'],
+            ],
+            false,
+        ];
+
+        yield [
+            'manon@mobilisation-eu.localhost',
+            'ecology-in-nantes',
+            [
+                ['Manon', 'Mercier', 'manon@mobilisation-eu.localhost'],
+            ],
+            [],
             true,
         ];
     }
