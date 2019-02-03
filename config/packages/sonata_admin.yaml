@@ -1,6 +1,4 @@
 sonata_admin:
-    title: 'Sonata Admin'
-    title_logo: bundles/sonataadmin/logo_title.png
     persist_filters: true
     show_mosaic_button: false
     security:

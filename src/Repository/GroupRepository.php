@@ -93,6 +93,7 @@ class GroupRepository extends ServiceEntityRepository
         return $this
             ->createQueryBuilder($alias)
             ->andWhere("$alias.approvedAt IS NOT NULL")
+            ->andWhere("$alias.refusedAt IS NULL")
         ;
     }
 }

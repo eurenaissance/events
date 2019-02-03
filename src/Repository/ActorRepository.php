@@ -19,6 +19,8 @@ class ActorRepository extends ServiceEntityRepository
             ->createQueryBuilder('a')
             ->where('a.emailAddress = :email')
             ->setParameter('email', $email)
+            ->innerJoin('a.city', 'c')
+            ->addSelect('c')
             ->getQuery()
             ->getOneOrNullResult()
         ;

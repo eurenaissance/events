@@ -299,7 +299,6 @@ class FollowerControllerTest extends HttpTestCase
 
     /**
      * @dataProvider provideActorCanUnfollowGroupFromView
-     * @group debug
      */
     public function testActorCanUnfollowGroupFromView(string $actorEmail, string $groupSlug): void
     {
