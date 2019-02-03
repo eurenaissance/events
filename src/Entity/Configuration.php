@@ -17,7 +17,7 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(length=50)
      *
      * @Assert\NotBlank
      * @Assert\Length(max=50)
@@ -27,7 +27,7 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(length=100)
      *
      * @Assert\NotBlank
      * @Assert\Length(max=100)
@@ -37,7 +37,7 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(length=100)
      *
      * @Assert\NotBlank
      * @Assert\Length(max=100)
@@ -47,7 +47,7 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=8)
+     * @ORM\Column(length=8)
      *
      * @Assert\NotBlank
      * @Assert\Length(max=8)
@@ -57,7 +57,7 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(length=50)
      *
      * @Assert\NotBlank
      * @Assert\Length(max=50)
@@ -67,7 +67,7 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(length=50)
      *
      * @Assert\NotBlank
      * @Assert\Length(max=50)
@@ -77,7 +77,7 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(length=200)
      *
      * @Assert\NotBlank
      * @Assert\Length(max=200)
@@ -87,7 +87,7 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(length=100)
      *
      * @Assert\NotBlank
      * @Assert\Length(max=100)
@@ -97,7 +97,7 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=30, nullable=true)
+     * @ORM\Column(length=30, nullable=true)
      *
      * @Assert\Length(max=30)
      */
@@ -106,7 +106,7 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(length=100)
      *
      * @Assert\NotBlank
      * @Assert\Length(max=100)
