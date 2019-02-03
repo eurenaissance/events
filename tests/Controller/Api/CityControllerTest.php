@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\App\Controller;
+namespace Test\App\Controller\Api;
 
 use App\Tests\HttpTestCase;
 

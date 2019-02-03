@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\App\Controller;
+namespace Test\App\Controller\Group;
 
 use App\Tests\HttpTestCase;
 use Doctrine\ORM\EntityManagerInterface;
