@@ -64,6 +64,19 @@ login:
     button: Log in
     forgot_password: I forgot my password
 
+#
+# Reset password
+#
+password_reset_request:
+    title: Request a new password
+    email: E-mail address
+    button: Submit
+    back: Back to the log in page
+
+password_reset_check:
+    title: Check your inbox
+    message: We send you an e-mail with a link to reset your password.
+    continue: Continue
 
 
 
@@ -189,7 +202,7 @@ actor:
             submit: Resend confirmation mail
             flash:
                 already_confirmed: Your account is already confirmed.
-                pending_token: A mail has already been sent in the last 2 hours with a link to confirm your account. Please wait a while to ask for another confirmation mail.
+                pending_token: An e-mail has already been sent in the last 2 hours with this account. Please wait a few hours before requesting a new password.
             success:
                 title: Confirmation mail sent
                 mail_sent: A new mail has been sent with a link to confirm your account. Please go check your mails.

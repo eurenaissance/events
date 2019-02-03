@@ -1,11 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'actor.reset_password.check_email.title'|trans %}
+{% block page_title 'password_reset_check.title'|trans %}
 
 {% block body %}
-    {{ 'actor.reset_password.check_email.mail_sent'|trans }}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-7 col-lg-5 col-xl-4 text-center">
+            <h4 class="mb-4">
+                {{ 'password_reset_check.title'|trans }}
+            </h4>
 
-    <a href="{{ path('app_login') }}">
-        {{- 'security.login.link.back'|trans -}}
-    </a>
+            <div class="mt-5 mb-5">
+                {{ 'password_reset_check.message'|trans }}
+            </div>
+
+            <a href="{{ path('app_login') }}" class="btn btn-lg btn-block btn-primary">
+                {{ 'password_reset_check.continue'|trans }}
+            </a>
+        </div>
+    </div>
 {% endblock %}

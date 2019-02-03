@@ -205,7 +205,7 @@ class RegistrationControllerTest extends HttpTestCase
             'email' => 'leonard@mobilisation-eu.localhost',
             'alreadyConfirmed' => false,
             'redirectedTo' => '/login',
-            'errors' => ['A mail has already been sent in the last 2 hours'],
+            'errors' => ['An e-mail has already been sent in the last 2 hours'],
         ];
 
         yield [
