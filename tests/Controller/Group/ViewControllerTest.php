@@ -295,7 +295,6 @@ class ViewControllerTest extends HttpTestCase
 
     /**
      * @dataProvider provideActorsCanSeeGroupInformations
-     * @group debug
      */
     public function testActorsCanSeeGroupInformations(
         string $email,

@@ -99,6 +99,46 @@ class FollowerControllerTest extends HttpTestCase
     {
         yield [
             'remi@mobilisation-eu.localhost',
+            'ecology-in-nice',
+            'jacques@mobilisation-eu.localhost',
+        ];
+
+        yield [
+            'remi@mobilisation-eu.localhost',
+            'culture-in-cannes',
+            'nicolas@mobilisation-eu.localhost',
+        ];
+
+        yield [
+            'remi@mobilisation-eu.localhost',
+            'ecology-in-nantes',
+            'manon@mobilisation-eu.localhost',
+        ];
+    }
+
+    /**
+     * @dataProvider provideActorCanFollowGroups
+     */
+    public function testActorCanFollowGroup(
+        string $actorEmail,
+        string $groupSlug,
+        string $animatorEmail
+    ): void {
+        $this->assertIfActorIsMemberOfGroup($actorEmail, $groupSlug, false);
+
+        $this->authenticateActor($actorEmail);
+
+        $this->client->request('GET', "/group/$groupSlug/follow");
+        $this->assertIsRedirectedTo("/group/$groupSlug");
+        $this->assertMailSentTo($animatorEmail);
+
+        $this->assertIfActorIsMemberOfGroup($actorEmail, $groupSlug, true);
+    }
+
+    public function provideActorCanFollowGroupFromView(): iterable
+    {
+        yield [
+            'remi@mobilisation-eu.localhost',
             'Rémi Gardien',
             'ecology-in-nice',
             'Ecology in Nice',
@@ -126,9 +166,9 @@ class FollowerControllerTest extends HttpTestCase
     }
 
     /**
-     * @dataProvider provideActorCanFollowGroups
+     * @dataProvider provideActorCanFollowGroupFromView
      */
-    public function testActorCanFollowGroup(
+    public function testActorCanFollowGroupFromView(
         string $actorEmail,
         string $actorFullName,
         string $groupSlug,
@@ -136,11 +176,15 @@ class FollowerControllerTest extends HttpTestCase
         string $animatorEmail,
         string $animatorName
     ): void {
-        $this->assertIfActorIsMemberOfGroup($actorEmail, $groupSlug, false);
-
         $this->authenticateActor($actorEmail);
 
-        $this->client->request('GET', "/group/$groupSlug/follow");
+        $crawler = $this->client->request('GET', "/group/$groupSlug");
+        $this->assertResponseSuccessFul();
+
+        $this->assertCount(1, $crawler->filter("a[href=\"/group/$groupSlug/follow\"]"));
+        $this->assertCount(0, $crawler->filter("a[href=\"/group/$groupSlug/unfollow\"]"));
+
+        $this->client->clickLink('follow this group');
         $this->assertIsRedirectedTo("/group/$groupSlug");
         $this->assertMailSent([
             'to' => $animatorEmail,
@@ -150,11 +194,12 @@ class FollowerControllerTest extends HttpTestCase
                         .contains('$actorFullName just started to follow your group \"$groupName\".')",
         ]);
 
-        $this->client->followRedirect();
+        $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('group.follower.follow.flash.success');
 
-        $this->assertIfActorIsMemberOfGroup($actorEmail, $groupSlug, true);
+        $this->assertCount(1, $crawler->filter('.alert:contains("group.follower.follow.flash.success")'));
+        $this->assertCount(0, $crawler->filter("a[href=\"/group/$groupSlug/follow\"]"));
+        $this->assertCount(1, $crawler->filter("a[href=\"/group/$groupSlug/unfollow\"]"));
     }
 
     public function provideActorCannotUnfollowGroups(): iterable
