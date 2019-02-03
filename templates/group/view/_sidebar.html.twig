@@ -1,16 +1,25 @@
 <p>
-    {{ group.city.name }}, {{ group.city.country|country }}
+    <span id="group-city">
+        {{ group.city.name }}, {{ group.city.country|country }}
+    </span>
     <br>
     A {{ distance_between(group, app.user) }}km de vous
 </p>
+
+<hr class="mt-4">
 <h5>Animé par:</h5>
-<p>
-    {{ group.animator.fullName }}
+<div id="animators">
+    <div>
+        {{ group.animator.fullName }}
+    </div>
+
     {% for coAnimator in group.coAnimators %}
-        <br>
-        {{ coAnimator.fullName }}
+        <div>
+            {{ coAnimator.fullName }}
+        </div>
     {% endfor %}
-</p>
+</div>
+
 <hr class="mt-4">
 <p id="group-description">
     {{ group.description|raw }}
