@@ -243,7 +243,7 @@ class ProfileControllerTest extends HttpTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
 
-        $this->client->submit($crawler->selectButton('Sign in')->form(), [
+        $this->client->submit($crawler->selectButton('Log in')->form(), [
             'emailAddress' => $email,
             'password' => $newPassword,
         ]);

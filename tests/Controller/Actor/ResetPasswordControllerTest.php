@@ -113,7 +113,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
         $this->assertResponseContains('Your password has been successfully reset.');
 
-        $this->client->submit($crawler->selectButton('Sign in')->form(), [
+        $this->client->submit($crawler->selectButton('Log in')->form(), [
             'emailAddress' => 'remi@mobilisation-eu.localhost',
             'password' => $password,
         ]);
