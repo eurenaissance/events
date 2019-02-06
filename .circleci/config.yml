@@ -1,7 +1,16 @@
 version: 2
 
 jobs:
-    phpcs:
+    php-cs:
+        docker:
+            - image: php:7.2-fpm-alpine3.7
+        working_directory: ~/app
+        steps:
+            - checkout
+            - run: wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.13.1/php-cs-fixer.phar
+            - run: php php-cs-fixer.phar fix --dry-run --diff
+
+    security-check:
         docker:
             - image: tgalopin/mobilisation-eu:master
               auth:
@@ -10,8 +19,18 @@ jobs:
         working_directory: ~/app
         steps:
             - checkout
-            - run: wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.13.1/php-cs-fixer.phar
-            - run: php php-cs-fixer.phar fix --dry-run --diff
+
+            # Composer
+            - restore_cache:
+                  keys:
+                      - v1-deps-{{ checksum "composer.lock" }}
+            - run: composer install --no-scripts --ignore-platform-reqs
+            - save_cache:
+                  paths: [./vendor]
+                  key: v1-deps-{{ checksum "composer.lock" }}
+
+            # Security check
+            - run: php vendor/bin/security-checker security:check
 
     tests:
         docker:
@@ -72,5 +91,6 @@ workflows:
     version: 2
     test:
         jobs:
-            - phpcs
+            - php-cs
+            - security-check
             - tests
