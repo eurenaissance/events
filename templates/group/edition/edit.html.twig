@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'group.edition.edit.title'|trans %}
+
+{% block body %}
+    {{ form_start(form) }}
+        {{ form_row(form.name, { label: 'group.name.label' }) }}
+        {{ form_row(form.description, { label: 'group.description.label' }) }}
+        {{ form_row(form.address, { label: 'group.address.label' }) }}
+        {{ form_row(form.country, { label: 'group.country.label' }) }}
+        {{ form_row(form.zipCode, { label: 'group.zip_code.label' }) }}
+
+        {# since `form.city` is a hidden type we need to explicitely show errors with `form_errors(form.city)` #}
+        {{ form_errors(form.city) }}
+        {{ form_widget(form.city) }}
+
+        <button type="submit">
+            {{ 'group.edition.edit.submit'|trans }}
+        </button>
+    {{ form_end(form) }}
+{% endblock %}

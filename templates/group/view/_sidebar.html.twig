@@ -25,6 +25,12 @@
     {{ group.description|raw }}
 </p>
 
+{% if is_granted('GROUP_ANIMATOR', group) %}
+    <a href="{{ path('app_group_edit', { slug: group.slug }) }}" class="btn btn-link">
+        Edit group
+    </a>
+{% endif %}
+
 {% if is_granted('GROUP_MEMBERS', group) %}
     <a href="{{ path('app_group_view_members', { slug: group.slug }) }}" class="btn btn-link">
         View members
