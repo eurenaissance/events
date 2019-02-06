@@ -4,11 +4,11 @@ namespace App\Form\Actor;
 
 use App\Entity\Actor;
 use App\Form\DataTransformer\CityToUuidTransformer;
+use App\Form\Type\CityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -55,12 +55,13 @@ class ActorType extends AbstractType
             ->add('zipCode', TextType::class, [
                 'mapped' => false,
             ])
-            ->add('country', CountryType::class, [
-                'mapped' => false,
-            ])
-            ->add('city', HiddenType::class, [
+            ->add('city', CityType::class, [
                 'invalid_message' => 'common.city.invalid',
                 'error_bubbling' => false,
+                'zip_code_field' => 'zipCode',
+            ])
+            ->add('country', CountryType::class, [
+                'mapped' => false,
             ])
         ;
 

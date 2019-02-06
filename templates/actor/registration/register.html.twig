@@ -2,6 +2,8 @@
 
 {% block page_title 'register.title'|trans %}
 
+{% block javascripts encore_entry_script_tags('city-autocomplete') %}
+
 {% block intro %}
     <div class="intro intro--primary">
         <div class="container">
@@ -64,10 +66,6 @@
             </h5>
 
             {{ form_row(form.birthday, { label: false }) }}
-
-            {# since `form.city` is a hidden type we need to explicitely show errors with `form_errors(form.city)` #}
-            {{ form_errors(form.city) }}
-            {{ form_widget(form.city) }}
 
             <div class="mt-5 text-center">
                 <button type="submit" class="btn btn-lg btn-block btn-primary">

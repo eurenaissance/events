@@ -1,0 +1,6 @@
+{% extends 'bootstrap_4_layout.html.twig' %}
+
+{% block city_widget %}
+    {% set attr = attr|default({})|merge({ 'data-zip-code-field': full_name|replace({(name): (zip_code_field)}) }) %}
+    {{ block('choice_widget') }}
+{% endblock %}
