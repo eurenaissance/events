@@ -1,62 +1,96 @@
 version: 2
 
-references:
-    working_directory: &working_directory
-        working_directory: ~/app
-
-    attach_workspace: &attach_workspace
-        attach_workspace:
-            at: ~/app
-
-    configure_base: &configure_base
-        environment:
-            - DOCKER_COMPOSE: "docker-compose -f docker-compose.yml"
-        machine:
-            enabled: true
-            image: circleci/classic:201711-01
-
 jobs:
-    build:
-        <<: *working_directory
-        <<: *configure_base
+    php-cs:
+        docker:
+            - image: php:7.2-fpm-alpine3.7
+        working_directory: ~/app
         steps:
             - checkout
+            - run: wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.13.1/php-cs-fixer.phar
+            - run: php php-cs-fixer.phar fix --dry-run --diff
+
+    security-check:
+        docker:
+            - image: tgalopin/mobilisation-eu:master
+              auth:
+                  username: $DOCKER_USER
+                  password: $DOCKER_PASSWORD
+        working_directory: ~/app
+        steps:
+            - checkout
+
+            # Composer
             - restore_cache:
-                  key: composer-{{ checksum "composer.lock" }}
+                  keys:
+                      - v1-deps-{{ checksum "composer.lock" }}
+            - run: composer install --no-scripts --ignore-platform-reqs
             - save_cache:
-                  paths:
-                      - ./vendor
-                      - ./bin/.phpunit
-                  key: composer-{{ checksum "composer.lock" }}
-            - persist_to_workspace:
-                  root: ./
-                  paths:
-                      - ./
+                  paths: [./vendor]
+                  key: v1-deps-{{ checksum "composer.lock" }}
+
+            # Security check
+            - run: php vendor/bin/security-checker security:check
 
     tests:
-        <<: *working_directory
-        <<: *configure_base
+        docker:
+            - image: tgalopin/mobilisation-eu:master
+              auth:
+                  username: $DOCKER_USER
+                  password: $DOCKER_PASSWORD
+            - image: redis:4-alpine
+            - image: mdillon/postgis:11
+              environment:
+                  POSTGRES_DB: mobilisation_eu
+                  POSTGRES_USER: mobilisation_eu
+                  POSTGRES_PASSWOR: mobilisation_eu
+        working_directory: ~/app
+        environment:
+            APP_ENV: test
+            DATABASE_HOST: '127.0.0.1'
+            REDIS_URL: 'redis://127.0.0.1'
         steps:
-            - *attach_workspace
-            - run:
-                  name: "Execute all tests"
-                  command: |
-                      set -x
-                      export PHPUNIT_ARGS="-v --log-junit ./phpunit/junit.xml"
-                      make up
-                      make build-assets
+            - checkout
 
-                      make test
-                      make phpcs
-                      make security-check
+            # Composer
+            - restore_cache:
+                  keys:
+                      - v1-deps-{{ checksum "composer.lock" }}
+            - run: composer install
+            - save_cache:
+                  paths: [./vendor]
+                  key: v1-deps-{{ checksum "composer.lock" }}
+
+            # Prepare PHPUnit bridge
+            - restore_cache:
+                  keys:
+                      - v1-phpunit-{{ checksum "composer.lock" }}
+            - run: bin/phpunit --check-version
+            - save_cache:
+                  paths: [./bin/.phpunit]
+                  key: v1-phpunit-{{ checksum "composer.lock" }}
+
+            # Wait for database
+            - run: php -r "set_time_limit(60);for(;;){if(@fsockopen('127.0.0.1',5432)){break;}echo \"Waiting for MySQL\n\";sleep(1);}"
+
+            # Yarn
+            - run: yarn install
+            - run: yarn build
+
+            # Prepare the database
+            - run: bin/console doctrine:migrations:migrate -n
+            - run: bin/console doctrine:fixtures:load -n
+
+            # Launch the test suite
+            - run: bin/phpunit -v --log-junit ./phpunit/junit.xml
+
             - store_test_results:
                   path: ./phpunit
 
 workflows:
     version: 2
-    build_test:
+    test:
         jobs:
-            - build
-            - tests:
-                  requires:
-                      - build
+            - php-cs
+            - security-check
+            - tests
