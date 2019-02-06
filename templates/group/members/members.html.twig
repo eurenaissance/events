@@ -22,7 +22,7 @@
                     <th scope="col">Last name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Since</th>
-                    {% if is_granted('GROUP_ANIMATOR', group) %}
+                    {% if is_granted('GROUP_PRIVILEGES', group) %}
                         <th scope="col">Actions</th>
                     {% endif %}
                 </tr>
@@ -34,7 +34,7 @@
                         <td>{{ animator.lastName }}</td>
                         <td>{{ animator.emailAddress }}</td>
                         <td>{{ group.createdAt|date }}</td>
-                        {% if is_granted('GROUP_ANIMATOR', group) %}
+                        {% if is_granted('GROUP_PRIVILEGES', group) %}
                             <td>
                             </td>
                         {% endif %}
@@ -46,7 +46,7 @@
                             <td>{{ actor.lastName }}</td>
                             <td>{{ actor.emailAddress }}</td>
                             <td>{{ membership.createdAt|date }}</td>
-                            {% if is_granted('GROUP_ANIMATOR', group) %}
+                            {% if is_granted('GROUP_PRIVILEGES', group) %}
                                 <td>
                                     <a href="{{ path('app_group_demote', { slug: group.slug, uuid: actor.uuid }) }}" class="btn btn-warning btn-sm">
                                         Demote
@@ -68,7 +68,7 @@
                     <th scope="col">Last name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Since</th>
-                    {% if is_granted('GROUP_ANIMATOR', group) %}
+                    {% if is_granted('GROUP_PRIVILEGES', group) %}
                         <th scope="col">Actions</th>
                     {% endif %}
                 </tr>
@@ -81,7 +81,7 @@
                             <td>{{ actor.lastName }}</td>
                             <td>{{ actor.emailAddress }}</td>
                             <td>{{ membership.createdAt|date }}</td>
-                            {% if is_granted('GROUP_ANIMATOR', group) %}
+                            {% if is_granted('GROUP_PRIVILEGES', group) %}
                                 <td>
                                     <a href="{{ path('app_group_promote', { slug: group.slug, uuid: actor.uuid }) }}" class="btn btn-success btn-sm">
                                         Promote

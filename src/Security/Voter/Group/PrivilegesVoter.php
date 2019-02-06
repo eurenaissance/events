@@ -7,9 +7,9 @@ use App\Entity\Group;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-class EditVoter extends Voter
+class PrivilegesVoter extends Voter
 {
-    private const ROLE = 'GROUP_EDIT';
+    private const ROLE = 'GROUP_PRIVILEGES';
 
     protected function supports($attribute, $subject)
     {
@@ -24,6 +24,6 @@ class EditVoter extends Voter
             return false;
         }
 
-        return $subject->isApproved() && ($user->isAnimatorOf($subject) || $user->isCoAnimatorOf($subject));
+        return $user->isAnimatorOf($subject);
     }
 }

@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CreationController extends AbstractController
 {
     /**
-     * @Route("/group/{slug}/event/create", name="app_event_creation_create", methods={"GET", "POST"})
+     * @Route("/group/{slug}/event/create", name="app_event_create", methods={"GET", "POST"})
      * @Entity("group", expr="repository.findApprovedBySlug(slug)")
      */
     public function create(Group $group, Request $request, CreationHandler $creationHandler): Response

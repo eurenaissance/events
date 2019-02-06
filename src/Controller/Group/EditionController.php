@@ -17,9 +17,9 @@ class EditionController extends AbstractController
      * @Route("/{slug}/edit", name="app_group_edit", methods={"GET", "POST"})
      * @Entity("group", expr="repository.findApprovedBySlug(slug)")
      */
-    public function create(Request $request, EditionHandler $editionHandler, Group $group): Response
+    public function edit(Request $request, EditionHandler $editionHandler, Group $group): Response
     {
-        $this->denyAccessUnlessGranted('GROUP_ANIMATOR', $group);
+        $this->denyAccessUnlessGranted('GROUP_EDIT', $group);
 
         $form = $this->createForm(EditionType::class, $group);
 
