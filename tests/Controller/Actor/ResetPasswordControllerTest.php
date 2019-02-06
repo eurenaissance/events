@@ -45,7 +45,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->client->request('GET', '/reset-password');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Request new password', ['emailAddress' => $email]);
+        $this->client->submitForm('Submit', ['emailAddress' => $email]);
         $this->assertIsRedirectedTo('/reset-password/check-email');
         $this->assertMailSent([
             'to' => $email,
@@ -64,9 +64,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->client->request('GET', '/reset-password');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Request new password', [
-            'emailAddress' => 'remi@mobilisation-eu.localhost',
-        ]);
+        $this->client->submitForm('Submit', ['emailAddress' => 'remi@mobilisation-eu.localhost']);
         $this->assertIsRedirectedTo('/login');
         $this->assertNoMailSent();
 
