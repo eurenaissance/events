@@ -40,14 +40,18 @@ class ActorType extends AbstractType
                 'widget' => 'choice',
                 'years' => $options['years'],
                 'placeholder' => [
-                    'year' => 'common.date.year.placeholder',
-                    'month' => 'common.date.month.placeholder',
-                    'day' => 'common.date.day.placeholder',
+                    'year' => 'common.date.year',
+                    'month' => 'common.date.month',
+                    'day' => 'common.date.day',
                 ],
                 'invalid_message' => 'common.date.invalid',
                 'empty_data' => null,
+                'format' => 'ddMMMMyyyy',
             ])
             ->add('emailAddress', EmailType::class)
+            ->add('country', CountryType::class, [
+                'mapped' => false,
+            ])
             ->add('address', TextType::class, [
                 'required' => false,
                 'empty_data' => '',
@@ -58,10 +62,8 @@ class ActorType extends AbstractType
             ->add('city', CityType::class, [
                 'invalid_message' => 'common.city.invalid',
                 'error_bubbling' => false,
+                'country_field' => 'country',
                 'zip_code_field' => 'zipCode',
-            ])
-            ->add('country', CountryType::class, [
-                'mapped' => false,
             ])
         ;
 

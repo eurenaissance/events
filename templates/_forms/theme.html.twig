@@ -1,6 +1,18 @@
 {% extends 'bootstrap_4_layout.html.twig' %}
 
+{% block date_widget %}
+    {% set attr = attr|default({})|merge({
+        'class': 'input-group ' ~ (attr['class']|default(''))
+    }) %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block city_widget %}
-    {% set attr = attr|default({})|merge({ 'data-zip-code-field': full_name|replace({(name): (zip_code_field)}) }) %}
-    {{ block('choice_widget') }}
+    {% set attr = attr|default({})|merge({
+        'data-zip-code-field': full_name|replace({(name): (zip_code_field)}),
+        'data-country-field': full_name|replace({(name): (country_field)})
+    }) %}
+
+    {{ block('form_widget_simple') }}
 {% endblock %}

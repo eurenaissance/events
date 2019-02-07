@@ -4,21 +4,26 @@ namespace App\Geocoder;
 
 use App\Entity\City;
 use App\Repository\CityRepository;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class DatabaseGeocoder implements GeocoderInterface
 {
-    private $appCountry;
+    private $cache;
     private $repository;
 
-    public function __construct(string $appCountry, CityRepository $repository)
+    public function __construct(CacheInterface $cache, CityRepository $repository)
     {
-        $this->appCountry = $appCountry;
+        $this->cache = $cache;
         $this->repository = $repository;
     }
 
-    public function findCities(string $zipCode): array
+    public function findCities(string $country, string $zipCode): array
     {
-        return $this->repository->findByZipCode($this->appCountry, $zipCode);
+        $country = strtoupper($country);
+
+        return $this->cache->get('geocode-cities-'.$country.'-'.$zipCode, function () use ($country, $zipCode) {
+            return $this->repository->findByZipCode($country, $zipCode);
+        });
     }
 
     public function findCity(int $cityId): ?City

@@ -48,6 +48,8 @@
                 {{ 'register.fields.postalAddress'|trans }}
             </h5>
 
+            {{ form_row(form.country, { label: 'register.fields.country' }) }}
+
             {{ form_row(form.address, { label: 'register.fields.streetAddress' }) }}
 
             <div class="row">
@@ -59,13 +61,16 @@
                 </div>
             </div>
 
-            {{ form_row(form.country, { label: 'register.fields.country' }) }}
-
             <h5 class="mb-3 mt-5">
                 {{ 'register.fields.birthdate'|trans }}
             </h5>
 
-            {{ form_row(form.birthday, { label: false }) }}
+            <div class="row">
+                <div class="col-md-8">
+                    {{ form_row(form.birthday, { label: false }) }}
+                </div>
+                <div class="col-md-4"></div>
+            </div>
 
             <div class="mt-5 text-center">
                 <button type="submit" class="btn btn-lg btn-block btn-primary">

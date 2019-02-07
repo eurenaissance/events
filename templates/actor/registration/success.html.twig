@@ -1,7 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'actor.registration.success.title'|trans %}
+{% block page_title 'register.confirm.title'|trans %}
+
+{% block intro %}
+    <div class="intro">
+        <div class="container">
+            <h2 class="intro__title">
+                {{ 'register.confirm.title'|trans }}
+            </h2>
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-    {{ 'actor.registration.success.mail_sent'|trans }}
+    <div class="text-center">
+        {{ 'register.confirm.subtitle'|trans }}
+    </div>
 {% endblock %}

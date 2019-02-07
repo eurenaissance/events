@@ -12,15 +12,22 @@ class CityType extends AbstractType
 {
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
+        $view->vars['country_field'] = $options['country_field'];
         $view->vars['zip_code_field'] = $options['zip_code_field'];
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'country_field' => null,
             'zip_code_field' => null,
-            'attr' => ['class' => 'city-autocomplete', 'disabled' => 'disabled'],
+            'attr' => ['class' => 'city-autocomplete'],
         ]);
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'city';
     }
 
     public function getParent()

@@ -1,6 +1,21 @@
-#
+# Common
+#########################################
+common:
+    date:
+        invalid: This date is invalid.
+        year: Year
+        month: Month
+        day: Day
+    gender:
+        select: Select a gender
+        female: Female
+        male: Male
+        other: Other
+
+
 # Layout
-#
+#########################################
+
 layout:
     header:
         find_event: Find an event
@@ -21,18 +36,21 @@ layout:
         privacy: Privacy policy
         contact: Contact
 
-#
+
 # Home
-#
+#########################################
+
 home:
     intro:
         sub: Don't wait for a better Europe.
         main: Change it!
         button: I'm in
 
-#
+
+# Actors
+#########################################
+
 # Register
-#
 register:
     title: Join the movement
     main: Join to the European transformation
@@ -50,10 +68,11 @@ register:
         city: City
         country: Country
         birthdate: Birth date
+    confirm:
+        title: One last step!
+        subtitle: We sent you an e-mail with a link to confirm your account.
 
-#
 # Login
-#
 login:
     title: Log in
     main: Welcome back!
@@ -64,9 +83,7 @@ login:
     button: Log in
     forgot_password: I forgot my password
 
-#
 # Reset password
-#
 password_reset_request:
     title: Request a new password
     email: E-mail address
@@ -75,7 +92,7 @@ password_reset_request:
 
 password_reset_check:
     title: Check your inbox
-    message: We send you an e-mail with a link to reset your password.
+    message: We sent you an e-mail with a link to reset your password.
     continue: Continue
 
 
@@ -89,7 +106,7 @@ password_reset_check:
 #
 # Common
 #
-common:
+old_common:
     title:
         default: Mobilisation EU
 
