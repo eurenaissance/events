@@ -2,6 +2,8 @@
 
 {% block title 'actor.profile.edit.title'|trans %}
 
+{% block javascripts encore_entry_script_tags('city-autocomplete') %}
+
 {% block body %}
     {{ form_start(form) }}
         {{ form_row(form.firstName, { label: 'actor.first_name.label' }) }}
@@ -10,13 +12,18 @@
         {{ form_row(form.gender, { label: 'actor.gender.label', placeholder: 'common.gender.select' }) }}
         {{ form_row(form.emailAddress, { label: 'actor.email_address.label.label' }) }}
         {{ form_row(form.address, { label: 'actor.address.label' }) }}
-        {{ form_row(form.country, { label: 'actor.country.label' }) }}
-        {{ form_row(form.zipCode, { label: 'actor.zip_code.label' }) }}
 
+        {{ form_row(form.country, { label: 'register.fields.country' }) }}
+        {{ form_row(form.address, { label: 'register.fields.streetAddress' }) }}
 
-        {# since `form.city` is a hidden type we need to explicitly show errors with `form_errors(form.city)` #}
-        {{ form_errors(form.city) }}
-        {{ form_widget(form.city) }}
+        <div class="row">
+            <div class="col-md-4">
+                {{ form_row(form.zipCode, { label: 'register.fields.postalCode' }) }}
+            </div>
+            <div class="col-md-8">
+                {{ form_row(form.city, { label: 'register.fields.city' }) }}
+            </div>
+        </div>
 
         <button type="submit">
             {{ 'actor.profile.edit.submit'|trans }}

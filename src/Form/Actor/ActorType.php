@@ -4,11 +4,11 @@ namespace App\Form\Actor;
 
 use App\Entity\Actor;
 use App\Form\DataTransformer\CityToUuidTransformer;
+use App\Form\Type\CityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -40,14 +40,18 @@ class ActorType extends AbstractType
                 'widget' => 'choice',
                 'years' => $options['years'],
                 'placeholder' => [
-                    'year' => 'common.date.year.placeholder',
-                    'month' => 'common.date.month.placeholder',
-                    'day' => 'common.date.day.placeholder',
+                    'year' => 'base.date.year',
+                    'month' => 'base.date.month',
+                    'day' => 'base.date.day',
                 ],
-                'invalid_message' => 'common.date.invalid',
+                'invalid_message' => 'base.date.invalid',
                 'empty_data' => null,
+                'format' => 'ddMMMMyyyy',
             ])
             ->add('emailAddress', EmailType::class)
+            ->add('country', CountryType::class, [
+                'mapped' => false,
+            ])
             ->add('address', TextType::class, [
                 'required' => false,
                 'empty_data' => '',
@@ -55,12 +59,11 @@ class ActorType extends AbstractType
             ->add('zipCode', TextType::class, [
                 'mapped' => false,
             ])
-            ->add('country', CountryType::class, [
-                'mapped' => false,
-            ])
-            ->add('city', HiddenType::class, [
+            ->add('city', CityType::class, [
                 'invalid_message' => 'common.city.invalid',
                 'error_bubbling' => false,
+                'country_field' => 'country',
+                'zip_code_field' => 'zipCode',
             ])
         ;
 

@@ -67,7 +67,7 @@ class RegistrationControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('A mail has been sent to confirm your account.');
+        $this->assertResponseContains('We sent you an e-mail with a link to confirm your account.');
         $this->assertActorConfirmed('new@mobilisation-eu.localhost', false);
     }
 

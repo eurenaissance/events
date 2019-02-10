@@ -5,7 +5,7 @@ Encore
     .setPublicPath('/build')
     .addStyleEntry('lib', './assets/scss/lib.scss')
     .addStyleEntry('app', './assets/scss/app.scss')
-    .addEntry('index', './assets/tsx/index.tsx')
+    .addEntry('city-autocomplete', './assets/tsx/city-autocomplete/index.tsx')
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())

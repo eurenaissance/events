@@ -1,6 +1,21 @@
-#
+# Common
+#########################################
+base:
+    address:
+        streetAddress: Street address
+        postalCode: Postal code
+        city: City
+        country: Country
+    date:
+        invalid: This date is not valid.
+        year: Year
+        month: Month
+        day: Day
+
+
 # Layout
-#
+#########################################
+
 layout:
     header:
         find_event: Find an event
@@ -21,39 +36,42 @@ layout:
         privacy: Privacy policy
         contact: Contact
 
-#
+
 # Home
-#
+#########################################
+
 home:
     intro:
         sub: Don't wait for a better Europe.
         main: Change it!
         button: I'm in
 
-#
+
+# Actors
+#########################################
+
+# Profile
+profile:
+    personal: Personal information
+    firstName: First name
+    lastName: Last name
+    email: E-mail address
+    postalAddress: Postal address
+    password: Password
+    passwordConfirm: Password confirmation
+    birthdate: Birth date
+
 # Register
-#
 register:
     title: Join the movement
     main: Join to the European transformation
     sub: Let's rethink Europe together
-    fields:
-        personal: Personal information
-        firstName: First name
-        lastName: Last name
-        email: E-mail address
-        password: Password
-        passwordConfirm: Password confirmation
-        postalAddress: Postal address
-        streetAddress: Street address
-        postalCode: Postal code
-        city: City
-        country: Country
-        birthdate: Birth date
+    submit: Register
+    confirm:
+        title: One last step!
+        subtitle: We sent you an e-mail with a link to confirm your account.
 
-#
 # Login
-#
 login:
     title: Log in
     main: Welcome back!
@@ -64,9 +82,7 @@ login:
     button: Log in
     forgot_password: I forgot my password
 
-#
 # Reset password
-#
 password_reset_request:
     title: Request a new password
     email: E-mail address
@@ -75,7 +91,7 @@ password_reset_request:
 
 password_reset_check:
     title: Check your inbox
-    message: We send you an e-mail with a link to reset your password.
+    message: We sent you an e-mail with a link to reset your password.
     continue: Continue
 
 
@@ -103,15 +119,6 @@ common:
         not_blank: Please enter a password.
         min_length: Password must be at least {{ limit }} characters long.
         max_length: Password should not exceed {{ limit }} characters.
-
-    date:
-        invalid: This date is not valid.
-        year:
-            placeholder: YYYY
-        month:
-            placeholder: MM
-        day:
-            placeholder: DD
 
     gender:
         select: Select a gender

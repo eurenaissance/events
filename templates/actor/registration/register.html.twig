@@ -2,6 +2,8 @@
 
 {% block page_title 'register.title'|trans %}
 
+{% block javascripts encore_entry_script_tags('city-autocomplete') %}
+
 {% block intro %}
     <div class="intro intro--primary">
         <div class="container">
@@ -20,58 +22,59 @@
             {{ form_start(form) }}
 
             <h5 class="mb-3">
-                {{ 'register.fields.personal'|trans }}
+                {{ 'profile.personal'|trans }}
             </h5>
             <div class="row">
                 <div class="col-md">
-                    {{ form_row(form.firstName, { label: 'register.fields.firstName' }) }}
+                    {{ form_row(form.firstName, { label: 'profile.firstName' }) }}
                 </div>
                 <div class="col-md">
-                    {{ form_row(form.lastName, { label: 'register.fields.lastName' }) }}
+                    {{ form_row(form.lastName, { label: 'profile.lastName' }) }}
                 </div>
             </div>
 
-            {{ form_row(form.emailAddress, { label: 'register.fields.email' }) }}
+            {{ form_row(form.emailAddress, { label: 'profile.email' }) }}
 
             <div class="row">
                 <div class="col-md">
-                    {{ form_row(form.plainPassword.first, { label: 'register.fields.password' }) }}
+                    {{ form_row(form.plainPassword.first, { label: 'profile.password' }) }}
                 </div>
                 <div class="col-md">
-                    {{ form_row(form.plainPassword.second, { label: 'register.fields.passwordConfirm' }) }}
+                    {{ form_row(form.plainPassword.second, { label: 'profile.passwordConfirm' }) }}
                 </div>
             </div>
 
             <h5 class="mb-3 mt-4">
-                {{ 'register.fields.postalAddress'|trans }}
+                {{ 'profile.postalAddress'|trans }}
             </h5>
 
-            {{ form_row(form.address, { label: 'register.fields.streetAddress' }) }}
+            {{ form_row(form.country, { label: 'base.address.country' }) }}
+
+            {{ form_row(form.address, { label: 'base.address.streetAddress' }) }}
 
             <div class="row">
                 <div class="col-md-4">
-                    {{ form_row(form.zipCode, { label: 'register.fields.postalCode' }) }}
+                    {{ form_row(form.zipCode, { label: 'base.address.postalCode' }) }}
                 </div>
                 <div class="col-md-8">
-                    {{ form_row(form.city, { label: 'register.fields.city' }) }}
+                    {{ form_row(form.city, { label: 'base.address.city' }) }}
                 </div>
             </div>
 
-            {{ form_row(form.country, { label: 'register.fields.country' }) }}
-
             <h5 class="mb-3 mt-5">
-                {{ 'register.fields.birthdate'|trans }}
+                {{ 'profile.birthdate'|trans }}
             </h5>
 
-            {{ form_row(form.birthday, { label: false }) }}
-
-            {# since `form.city` is a hidden type we need to explicitely show errors with `form_errors(form.city)` #}
-            {{ form_errors(form.city) }}
-            {{ form_widget(form.city) }}
+            <div class="row">
+                <div class="col-md-8">
+                    {{ form_row(form.birthday, { label: false }) }}
+                </div>
+                <div class="col-md-4"></div>
+            </div>
 
             <div class="mt-5 text-center">
                 <button type="submit" class="btn btn-lg btn-block btn-primary">
-                    {{ 'actor.registration.register.submit'|trans }}
+                    {{ 'register.submit'|trans }}
                 </button>
             </div>
 
