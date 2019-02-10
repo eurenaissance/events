@@ -3,7 +3,7 @@ import {render} from 'react-dom';
 import {dom} from '../dom/dom';
 import {CityAutocomplete} from './components/CityAutocomplete';
 
-dom.findAll('.city-autocomplete').forEach(field => {
+dom.findAll<HTMLInputElement>('.city-autocomplete').forEach(field => {
     const zipCodeFieldName = field.getAttribute('data-zip-code-field');
     const countryFieldName = field.getAttribute('data-country-field');
     if (!zipCodeFieldName || !countryFieldName) {
@@ -18,11 +18,14 @@ dom.findAll('.city-autocomplete').forEach(field => {
 
     const wrapper = dom.createWrapper(field);
 
+    field.classList.remove('city-autocomplete');
+
     render(
         <CityAutocomplete
             id={field.getAttribute('id')}
             name={field.getAttribute('name')}
-            className={field.getAttribute('class')}
+            className={field.className}
+            value={field.value}
             countryField={countryField}
             zipCodeField={zipCodeField}
         />,

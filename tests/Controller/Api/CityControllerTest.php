@@ -2,6 +2,7 @@
 
 namespace Test\App\Controller\Api;
 
+use App\DataFixtures\CityFixtures;
 use App\Tests\HttpTestCase;
 
 /**
@@ -103,6 +104,18 @@ class CityControllerTest extends HttpTestCase
     public function testAutocompleteFailure(?string $country, ?string $zipCode): void
     {
         $this->client->request('GET', "/api/city/autocomplete/$country/$zipCode");
+        $this->assertNotFoundResponse();
+    }
+
+    public function testShowSuccess(): void
+    {
+        $this->client->request('GET', '/api/city/'.CityFixtures::CITY_01_UUID);
+        $this->assertJsonResponse(['name' => 'Paris', 'uuid' => 'e8b15645-8df6-4d15-8555-94922199e8bd']);
+    }
+
+    public function testShowFailure(): void
+    {
+        $this->client->request('GET', '/api/city/98cccdf2-ced1-4e40-935d-94922199e8bd');
         $this->assertNotFoundResponse();
     }
 }

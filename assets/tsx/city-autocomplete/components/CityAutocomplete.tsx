@@ -8,6 +8,7 @@ interface Props {
     id: string | null,
     name: string | null,
     className: string | null,
+    value: string,
     countryField: HTMLInputElement,
     zipCodeField: HTMLInputElement,
 }
@@ -82,7 +83,15 @@ export class CityAutocomplete extends Component<Props, State> {
                     name={this.props.name ? this.props.name : ''}
                     className={this.props.className ? this.props.className : ''}
                     disabled={this.state.loading || !this.state.cities.length}>
-                {this.state.cities.map(city => <option value={city.uuid}>{city.name}</option>)}
+
+                {this.state.cities.map(city => {
+                    return (
+                        <option value={city.uuid} selected={city.uuid === this.props.value}>
+                            {city.name}
+                        </option>
+                    );
+                })}
+
             </select>
         );
     }

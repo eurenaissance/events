@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\City;
 use App\Geocoder\GeocoderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,5 +24,13 @@ class CityController extends AbstractController
     public function autocomplete(GeocoderInterface $geocoder, string $country, string $zipCode): JsonResponse
     {
         return $this->json($geocoder->findCities($country, $zipCode), 200, [], ['groups' => 'city_autocomplete']);
+    }
+
+    /**
+     * @Route("/{uuid}", name="app_api_city_show", requirements={"uuid": "%pattern_uuid%"}, methods="GET")
+     */
+    public function show(City $city): JsonResponse
+    {
+        return $this->json($city, 200, [], ['groups' => 'city_autocomplete']);
     }
 }

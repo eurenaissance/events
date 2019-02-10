@@ -4,6 +4,15 @@
     display: none;
 }
 
+.city-autocomplete, .city-autocomplete:focus, .city-autocomplete:hover, .city-autocomplete:active {
+    background: #e9ecef;
+    color: #e9ecef;
+    border: 0;
+    opacity: 1;
+    cursor: default;
+    box-shadow: none;
+}
+
 .header {
     padding: 30px 0;
 
