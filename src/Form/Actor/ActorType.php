@@ -40,11 +40,11 @@ class ActorType extends AbstractType
                 'widget' => 'choice',
                 'years' => $options['years'],
                 'placeholder' => [
-                    'year' => 'common.date.year',
-                    'month' => 'common.date.month',
-                    'day' => 'common.date.day',
+                    'year' => 'base.date.year',
+                    'month' => 'base.date.month',
+                    'day' => 'base.date.day',
                 ],
-                'invalid_message' => 'common.date.invalid',
+                'invalid_message' => 'base.date.invalid',
                 'empty_data' => null,
                 'format' => 'ddMMMMyyyy',
             ])

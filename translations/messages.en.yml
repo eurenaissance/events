@@ -1,16 +1,16 @@
 # Common
 #########################################
-common:
+base:
+    address:
+        streetAddress: Street address
+        postalCode: Postal code
+        city: City
+        country: Country
     date:
-        invalid: This date is invalid.
+        invalid: This date is not valid.
         year: Year
         month: Month
         day: Day
-    gender:
-        select: Select a gender
-        female: Female
-        male: Male
-        other: Other
 
 
 # Layout
@@ -50,24 +50,23 @@ home:
 # Actors
 #########################################
 
+# Profile
+profile:
+    personal: Personal information
+    firstName: First name
+    lastName: Last name
+    email: E-mail address
+    postalAddress: Postal address
+    password: Password
+    passwordConfirm: Password confirmation
+    birthdate: Birth date
+
 # Register
 register:
     title: Join the movement
     main: Join to the European transformation
     sub: Let's rethink Europe together
-    fields:
-        personal: Personal information
-        firstName: First name
-        lastName: Last name
-        email: E-mail address
-        password: Password
-        passwordConfirm: Password confirmation
-        postalAddress: Postal address
-        streetAddress: Street address
-        postalCode: Postal code
-        city: City
-        country: Country
-        birthdate: Birth date
+    submit: Register
     confirm:
         title: One last step!
         subtitle: We sent you an e-mail with a link to confirm your account.
@@ -106,7 +105,7 @@ password_reset_check:
 #
 # Common
 #
-old_common:
+common:
     title:
         default: Mobilisation EU
 
@@ -120,15 +119,6 @@ old_common:
         not_blank: Please enter a password.
         min_length: Password must be at least {{ limit }} characters long.
         max_length: Password should not exceed {{ limit }} characters.
-
-    date:
-        invalid: This date is not valid.
-        year:
-            placeholder: YYYY
-        month:
-            placeholder: MM
-        day:
-            placeholder: DD
 
     gender:
         select: Select a gender

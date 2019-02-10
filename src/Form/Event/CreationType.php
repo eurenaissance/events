@@ -52,22 +52,22 @@ class CreationType extends AbstractType
                 'widget' => 'choice',
                 'years' => $options['years'],
                 'placeholder' => [
-                    'year' => 'common.date.year.placeholder',
-                    'month' => 'common.date.month.placeholder',
-                    'day' => 'common.date.day.placeholder',
+                    'year' => 'base.date.year',
+                    'month' => 'base.date.month',
+                    'day' => 'base.date.day',
                 ],
-                'invalid_message' => 'common.date.invalid',
+                'invalid_message' => 'base.date.invalid',
                 'empty_data' => null,
             ])
             ->add('finishAt', DateType::class, [
                 'widget' => 'choice',
                 'years' => $options['years'],
                 'placeholder' => [
-                    'year' => 'common.date.year.placeholder',
-                    'month' => 'common.date.month.placeholder',
-                    'day' => 'common.date.day.placeholder',
+                    'year' => 'base.date.year',
+                    'month' => 'base.date.month',
+                    'day' => 'base.date.day',
                 ],
-                'invalid_message' => 'common.date.invalid',
+                'invalid_message' => 'base.date.invalid',
                 'empty_data' => null,
             ])
             ->add('address', TextType::class, [

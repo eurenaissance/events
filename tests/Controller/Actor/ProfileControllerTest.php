@@ -160,7 +160,7 @@ class ProfileControllerTest extends HttpTestCase
                 'Please enter your first name.',
                 'Please enter your last name.',
                 'Please select your gender.',
-                'This date is invalid.',
+                'This date is not valid.',
                 'This city is not valid.',
                 'The address can not exceed 150 characters.',
             ],

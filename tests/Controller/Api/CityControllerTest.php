@@ -91,7 +91,6 @@ class CityControllerTest extends HttpTestCase
         yield ['FR2', '75000'];
         yield ['FRFR', '75000'];
         yield ['F R', '75000'];
-        yield ['FR', '7'];
         yield ['FR', 'wayTooLongToBeAValidZipCode'];
         yield [null, null];
         yield [null, '75000'];
