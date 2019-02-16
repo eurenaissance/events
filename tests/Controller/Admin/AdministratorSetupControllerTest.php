@@ -34,7 +34,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Save', [
+        $this->client->submitForm('Setup', [
             'emailAddress' => $email,
             'plainPassword' => [
                 'first' => $password,
@@ -83,7 +83,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $this->client->request('GET', '/admin/setup');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Save', [
+        $this->client->submitForm('Setup', [
             'emailAddress' => $email,
             'plainPassword' => [
                 'first' => $firstPassword,
