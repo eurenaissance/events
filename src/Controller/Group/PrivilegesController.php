@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AnimatorController extends AbstractController
+class PrivilegesController extends AbstractController
 {
     /**
      * @Route(
@@ -27,7 +27,7 @@ class AnimatorController extends AbstractController
         Group $group,
         Actor $actor
     ): Response {
-        $this->denyAccessUnlessGranted('GROUP_ANIMATOR', $group);
+        $this->denyAccessUnlessGranted('GROUP_PRIVILEGES', $group);
 
         $coAnimatorMembershipHandler->promote($actor, $group);
 
@@ -51,7 +51,7 @@ class AnimatorController extends AbstractController
         Group $group,
         Actor $actor
     ): Response {
-        $this->denyAccessUnlessGranted('GROUP_ANIMATOR', $group);
+        $this->denyAccessUnlessGranted('GROUP_PRIVILEGES', $group);
 
         $coAnimatorMembershipHandler->demote($actor, $group);
 

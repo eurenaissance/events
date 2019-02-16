@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Security\Voter\Group;
+namespace App\Security\Voter\Event;
 
 use App\Entity\Actor;
-use App\Entity\Group;
+use App\Entity\Event;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-class AnimatorVoter extends Voter
+class EditVoter extends Voter
 {
-    private const ROLE = 'GROUP_ANIMATOR';
+    private const ROLE = 'EVENT_EDIT';
 
     protected function supports($attribute, $subject)
     {
-        return self::ROLE === $attribute && $subject instanceof Group;
+        return self::ROLE === $attribute && $subject instanceof Event;
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -24,6 +24,6 @@ class AnimatorVoter extends Voter
             return false;
         }
 
-        return $user->isAnimatorOf($subject);
+        return $subject->getCreator()->isEqualTo($user);
     }
 }

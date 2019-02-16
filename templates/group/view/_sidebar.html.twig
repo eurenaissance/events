@@ -25,6 +25,12 @@
     {{ group.description|raw }}
 </p>
 
+{% if is_granted('GROUP_EDIT', group) %}
+    <a href="{{ path('app_group_edit', { slug: group.slug }) }}" class="btn btn-link">
+        Edit group
+    </a>
+{% endif %}
+
 {% if is_granted('GROUP_MEMBERS', group) %}
     <a href="{{ path('app_group_view_members', { slug: group.slug }) }}" class="btn btn-link">
         View members
@@ -32,7 +38,7 @@
 {% endif %}
 
 {% if is_granted('EVENT_CREATE', group) %}
-    <a href="{{ path('app_event_creation_create', { slug: group.slug }) }}" class="btn btn-link">
+    <a href="{{ path('app_event_create', { slug: group.slug }) }}" class="btn btn-link">
         Create an event
     </a>
 {% endif %}
