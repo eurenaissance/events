@@ -73,7 +73,7 @@ class GeocoderSetupCommand extends Command
         }
 
         $finder = new Finder();
-        $finder->in(__DIR__.'/../Geocoder/data');
+        $finder->in(__DIR__.'/../Geography/Resources/data');
         $finder->sortByName();
         $finder->directories();
         if ($filterCountry) {

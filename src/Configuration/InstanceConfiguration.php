@@ -91,8 +91,25 @@ class InstanceConfiguration
 
     private function prepareData()
     {
-        if (!$this->data) {
-            $this->data = $this->repository->findAll()[0];
+        if ($this->data) {
+            return;
         }
+
+        if ($this->data = $this->repository->findOneBy([])) {
+            return;
+        }
+
+        $configuration = new Configuration();
+        $configuration->setPartyName('Your party');
+        $configuration->setPartyLogo('fixtures/logo/default.jpg');
+        $configuration->setPartyWebsite('https://events.your-party.com');
+        $configuration->setColorPrimary('6f80ff');
+        $configuration->setFontPrimary('Roboto Slab');
+        $configuration->setFontMono('Roboto Mono');
+        $configuration->setMetaDescription('Your party slogan');
+        $configuration->setMetaImage('fixtures/home/default.jpg');
+        $configuration->setHomePicture('fixtures/home/default.jpg');
+
+        $this->data = $configuration;
     }
 }

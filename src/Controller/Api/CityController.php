@@ -3,7 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\City;
-use App\Geocoder\GeocoderInterface;
+use App\Geography\CityRegistry\CityRegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,9 +21,9 @@ class CityController extends AbstractController
      *     methods="GET"
      * )
      */
-    public function autocomplete(GeocoderInterface $geocoder, string $country, string $zipCode): JsonResponse
+    public function autocomplete(CityRegistryInterface $registry, string $country, string $zipCode): JsonResponse
     {
-        return $this->json($geocoder->findCities($country, $zipCode), 200, [], ['groups' => 'city_autocomplete']);
+        return $this->json($registry->findCities($country, $zipCode), 200, [], ['groups' => 'city_autocomplete']);
     }
 
     /**

@@ -36,7 +36,8 @@
         "symfony/serializer": "4.2.*",
         "symfony/swiftmailer-bundle": "^3.2",
         "symfony/webpack-encore-bundle": "^1.1",
-        "symfony/yaml": "4.2.*"
+        "symfony/yaml": "4.2.*",
+        "webmozart/assert": "^1.4"
     },
     "require-dev": {
         "coduo/php-matcher": "^3.1",
@@ -47,8 +48,7 @@
         "sensiolabs/security-checker": "^5.0",
         "symfony/debug-pack": "^1.0",
         "symfony/maker-bundle": "^1.11",
-        "symfony/test-pack": "^1.0",
-        "webmozart/assert": "^1.4"
+        "symfony/test-pack": "^1.0"
     },
     "config": {
         "preferred-install": {

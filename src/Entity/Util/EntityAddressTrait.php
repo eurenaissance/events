@@ -3,6 +3,7 @@
 namespace App\Entity\Util;
 
 use App\Entity\City;
+use App\Geography\Model\Coordinates;
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,6 +28,20 @@ trait EntityAddressTrait
      * @Assert\NotBlank(message="common.city.not_blank", groups={"registration", "profile"})
      */
     private $city;
+
+    /**
+     * @var Point|null
+     *
+     * @ORM\Column(type="point", nullable=true)
+     */
+    private $coordinates;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $coordinatesAccuracy;
 
     public function getAddress(): ?string
     {
@@ -58,8 +73,29 @@ trait EntityAddressTrait
         return $this->city ? $this->city->getCountry() : null;
     }
 
-    public function getCoordinates(): ?Point
+    public function getCoordinates(): ?Coordinates
     {
-        return $this->city ? $this->city->getCoordinates() : null;
+        if (!$this->coordinates) {
+            return null;
+        }
+
+        return new Coordinates(
+            $this->coordinates->getLongitude(),
+            $this->coordinates->getLatitude(),
+            $this->coordinatesAccuracy
+        );
+    }
+
+    public function setCoordinates(?Coordinates $coordinates)
+    {
+        if (!$coordinates) {
+            $this->coordinates = null;
+            $this->coordinatesAccuracy = null;
+
+            return;
+        }
+
+        $this->coordinates = new Point($coordinates->getLongitude(), $coordinates->getLatitude());
+        $this->coordinatesAccuracy = $coordinates->getAccuracy();
     }
 }
