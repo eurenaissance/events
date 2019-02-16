@@ -1,13 +1,53 @@
-<p>
-    <span id="group-city">
-        {{ group.city.name }}, {{ group.city.country|country }}
-    </span>
-    <br>
-    A {{ distance_between(group, app.user) }}km de vous
-</p>
+{% if is_granted('GROUP_FOLLOW', group) or is_granted('GROUP_UNFOLLOW', group)  %}
+    <div class="mb-5">
+        {% if is_granted('GROUP_UNFOLLOW', group) %}
+            <a href="{{ path('app_group_unfollow', { slug: group.slug }) }}" class="btn btn-block btn-primary">
+                Unfollow
+            </a>
+        {% endif %}
 
-<hr class="mt-4">
-<h5>Animé par:</h5>
+        {% if is_granted('GROUP_FOLLOW', group) %}
+            <a href="{{ path('app_group_follow', { slug: group.slug }) }}" class="btn btn-block btn-primary">
+                Follow
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
+
+<div class="address mb-2">
+    <div class="address__icon">
+        <i class="fas fa-map-marker-alt"></i>
+    </div>
+    <div class="address__text">
+        <div class="address__text__street">
+            {{ group.address }}
+        </div>
+        <div class="address__text__city">
+            {{ group.city.name }}, {{ group.city.country|country }}
+        </div>
+    </div>
+</div>
+
+<div class="text-muted">
+    <small>
+        <a href="https://maps.google.com/?q={{ group.address }} {{ group.city.name }} {{ group.city.country|country }}" target="_blank">
+            Voir sur Google Maps
+        </a>
+    </small>
+</div>
+
+<h5 class="mt-5">
+    À propos
+</h5>
+
+<div id="group-description">
+    {{ group.description|nl2br }}
+</div>
+
+<h5 class="mt-5">
+    Animé par :
+</h5>
+
 <div id="animators">
     <div>
         {{ group.animator.fullName }}
@@ -19,46 +59,3 @@
         </div>
     {% endfor %}
 </div>
-
-<hr class="mt-4">
-<p id="group-description">
-    {{ group.description|raw }}
-</p>
-
-{% if is_granted('GROUP_EDIT', group) %}
-    <a href="{{ path('app_group_edit', { slug: group.slug }) }}" class="btn btn-link">
-        Edit group
-    </a>
-{% endif %}
-
-{% if is_granted('GROUP_MEMBERS', group) %}
-    <a href="{{ path('app_group_view_members', { slug: group.slug }) }}" class="btn btn-link">
-        View members
-    </a>
-{% endif %}
-
-{% if is_granted('EVENT_CREATE', group) %}
-    <a href="{{ path('app_event_create', { slug: group.slug }) }}" class="btn btn-link">
-        Create an event
-    </a>
-{% endif %}
-
-{% if is_granted('GROUP_UNFOLLOW', group) %}
-    <p>
-        You are follower of this group! \o/
-        <br>
-        <a href="{{ path('app_group_unfollow', { slug: group.slug }) }}">
-            stop following this group
-        </a>
-    </p>
-{% endif %}
-
-{% if is_granted('GROUP_FOLLOW', group) %}
-    <p>
-        Interested in following this group ?
-        <br>
-        <a href="{{ path('app_group_follow', { slug: group.slug }) }}">
-            follow this group
-        </a>
-    </p>
-{% endif %}

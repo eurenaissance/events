@@ -15,6 +15,7 @@
 
 .header {
     padding: 30px 0;
+    background: $white;
 
     &__row {
         display: flex;
@@ -163,5 +164,25 @@
         padding: 0;
         font-family: $font-roboto-slab;
         font-size: 36px;
+    }
+}
+
+.address {
+    display: flex;
+    align-items: center;
+
+    &__icon {
+        font-size: 24px;
+        padding: 0 10px 0 0;
+    }
+
+    &__text {
+        &__street {
+            color: $gray-600;
+        }
+
+        &__city {
+            font-weight: 600;
+        }
     }
 }

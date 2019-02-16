@@ -16,6 +16,13 @@ class CreateVoter extends Voter
         return self::ROLE === $attribute && $subject instanceof Group;
     }
 
+    /**
+     * @param string $attribute
+     * @param Group $subject
+     * @param TokenInterface $token
+     *
+     * @return bool
+     */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         $user = $token->getUser();
@@ -24,6 +31,6 @@ class CreateVoter extends Voter
             return false;
         }
 
-        return $user->isAnimatorOf($subject) || $user->isCoAnimatorOf($subject);
+        return $subject->isApproved() && ($user->isAnimatorOf($subject) || $user->isCoAnimatorOf($subject));
     }
 }

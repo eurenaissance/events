@@ -1,47 +1,89 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'group.view.view.title'|trans({ '%group%': group.name }) %}
+{% block page_title group.name %}
+
+{% block intro %}
+    <div class="intro intro--primary mb-5">
+        <div class="container">
+            <h2 class="intro__title">
+                {{ group.name }}
+            </h2>
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-    <h1>{{ group.name }}</h1>
+    {% if group.isPending %}
+        <div class="alert alert-warning">
+            {{ 'group.view.view.flash.pending'|trans }}
+        </div>
+    {% elseif is_granted('GROUP_EDIT', group) or is_granted('GROUP_MEMBERS', group) or is_granted('EVENT_CREATE', group) %}
+        <div class="text-right">
+            <div class="btn-group">
+                {% if is_granted('GROUP_EDIT', group) %}
+                    <a href="{{ path('app_group_edit', { slug: group.slug }) }}" class="btn btn-sm btn-outline-secondary">
+                        Edit group
+                    </a>
+                {% endif %}
 
-    <hr class="mt-5">
+                {% if is_granted('GROUP_MEMBERS', group) %}
+                    <a href="{{ path('app_group_view_members', { slug: group.slug }) }}" class="btn btn-sm btn-outline-secondary">
+                        View members
+                    </a>
+                {% endif %}
+
+                {% if is_granted('EVENT_CREATE', group) %}
+                    <a href="{{ path('app_event_create', { slug: group.slug }) }}" class="btn btn-sm btn-outline-secondary">
+                        Create an event
+                    </a>
+                {% endif %}
+            </div>
+
+            <hr />
+        </div>
+    {% endif %}
 
     <div class="row">
         <div class="col-md-8">
-            {% if group.isPending %}
-                <div class="alert alert-primary">
-                    <p class="mb-0">
-                        {{ 'group.view.view.flash.pending'|trans }}
-                    </p>
-                </div>
-            {% endif %}
+            <div class="pr-3">
+                {% if upcoming_events|length == 0 and finished_events|length == 0 %}
+                    <div class="p-5 text-center text-muted">
+                        This group did not organize any event yet.
+                    </div>
+                {% else %}
+                    {% if upcoming_events|length > 0 %}
+                        <div id="upcoming-events" class="mb-5">
+                            <h3 class="p-2 mb-3">
+                                Upcoming events
+                            </h3>
 
-            <div id="upcoming-events">
-                <h3>Upcoming events:</h3>
-                {% for event in upcoming_events %}
-                    {% include 'group/view/_event.html.twig' %}
-                    <hr>
-                {% endfor %}
-            </div>
+                            {% for event in upcoming_events %}
+                                {% include 'group/view/_event.html.twig' %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
+                    {% if finished_events|length > 0 %}
+                        <div id="finished-events">
+                            <h3 class="p-2 mb-3">
+                                Finished events
+                            </h3>
 
-            <div id="finished-events">
-                <h3>Finished events:</h3>
+                            {% for event in finished_events %}
+                                {% include 'group/view/_event.html.twig' %}
+                            {% endfor %}
 
-                {% for event in finished_events %}
-                    {% include 'group/view/_event.html.twig' %}
-                    <hr>
-                {% endfor %}
-
-                {% include '_components/pagination.html.twig' with {
-                    total_pages: finished_events_total_pages,
-                    route_parameters: { slug: group.slug, _fragment: 'finished-events' },
-                    page_parameter: constant('App\\Controller\\Group\\ViewController::FINISHED_EVENTS_PAGE_PARAMETER')
-                } %}
+                            {% include '_components/pagination.html.twig' with {
+                                total_pages: finished_events_total_pages,
+                                route_parameters: { slug: group.slug, _fragment: 'finished-events' },
+                                page_parameter: constant('App\\Controller\\Group\\ViewController::FINISHED_EVENTS_PAGE_PARAMETER')
+                            } %}
+                        </div>
+                    {% endif %}
+                {% endif %}
             </div>
         </div>
-        <div class="col-md-4 border-left">
+        <div class="col-md-4">
             {% include 'group/view/_sidebar.html.twig' %}
         </div>
     </div>

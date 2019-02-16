@@ -1,14 +1,26 @@
-<div class="event">
-    <h4>{{ event.name }}</h4>
+<div class="card card--event mb-4">
+    <h4 class="card__title">
+        <a href="">
+            {{ event.name }}
+        </a>
+    </h4>
 
-    <p>Organisé par: {{ event.creator.fullName }}</p>
+    <div class="card__subtitle">
+        {{ event.beginAt|localizeddate('full') }}
+    </div>
 
-    <p>
-        Début: {{ event.beginAt|localizeddate('full') }}
-        <br>
-        Fin: {{ event.finishAt|localizeddate('full') }}
-    </p>
-    <p>
+    <div class="card__subtitle">
         {{ event.description }}
-    </p>
+    </div>
+
+    <div class="card__user">
+        <div class="card__user__image">
+            <img src="{{ image_asset('fixtures/users/default.jpg', {'w': 100}) }}" />
+        </div>
+        <div class="card__user__profile">
+            Organisé par <a href="">{{ event.creator.fullName }}</a>
+            <br />
+            De <a href="">{{ event.group.name }}</a>
+        </div>
+    </div>
 </div>

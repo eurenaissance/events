@@ -60,8 +60,6 @@ class ActorType extends AbstractType
                 'mapped' => false,
             ])
             ->add('city', CityType::class, [
-                'invalid_message' => 'common.city.invalid',
-                'error_bubbling' => false,
                 'country_field' => 'country',
                 'zip_code_field' => 'zipCode',
             ])

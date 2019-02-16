@@ -95,6 +95,22 @@ password_reset_check:
     continue: Continue
 
 
+# Groups
+#########################################
+
+# Form
+group_form:
+    information: Group information
+    name: Name
+    description: About
+    description_help: Describe this group in a few words.
+    postalAddress: Postal address
+
+# Create
+group_create:
+    title: Create a group
+    submit: Create
+
 
 
 
