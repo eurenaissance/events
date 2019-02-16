@@ -5,6 +5,7 @@ namespace App\Geocoder;
 use App\Entity\City;
 use App\Repository\CityRepository;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class DatabaseGeocoder implements GeocoderInterface
 {
@@ -21,7 +22,9 @@ class DatabaseGeocoder implements GeocoderInterface
     {
         $country = strtoupper($country);
 
-        return $this->cache->get('geocode-cities-'.$country.'-'.$zipCode, function () use ($country, $zipCode) {
+        return $this->cache->get('geocode-cities-'.$country.'-'.$zipCode, function (ItemInterface $item) use ($country, $zipCode) {
+            $item->expiresAfter(3600 * 24 * 30); // 1 month
+
             return $this->repository->findByZipCode($country, $zipCode);
         });
     }

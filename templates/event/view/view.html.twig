@@ -1,29 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'event.view.view.title'|trans({ '%event%': event.name }) %}
+{% block page_title event.name %}
+
+{% block intro %}
+    <div class="intro intro--primary mb-5">
+        <div class="container">
+            <h2 class="intro__title">
+                {{ event.name }}
+            </h2>
+
+            {{ event.beginAt|localizeddate('full') }}
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-    <h1>{{ event.name }}</h1>
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="row align-items-center">
+                <div class="col text-muted">
+                    Organisé par <a href="">{{ event.creator.fullName }}</a>
+                    <br />
+                    De <a href="">{{ event.group.name }}</a>
+                </div>
+                <div class="col">
+                    <div class="address mb-1">
+                        <div class="address__icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="address__text">
+                            <div class="address__text__street">
+                                {{ event.address }}
+                            </div>
+                            <div class="address__text__city">
+                                {{ event.city.name }}, {{ event.city.country|country }}
+                            </div>
+                        </div>
+                    </div>
 
-    <hr class="mt-5">
+                    <small>
+                        <a href="https://maps.google.com/?q={{ event.address }} {{ event.city.name }} {{ event.city.country|country }}" target="_blank">
+                            Voir sur Google Maps
+                        </a>
+                    </small>
+                </div>
+            </div>
 
-    <div class="row">
-        <div class="col-md-8">
-        </div>
-        <div class="col-md-4 border-left">
-            <p>
-                {{ event.city.name }}, {{ event.city.country|country }}
-                <br>
-                A {{ distance_between(event, app.user) }}km de vous
-            </p>
-            <h5>Organisé par:</h5>
-            <p>
-                {{ event.creator.fullName }}
-            </p>
-            <hr class="mt-4">
-            <p id="event-description">
+            <div id="event-description" class="mt-5 mb-5">
                 {{ event.description|raw }}
-            </p>
+            </div>
+
+            <a href="" class="btn btn-primary btn-lg btn-block">
+                Register
+            </a>
+            <a href="" class="btn btn-link btn-block">
+                Contact the organizer
+            </a>
         </div>
     </div>
 {% endblock %}

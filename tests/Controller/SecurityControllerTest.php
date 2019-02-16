@@ -69,7 +69,7 @@ class SecurityControllerTest extends HttpTestCase
         $this->assertEquals($fieldValues['emailAddress'], $form->get('emailAddress')->getValue());
 
         foreach ($errors as $error) {
-            $this->assertContains($error, $crawler->filter('.login_error')->html());
+            $this->assertContains($error, $crawler->filter('.alert-danger')->html());
         }
     }
 

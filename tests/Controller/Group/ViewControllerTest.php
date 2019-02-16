@@ -93,7 +93,7 @@ class ViewControllerTest extends HttpTestCase
 
         $crawler = $this->client->request('GET', '/group/culture-in-paris');
         $this->assertResponseSuccessFul();
-        $this->assertCount(1, $crawler->filter('h1:contains("Culture in Paris")'));
+        $this->assertCount(1, $crawler->filter('h2:contains("Culture in Paris")'));
         $this->assertCount(1, $crawler->filter('.alert:contains("Your group is waiting for admin approval.")'));
     }
 
@@ -149,7 +149,7 @@ class ViewControllerTest extends HttpTestCase
                 'First finished event in Paris',
             ],
             [
-                '/unfollow' => 'stop following this group',
+                '/unfollow' => 'Unfollow',
                 '/follow' => false,
                 '/members' => false,
                 '/event/create' => false,
@@ -231,7 +231,7 @@ class ViewControllerTest extends HttpTestCase
             ['Event ecology in Clichy'],
             [
                 '/unfollow' => false,
-                '/follow' => 'follow this group',
+                '/follow' => 'Follow',
                 '/members' => false,
                 '/event/create' => false,
             ],
@@ -248,7 +248,7 @@ class ViewControllerTest extends HttpTestCase
             [],
             [
                 '/unfollow' => false,
-                '/follow' => 'follow this group',
+                '/follow' => 'Follow',
                 '/members' => false,
                 '/event/create' => false,
             ],
@@ -265,7 +265,7 @@ class ViewControllerTest extends HttpTestCase
             [],
             [
                 '/unfollow' => false,
-                '/follow' => 'follow this group',
+                '/follow' => 'Follow',
                 '/members' => false,
                 '/event/create' => false,
             ],
@@ -295,7 +295,7 @@ class ViewControllerTest extends HttpTestCase
             ],
             [
                 '/unfollow' => false,
-                '/follow' => 'follow this group',
+                '/follow' => 'Follow',
                 '/members' => false,
                 '/event/create' => false,
             ],
@@ -321,9 +321,9 @@ class ViewControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', "/group/$groupSlug");
         $this->assertResponseSuccessFul();
 
-        $this->assertCount(1, $crawler->filter("h1:contains(\"$groupName\")"));
+        $this->assertCount(1, $crawler->filter("h2:contains(\"$groupName\")"));
         $this->assertCount(1, $crawler->filter("#group-description:contains(\"$groupDescription\")"));
-        $this->assertCount(1, $crawler->filter("#group-city:contains(\"$groupCity\")"));
+        $this->assertCount(1, $crawler->filter("#group-address:contains(\"$groupCity\")"));
 
         $animators = $crawler->filter('#animators')->children();
         $this->assertCount(count($animatorNames), $animators);
@@ -332,14 +332,14 @@ class ViewControllerTest extends HttpTestCase
             $this->assertSame($animatorNames[$i], trim($animators->eq($i)->text()));
         }
 
-        $upcomingEvents = $crawler->filter('#upcoming-events .event');
+        $upcomingEvents = $crawler->filter('#upcoming-events .card--event');
         $this->assertCount(count($upcomingEventNames), $upcomingEvents);
 
         for ($i = 0; $i < count($upcomingEventNames); ++$i) {
             $this->assertSame($upcomingEventNames[$i], trim($upcomingEvents->eq($i)->filter('h4')->text()));
         }
 
-        $finishedEvents = $crawler->filter('#finished-events .event');
+        $finishedEvents = $crawler->filter('#finished-events .card--event');
         $this->assertCount(count($finishedEventNames), $finishedEvents);
 
         for ($i = 0; $i < count($finishedEventNames); ++$i) {

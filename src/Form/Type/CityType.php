@@ -19,6 +19,8 @@ class CityType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'invalid_message' => 'common.city.invalid',
+            'error_bubbling' => false,
             'country_field' => null,
             'zip_code_field' => null,
             'attr' => ['class' => 'city-autocomplete'],

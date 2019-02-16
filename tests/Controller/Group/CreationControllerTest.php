@@ -280,7 +280,7 @@ class CreationControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertCount(1, $crawler->filter("h1:contains(\"$groupName\")"));
+        $this->assertCount(1, $crawler->filter("h2:contains(\"$groupName\")"));
         $this->assertCount(1, $crawler->filter('.alert:contains("Your group is waiting for admin approval.")'));
         $this->assertCount(1, $crawler->filter("#group-description:contains(\"$groupDescription\")"));
         $this->assertEmpty($crawler->selectLink('Create a group'));

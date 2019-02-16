@@ -24,11 +24,7 @@ class CityToUuidTransformer implements DataTransformerInterface
      */
     public function transform($city)
     {
-        if (!$city) {
-            return '';
-        }
-
-        return (string) $city->getUuidAsString();
+        return $city ? $city->getUuidAsString() : '';
     }
 
     /**

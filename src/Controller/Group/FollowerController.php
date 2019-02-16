@@ -21,8 +21,6 @@ class FollowerController extends AbstractController
 
         $followerMembershipHandler->follow($this->getUser(), $group);
 
-        $this->addFlash('info', 'group.follower.follow.flash.success');
-
         return $this->redirectToRoute('app_group_view', ['slug' => $group->getSlug()]);
     }
 
@@ -35,8 +33,6 @@ class FollowerController extends AbstractController
         $this->denyAccessUnlessGranted('GROUP_UNFOLLOW', $group);
 
         $followerMembershipHandler->unfollow($this->getUser(), $group);
-
-        $this->addFlash('info', 'group.follower.unfollow.flash.success');
 
         return $this->redirectToRoute('app_group_view', ['slug' => $group->getSlug()]);
     }

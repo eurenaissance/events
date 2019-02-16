@@ -4,10 +4,10 @@ namespace App\Form\Group;
 
 use App\Entity\Group;
 use App\Form\DataTransformer\CityToUuidTransformer;
+use App\Form\Type\CityType;
 use App\Util\Slugify;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -45,9 +45,9 @@ class GroupType extends AbstractType
             ->add('country', CountryType::class, [
                 'mapped' => false,
             ])
-            ->add('city', HiddenType::class, [
-                'invalid_message' => 'common.city.invalid',
-                'error_bubbling' => false,
+            ->add('city', CityType::class, [
+                'country_field' => 'country',
+                'zip_code_field' => 'zipCode',
             ])
             ->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
                 $form = $event->getForm();
