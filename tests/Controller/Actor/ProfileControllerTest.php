@@ -45,7 +45,7 @@ class ProfileControllerTest extends HttpTestCase
             [
                 'firstName' => 'Rémi',
                 'lastName' => 'Gardien',
-                'gender' => '',
+                'gender' => 'male',
                 'address' => '',
                 'country' => 'FR',
                 'zipCode' => '92270',
@@ -149,7 +149,7 @@ class ProfileControllerTest extends HttpTestCase
             [
                 'firstName' => null,
                 'lastName' => null,
-                'gender' => null,
+                'gender' => 'male',
                 'birthday' => ['year' => null, 'month' => '11', 'day' => '27'],
                 'address' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquet ligula ut elit consectetur, quis vulputate felis vestibulum. Vivamus rutrum metus leo, in dignissim lectus fringilla nec.',
                 'country' => 'FR',
@@ -159,7 +159,6 @@ class ProfileControllerTest extends HttpTestCase
             'errors' => [
                 'Please enter your first name.',
                 'Please enter your last name.',
-                'Please select your gender.',
                 'This date is not valid.',
                 'This city is not valid.',
                 'The address can not exceed 150 characters.',

@@ -60,6 +60,7 @@ profile:
     password: Password
     passwordConfirm: Password confirmation
     birthdate: Birth date
+    gender: Gender
 
 # Register
 register:
