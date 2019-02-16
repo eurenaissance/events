@@ -15,7 +15,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
+        <testsuite name="Events Europe">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

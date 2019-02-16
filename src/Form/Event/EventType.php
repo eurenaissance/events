@@ -4,7 +4,6 @@ namespace App\Form\Event;
 
 use App\Entity\Event;
 use App\Form\DataTransformer\CityToUuidTransformer;
-use App\Form\Type\CityType;
 use App\Util\Slugify;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
@@ -46,7 +45,7 @@ class EventType extends AbstractType
                     'month' => 'base.date.month',
                     'day' => 'base.date.day',
                 ],
-                'invalid_message' => 'common.date.invalid',
+                'invalid_message' => 'base.date.invalid',
                 'empty_data' => null,
             ])
             ->add('finishAt', DateType::class, [
@@ -57,7 +56,7 @@ class EventType extends AbstractType
                     'month' => 'base.date.month',
                     'day' => 'base.date.day',
                 ],
-                'invalid_message' => 'common.date.invalid',
+                'invalid_message' => 'base.date.invalid',
                 'empty_data' => null,
             ])
             ->add('address', TextType::class, [
@@ -70,11 +69,9 @@ class EventType extends AbstractType
             ->add('country', CountryType::class, [
                 'mapped' => false,
             ])
-            ->add('city', CityType::class, [
+            ->add('city', HiddenType::class, [
                 'invalid_message' => 'common.city.invalid',
                 'error_bubbling' => false,
-                'country_field' => 'country',
-                'zip_code_field' => 'zipCode',
             ])
             ->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
                 $form = $event->getForm();
