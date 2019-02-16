@@ -15,12 +15,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ group.name }}</h5>
                         <p class="card-text">
-                            {% set distance = distance_between(group, app.user) %}
-                            {% if distance > 0 %}
-                                {{ distance }}km from you.
-                            {% else %}
-                                In your city.
-                            {% endif %}
+                            {{ distance_between(group, app.user).meters }} meters from you.
                         </p>
                         <p class="card-text">{{ group.description }}</p>
                         <a href="{{ path('app_group_view', { slug: group.slug }) }}" class="btn btn-primary">

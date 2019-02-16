@@ -25,8 +25,6 @@ interface GeocodableInterface
      * Set geocoded coordinates or null if the geocoding failed.
      *
      * @param Coordinates|null $coordinates
-     *
-     * @return void
      */
     public function setCoordinates(?Coordinates $coordinates);
 }

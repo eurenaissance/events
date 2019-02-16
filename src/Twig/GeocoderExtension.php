@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use App\Geography\Distance\DistanceCalculatorInterface;
 use App\Geography\GeographyInterface;
+use App\Geography\Model\Distance;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -23,8 +24,8 @@ class GeocoderExtension extends AbstractExtension
         ];
     }
 
-    public function getDistanceBetween(GeographyInterface $geocodable1, GeographyInterface $geocodable2): int
+    public function getDistanceBetween(GeographyInterface $g1, GeographyInterface $g2): Distance
     {
-        return (int) round($this->calculator->getDistanceBetween($geocodable1, $geocodable2));
+        return $this->calculator->getDistanceBetween($g1->getCoordinates(), $g2->getCoordinates());
     }
 }
