@@ -1,36 +1,61 @@
-{% extends 'base.html.twig' %}
+{% extends 'actor/profile/_base.html.twig' %}
 
-{% block title 'actor.profile.edit.title'|trans %}
+{% block page_title 'actor.profile.edit.title'|trans %}
+{% block item_profile_edit 'active' %}
 
 {% block javascripts encore_entry_script_tags('city-autocomplete') %}
 
-{% block body %}
+{% block profile_body %}
     {{ form_start(form) }}
-        {{ form_row(form.firstName, { label: 'actor.first_name.label' }) }}
-        {{ form_row(form.lastName, { label: 'actor.last_name.label' }) }}
-        {{ form_row(form.birthday, { label: 'actor.birthday.label' }) }}
-        {{ form_row(form.gender, { label: 'actor.gender.label', placeholder: 'common.gender.select' }) }}
-        {{ form_row(form.emailAddress, { label: 'actor.email_address.label.label' }) }}
-        {{ form_row(form.address, { label: 'actor.address.label' }) }}
 
-        {{ form_row(form.country, { label: 'register.fields.country' }) }}
-        {{ form_row(form.address, { label: 'register.fields.streetAddress' }) }}
-
-        <div class="row">
-            <div class="col-md-4">
-                {{ form_row(form.zipCode, { label: 'register.fields.postalCode' }) }}
-            </div>
-            <div class="col-md-8">
-                {{ form_row(form.city, { label: 'register.fields.city' }) }}
-            </div>
+    <h5 class="mb-3">
+        {{ 'profile.personal'|trans }}
+    </h5>
+    <div class="row">
+        <div class="col-md">
+            {{ form_row(form.firstName, { label: 'profile.firstName' }) }}
         </div>
+        <div class="col-md">
+            {{ form_row(form.lastName, { label: 'profile.lastName' }) }}
+        </div>
+    </div>
 
-        <button type="submit">
+    {{ form_row(form.emailAddress, { label: 'profile.email' }) }}
+    {{ form_row(form.gender, { label: 'profile.gender' }) }}
+
+    <h5 class="mb-3 mt-5">
+        {{ 'profile.postalAddress'|trans }}
+    </h5>
+
+    {{ form_row(form.country, { label: 'base.address.country' }) }}
+
+    {{ form_row(form.address, { label: 'base.address.streetAddress' }) }}
+
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_row(form.zipCode, { label: 'base.address.postalCode' }) }}
+        </div>
+        <div class="col-md-8">
+            {{ form_row(form.city, { label: 'base.address.city' }) }}
+        </div>
+    </div>
+
+    <h5 class="mb-3 mt-5">
+        {{ 'profile.birthdate'|trans }}
+    </h5>
+
+    <div class="row">
+        <div class="col-md-8">
+            {{ form_row(form.birthday, { label: false }) }}
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+    <div class="mt-5">
+        <button type="submit" class="btn btn-primary">
             {{ 'actor.profile.edit.submit'|trans }}
         </button>
-    {{ form_end(form) }}
+    </div>
 
-    <a href="{{ path('app_actor_profile_change_password') }}">
-        {{ 'actor.profile.change_password.link.default'|trans }}
-    </a>
+    {{ form_end(form) }}
 {% endblock %}

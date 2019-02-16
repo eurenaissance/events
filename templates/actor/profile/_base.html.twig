@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block intro %}
+    <div class="intro">
+        <div class="container">
+            <h2 class="intro__title">
+                {{ app.user.fullName }}
+            </h2>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% block item_profile_edit '' %}" href="{{ path('app_actor_profile_edit') }}">
+                        Account
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% block item_profile_password '' %}" href="{{ path('app_actor_profile_change_password') }}">
+                        Password
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% block item_profile_notifications '' %}" href="">
+                        Notifications
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-8">
+            {% block profile_body '' %}
+        </div>
+    </div>
+{% endblock %}
