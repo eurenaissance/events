@@ -17,8 +17,8 @@ class CreateVoter extends Voter
     }
 
     /**
-     * @param string $attribute
-     * @param Group $subject
+     * @param string         $attribute
+     * @param Group          $subject
      * @param TokenInterface $token
      *
      * @return bool
