@@ -1,6 +1,6 @@
 <div class="card card--event mb-4">
     <h4 class="card__title">
-        <a href="">
+        <a href="{{ path('app_event_view', {'slug': event.slug}) }}">
             {{ event.name }}
         </a>
     </h4>
