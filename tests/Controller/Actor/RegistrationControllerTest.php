@@ -84,8 +84,8 @@ class RegistrationControllerTest extends HttpTestCase
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
-                'An actor is already registered with this email.',
-                'Please enter a password.',
+                'actor.email_address.unique',
+                'common.password.not_blank',
             ],
         ];
 
@@ -100,8 +100,8 @@ class RegistrationControllerTest extends HttpTestCase
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
-                'An actor is already registered with this email.',
-                'Please enter a password.',
+                'actor.email_address.unique',
+                'common.password.not_blank',
             ],
         ];
 
@@ -116,10 +116,10 @@ class RegistrationControllerTest extends HttpTestCase
                 'city' => 'abcdef',
             ],
             [
-                'This email address is not valid.',
-                'Please enter your birth date.',
-                'Password must be at least 6 characters long.',
-                'This city is not valid.',
+                'actor.email_address.valid',
+                'actor.birthday.not_blank',
+                'common.password.min_length',
+                'common.city.invalid',
             ],
         ];
 
@@ -134,13 +134,13 @@ class RegistrationControllerTest extends HttpTestCase
                 'city' => null,
             ],
             [
-                'Please enter your email address.',
-                'Please enter your first name.',
-                'Please enter your last name.',
-                'This date is not valid.',
-                'Passwords do not match.',
-                'This city is not valid.',
-                'The address can not exceed 150 characters.',
+                'actor.email_address.not_blank',
+                'actor.first_name.not_blank',
+                'actor.last_name.not_blank',
+                'base.date.invalid',
+                'common.password.mismatch',
+                'common.city.invalid',
+                'common.address.max_length',
             ],
         ];
     }
@@ -153,7 +153,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->request('GET', '/register');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Register', $fieldValues);
+        $this->client->submitForm('register.submit', $fieldValues);
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
     }
@@ -165,15 +165,15 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Resend confirmation mail', [
+        $this->client->submitForm('actor.registration.resend_confirmation.submit', [
             'emailAddress' => 'patrick@mobilisation-eu.localhost',
         ]);
         $this->assertIsRedirectedTo('/register/resend-confirmation/check-email');
         $this->assertMailSent([
             'to' => 'patrick@mobilisation-eu.localhost',
-            'subject' => 'Welcome Patrick, please confirm your registration.',
+            'subject' => 'mail.actor.registration_confirmation.subject',
             'body' => "@string@
-                        .contains('Welcome Patrick!')
+                        .contains('mail.actor.registration_confirmation.body')
                         .matchRegex('#href=\"http://localhost/register/confirm/".self::UUID_PATTERN."#\"')",
         ]);
 
@@ -205,14 +205,14 @@ class RegistrationControllerTest extends HttpTestCase
             'email' => 'leonard@mobilisation-eu.localhost',
             'alreadyConfirmed' => false,
             'redirectedTo' => '/login',
-            'errors' => ['An e-mail has already been sent in the last 2 hours'],
+            'errors' => ['actor.registration.resend_confirmation.flash.pending_token'],
         ];
 
         yield [
             'email' => 'remi@mobilisation-eu.localhost',
             'alreadyConfirmed' => true,
             'redirectedTo' => '/login',
-            'errors' => ['Your account is already confirmed.'],
+            'errors' => ['actor.registration.resend_confirmation.flash.already_confirmed'],
         ];
     }
 
@@ -230,7 +230,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Resend confirmation mail', ['emailAddress' => $email]);
+        $this->client->submitForm('actor.registration.resend_confirmation.submit', ['emailAddress' => $email]);
         $this->assertIsRedirectedTo($redirectedTo);
         $this->assertNoMailSent();
 
@@ -248,11 +248,8 @@ class RegistrationControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/register/confirmed');
         $this->assertMailSent([
             'to' => 'leonard@mobilisation-eu.localhost',
-            'subject' => 'Welcome Léonard, your registration is now complete.',
-            'body' => "@string@
-                        .contains('Welcome Léonard!')
-                        .contains('Your registration is now complete.')
-                        .contains('href=\"http://localhost/login\"')",
+            'subject' => 'mail.actor.registration_complete.subject',
+            'body' => "@string@.contains('mail.actor.registration_complete.body')",
         ]);
 
         $this->client->followRedirect();
@@ -274,7 +271,7 @@ class RegistrationControllerTest extends HttpTestCase
             'alreadyConfirmed' => true,
             'token' => ConfirmTokenFixtures::TOKEN_01_UUID,
             'redirectedTo' => '/login',
-            'errors' => ['Your account is already confirmed.'],
+            'errors' => ['actor.registration.confirm.flash.already_confirmed'],
         ];
 
         // token is expired but user is now confirmed
@@ -283,7 +280,7 @@ class RegistrationControllerTest extends HttpTestCase
             'alreadyConfirmed' => true,
             'token' => ConfirmTokenFixtures::TOKEN_02_UUID,
             'redirectedTo' => '/login',
-            'errors' => ['Your account is already confirmed.'],
+            'errors' => ['actor.registration.confirm.flash.already_confirmed'],
         ];
 
         // token is expired
@@ -292,7 +289,7 @@ class RegistrationControllerTest extends HttpTestCase
             'alreadyConfirmed' => false,
             'token' => ConfirmTokenFixtures::TOKEN_05_UUID,
             'redirectedTo' => '/register/resend-confirmation',
-            'errors' => ['This link is no longer valid.'],
+            'errors' => ['actor.registration.confirm.flash.token_expired'],
         ];
     }
 
