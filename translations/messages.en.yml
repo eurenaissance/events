@@ -133,7 +133,7 @@ common:
         label: Password
         confirmation: Password confirmation
         mismatch: Passwords do not match.
-        not_blank: Please enter a password.
+        not_blank: Please enter a password².
         min_length: Password must be at least {{ limit }} characters long.
         max_length: Password should not exceed {{ limit }} characters.
 
@@ -272,7 +272,6 @@ actor:
             title: Reset password
             submit: Reset password
             flash:
-                token_already_consumed: This link is no longer valid. Please request a new reset password link.
                 token_expired: This link is no longer valid. Please request a new reset password link.
                 success: Your password has been successfully reset.
 

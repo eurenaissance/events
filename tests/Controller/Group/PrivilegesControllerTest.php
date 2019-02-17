@@ -127,10 +127,8 @@ class AnimatorControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo("/group/$groupSlug/members");
         $this->assertMailSent([
             'to' => $followerEmail,
-            'subject' => "You have been promoted to co-animator in the group \"$groupName\"!",
-            'body' => "@string@
-                        .contains('Hello $followerName!')
-                        .contains('You have been promoted to co-animator')",
+            'subject' => 'mail.group.new_co_animator.subject',
+            'body' => "@string@.contains('mail.group.new_co_animator.body')",
         ]);
 
         $crawler = $this->client->followRedirect();

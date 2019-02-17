@@ -2,7 +2,6 @@
 
 namespace Test\App\Controller\Group;
 
-use App\Entity\Group;
 use App\Tests\HttpTestCase;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -15,8 +14,10 @@ class FollowerControllerTest extends HttpTestCase
     {
         // animator of the group
         yield ['marine@mobilisation-eu.localhost', 'ecology-in-paris', true];
+
         // co-animator of the group
         yield ['titouan@mobilisation-eu.localhost', 'ecology-in-paris', true];
+
         // follower of the group
         yield ['remi@mobilisation-eu.localhost', 'ecology-in-paris', true];
     }
@@ -41,14 +42,19 @@ class FollowerControllerTest extends HttpTestCase
     {
         // animator of the refused group
         yield ['thomas@mobilisation-eu.localhost', 'development-in-lille', 3];
+
         // co-animator of the refused group
         yield ['remi@mobilisation-eu.localhost', 'development-in-lille', 3];
+
         // follower of the refused group
         yield ['nicolas@mobilisation-eu.localhost', 'development-in-lille', 3];
+
         // no relation with the refused group
         yield ['titouan@mobilisation-eu.localhost', 'development-in-lille', 3];
+
         // animator of the pending group
         yield ['marine@mobilisation-eu.localhost', 'culture-in-paris', 1];
+
         // no relation with the pending group
         yield ['titouan@mobilisation-eu.localhost', 'culture-in-paris', 1];
         yield ['remi@mobilisation-eu.localhost', 'culture-in-paris', 1];
@@ -188,10 +194,8 @@ class FollowerControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo("/group/$groupSlug");
         $this->assertMailSent([
             'to' => $animatorEmail,
-            'subject' => "Your group \"$groupName\" has a new follower!",
-            'body' => "@string@
-                        .contains('Hello $animatorName!')
-                        .contains('$actorFullName just started to follow your group \"$groupName\".')",
+            'subject' => 'mail.group.new_follower.subject',
+            'body' => "@string@.contains('mail.group.new_follower.body')",
         ]);
 
         $crawler = $this->client->followRedirect();
@@ -205,8 +209,10 @@ class FollowerControllerTest extends HttpTestCase
     {
         // animator of the group
         yield ['titouan@mobilisation-eu.localhost', 'ecology-in-clichy', true];
+
         // co-animator of the group
         yield ['marine@mobilisation-eu.localhost', 'ecology-in-clichy', true];
+
         // no relation with the group
         yield ['nicolas@mobilisation-eu.localhost', 'ecology-in-clichy', false];
     }

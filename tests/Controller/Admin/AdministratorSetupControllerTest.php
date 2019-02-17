@@ -63,10 +63,10 @@ class AdministratorSetupControllerTest extends HttpTestCase
         yield ['superadmin@mobilisation-eu', 'test123', 'test123', ['This value is not a valid email address.']];
         yield ['', 'test123', 'test123', ['This value should not be blank.']];
         yield [null, 'test123', 'test123', ['This value should not be blank.']];
-        yield ['superadmin@mobilisation-eu.localhost', 'test123', '321test', ['Passwords do not match.']];
-        yield ['superadmin@mobilisation-eu.localhost', 'test', 'test', ['Password must be at least 6 characters long.']];
-        yield ['superadmin@mobilisation-eu.localhost', '', '', ['Please enter a password.']];
-        yield ['superadmin@mobilisation-eu.localhost', null, null, ['Please enter a password.']];
+        yield ['superadmin@mobilisation-eu.localhost', 'test123', '321test', ['common.password.mismatch']];
+        yield ['superadmin@mobilisation-eu.localhost', 'test', 'test', ['common.password.min_length']];
+        yield ['superadmin@mobilisation-eu.localhost', '', '', ['common.password.not_blank']];
+        yield ['superadmin@mobilisation-eu.localhost', null, null, ['common.password.not_blank']];
     }
 
     /**

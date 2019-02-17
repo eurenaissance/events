@@ -94,21 +94,25 @@ class ViewControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/group/culture-in-paris');
         $this->assertResponseSuccessFul();
         $this->assertCount(1, $crawler->filter('h2:contains("Culture in Paris")'));
-        $this->assertCount(1, $crawler->filter('.alert:contains("Your group is waiting for admin approval.")'));
+        $this->assertCount(1, $crawler->filter('.alert:contains("group.view.view.flash.pending")'));
     }
 
     public function provideActorsForConfirmedGroup(): iterable
     {
         // animator of another refused group
         yield ['remi@mobilisation-eu.localhost', 'ecology-in-paris'];
+
         // animator of another confirmed group
         yield ['titouan@mobilisation-eu.localhost', 'ecology-in-paris'];
+
         // animator of the confirmed group
         yield ['marine@mobilisation-eu.localhost', 'ecology-in-paris'];
+
         // no relation with the group
         yield ['francis@mobilisation-eu.localhost', 'ecology-in-clichy'];
         yield ['jacques@mobilisation-eu.localhost', 'culture-in-asnieres'];
         yield ['manon@mobilisation-eu.localhost', 'ecology-in-nice'];
+
         // no relation with any group
         yield ['didier@mobilisation-eu.localhost', 'ecology-in-paris'];
     }

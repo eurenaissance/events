@@ -47,7 +47,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->request('GET', '/register');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Register', [
+        $this->client->submitForm('register.submit', [
             'emailAddress' => 'new@mobilisation-eu.localhost',
             'firstName' => 'Rémi',
             'lastName' => 'Gardien',
@@ -59,15 +59,13 @@ class RegistrationControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/register/check-email');
         $this->assertMailSent([
             'to' => 'new@mobilisation-eu.localhost',
-            'subject' => 'Welcome Rémi, please confirm your registration.',
-            'body' => "@string@
-                        .contains('Welcome Rémi!')
-                        .matchRegex('#href=\"http://localhost/register/confirm/".self::UUID_PATTERN."#\"')",
+            'subject' => 'mail.actor.registration_confirmation.subject',
+            'body' => "@string@.contains('mail.actor.registration_confirmation.body')",
         ]);
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('We sent you an e-mail with a link to confirm your account.');
+        $this->assertResponseContains('register.confirm.subtitle');
         $this->assertActorConfirmed('new@mobilisation-eu.localhost', false);
     }
 
@@ -172,14 +170,12 @@ class RegistrationControllerTest extends HttpTestCase
         $this->assertMailSent([
             'to' => 'patrick@mobilisation-eu.localhost',
             'subject' => 'mail.actor.registration_confirmation.subject',
-            'body' => "@string@
-                        .contains('mail.actor.registration_confirmation.body')
-                        .matchRegex('#href=\"http://localhost/register/confirm/".self::UUID_PATTERN."#\"')",
+            'body' => "@string@.contains('mail.actor.registration_confirmation.body')",
         ]);
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('A new mail has been sent with a link to confirm your account.');
+        $this->assertResponseContains('actor.registration.resend_confirmation.success.mail_sent');
         $this->assertActorConfirmed('patrick@mobilisation-eu.localhost', false);
     }
 
@@ -188,7 +184,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Resend confirmation mail', [
+        $this->client->submitForm('actor.registration.resend_confirmation.submit', [
             'emailAddress' => 'unknown@mobilisation-eu.localhost',
         ]);
         $this->assertIsRedirectedTo('/register/resend-confirmation/check-email');
@@ -196,7 +192,7 @@ class RegistrationControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('A new mail has been sent with a link to confirm your account.');
+        $this->assertResponseContains('actor.registration.resend_confirmation.success.mail_sent');
     }
 
     public function provideResendConfirmationFailures(): iterable
