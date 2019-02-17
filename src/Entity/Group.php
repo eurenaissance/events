@@ -25,8 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="groups")
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
  *
- * @UniqueEntity("name", message="group.name.unique", repositoryMethod="findWithoutFilters")
- * @UniqueEntity("slug", errorPath="name", message="group.slug.unique", repositoryMethod="findWithoutFilters")
+ * @UniqueEntity("slug", errorPath="name", message="group.slug.not_unique", repositoryMethod="findWithoutFilters")
  * @IsGeocoded(groups={"registration", "profile"})
  */
 class Group implements EntitySlugInterface, GeographyInterface, GeocodableInterface, EntityReviewInterface

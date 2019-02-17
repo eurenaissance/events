@@ -16,7 +16,7 @@ class IsGeocoded extends Constraint
         self::NO_SUCH_ADDRESS_ERROR => 'NO_SUCH_ADDRESS_ERROR',
     ];
 
-    public $message = 'This address was not found.';
+    public $message = 'common.address.not_found';
 
     /**
      * {@inheritdoc}

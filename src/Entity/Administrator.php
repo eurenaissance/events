@@ -14,7 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * })
  * @ORM\Entity(repositoryClass="App\Repository\AdministratorRepository")
  *
- * @UniqueEntity(fields={"emailAddress"})
+ * @UniqueEntity(fields={"emailAddress"}, message="administrator.email_address.not_unique")
  */
 class Administrator implements AdministratorInterface
 {
@@ -25,8 +25,8 @@ class Administrator implements AdministratorInterface
      *
      * @ORM\Column
      *
-     * @Assert\NotBlank
-     * @Assert\Email
+     * @Assert\NotBlank(message="administrator.email_address.not_blank")
+     * @Assert\Email(message="administrator.email_address.invalid")
      */
     private $emailAddress;
 
@@ -83,7 +83,6 @@ class Administrator implements AdministratorInterface
 
     public function getSalt()
     {
-        return;
     }
 
     public function getUsername()

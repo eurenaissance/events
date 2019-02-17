@@ -220,7 +220,7 @@ class CreationControllerTest extends HttpTestCase
                 'finishAt' => ['year' => 2019, 'month' => 10, 'day' => 8],
             ],
             [
-                'base.date.invalid',
+                'common.date.invalid',
             ],
         ];
 
@@ -235,8 +235,8 @@ class CreationControllerTest extends HttpTestCase
                 'finishAt' => ['year' => null, 'month' => 10, 'day' => 8],
             ],
             [
-                'event.slug.unique',
-                'base.date.invalid',
+                'event.slug.not_unique',
+                'common.date.invalid',
             ],
         ];
     }

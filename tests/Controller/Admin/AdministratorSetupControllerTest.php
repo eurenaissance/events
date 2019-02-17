@@ -60,9 +60,9 @@ class AdministratorSetupControllerTest extends HttpTestCase
 
     public function provideSetupFailure(): iterable
     {
-        yield ['superadmin@mobilisation-eu', 'test123', 'test123', ['This value is not a valid email address.']];
-        yield ['', 'test123', 'test123', ['This value should not be blank.']];
-        yield [null, 'test123', 'test123', ['This value should not be blank.']];
+        yield ['superadmin@mobilisation-eu', 'test123', 'test123', ['administrator.email_address.invalid']];
+        yield ['', 'test123', 'test123', ['administrator.email_address.not_blank']];
+        yield [null, 'test123', 'test123', ['administrator.email_address.not_blank']];
         yield ['superadmin@mobilisation-eu.localhost', 'test123', '321test', ['common.password.mismatch']];
         yield ['superadmin@mobilisation-eu.localhost', 'test', 'test', ['common.password.min_length']];
         yield ['superadmin@mobilisation-eu.localhost', '', '', ['common.password.not_blank']];

@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RegistrationType extends AbstractType
 {
-    private const VALIDATION_GROUPS = ['registration'];
+    private const VALIDATION_GROUPS = ['registration', 'address'];
 
     private $passwordEncoderListener;
 

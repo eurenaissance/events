@@ -16,12 +16,8 @@ class EmailRequestType extends AbstractType
             ->add('emailAddress', EmailType::class, [
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'actor.email_address.not_blank',
-                    ]),
-                    new Email([
-                        'message' => 'actor.email_address.valid',
-                    ]),
+                    new NotBlank(['message' => 'actor.email_address.not_blank']),
+                    new Email(['message' => 'actor.email_address.invalid']),
                 ],
             ])
         ;
