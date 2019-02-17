@@ -71,7 +71,7 @@ class CreationControllerTest extends HttpTestCase
         $this->client->request('GET', '/group/create');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Create', [
+        $this->client->submitForm('group_create.submit', [
             'name' => $groupName,
             'description' => $groupDescription,
             'city' => CityFixtures::CITY_02_UUID,
@@ -116,9 +116,9 @@ class CreationControllerTest extends HttpTestCase
                 'city' => null,
             ],
             [
-                'Please enter a group name.',
-                'Please provide a short description.',
-                'This city is not valid.',
+                'group.name.not_blank',
+                'group.description.not_blank',
+                'common.city.invalid',
             ],
         ];
 
@@ -130,8 +130,8 @@ class CreationControllerTest extends HttpTestCase
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
-                'A group named &quot;&quot;Ecology in Paris&quot;&quot; already exists.',
-                'The description must be at least 10 characters long.',
+                'group.slug.unique',
+                'group.description.min_length',
             ],
         ];
 
@@ -143,8 +143,8 @@ class CreationControllerTest extends HttpTestCase
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
-                'A group with a URL &quot;&quot;ecology-in-paris&quot;&quot; already exists.',
-                'The group name should not exceed 300 characters.',
+                'group.slug.unique',
+                'group.description.max_length',
             ],
         ];
 
@@ -155,7 +155,9 @@ class CreationControllerTest extends HttpTestCase
                 'description' => 'A very cool description.',
                 'city' => CityFixtures::CITY_02_UUID,
             ],
-            ['A group named &quot;&quot;Culture in Paris&quot;&quot; already exists.'],
+            [
+                'group.slug.unique',
+            ],
         ];
 
         // a pending group with this slug already exists
@@ -165,7 +167,9 @@ class CreationControllerTest extends HttpTestCase
                 'description' => 'A very cool description.',
                 'city' => CityFixtures::CITY_02_UUID,
             ],
-            ['A group with a URL &quot;&quot;culture-in-paris&quot;&quot; already exists.'],
+            [
+                'group.slug.unique',
+            ],
         ];
 
         // a refused group with this name already exists
@@ -175,7 +179,9 @@ class CreationControllerTest extends HttpTestCase
                 'description' => 'A very cool description.',
                 'city' => CityFixtures::CITY_02_UUID,
             ],
-            ['A group named &quot;&quot;Development in Bois-Colombes&quot;&quot; already exists.'],
+            [
+                'group.slug.unique',
+            ],
         ];
 
         // a refused group with this slug already exists
@@ -185,7 +191,9 @@ class CreationControllerTest extends HttpTestCase
                 'description' => 'A very cool description.',
                 'city' => CityFixtures::CITY_02_UUID,
             ],
-            ['A group with a URL &quot;&quot;development-in-bois-colombes&quot;&quot; already exists.'],
+            [
+                'group.slug.unique',
+            ],
         ];
     }
 
@@ -199,7 +207,7 @@ class CreationControllerTest extends HttpTestCase
         $this->client->request('GET', '/group/create');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Create', $fieldValues);
+        $this->client->submitForm('group_create.submit', $fieldValues);
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
         $this->assertNull($this->getGroupRepository()->findOneBy([
@@ -261,10 +269,10 @@ class CreationControllerTest extends HttpTestCase
         $this->client->request('GET', '/');
         $this->assertResponseSuccessFul();
 
-        $this->client->clickLink('Create a group');
+        $this->client->clickLink('layout.header.create_group');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Create', [
+        $this->client->submitForm('group_create.submit', [
             'name' => $groupName,
             'description' => $groupDescription,
             'city' => CityFixtures::CITY_02_UUID,
@@ -272,17 +280,15 @@ class CreationControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo("/group/$groupSlug");
         $this->assertMailSent([
             'to' => $email,
-            'subject' => "Your group \"$groupName\" has been created.",
-            'body' => "@string@
-                        .contains('Hello $firstName!')
-                        .contains('Please wait for an admin approval.')",
+            'subject' => 'mail.group.created.subject',
+            'body' => "@string@.contains('mail.group.created.body')",
         ]);
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
         $this->assertCount(1, $crawler->filter("h2:contains(\"$groupName\")"));
-        $this->assertCount(1, $crawler->filter('.alert:contains("Your group is waiting for admin approval.")'));
+        $this->assertCount(1, $crawler->filter('.alert:contains("group.view.view.flash.pending")'));
         $this->assertCount(1, $crawler->filter("#group-description:contains(\"$groupDescription\")"));
-        $this->assertEmpty($crawler->selectLink('Create a group'));
+        $this->assertEmpty($crawler->selectLink('layout.header.create_group'));
     }
 }

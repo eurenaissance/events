@@ -123,7 +123,7 @@ class ProfileControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/profile');
         $this->assertResponseSuccessFul();
 
-        $form = $crawler->selectButton('Save my profile')->form();
+        $form = $crawler->selectButton('actor.profile.edit.submit')->form();
         $emailField = $form->get('emailAddress');
         $this->assertTrue($emailField->isDisabled());
         $this->assertSame($email, $emailField->getValue());
@@ -134,9 +134,9 @@ class ProfileControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('Your profile has been successfully saved.');
+        $this->assertResponseContains('actor.profile.edit.flash.success');
 
-        $form = $crawler->selectButton('Save my profile')->form();
+        $form = $crawler->selectButton('actor.profile.edit.submit')->form();
         $emailField = $form->get('emailAddress');
         $this->assertTrue($emailField->isDisabled());
         $this->assertSame($email, $emailField->getValue());
@@ -157,11 +157,11 @@ class ProfileControllerTest extends HttpTestCase
                 'city' => 'abcdef',
             ],
             'errors' => [
-                'Please enter your first name.',
-                'Please enter your last name.',
-                'This date is not valid.',
-                'This city is not valid.',
-                'The address can not exceed 150 characters.',
+                'actor.first_name.not_blank',
+                'actor.last_name.not_blank',
+                'base.date.invalid',
+                'common.city.invalid',
+                'common.address.max_length',
             ],
         ];
     }
@@ -176,7 +176,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->client->request('GET', '/profile');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Save my profile', $fieldValues);
+        $this->client->submitForm('actor.profile.edit.submit', $fieldValues);
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
     }
@@ -200,7 +200,7 @@ class ProfileControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', '/profile/change-password');
         $this->assertResponseSuccessFul();
 
-        $form = $crawler->selectButton('Change my password')->form();
+        $form = $crawler->selectButton('actor.profile.change_password.submit')->form();
         $this->assertArraySubset(['plainPassword' => ['first' => '', 'second' => '']], $form->getPhpValues());
 
         $this->client->submit($form, [
@@ -212,14 +212,12 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/profile');
         $this->assertMailSent([
             'to' => $email,
-            'subject' => 'Your password has been successfully changed.',
-            'body' => "@string@
-                        .contains('Hello $firstName!')
-                        .contains('Your password has been successfully changed.')",
+            'subject' => 'mail.actor.password_changed.subject',
+            'body' => "@string@.contains('mail.actor.password_changed.body')",
         ]);
 
         $this->client->followRedirect();
-        $this->assertResponseContains('Your password has been successfully changed.');
+        $this->assertResponseContains('actor.profile.change_password.flash.success');
 
         // ensure user is not logged out after this request
         $this->client->request('GET', '/profile');
@@ -231,7 +229,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Log in', [
+        $this->client->submitForm('login.button', [
             'emailAddress' => $email,
             'password' => $newPassword,
         ]);
@@ -247,13 +245,13 @@ class ProfileControllerTest extends HttpTestCase
         yield [
             'first' => 'test',
             'second' => 'test',
-            'error' => 'Password must be at least 6 characters long.',
+            'error' => 'common.password.min_length',
         ];
 
         yield [
             'first' => 'test123',
             'second' => '123test',
-            'error' => 'Passwords do not match.',
+            'error' => 'common.password.mismatch',
         ];
     }
 
@@ -269,7 +267,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->client->request('GET', '/profile/change-password');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Change my password', [
+        $this->client->submitForm('actor.profile.change_password.submit', [
             'plainPassword' => [
                 'first' => $first,
                 'second' => $second,

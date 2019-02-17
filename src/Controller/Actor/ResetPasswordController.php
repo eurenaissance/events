@@ -79,7 +79,7 @@ class ResetPasswordController extends AbstractController
         }
 
         if ($token->isConsumed()) {
-            $this->addFlash('info', 'actor.reset_password.reset.flash.token_already_consumed');
+            $this->addFlash('info', 'actor.reset_password.reset.flash.token_expired');
 
             return $this->redirectToRoute('app_login');
         }

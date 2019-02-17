@@ -105,7 +105,7 @@ class CreationControllerTest extends HttpTestCase
         $this->client->request('GET', "/group/$groupSlug/event/create");
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Create', [
+        $this->client->submitForm('event.creation.create.submit', [
             'name' => $eventName,
             'description' => $eventDescription,
             'city' => CityFixtures::CITY_02_UUID,
@@ -201,11 +201,11 @@ class CreationControllerTest extends HttpTestCase
                 'finishAt' => [],
             ],
             [
-                'Please enter an event name.',
-                'Please provide a short description.',
-                'This city is not valid.',
-                'Please enter a start date.',
-                'Please enter a finish date.',
+                'event.name.not_blank',
+                'event.description.not_blank',
+                'common.city.invalid',
+                'event.begin_at.not_blank',
+                'event.finish_at.not_blank',
             ],
         ];
 
@@ -220,7 +220,7 @@ class CreationControllerTest extends HttpTestCase
                 'finishAt' => ['year' => 2019, 'month' => 10, 'day' => 8],
             ],
             [
-                'This date is not valid.',
+                'base.date.invalid',
             ],
         ];
 
@@ -235,13 +235,8 @@ class CreationControllerTest extends HttpTestCase
                 'finishAt' => ['year' => null, 'month' => 10, 'day' => 8],
             ],
             [
-                sprintf(
-                    'An event with a URL &quot;&quot;%s-%s-%s-event-in-clichy&quot;&quot; already exists.',
-                    $beginAt['year'],
-                    str_pad($beginAt['month'], 2, '0', STR_PAD_LEFT),
-                    str_pad($beginAt['day'], 2, '0', STR_PAD_LEFT)
-                ),
-                'This date is not valid.',
+                'event.slug.unique',
+                'base.date.invalid',
             ],
         ];
     }
@@ -256,7 +251,7 @@ class CreationControllerTest extends HttpTestCase
         $this->client->request('GET', "/group/$groupSlug/event/create");
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Create', $fieldValues);
+        $this->client->submitForm('event.creation.create.submit', $fieldValues);
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
         $this->assertNull($this->getEventRepository()->findOneBy([
@@ -329,14 +324,12 @@ class CreationControllerTest extends HttpTestCase
         $this->client->clickLink('Create an event');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Create', $fieldValues);
+        $this->client->submitForm('event.creation.create.submit', $fieldValues);
         $this->assertIsRedirectedTo("/event/$eventSlug");
         $this->assertMailSent([
             'to' => $email,
-            'subject' => 'Your event "'.$fieldValues['name'].'" has been created.',
-            'body' => "@string@
-                        .contains('Hello $firstName!')
-                        .contains('Your event \"".$fieldValues['name']."\" in the group \"$groupName\" has been created.')",
+            'subject' => 'mail.event.created.subject',
+            'body' => "@string@.contains('mail.event.created.body')",
         ]);
 
         $crawler = $this->client->followRedirect();

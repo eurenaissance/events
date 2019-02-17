@@ -17,7 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="events")
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  *
- * @UniqueEntity("name", message="event.name.unique")
  * @UniqueEntity("slug", errorPath="name", message="event.slug.unique")
  */
 class Event implements EntitySlugInterface, GeocodableInterface

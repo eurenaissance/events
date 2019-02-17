@@ -17,7 +17,9 @@ class SecurityControllerTest extends HttpTestCase
                 'emailAddress' => 'unknown@mobilisation-eu.localhost',
                 'password' => ActorFixtures::DEFAULT_PASSWORD,
             ],
-            ['Invalid credentials'],
+            [
+                'security.login.error.bad_credentials',
+            ],
         ];
 
         yield [
@@ -25,7 +27,9 @@ class SecurityControllerTest extends HttpTestCase
                 'emailAddress' => 'remi@mobilisation-eu.localhost',
                 'password' => 'bad_password',
             ],
-            ['Invalid credentials'],
+            [
+                'security.login.error.bad_credentials',
+            ],
         ];
 
         yield [
@@ -34,8 +38,7 @@ class SecurityControllerTest extends HttpTestCase
                 'password' => ActorFixtures::DEFAULT_PASSWORD,
             ],
             [
-                'Your account is not confirmed yet.',
-                '/register/resend-confirmation',
+                'security.login.error.not_confirmed',
             ],
         ];
 
@@ -45,8 +48,7 @@ class SecurityControllerTest extends HttpTestCase
                 'password' => ActorFixtures::DEFAULT_PASSWORD,
             ],
             [
-                'Your account is not confirmed yet.',
-                '/register/resend-confirmation',
+                'security.login.error.not_confirmed',
             ],
         ];
     }
@@ -59,13 +61,13 @@ class SecurityControllerTest extends HttpTestCase
         $this->client->request('GET', '/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Log in', $fieldValues);
+        $this->client->submitForm('login.button', $fieldValues);
         $this->assertIsRedirectedTo('/login');
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
 
-        $form = $crawler->selectButton('Log in')->form();
+        $form = $crawler->selectButton('login.button')->form();
         $this->assertEquals($fieldValues['emailAddress'], $form->get('emailAddress')->getValue());
 
         foreach ($errors as $error) {
@@ -78,7 +80,7 @@ class SecurityControllerTest extends HttpTestCase
         $this->client->request('GET', '/login');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Log in', [
+        $this->client->submitForm('login.button', [
             'emailAddress' => 'remi@mobilisation-eu.localhost',
             'password' => ActorFixtures::DEFAULT_PASSWORD,
         ]);
