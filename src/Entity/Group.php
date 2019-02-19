@@ -5,13 +5,15 @@ namespace App\Entity;
 use App\Entity\Group\CoAnimatorMembership;
 use App\Entity\Group\FollowerMembership;
 use App\Entity\Util\EntityAddressTrait;
-use App\Geocoder\GeocodableInterface;
+use App\Geography\Geocoder\GeocodableInterface;
+use App\Geography\GeographyInterface;
 use App\Entity\Util\EntityIdTrait;
 use App\Entity\Util\EntityReviewInterface;
 use App\Entity\Util\EntityReviewTrait;
 use App\Entity\Util\EntitySlugInterface;
 use App\Entity\Util\EntitySlugTrait;
 use App\Entity\Util\EntityUuidTrait;
+use App\Validator\IsGeocoded\IsGeocoded;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,8 +27,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @UniqueEntity("name", message="group.name.unique", repositoryMethod="findWithoutFilters")
  * @UniqueEntity("slug", errorPath="name", message="group.slug.unique", repositoryMethod="findWithoutFilters")
+ * @IsGeocoded(groups={"registration", "profile"})
  */
-class Group implements EntitySlugInterface, GeocodableInterface, EntityReviewInterface
+class Group implements EntitySlugInterface, GeographyInterface, GeocodableInterface, EntityReviewInterface
 {
     use EntityIdTrait;
     use EntityUuidTrait;

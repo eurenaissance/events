@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Entity\Util\EntityAddressTrait;
-use App\Geocoder\GeocodableInterface;
+use App\Geography\Geocoder\GeocodableInterface;
+use App\Geography\GeographyInterface;
 use App\Entity\Util\EntityIdTrait;
 use App\Entity\Util\EntitySlugInterface;
 use App\Entity\Util\EntitySlugTrait;
 use App\Entity\Util\EntityUuidTrait;
+use App\Validator\IsGeocoded\IsGeocoded;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -18,8 +20,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  *
  * @UniqueEntity("slug", errorPath="name", message="event.slug.unique")
+ * @IsGeocoded(groups={"registration", "profile"})
  */
-class Event implements EntitySlugInterface, GeocodableInterface
+class Event implements EntitySlugInterface, GeographyInterface, GeocodableInterface
 {
     use EntityIdTrait;
     use EntityUuidTrait;

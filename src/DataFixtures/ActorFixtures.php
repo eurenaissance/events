@@ -202,6 +202,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor->setLastName($lastName);
         $actor->setBirthday(new \DateTimeImmutable($birthday));
         $actor->setCity($this->getReference($cityReference));
+        $actor->setCoordinates($this->getReference($cityReference)->getCoordinates());
 
         if ($gender) {
             $actor->setGender($gender);

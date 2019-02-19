@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use App\Geocoder\GeocodableInterface;
+use App\Geography\GeographyInterface;
 use App\Entity\Util\EntityIdTrait;
 use App\Entity\Util\EntityUuidTrait;
+use App\Geography\Model\Coordinates;
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
@@ -17,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * })
  * @ORM\Entity(repositoryClass="App\Repository\CityRepository")
  */
-class City implements GeocodableInterface
+class City implements GeographyInterface
 {
     use EntityIdTrait;
     use EntityUuidTrait;
@@ -95,9 +96,9 @@ class City implements GeocodableInterface
         return $this->zipCode;
     }
 
-    public function getCoordinates(): Point
+    public function getCoordinates(): Coordinates
     {
-        return $this->coordinates;
+        return new Coordinates($this->coordinates->getLongitude(), $this->coordinates->getLatitude(), 'low');
     }
 
     public function getLatitude(): float

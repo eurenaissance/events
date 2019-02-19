@@ -35,7 +35,7 @@ class CityRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->where('c.country = :country')
-            ->setParameter('country', $country)
+            ->setParameter('country', strtoupper($country))
             ->andWhere(':zipCode LIKE CONCAT(c.canonicalZipCode, \'%\')')
             ->setParameter('zipCode', City::canonicalizeZipCode($zipCode))
             ->orderBy('c.name', 'ASC')

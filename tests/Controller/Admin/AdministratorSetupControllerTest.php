@@ -97,7 +97,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
     public function testSetupIsDisabledForAnonymous(): void
     {
         $this->client->request('GET', '/admin/setup');
-        $this->assertIsRedirectedTo('/admin/login');
+        $this->assertNotFoundResponse();
     }
 
     public function testSetupIsDisabledForActors(): void
@@ -105,7 +105,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/admin/setup');
-        $this->assertAccessDeniedResponse();
+        $this->assertNotFoundResponse();
     }
 
     public function testSetupIsDisabledForAdministrators(): void
@@ -113,6 +113,6 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/admin/setup');
-        $this->assertAccessDeniedResponse();
+        $this->assertNotFoundResponse();
     }
 }

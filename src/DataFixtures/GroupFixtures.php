@@ -180,6 +180,7 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
         $group->setDescription($description);
         $group->setAnimator($this->getReference($animatorReference));
         $group->setCity($this->getReference($cityReference));
+        $group->setCoordinates($this->getReference($cityReference)->getCoordinates());
 
         if ($address) {
             $group->setAddress($address);

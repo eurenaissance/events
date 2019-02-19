@@ -6,9 +6,11 @@ use App\Entity\Group\CoAnimatorMembership;
 use App\Entity\Group\FollowerMembership;
 use App\Entity\Util\EntityAddressTrait;
 use App\Entity\Util\EntityIdTrait;
-use App\Geocoder\GeocodableInterface;
+use App\Geography\Geocoder\GeocodableInterface;
+use App\Geography\GeographyInterface;
 use App\Security\User\ActorInterface;
 use App\Entity\Util\EntityUuidTrait;
+use App\Validator\IsGeocoded\IsGeocoded;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,8 +26,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="App\Repository\ActorRepository")
  *
  * @UniqueEntity("emailAddress", message="actor.email_address.unique", groups={"registration"})
+ * @IsGeocoded(groups={"registration", "profile"})
  */
-class Actor implements ActorInterface, GeocodableInterface
+class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
 {
     use EntityIdTrait;
     use EntityUuidTrait;

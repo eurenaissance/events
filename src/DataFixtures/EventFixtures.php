@@ -205,6 +205,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
         $event->setCreator($this->getReference($creatorReference));
         $event->setGroup($this->getReference($groupReference));
         $event->setCity($this->getReference($cityReference));
+        $event->setCoordinates($this->getReference($cityReference)->getCoordinates());
 
         if ($address) {
             $event->setAddress($address);

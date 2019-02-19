@@ -15,7 +15,7 @@ doctrine:
         password:       '%env(DATABASE_PASSWORD)%'
         driver:         pdo_pgsql
         server_version: '11.1'
-        schema_filter:  ~^(?!(public|topology))~
+        schema_filter:  ~^(?!(public|topology|tiger))~
         types:
             geometry: CrEOF\Spatial\DBAL\Types\GeometryType
             point: CrEOF\Spatial\DBAL\Types\Geometry\PointType

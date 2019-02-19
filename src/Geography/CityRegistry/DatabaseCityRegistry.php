@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Geocoder;
+namespace App\Geography\CityRegistry;
 
 use App\Entity\City;
 use App\Repository\CityRepository;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
-class DatabaseGeocoder implements GeocoderInterface
+class DatabaseCityRegistry implements CityRegistryInterface
 {
+    private const CACHE_TTL = 3600 * 24 * 30; // 1 month
+
     private $cache;
     private $repository;
 
@@ -21,16 +23,12 @@ class DatabaseGeocoder implements GeocoderInterface
     public function findCities(string $country, string $zipCode): array
     {
         $country = strtoupper($country);
+        $zipCode = City::canonicalizeZipCode($zipCode);
 
         return $this->cache->get('geocode-cities-'.$country.'-'.$zipCode, function (ItemInterface $item) use ($country, $zipCode) {
-            $item->expiresAfter(3600 * 24 * 30); // 1 month
+            $item->expiresAfter(self::CACHE_TTL);
 
             return $this->repository->findByZipCode($country, $zipCode);
         });
-    }
-
-    public function findCity(int $cityId): ?City
-    {
-        return $this->repository->find($cityId);
     }
 }
