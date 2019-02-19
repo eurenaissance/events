@@ -3,10 +3,12 @@
 namespace App\DataFixtures;
 
 use App\Entity\Actor;
+use App\Geography\Model\Coordinates;
 use App\Security\PasswordEncoder;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Faker\Factory;
 use Ramsey\Uuid\Uuid;
 
 class ActorFixtures extends Fixture implements DependentFixtureInterface
@@ -173,6 +175,36 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($actor9);
         $manager->persist($actor10);
         $manager->persist($actor11);
+
+        $manager->flush();
+
+        $cities = [
+            'Clichy' => [48.9002, 2.3095],
+            'Paris 8' => [48.8763, 2.3183],
+            'Paris 17' => [48.8835, 2.3219],
+            'Paris 18' => [48.8925, 2.3444],
+        ];
+
+        $faker = Factory::create('fr_FR');
+
+        for ($i = 0; $i < 25; ++$i) {
+            $city = $faker->randomElement($cities);
+
+            $actor = new Actor(Uuid::uuid4());
+            $actor->setEmailAddress($faker->email);
+            $actor->changePassword('unusable-but-quick');
+            $actor->setFirstName($faker->firstName);
+            $actor->setLastName($faker->lastName);
+            $actor->setBirthday($faker->dateTimeBetween('-90 years', '-18 years'));
+            $actor->setGender($faker->randomElement(['male', 'female']));
+            $actor->setCity($this->getReference('city-asnieres'));
+            $actor->setCoordinates(new Coordinates($city[0], $city[1], 'low'));
+            $actor->setAddress($faker->streetAddress);
+
+            $manager->persist($actor);
+
+            $this->setReference('faker-actor-'.$i, $actor);
+        }
 
         $manager->flush();
     }

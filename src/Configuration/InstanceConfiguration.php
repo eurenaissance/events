@@ -5,6 +5,26 @@ namespace App\Configuration;
 use App\Entity\Configuration;
 use App\Repository\ConfigurationRepository;
 
+/**
+ * @method getPartyName
+ * @method getPartyLogo
+ * @method getPartyWebsite
+ * @method getColorPrimary
+ * @method getFontPrimary
+ * @method getFontMono
+ * @method getFavicon
+ * @method getMetaDescription
+ * @method getMetaImage
+ * @method getMetaGoogleAnalyticsId
+ * @method getHomeImage
+ * @method getHomeIntroSubtitle
+ * @method getHomeIntroTitle
+ * @method getHomeIntroButton
+ * @method getHomeDisplayMap
+ * @method getEmailSender
+ * @method getEmailSenderName
+ * @method getEmailContact
+ */
 class InstanceConfiguration
 {
     private $repository;
@@ -19,74 +39,11 @@ class InstanceConfiguration
         $this->repository = $repository;
     }
 
-    public function getPartyName(): ?string
+    public function __call($name, $arguments)
     {
         $this->prepareData();
 
-        return $this->data->getPartyName();
-    }
-
-    public function getPartyLogo(): ?string
-    {
-        $this->prepareData();
-
-        return $this->data->getPartyLogo();
-    }
-
-    public function getPartyWebsite(): ?string
-    {
-        $this->prepareData();
-
-        return $this->data->getPartyWebsite();
-    }
-
-    public function getColorPrimary(): ?string
-    {
-        $this->prepareData();
-
-        return $this->data->getColorPrimary();
-    }
-
-    public function getFontPrimary(): ?string
-    {
-        $this->prepareData();
-
-        return $this->data->getFontPrimary();
-    }
-
-    public function getFontMono(): ?string
-    {
-        $this->prepareData();
-
-        return $this->data->getFontMono();
-    }
-
-    public function getMetaDescription(): ?string
-    {
-        $this->prepareData();
-
-        return $this->data->getMetaDescription();
-    }
-
-    public function getMetaImage(): ?string
-    {
-        $this->prepareData();
-
-        return $this->data->getMetaImage();
-    }
-
-    public function getMetaGoogleAnalyticsId(): ?string
-    {
-        $this->prepareData();
-
-        return $this->data->getMetaGoogleAnalyticsId();
-    }
-
-    public function getHomePicture(): ?string
-    {
-        $this->prepareData();
-
-        return $this->data->getHomePicture();
+        return $this->data->{'get'.ucfirst($name)}();
     }
 
     private function prepareData()
@@ -102,13 +59,20 @@ class InstanceConfiguration
         $configuration = new Configuration();
         $configuration->setPartyName('Your party');
         $configuration->setPartyLogo('fixtures/logo/default.jpg');
-        $configuration->setPartyWebsite('https://events.your-party.com');
+        $configuration->setPartyWebsite('https://your-party.com');
         $configuration->setColorPrimary('6f80ff');
         $configuration->setFontPrimary('Roboto Slab');
         $configuration->setFontMono('Roboto Mono');
+        $configuration->setFavicon('fixtures/logo/favicon.png');
         $configuration->setMetaDescription('Your party slogan');
         $configuration->setMetaImage('fixtures/home/default.jpg');
-        $configuration->setHomePicture('fixtures/home/default.jpg');
+        $configuration->setHomeImage('fixtures/home/default.jpg');
+        $configuration->setHomeIntroSubtitle('Don\'t wait for a better Europe.');
+        $configuration->setHomeIntroTitle('Change it!');
+        $configuration->setHomeIntroButton('I\'m in!');
+        $configuration->setHomeDisplayMap(false);
+        $configuration->setEmailSender('contact@your-party.com');
+        $configuration->setEmailContact('contact@your-party.com');
 
         $this->data = $configuration;
     }

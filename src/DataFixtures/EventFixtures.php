@@ -3,10 +3,12 @@
 namespace App\DataFixtures;
 
 use App\Entity\Event;
+use App\Geography\Model\Coordinates;
 use App\Util\Slugify;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Faker\Factory;
 use Ramsey\Uuid\Uuid;
 
 class EventFixtures extends Fixture implements DependentFixtureInterface
@@ -171,6 +173,36 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($event8);
         $manager->persist($event9);
         $manager->persist($event10);
+
+        $manager->flush();
+
+        $cities = [
+            'București 1' => [44.485492, 26.061322], // Sector 1
+            'București 2' => [44.447476, 26.126449], // Sector 2
+            'București 3' => [44.419630, 26.150992], // Sector 3
+        ];
+
+        $faker = Factory::create('fr_FR');
+
+        for ($i = 0; $i < 100; ++$i) {
+            $date = $faker->numberBetween(1, 10);
+            $city = $faker->randomElement($cities);
+
+            $event = new Event(Uuid::uuid4());
+            $event->setName($faker->text(45));
+            $event->setDescription($faker->text(150));
+            $event->setBeginAt(new \DateTimeImmutable('+'.$date.' days'));
+            $event->setFinishAt(new \DateTimeImmutable('+'.$date.' days 4 hours'));
+            $event->setCreator($this->getReference('faker-actor-'.$faker->numberBetween(0, 24)));
+            $event->setGroup($this->getReference('faker-group-'.$faker->numberBetween(0, 9)));
+            $event->setCity($this->getReference('city-bucarest'));
+            $event->setCoordinates(new Coordinates($city[0], $city[1], 'low'));
+            $event->setAddress($faker->streetAddress);
+
+            $this->slugify->createSlug($event);
+
+            $manager->persist($event);
+        }
 
         $manager->flush();
     }

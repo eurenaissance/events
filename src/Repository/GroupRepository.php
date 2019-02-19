@@ -16,6 +16,33 @@ class GroupRepository extends ServiceEntityRepository
         parent::__construct($registry, Group::class);
     }
 
+    public function findHomeMostActive(int $maxResults = 3): iterable
+    {
+        $mostActiveGroups = $this->createApprovedQueryBuilder()
+            ->select('g.id', 'COUNT(e) AS count')
+            ->leftJoin('g.events', 'e')
+            ->groupBy('g.id')
+            ->orderBy('count', 'DESC')
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        if (!$mostActiveGroups) {
+            return [];
+        }
+
+        $qb = $this->createApprovedQueryBuilder();
+
+        return $qb->select('g', 'a', 'e')
+            ->leftJoin('g.events', 'e')
+            ->leftJoin('g.animator', 'a')
+            ->where($qb->expr()->in('g.id', array_column($mostActiveGroups, 'id')))
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function findOneBySlug(string $slug): ?Group
     {
         return $this

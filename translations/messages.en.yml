@@ -41,10 +41,12 @@ layout:
 #########################################
 
 home:
-    intro:
-        sub: Don't wait for a better Europe.
-        main: Change it!
-        button: I'm in
+    upcoming:
+        title: Upcoming events
+        view_all: View all the events
+    active:
+        title: Most active groups
+        view_all: View all the groups
 
 
 # Actors
@@ -99,6 +101,12 @@ password_reset_check:
 # Groups
 #########################################
 
+group_card:
+    organized_events: '1 event organized|%count% events organized'
+    followers: '1 follower|%count% followers'
+    animated_by: Animated by
+    learn_more: Learn more
+
 # Form
 group_form:
     information: Group information
@@ -112,6 +120,19 @@ group_create:
     title: Create a group
     submit: Create
 
+
+# Events
+#########################################
+
+event_card:
+    organized_by: 'Organized by %name%'
+    from: From
+    learn_more: Learn more
+
+event_view:
+    google_maps: View on Google Maps
+    register: Register
+    contact_organizer: Contact the organizer
 
 
 

@@ -197,6 +197,9 @@
             "ref": "81dee417d2cc60cd1c9d6208dff2ec22a1103e93"
         }
     },
+    "fzaninotto/faker": {
+        "version": "v1.8.0"
+    },
     "geokit/geokit": {
         "version": "v1.3.0"
     },

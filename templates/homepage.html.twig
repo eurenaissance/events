@@ -4,109 +4,149 @@
 
 {% block body %}
 <div class="home">
-    <div class="home__intro" style="background-image: url('{{ image_asset('fixtures/home/default.jpg') }}');">
+    <div class="home__intro" style="background-image: url('{{ image_asset(instance_configuration.homeImage) }}');">
         <h3 class="home__intro__subtitle">
-            {{ 'home.intro.sub'|trans }}
+            {{ instance_configuration.homeIntroSubtitle }}
         </h3>
         <h2 class="home__intro__title">
-            {{ 'home.intro.main'|trans }}
+            {{ instance_configuration.homeIntroTitle }}
         </h2>
-        <a href="{{ path('app_actor_registration_register') }}" class="btn btn-primary btn-lg">
-            {{ 'home.intro.button'|trans }}
-        </a>
+
+        {% if not app.user %}
+            <div class="home__intro__button">
+                <a href="{{ path('app_actor_registration_register') }}" class="btn btn-primary btn-lg">
+                    {{ instance_configuration.homeIntroButton }}
+                </a>
+            </div>
+        {% endif %}
     </div>
 
-    <div class="home__events">
+    <div class="home__category">
+        <h3 class="mb-4 p-2 text-black">
+            {{ 'home.upcoming.title'|trans }}
+        </h3>
+
         <div class="row">
-            <div class="col-4">
-                <div class="card card--event">
-                    <h4 class="card__title">
-                        <a href="">
-                            Atelier de discussion stratégie de mise en place
-                        </a>
-                    </h4>
+            {% for event in upcomingEvents %}
+                <div class="col-4">
+                    <div class="card card--event">
+                        <h4 class="card__title">
+                            <a href="{{ path('app_event_view', {'slug': event.slug}) }}">
+                                {{ event.name }}
+                            </a>
+                        </h4>
 
-                    <div class="card__subtitle">
-                        Jeudi 12 avril 2019
-                    </div>
-
-                    <div class="card__subtitle">
-                        34 participants
-                    </div>
-
-                    <div class="card__user">
-                        <div class="card__user__image">
-                            <img src="{{ image_asset('fixtures/users/default.jpg', {'w': 100}) }}" />
+                        <div class="card__subtitle">
+                            {{ event.beginAt|localizeddate('long', 'short') }}
                         </div>
-                        <div class="card__user__profile">
-                            Organisé par <a href="">Titouan G</a>
-                            <br />
-                            De <a href="">Paris XIème</a>
+
+                        <div class="address mt-4" id="group-address">
+                            <div class="address__icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="address__text">
+                                <div class="address__text__street">
+                                    <a href="https://maps.google.com/?q={{ event.address }} {{ event.city.name }} {{ event.city.country|country }}" target="_blank">
+                                        {{ event.address|capitalize }}
+                                    </a>
+                                </div>
+                                <div class="address__text__city">
+                                    {{ event.city.name }}, {{ event.city.country|country }}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="card card--event">
-                    <h4 class="card__title">
-                        <a href="">
-                            Atelier de discussion stratégie de mise en place
-                        </a>
-                    </h4>
 
-                    <div class="card__subtitle">
-                        Jeudi 12 avril 2019
-                    </div>
-
-                    <div class="card__subtitle">
-                        34 participants
-                    </div>
-
-                    <div class="card__user">
-                        <div class="card__user__image">
-                            <img src="{{ image_asset('fixtures/users/default.jpg', {'w': 100}) }}" />
+                        <div class="card__user mt-4">
+                            <div class="card__user__icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="card__user__profile">
+                                {{ 'event_card.organized_by'|trans({'%name%': event.creator.fullName}) }}
+                                <br />
+                                {{ 'event_card.from'|trans }}
+                                <a href="{{ path('app_group_view', {'slug': event.group.slug}) }}">
+                                    {{ event.group.name }}
+                                </a>
+                            </div>
                         </div>
-                        <div class="card__user__profile">
-                            Organisé par <a href="">Titouan G</a>
-                            <br />
-                            De <a href="">Paris XIème</a>
+
+                        <div class="mt-4 text-right">
+                            <a href="{{ path('app_event_view', {'slug': event.slug}) }}" class="d-inline-flex align-items-center">
+                                {{ 'event_card.learn_more'|trans }}
+                                <i class="fas fa-caret-right ml-2"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="card card--event">
-                    <h4 class="card__title">
-                        <a href="">
-                            Atelier de discussion stratégie de mise en place
-                        </a>
-                    </h4>
-
-                    <div class="card__subtitle">
-                        Jeudi 12 avril 2019
-                    </div>
-
-                    <div class="card__subtitle">
-                        34 participants
-                    </div>
-
-                    <div class="card__user">
-                        <div class="card__user__image">
-                            <img src="{{ image_asset('fixtures/users/default.jpg', {'w': 100}) }}" />
-                        </div>
-                        <div class="card__user__profile">
-                            Organisé par <a href="">Titouan G</a>
-                            <br />
-                            De <a href="">Paris XIème</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
 
         <div class="text-center mt-5">
-            <a href="" class="btn btn-outline-primary btn-lg">
-                Voir tous les événements
+            <a href="{{ path('app_event_search') }}" class="btn btn-outline-primary">
+                {{ 'home.upcoming.view_all'|trans }}
+            </a>
+        </div>
+    </div>
+
+    <div class="home__category">
+        <h3 class="mb-4 p-2 text-black">
+            {{ 'home.active.title'|trans }}
+        </h3>
+
+        <div class="row">
+            {% for group in mostActiveGroups %}
+                <div class="col-4">
+                    <div class="card card--group">
+                        <h4 class="card__title">
+                            <a href="{{ path('app_group_view', {'slug': group.slug}) }}">
+                                {{ group.name }}
+                            </a>
+                        </h4>
+
+                        <div class="card__subtitle">
+                            {{ 'group_card.organized_events'|transchoice(group.events|length) }}<br />
+                            {{ 'group_card.followers'|transchoice(group.followers|length) }}
+                        </div>
+
+                        <div class="address mt-4" id="group-address">
+                            <div class="address__icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="address__text">
+                                <div class="address__text__street">
+                                    <a href="https://maps.google.com/?q={{ group.address }} {{ group.city.name }} {{ group.city.country|country }}" target="_blank">
+                                        {{ group.address|capitalize }}
+                                    </a>
+                                </div>
+                                <div class="address__text__city">
+                                    {{ group.city.name }}, {{ group.city.country|country }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card__user mt-4">
+                            <div class="card__user__icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="card__user__profile">
+                                {{ 'group_card.animated_by'|trans({'%name%': group.animator.fullName}) }}
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-right">
+                            <a href="{{ path('app_group_view', {'slug': group.slug}) }}" class="d-inline-flex align-items-center">
+                                {{ 'group_card.learn_more'|trans }}
+                                <i class="fas fa-caret-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{{ path('app_group_search') }}" class="btn btn-outline-primary">
+                {{ 'home.active.view_all'|trans }}
             </a>
         </div>
     </div>

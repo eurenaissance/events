@@ -9,18 +9,21 @@
         {{ event.beginAt|localizeddate('full') }}
     </div>
 
-    <div class="card__subtitle">
+    <div class="card__subtitle text-black">
         {{ event.description }}
     </div>
 
     <div class="card__user">
-        <div class="card__user__image">
-            <img src="{{ image_asset('fixtures/users/default.jpg', {'w': 100}) }}" />
+        <div class="card__user__icon">
+            <i class="fas fa-user"></i>
         </div>
         <div class="card__user__profile">
-            Organisé par <a href="">{{ event.creator.fullName }}</a>
+            {{ 'event_card.organized_by'|trans }} {{ event.creator.fullName }}
             <br />
-            De <a href="">{{ event.group.name }}</a>
+            {{ 'event_card.from'|trans }}
+            <a href="{{ path('app_group_view', {'slug': event.group.slug}) }}">
+                {{ event.group.name }}
+            </a>
         </div>
     </div>
 </div>
