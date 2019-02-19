@@ -1,0 +1,104 @@
+# Common
+#########################################
+
+# Address
+common.address.not_blank: The street address is required.
+common.address.max_length: This street address cannot contain more than {{ limit }} characters.
+common.address.not_found: |
+    This address could not be located. Could you check it does not contain any error?
+    If the problem persists, please contact us.
+
+# City
+common.city.not_blank: The city is required.
+common.city.invalid: This city is invalid. Can you retry?
+
+# City
+common.date.invalid: This date is invalid. Can you retry?
+
+# Password
+common.password.not_blank: The password is required.
+common.password.mismatch: The password and its confirmation do not match.
+common.password.min_length: The password must contain at least {{ limit }} characters.
+
+
+# Actor
+#########################################
+
+# Email
+actor.email_address.not_unique: |
+    An actor already registered using this email address.
+    Perhaps do you already have an account? If you think there is a problem, please contact us.
+actor.email_address.invalid: This email address is not valid.
+actor.email_address.not_blank: The email address is required.
+actor.email_address.max_length: The email address cannot contain more than {{ limit }} characters.
+
+# First name
+actor.first_name.not_blank: The first name is required.
+actor.first_name.max_length: The first name cannot contain more than {{ limit }} characters.
+
+# Last name
+actor.last_name.not_blank: The last name is required.
+actor.last_name.max_length: The last name cannot contain more than {{ limit }} characters.
+
+# Birthday
+actor.birthday.not_blank: The birth date is required to ensure you are allowed to subscribe on this platform.
+actor.birthday.invalid: This birth date is invalid.
+
+# Gender
+actor.gender.not_blank: The gender is required. Don't hesitate to use "Prefered not to say" if you want.
+actor.gender.invalid: This gender is invalid.
+
+
+# Administrator
+#########################################
+
+# Email
+administrator.email_address.not_unique: An administrator already registered using this email address.
+administrator.email_address.invalid: This email address is not valid.
+administrator.email_address.not_blank: The email address is required.
+
+
+# Event
+#########################################
+
+# Name
+event.name.not_blank: The name is required.
+event.name.min_length: The name must contain at least {{ limit }} characters.
+event.name.max_length: The name cannot contain more than {{ limit }} characters.
+
+# Slug
+event.slug.not_unique: |
+    An event was already created with this name and date.
+    If this is not a duplicate, please change this event name to something different.
+
+# Description
+event.description.not_blank: The description is required.
+event.description.min_length: The description must contain at least {{ limit }} characters.
+event.description.max_length: The description cannot contain more than {{ limit }} characters.
+
+# Begin at
+event.begin_at.not_blank: The starting date and time are required.
+event.begin_at.invalid: This starting date and time are invalid.
+
+# Finish at
+event.finish_at.not_blank: The ending date and time are required.
+event.finish_at.invalid: This ending date and time are invalid.
+
+
+# Group
+#########################################
+
+# Name
+group.name.not_blank: The name is required.
+group.name.min_length: The name must contain at least {{ limit }} characters.
+group.name.max_length: The name cannot contain more than {{ limit }} characters.
+
+# Slug
+group.slug.not_unique: |
+    A group was already created with this name. If this is not a duplicate,
+    please change this group name to something different.
+
+# Description
+group.description.not_blank: The description is required.
+group.description.min_length: The description must contain at least {{ limit }} characters.
+group.description.max_length: The description cannot contain more than {{ limit }} characters.

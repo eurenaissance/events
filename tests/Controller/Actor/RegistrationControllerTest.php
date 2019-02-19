@@ -53,7 +53,7 @@ class RegistrationControllerTest extends HttpTestCase
             'lastName' => 'Gardien',
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'plainPassword' => ['first' => 'test123', 'second' => 'test123'],
-            'address' => null,
+            'address' => '123 random street',
             'city' => CityFixtures::CITY_02_UUID,
         ]);
         $this->assertIsRedirectedTo('/register/check-email');
@@ -82,7 +82,7 @@ class RegistrationControllerTest extends HttpTestCase
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
-                'actor.email_address.unique',
+                'actor.email_address.not_unique',
                 'common.password.not_blank',
             ],
         ];
@@ -98,7 +98,7 @@ class RegistrationControllerTest extends HttpTestCase
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
-                'actor.email_address.unique',
+                'actor.email_address.not_unique',
                 'common.password.not_blank',
             ],
         ];
@@ -114,7 +114,7 @@ class RegistrationControllerTest extends HttpTestCase
                 'city' => 'abcdef',
             ],
             [
-                'actor.email_address.valid',
+                'actor.email_address.invalid',
                 'actor.birthday.not_blank',
                 'common.password.min_length',
                 'common.city.invalid',
@@ -135,7 +135,7 @@ class RegistrationControllerTest extends HttpTestCase
                 'actor.email_address.not_blank',
                 'actor.first_name.not_blank',
                 'actor.last_name.not_blank',
-                'base.date.invalid',
+                'common.date.invalid',
                 'common.password.mismatch',
                 'common.city.invalid',
                 'common.address.max_length',

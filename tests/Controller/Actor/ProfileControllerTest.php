@@ -104,7 +104,7 @@ class ProfileControllerTest extends HttpTestCase
                 'firstName' => 'Nic',
                 'lastName' => 'Cag',
                 'gender' => 'other',
-                'address' => '',
+                'address' => '123 random street',
                 'country' => 'FR',
                 'zipCode' => '06000',
                 'city' => CityFixtures::CITY_05_UUID,
@@ -159,7 +159,7 @@ class ProfileControllerTest extends HttpTestCase
             'errors' => [
                 'actor.first_name.not_blank',
                 'actor.last_name.not_blank',
-                'base.date.invalid',
+                'common.date.invalid',
                 'common.city.invalid',
                 'common.address.max_length',
             ],

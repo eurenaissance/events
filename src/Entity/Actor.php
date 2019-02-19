@@ -25,7 +25,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * })
  * @ORM\Entity(repositoryClass="App\Repository\ActorRepository")
  *
- * @UniqueEntity("emailAddress", message="actor.email_address.unique", groups={"registration"})
+ * @UniqueEntity("emailAddress", message="actor.email_address.not_unique", groups={"registration"})
  * @IsGeocoded(groups={"registration", "profile"})
  */
 class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
@@ -41,7 +41,7 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
      *
      * @ORM\Column
      *
-     * @Assert\Email(message="actor.email_address.valid", groups={"registration", "profile"})
+     * @Assert\Email(message="actor.email_address.invalid", groups={"registration", "profile"})
      * @Assert\NotBlank(message="actor.email_address.not_blank", groups={"registration", "profile"})
      * @Assert\Length(max=255, maxMessage="actor.email_address.max_length", groups={"registration", "profile"})
      */
@@ -53,7 +53,7 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
      * @ORM\Column(length=50)
      *
      * @Assert\NotBlank(message="actor.first_name.not_blank", groups={"registration", "profile"})
-     * @Assert\Length(max=50, maxMessage="actor.firstName.max_length", groups={"registration", "profile"})
+     * @Assert\Length(max=50, maxMessage="actor.first_name.max_length", groups={"registration", "profile"})
      */
     private $firstName;
 
@@ -63,7 +63,7 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
      * @ORM\Column(length=50)
      *
      * @Assert\NotBlank(message="actor.last_name.not_blank", groups={"registration", "profile"})
-     * @Assert\Length(max=50, maxMessage="actor.lastName.max_length", groups={"registration", "profile"})
+     * @Assert\Length(max=50, maxMessage="actor.last_name.max_length", groups={"registration", "profile"})
      */
     private $lastName;
 
@@ -73,7 +73,7 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
      * @ORM\Column(type="date")
      *
      * @Assert\NotBlank(message="actor.birthday.not_blank", groups={"registration", "profile"})
-     * @Assert\Date(message="actor.birthday.date", groups={"registration", "profile"})
+     * @Assert\Date(message="actor.birthday.invalid", groups={"registration", "profile"})
      */
     private $birthday;
 
@@ -83,7 +83,7 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
      * @ORM\Column(length=6, nullable=true)
      *
      * @Assert\NotBlank(message="actor.gender.not_blank", groups={"profile"})
-     * @Assert\Choice(message="actor.gender.choice", choices=Actor::GENDERS, groups={"profile"})
+     * @Assert\Choice(message="actor.gender.invalid", choices=Actor::GENDERS, groups={"profile"})
      */
     private $gender;
 
@@ -178,7 +178,6 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
 
     public function getSalt()
     {
-        return;
     }
 
     public function getUsername()

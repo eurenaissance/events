@@ -15,7 +15,8 @@ trait EntityAddressTrait
      *
      * @ORM\Column(length=150, nullable=true)
      *
-     * @Assert\Length(max=150, maxMessage="common.address.max_length", groups={"registration", "profile"})
+     * @Assert\NotBlank(message="common.address.not_blank", groups={"address"})
+     * @Assert\Length(max=150, maxMessage="common.address.max_length", groups={"address"})
      */
     private $address;
 
@@ -25,7 +26,7 @@ trait EntityAddressTrait
      * @ORM\ManyToOne(targetEntity=City::class, fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      *
-     * @Assert\NotBlank(message="common.city.not_blank", groups={"registration", "profile"})
+     * @Assert\NotBlank(message="common.city.not_blank", groups={"address"})
      */
     private $city;
 

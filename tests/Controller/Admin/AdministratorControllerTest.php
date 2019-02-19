@@ -15,6 +15,7 @@ class AdministratorControllerTest extends HttpTestCase
         yield ['/admin/app/administrator/create'];
         yield ['/admin/app/administrator/1/edit'];
         yield ['/admin/app/administrator/1/delete'];
+
         // own account
         yield ['/admin/app/administrator/2/edit'];
         yield ['/admin/app/administrator/2/delete'];
@@ -154,10 +155,10 @@ class AdministratorControllerTest extends HttpTestCase
 
     public function provideEditPasswordFailures(): iterable
     {
-        yield ['test123', null, 'Passwords do not match.'];
-        yield [null, 'test123', 'Passwords do not match.'];
-        yield ['test123', '321test', 'Passwords do not match.'];
-        yield ['123', '123', 'Password must be at least 6 characters long.'];
+        yield ['test123', null, 'The password and its confirmation do not match.'];
+        yield [null, 'test123', 'The password and its confirmation do not match.'];
+        yield ['test123', '321test', 'The password and its confirmation do not match.'];
+        yield ['123', '123', 'The password must contain at least 6 characters.'];
     }
 
     /**
@@ -167,7 +168,7 @@ class AdministratorControllerTest extends HttpTestCase
     {
         $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
-        $crawler = $this->client->request('GET', '/admin/app/administrator/2/edit');
+        $this->client->request('GET', '/admin/app/administrator/2/edit');
         $this->assertResponseSuccessFul();
 
         $this->submitAdminForm('Update', [

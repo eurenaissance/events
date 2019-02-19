@@ -44,9 +44,9 @@ class ActorType extends AbstractType
                     'month' => 'base.date.month',
                     'day' => 'base.date.day',
                 ],
-                'invalid_message' => 'base.date.invalid',
                 'empty_data' => null,
                 'format' => 'ddMMMMyyyy',
+                'invalid_message' => 'common.date.invalid',
             ])
             ->add('emailAddress', EmailType::class)
             ->add('country', CountryType::class, [

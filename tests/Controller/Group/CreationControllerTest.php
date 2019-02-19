@@ -130,7 +130,7 @@ class CreationControllerTest extends HttpTestCase
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
-                'group.slug.unique',
+                'group.slug.not_unique',
                 'group.description.min_length',
             ],
         ];
@@ -143,7 +143,7 @@ class CreationControllerTest extends HttpTestCase
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
-                'group.slug.unique',
+                'group.slug.not_unique',
                 'group.description.max_length',
             ],
         ];
@@ -156,7 +156,7 @@ class CreationControllerTest extends HttpTestCase
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
-                'group.slug.unique',
+                'group.slug.not_unique',
             ],
         ];
 
@@ -168,7 +168,7 @@ class CreationControllerTest extends HttpTestCase
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
-                'group.slug.unique',
+                'group.slug.not_unique',
             ],
         ];
 
@@ -180,7 +180,7 @@ class CreationControllerTest extends HttpTestCase
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
-                'group.slug.unique',
+                'group.slug.not_unique',
             ],
         ];
 
@@ -192,7 +192,7 @@ class CreationControllerTest extends HttpTestCase
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
-                'group.slug.unique',
+                'group.slug.not_unique',
             ],
         ];
     }

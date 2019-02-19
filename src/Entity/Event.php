@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="events")
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  *
- * @UniqueEntity("slug", errorPath="name", message="event.slug.unique")
+ * @UniqueEntity("slug", errorPath="name", message="event.slug.not_unique")
  * @IsGeocoded(groups={"registration", "profile"})
  */
 class Event implements EntitySlugInterface, GeographyInterface, GeocodableInterface
@@ -65,7 +65,7 @@ class Event implements EntitySlugInterface, GeographyInterface, GeocodableInterf
      * @ORM\Column(type="datetime")
      *
      * @Assert\NotBlank(message="event.begin_at.not_blank")
-     * @Assert\Date(message="event.begin_at.date")
+     * @Assert\Date(message="event.begin_at.invalid")
      */
     private $beginAt;
 
@@ -75,7 +75,7 @@ class Event implements EntitySlugInterface, GeographyInterface, GeocodableInterf
      * @ORM\Column(type="datetime")
      *
      * @Assert\NotBlank(message="event.finish_at.not_blank")
-     * @Assert\Date(message="event.finish_at.date")
+     * @Assert\Date(message="event.finish_at.invalid")
      */
     private $finishAt;
 

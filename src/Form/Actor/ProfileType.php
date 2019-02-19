@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProfileType extends AbstractType
 {
-    private const VALIDATION_GROUPS = ['profile'];
+    private const VALIDATION_GROUPS = ['profile', 'address'];
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

@@ -15,14 +15,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Security;
 
 class EventType extends AbstractType
 {
     private $slugify;
     private $cityToUuidTransformer;
 
-    public function __construct(Security $security, Slugify $slugify, CityToUuidTransformer $cityToUuidTransformer)
+    public function __construct(Slugify $slugify, CityToUuidTransformer $cityToUuidTransformer)
     {
         $this->slugify = $slugify;
         $this->cityToUuidTransformer = $cityToUuidTransformer;
@@ -45,8 +44,8 @@ class EventType extends AbstractType
                     'month' => 'base.date.month',
                     'day' => 'base.date.day',
                 ],
-                'invalid_message' => 'base.date.invalid',
                 'empty_data' => null,
+                'invalid_message' => 'common.date.invalid',
             ])
             ->add('finishAt', DateType::class, [
                 'widget' => 'choice',
@@ -56,8 +55,8 @@ class EventType extends AbstractType
                     'month' => 'base.date.month',
                     'day' => 'base.date.day',
                 ],
-                'invalid_message' => 'base.date.invalid',
                 'empty_data' => null,
+                'invalid_message' => 'common.date.invalid',
             ])
             ->add('address', TextType::class, [
                 'required' => false,
@@ -75,6 +74,7 @@ class EventType extends AbstractType
             ])
             ->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
                 $form = $event->getForm();
+
                 /** @var Event $groupEvent */
                 $groupEvent = $event->getData();
 
