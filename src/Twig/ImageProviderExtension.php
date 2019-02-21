@@ -21,13 +21,16 @@ class ImageProviderExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('image_asset', [$this, 'createImageAssetUrl']),
+            new TwigFunction('image_asset', [$this, 'createImageAssetUrl'], ['is_safe' => ['html']]),
         ];
     }
 
     public function createImageAssetUrl(string $path, array $filters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        $filters['fm'] = 'pjpg';
+        if (empty($filters['fm'])) {
+            $filters['fm'] = 'pjpg';
+        }
+
         $filters['s'] = SignatureFactory::create($this->secret)->generateSignature($path, $filters);
         $filters['path'] = $path;
 

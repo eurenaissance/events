@@ -27,20 +27,18 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(length=100)
-     *
-     * @Assert\NotBlank
-     * @Assert\Length(max=100)
+     * @ORM\Column(length=50)
      */
     private $partyLogo;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(length=100)
+     * @ORM\Column(length=200)
      *
      * @Assert\NotBlank
-     * @Assert\Length(max=100)
+     * @Assert\Length(max=200)
+     * @Assert\Url
      */
     private $partyWebsite;
 
@@ -77,6 +75,16 @@ class Configuration
     /**
      * @var string|null
      *
+     * @ORM\Column(length=50)
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(max=50)
+     */
+    private $favicon;
+
+    /**
+     * @var string|null
+     *
      * @ORM\Column(length=200)
      *
      * @Assert\NotBlank
@@ -87,10 +95,10 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(length=100)
+     * @ORM\Column(length=50)
      *
      * @Assert\NotBlank
-     * @Assert\Length(max=100)
+     * @Assert\Length(max=50)
      */
     private $metaImage;
 
@@ -111,7 +119,76 @@ class Configuration
      * @Assert\NotBlank
      * @Assert\Length(max=100)
      */
-    private $homePicture;
+    private $homeImage;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(length=50)
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(max=50)
+     */
+    private $homeIntroSubtitle;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(length=30)
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(max=30)
+     */
+    private $homeIntroTitle;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(length=50)
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(max=50)
+     */
+    private $homeIntroButton;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $homeDisplayMap;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(length=200)
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(max=200)
+     * @Assert\Email
+     */
+    private $emailSender;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(length=50, nullable=true)
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(max=50)
+     */
+    private $emailSenderName;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(length=200, nullable=true)
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(max=200)
+     * @Assert\Email
+     */
+    private $emailContact;
 
     public function getPartyName(): ?string
     {
@@ -173,6 +250,16 @@ class Configuration
         $this->fontMono = $fontMono;
     }
 
+    public function getFavicon(): ?string
+    {
+        return $this->favicon;
+    }
+
+    public function setFavicon(?string $favicon)
+    {
+        $this->favicon = $favicon;
+    }
+
     public function getMetaDescription(): ?string
     {
         return $this->metaDescription;
@@ -203,13 +290,83 @@ class Configuration
         $this->metaGoogleAnalyticsId = $metaGoogleAnalyticsId;
     }
 
-    public function getHomePicture(): ?string
+    public function getHomeImage(): ?string
     {
-        return $this->homePicture;
+        return $this->homeImage;
     }
 
-    public function setHomePicture(?string $homePicture)
+    public function setHomeImage(?string $homeImage)
     {
-        $this->homePicture = $homePicture;
+        $this->homeImage = $homeImage;
+    }
+
+    public function getHomeIntroSubtitle(): ?string
+    {
+        return $this->homeIntroSubtitle;
+    }
+
+    public function setHomeIntroSubtitle(?string $homeIntroSubtitle)
+    {
+        $this->homeIntroSubtitle = $homeIntroSubtitle;
+    }
+
+    public function getHomeIntroTitle(): ?string
+    {
+        return $this->homeIntroTitle;
+    }
+
+    public function setHomeIntroTitle(?string $homeIntroTitle)
+    {
+        $this->homeIntroTitle = $homeIntroTitle;
+    }
+
+    public function getHomeIntroButton(): ?string
+    {
+        return $this->homeIntroButton;
+    }
+
+    public function setHomeIntroButton(?string $homeIntroButton)
+    {
+        $this->homeIntroButton = $homeIntroButton;
+    }
+
+    public function getHomeDisplayMap(): bool
+    {
+        return $this->homeDisplayMap;
+    }
+
+    public function setHomeDisplayMap(bool $homeDisplayMap)
+    {
+        $this->homeDisplayMap = $homeDisplayMap;
+    }
+
+    public function getEmailSender(): ?string
+    {
+        return $this->emailSender;
+    }
+
+    public function setEmailSender(?string $emailSender)
+    {
+        $this->emailSender = $emailSender;
+    }
+
+    public function getEmailSenderName(): ?string
+    {
+        return $this->emailSenderName;
+    }
+
+    public function setEmailSenderName(?string $emailSenderName)
+    {
+        $this->emailSenderName = $emailSenderName;
+    }
+
+    public function getEmailContact(): ?string
+    {
+        return $this->emailContact;
+    }
+
+    public function setEmailContact(?string $emailContact)
+    {
+        $this->emailContact = $emailContact;
     }
 }

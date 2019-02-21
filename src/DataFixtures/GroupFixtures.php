@@ -3,10 +3,12 @@
 namespace App\DataFixtures;
 
 use App\Entity\Group;
+use App\Geography\Model\Coordinates;
 use App\Util\Slugify;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Faker\Factory;
 use Ramsey\Uuid\Uuid;
 
 class GroupFixtures extends Fixture implements DependentFixtureInterface
@@ -153,6 +155,35 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($group8);
         $manager->persist($group9);
         $manager->persist($group10);
+
+        $manager->flush();
+
+        $cities = [
+            'București 1' => [44.485492, 26.061322], // Sector 1
+            'București 2' => [44.447476, 26.126449], // Sector 2
+            'București 3' => [44.419630, 26.150992], // Sector 3
+        ];
+
+        $faker = Factory::create('fr_FR');
+
+        for ($i = 0; $i < 10; ++$i) {
+            $city = $faker->randomElement($cities);
+
+            $group = new Group();
+            $group->setName($faker->text(45));
+            $group->setDescription($faker->text(150));
+            $group->setAnimator($this->getReference('actor-cannes'));
+            $group->setCity($this->getReference('city-bucarest'));
+            $group->setCoordinates(new Coordinates($city[0], $city[1], 'low'));
+            $group->setAddress($faker->streetAddress);
+            $group->approve();
+
+            $this->slugify->createSlug($group);
+
+            $manager->persist($group);
+
+            $this->setReference('faker-group-'.$i, $group);
+        }
 
         $manager->flush();
     }

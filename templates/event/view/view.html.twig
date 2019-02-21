@@ -19,9 +19,12 @@
         <div class="col-lg-8 col-xl-6">
             <div class="row align-items-center">
                 <div class="col text-muted">
-                    Organisé par <a href="">{{ event.creator.fullName }}</a>
+                    {{ 'event_card.organized_by'|trans({ '%name%': event.creator.fullName }) }}
                     <br />
-                    De <a href="">{{ event.group.name }}</a>
+                    {{ 'event_card.from'|trans }}
+                    <a href="{{ path('app_group_view', {'slug': event.group.slug}) }}">
+                        {{ event.group.name }}
+                    </a>
                 </div>
                 <div class="col">
                     <div class="address mb-1">
@@ -40,7 +43,7 @@
 
                     <small>
                         <a href="https://maps.google.com/?q={{ event.address }} {{ event.city.name }} {{ event.city.country|country }}" target="_blank">
-                            Voir sur Google Maps
+                            {{ 'event_view.google_maps'|trans }}
                         </a>
                     </small>
                 </div>
@@ -51,10 +54,10 @@
             </div>
 
             <a href="" class="btn btn-primary btn-lg btn-block">
-                Register
+                {{ 'event_view.register'|trans }}
             </a>
             <a href="" class="btn btn-link btn-block">
-                Contact the organizer
+                {{ 'event_view.contact_organizer'|trans }}
             </a>
         </div>
     </div>

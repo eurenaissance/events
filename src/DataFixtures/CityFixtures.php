@@ -19,30 +19,44 @@ class CityFixtures extends Fixture
     public const CITY_08_UUID = 'a92fc7e8-d3df-4bf1-ab6a-42b4f4a0cd43';
     public const CITY_09_UUID = '98cccdf2-ced1-4e40-935d-e562a0d9d391';
     public const CITY_10_UUID = '19f5a6f0-ea04-421a-bfea-4ead09e30506';
+    public const CITY_11_UUID = '43b95711-0c51-4bc1-8c8c-18d9f8d340aa';
 
     public function load(ObjectManager $manager)
     {
-        $city1 = $this->create('paris', self::CITY_01_UUID, 'FR', 'Paris', '75000', 48.8534, 2.3488);
-        $city2 = $this->create('clichy', self::CITY_02_UUID, 'FR', 'Clichy', '92110', 48.9002, 2.3095);
-        $city3 = $this->create('asnieres', self::CITY_03_UUID, 'FR', 'Asnières-sur-Seine', '92600', 48.9167, 2.2833);
-        $city4 = $this->create('bois-colombes', self::CITY_04_UUID, 'FR', 'Bois-Colombes', '92270', 48.9194, 2.2748);
-        $city5 = $this->create('nice', self::CITY_05_UUID, 'FR', 'Nice', '06000', 43.7031, 7.2661);
-        $city6 = $this->create('cannes', self::CITY_06_UUID, 'FR', 'Cannes', '06400', 43.5513, 7.0128);
-        $city7 = $this->create('lille', self::CITY_07_UUID, 'FR', 'Lille', '59000', 50.633, 3.0586);
-        $city8 = $this->create('nantes', self::CITY_08_UUID, 'FR', 'Nantes', '44000', 47.2173, -1.5534);
-        $city9 = $this->create('saint-herblain', self::CITY_09_UUID, 'FR', 'Saint-Herblain', '44800', 47.2176, -1.6484);
-        $city10 = $this->create('coueron', self::CITY_10_UUID, 'FR', 'Couëron', '44220', 47.2151, -1.7217);
+        $city = $this->create('paris', self::CITY_01_UUID, 'FR', 'Paris', '75000', 48.8534, 2.3488);
+        $manager->persist($city);
 
-        $manager->persist($city1);
-        $manager->persist($city2);
-        $manager->persist($city3);
-        $manager->persist($city4);
-        $manager->persist($city5);
-        $manager->persist($city6);
-        $manager->persist($city7);
-        $manager->persist($city8);
-        $manager->persist($city9);
-        $manager->persist($city10);
+        $city = $this->create('clichy', self::CITY_02_UUID, 'FR', 'Clichy', '92110', 48.9002, 2.3095);
+        $manager->persist($city);
+
+        $city = $this->create('asnieres', self::CITY_03_UUID, 'FR', 'Asnières-sur-Seine', '92600', 48.9167, 2.2833);
+        $manager->persist($city);
+
+        $city = $this->create('bois-colombes', self::CITY_04_UUID, 'FR', 'Bois-Colombes', '92270', 48.9194, 2.2748);
+        $manager->persist($city);
+
+        $city = $this->create('nice', self::CITY_05_UUID, 'FR', 'Nice', '06000', 43.7031, 7.2661);
+        $manager->persist($city);
+
+        $city = $this->create('cannes', self::CITY_06_UUID, 'FR', 'Cannes', '06400', 43.5513, 7.0128);
+        $manager->persist($city);
+
+        $city = $this->create('lille', self::CITY_07_UUID, 'FR', 'Lille', '59000', 50.633, 3.0586);
+        $manager->persist($city);
+
+        $city = $this->create('nantes', self::CITY_08_UUID, 'FR', 'Nantes', '44000', 47.2173, -1.5534);
+        $manager->persist($city);
+
+        $city = $this->create('saint-herblain', self::CITY_09_UUID, 'FR', 'Saint-Herblain', '44800', 47.2176, -1.6484);
+        $manager->persist($city);
+
+        $city = $this->create('coueron', self::CITY_10_UUID, 'FR', 'Couëron', '44220', 47.2151, -1.7217);
+        $manager->persist($city);
+
+        $city = $this->create('bucarest', self::CITY_11_UUID, 'RO', 'Bucureşti', '021064', 44.418, 26.1691);
+        $manager->persist($city);
+
+        $manager->flush();
 
         $cities = [
             // Multiple cities for a single ZIP code

@@ -15,10 +15,32 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    public function findHomeUpcoming(int $maxResults = 3): iterable
+    {
+        return $this
+            ->createQueryBuilder('e')
+            ->leftJoin('e.group', 'g')
+            ->addSelect('g')
+            ->leftJoin('e.creator', 'c')
+            ->addSelect('c')
+            ->where('g.approvedAt IS NOT NULL')
+            ->andWhere('g.refusedAt IS NULL')
+            ->andWhere('e.beginAt > CURRENT_TIMESTAMP()')
+            ->orderBy('e.beginAt', 'ASC')
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function findOneBySlug(string $slug): ?Event
     {
         return $this
             ->createQueryBuilder('e')
+            ->leftJoin('e.group', 'g')
+            ->addSelect('g')
+            ->leftJoin('e.creator', 'c')
+            ->addSelect('c')
             ->where('e.slug = :slug')
             ->setParameter('slug', $slug)
             ->getQuery()
@@ -30,6 +52,10 @@ class EventRepository extends ServiceEntityRepository
     {
         return $this
             ->createQueryBuilder('e')
+            ->leftJoin('e.group', 'g')
+            ->addSelect('g')
+            ->leftJoin('e.creator', 'c')
+            ->addSelect('c')
             ->where('e.group = :group')
             ->andWhere('e.finishAt > CURRENT_TIMESTAMP()')
             ->orderBy('e.beginAt', 'ASC')
@@ -44,6 +70,10 @@ class EventRepository extends ServiceEntityRepository
     {
         $qb = $this
             ->createQueryBuilder('e')
+            ->leftJoin('e.group', 'g')
+            ->addSelect('g')
+            ->leftJoin('e.creator', 'c')
+            ->addSelect('c')
             ->where('e.group = :group')
             ->andWhere('e.finishAt <= CURRENT_TIMESTAMP()')
             ->orderBy('e.finishAt', 'DESC')
