@@ -4,9 +4,9 @@ namespace App\Form\Event;
 
 use App\Entity\Event;
 use App\Form\DataTransformer\CityToUuidTransformer;
+use App\Form\Type\CountryType;
 use App\Util\Slugify;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
