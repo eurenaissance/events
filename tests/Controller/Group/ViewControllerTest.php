@@ -15,8 +15,10 @@ class ViewControllerTest extends HttpTestCase
         yield ['development-in-bois-colombes'];
         yield ['development-in-paris'];
         yield ['development-in-lille'];
+
         // pending groups
         yield ['culture-in-paris'];
+
         // approved group
         yield ['ecology-in-clichy'];
         yield ['ecology-in-paris'];
@@ -31,7 +33,7 @@ class ViewControllerTest extends HttpTestCase
      */
     public function testAnonymousCannotViewAnyGroup(string $slug): void
     {
-        $this->client->request('GET', "/group/$slug");
+        $this->client->request('GET', '/group/'.$slug);
         $this->assertIsRedirectedTo('/login');
     }
 

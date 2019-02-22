@@ -6,6 +6,7 @@ use App\Entity\City;
 use App\Geography\Model\Coordinates;
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait EntityAddressTrait
@@ -17,6 +18,8 @@ trait EntityAddressTrait
      *
      * @Assert\NotBlank(message="common.address.not_blank", groups={"address"})
      * @Assert\Length(max=150, maxMessage="common.address.max_length", groups={"address"})
+     *
+     * @Groups("search")
      */
     private $address;
 
@@ -27,6 +30,8 @@ trait EntityAddressTrait
      * @ORM\JoinColumn(nullable=false)
      *
      * @Assert\NotBlank(message="common.city.not_blank", groups={"address"})
+     *
+     * @Groups("search")
      */
     private $city;
 

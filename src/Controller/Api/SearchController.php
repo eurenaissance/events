@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Repository\CityRepository;
+use App\Repository\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,5 +26,17 @@ class SearchController extends AbstractController
         }
 
         return $this->json($repo->search($term, $appCountry), 200, [], ['groups' => 'city_autocomplete']);
+    }
+
+    /**
+     * @Route("/events", methods="GET", name="app_api_search_events")
+     */
+    public function events(CityRepository $cityRepo, EventRepository $eventRepo, Request $request): JsonResponse
+    {
+        if (!$city = $cityRepo->findOneByUuid($request->query->get('c'))) {
+            throw new BadRequestHttpException();
+        }
+
+        return $this->json($eventRepo->search($city, $request->query->get('q', '')), 200, [], ['groups' => 'search']);
     }
 }

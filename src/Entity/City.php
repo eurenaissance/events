@@ -36,6 +36,7 @@ class City implements GeographyInterface
      * @ORM\Column(length=150)
      *
      * @Groups("city_autocomplete")
+     * @Groups("search")
      */
     private $name;
 

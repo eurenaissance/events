@@ -19,6 +19,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -48,6 +49,8 @@ class Group implements EntitySlugInterface, GeographyInterface, GeocodableInterf
      *     minMessage="group.name.min_length",
      *     maxMessage="group.name.max_length"
      * )
+     *
+     * @Groups("search")
      */
     private $name;
 
@@ -127,6 +130,15 @@ class Group implements EntitySlugInterface, GeographyInterface, GeocodableInterf
         return (string) $this->name;
     }
 
+    /**
+     * @Groups("search")
+     */
+    public function getMembersCount(): int
+    {
+        // animator + memberships
+        return 1 + $this->coAnimatorMemberships->count() + $this->followerMemberships->count();
+    }
+
     public function getName(): ?string
     {
         return $this->name;
@@ -170,12 +182,6 @@ class Group implements EntitySlugInterface, GeographyInterface, GeocodableInterf
     public function getCoAnimatorMemberships(): Collection
     {
         return $this->coAnimatorMemberships;
-    }
-
-    public function getMembersCount(): int
-    {
-        // animator + memberships
-        return 1 + $this->coAnimatorMemberships->count() + $this->followerMemberships->count();
     }
 
     public function getCoAnimators(): ArrayCollection

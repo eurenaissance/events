@@ -14,6 +14,7 @@ trait EntityUuidTrait
      * @ORM\Column(type="uuid", unique=true)
      *
      * @Groups("city_autocomplete")
+     * @Groups("search")
      */
     private $uuid;
 

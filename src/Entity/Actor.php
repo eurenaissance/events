@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -54,6 +55,8 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
      *
      * @Assert\NotBlank(message="actor.first_name.not_blank", groups={"registration", "profile"})
      * @Assert\Length(max=50, maxMessage="actor.first_name.max_length", groups={"registration", "profile"})
+     *
+     * @Groups("search")
      */
     private $firstName;
 
@@ -64,6 +67,8 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
      *
      * @Assert\NotBlank(message="actor.last_name.not_blank", groups={"registration", "profile"})
      * @Assert\Length(max=50, maxMessage="actor.last_name.max_length", groups={"registration", "profile"})
+     *
+     * @Groups("search")
      */
     private $lastName;
 
