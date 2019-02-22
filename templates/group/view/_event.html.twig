@@ -18,12 +18,7 @@
             <i class="fas fa-user"></i>
         </div>
         <div class="card__user__profile">
-            {{ 'event_card.organized_by'|trans }} {{ event.creator.fullName }}
-            <br />
-            {{ 'event_card.from'|trans }}
-            <a href="{{ path('app_group_view', {'slug': event.group.slug}) }}">
-                {{ event.group.name }}
-            </a>
+            {{ 'event_card.organized_by'|trans({'%name%': event.creator.fullName}) }}
         </div>
     </div>
 </div>
