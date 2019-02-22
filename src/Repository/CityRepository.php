@@ -42,4 +42,41 @@ class CityRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function search(string $name, string $preferedCountry, int $limit = 10): iterable
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->addSelect('(CASE WHEN c.country = :preferedCountry THEN 1 ELSE 0 END) AS HIDDEN isPreferedCountry');
+        $qb->setParameter('preferedCountry', $preferedCountry);
+
+        $scoreQuery = [];
+
+        $keywords = explode(' ', $name);
+        foreach ($keywords as $i => $keyword) {
+            // Start with => score 3
+            $scoreQuery[] = '(CASE WHEN LOWER(c.name) LIKE :ks'.$i.' THEN 3 ELSE 0 END)';
+            $qb->setParameter('ks'.$i, strtolower($keyword).'%');
+
+            // Contains => score 1
+            $scoreQuery[] = '(CASE WHEN LOWER(c.name) LIKE :kc'.$i.' THEN 1 ELSE 0 END)';
+            $qb->setParameter('kc'.$i, '%'.strtolower($keyword).'%');
+        }
+
+        $qb->addSelect('('.implode(' + ', $scoreQuery).') AS score');
+        $qb->addOrderBy('isPreferedCountry', 'DESC');
+        $qb->addOrderBy('score', 'DESC');
+        $qb->addOrderBy('c.name', 'DESC');
+        $qb->setMaxResults($limit);
+
+        $data = $qb->getQuery()->getResult();
+        $results = [];
+
+        foreach ($data as $item) {
+            if ($item['score']) {
+                $results[] = $item[0];
+            }
+        }
+
+        return $results;
+    }
 }
