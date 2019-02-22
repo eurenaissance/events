@@ -7,7 +7,8 @@ parameters:
     app_country: '%env(APP_COUNTRY)%'
     app_timezone: '%env(APP_TIMEZONE)%'
     app_language_ruleset: '%env(APP_LANGUAGE_RULESET)%'
-    default_sender: { '%env(DEFAULT_SENDER_EMAIL)%': '%env(DEFAULT_SENDER_NAME)%' }
+    app_mapbox_token: '%env(MAPBOX_TOKEN)%'
+    app_default_sender: { '%env(DEFAULT_SENDER_EMAIL)%': '%env(DEFAULT_SENDER_NAME)%' }
     pattern_uuid: '[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}'
 
 services:
@@ -17,7 +18,7 @@ services:
         bind:
             string $appSecret: '%kernel.secret%'
             string $appCountry: '%app_country%'
-            array $defaultSender: '%default_sender%'
+            array $defaultSender: '%app_default_sender%'
 
     App\:
         resource: '../src/*'

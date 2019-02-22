@@ -2,6 +2,8 @@
 
 {% block title instance_configuration.partyName %}
 
+{% block javascripts encore_entry_script_tags('home') %}
+
 {% block body %}
 <div class="home">
     <div class="home__intro" style="background-image: url('{{ image_asset(instance_configuration.homeImage) }}');">
@@ -22,9 +24,11 @@
     </div>
 
     <div class="home__category">
-        <h3 class="mb-4 p-2 text-black">
+        <h3 class="mb-2 p-2 text-black">
             {{ 'home.upcoming.title'|trans }}
         </h3>
+
+        <div class="home__map mb-4" id="map"></div>
 
         <div class="row">
             {% for event in upcomingEvents %}

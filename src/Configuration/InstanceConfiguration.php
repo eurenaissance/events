@@ -43,7 +43,7 @@ class InstanceConfiguration
     {
         $this->prepareData();
 
-        return $this->data->{'get'.ucfirst($name)}();
+        return method_exists($this->data, $name) ? $this->data->{$name}() : $this->data->{'get'.ucfirst($name)}();
     }
 
     private function prepareData()

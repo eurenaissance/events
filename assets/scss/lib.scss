@@ -1,4 +1,16 @@
 /*
+ * Leaflet
+ */
+@import '~leaflet/dist/leaflet.css';
+
+.leaflet-popup-content-wrapper {
+    border-radius: 14px;
+    box-shadow: 0 2px 11px 1px rgba(194, 194, 194, 0.5);
+    padding: 10px 5px;
+    color: #555555;
+}
+
+/*
  * Customized version of Bootstrap, lososely based on the Litera theme by Bootswatch.
  */
 

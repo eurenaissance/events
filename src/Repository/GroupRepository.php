@@ -34,9 +34,11 @@ class GroupRepository extends ServiceEntityRepository
 
         $qb = $this->createApprovedQueryBuilder();
 
-        return $qb->select('g', 'a', 'e')
+        return $qb->select('g', 'a', 'e', 'cm', 'fm')
             ->leftJoin('g.events', 'e')
             ->leftJoin('g.animator', 'a')
+            ->leftJoin('g.coAnimatorMemberships', 'cm')
+            ->leftJoin('g.followerMemberships', 'fm')
             ->where($qb->expr()->in('g.id', array_column($mostActiveGroups, 'id')))
             ->getQuery()
             ->getResult()
