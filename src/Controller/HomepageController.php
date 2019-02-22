@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Configuration\InstanceConfiguration;
+use App\DataExposer\DataExposer;
 use App\Repository\EventRepository;
 use App\Repository\GroupRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,8 +15,14 @@ class HomepageController extends AbstractController
     /**
      * @Route("/", name="app_homepage", methods="GET")
      */
-    public function homepage(EventRepository $eventsRepo, GroupRepository $groupRepo): Response
-    {
+    public function homepage(
+        InstanceConfiguration $config,
+        EventRepository $eventsRepo,
+        GroupRepository $groupRepo,
+        DataExposer $exposer
+    ): Response {
+        $exposer->expose('map', $config->getHomeDisplayMap() ? $eventsRepo->findHomeMap() : []);
+
         return $this->render('homepage.html.twig', [
             'upcomingEvents' => $eventsRepo->findHomeUpcoming(),
             'mostActiveGroups' => $groupRepo->findHomeMostActive(),

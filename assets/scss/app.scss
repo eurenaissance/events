@@ -101,6 +101,27 @@
     &__category {
         margin-top: 60px;
     }
+
+    &__map {
+        height: 400px;
+
+        &__event {
+            margin: 15px 0;
+            font-family: $font-roboto-mono;
+            font-size: 12px;
+
+            a {
+                color: #000;
+                font-weight: bold;
+                font-size: 14px;
+                font-family: $font-roboto-slab;
+            }
+
+            &__date {
+                color: #999;
+            }
+        }
+    }
 }
 
 .card {
