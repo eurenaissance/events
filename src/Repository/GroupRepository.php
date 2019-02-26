@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Actor;
+use App\Entity\City;
 use App\Entity\Group;
 use App\Geography\GeographyInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -14,6 +15,24 @@ class GroupRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Group::class);
+    }
+
+    public function search(City $city, int $maxDistance = 100): iterable
+    {
+        if (!$coordinates = $city->getCoordinates()) {
+            throw new \InvalidArgumentException('Cannot find closest groups from City with no coordinates.');
+        }
+
+        return $this
+            ->createApprovedQueryBuilder()
+            ->addSelect('ST_Distance_Sphere(g.coordinates, :coordinates) as HIDDEN distance')
+            ->andWhere('ST_Distance_Sphere(g.coordinates, :coordinates) <= :maxDistance')
+            ->setParameter('coordinates', $coordinates, 'point')
+            ->setParameter('maxDistance', $maxDistance * 1000)
+            ->orderBy('distance', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     public function findHomeMostActive(int $maxResults = 3): iterable

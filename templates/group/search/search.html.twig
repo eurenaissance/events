@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% for group in results %}
+        {{ group.name }}
+        <br>
+    {% endfor %}
+{% endblock %}

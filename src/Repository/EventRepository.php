@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\City;
 use App\Entity\Event;
 use App\Entity\Group;
 use CrEOF\Spatial\PHP\Types\Geography\Point;
@@ -14,6 +15,26 @@ class EventRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Event::class);
+    }
+
+    public function search(City $city, int $maxDistance = 100, int $maxResults = 6, int $page = 1): Paginator
+    {
+        if (!$coordinates = $city->getCoordinates()) {
+            throw new \InvalidArgumentException('Cannot find closest events from City with no coordinates.');
+        }
+
+        return $this
+            ->createQueryBuilder('e')
+            ->addSelect('ST_Distance_Sphere(e.coordinates, :coordinates) as HIDDEN distance')
+            ->andWhere('ST_Distance_Sphere(e.coordinates, :coordinates) <= :maxDistance')
+            ->setParameter('coordinates', $coordinates, 'point')
+            ->setParameter('maxDistance', $maxDistance * 1000)
+            ->orderBy('distance', 'ASC')
+            ->setFirstResult($maxResults * ($page - 1))
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     public function findHomeMap(): iterable

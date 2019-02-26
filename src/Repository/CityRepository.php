@@ -24,6 +24,11 @@ class CityRepository extends ServiceEntityRepository
         return $this->findOneBy(['uuid' => $uuid]);
     }
 
+    public function findOneByName(string $name): ?City
+    {
+        return $this->findOneBy(['name' => $name]);
+    }
+
     /**
      * @param string $country
      * @param string $zipCode
