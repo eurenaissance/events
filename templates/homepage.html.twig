@@ -14,7 +14,13 @@
             {{ instance_configuration.homeIntroTitle }}
         </h2>
 
-        {% if not app.user %}
+        {% if app.user %}
+            <div class="home__intro__button">
+                <a href="{{ path('app_event_search') }}" class="btn btn-primary btn-lg">
+                    {{ 'layout.header.find_event'|trans }}
+                </a>
+            </div>
+        {% else %}
             <div class="home__intro__button">
                 <a href="{{ path('app_actor_registration_register') }}" class="btn btn-primary btn-lg">
                     {{ instance_configuration.homeIntroButton }}
@@ -23,6 +29,7 @@
         {% endif %}
     </div>
 
+    {% if upcomingEvents %}
     <div class="home__category">
         <h3 class="mb-2 p-2 text-black">
             {{ 'home.upcoming.title'|trans }}
@@ -91,7 +98,9 @@
             </a>
         </div>
     </div>
+    {% endif %}
 
+    {% if mostActiveGroups %}
     <div class="home__category">
         <h3 class="mb-4 p-2 text-black">
             {{ 'home.active.title'|trans }}
@@ -154,5 +163,6 @@
             </a>
         </div>
     </div>
+    {% endif %}
 </div>
 {% endblock %}
