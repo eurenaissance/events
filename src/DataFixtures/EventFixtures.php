@@ -157,9 +157,9 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             '+3 days',
             '+5 days',
-            'actor-cannes',
+            'actor-nice',
             'group-nice-ecology-approved',
-            'city-asnieres',
+            'city-nice',
             '345 random street'
         );
 

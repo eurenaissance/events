@@ -19,9 +19,9 @@ class CityRepository extends ServiceEntityRepository
         parent::__construct($registry, City::class);
     }
 
-    public function findOneByUuid(string $uuid): ?City
+    public function findOneByUuid(?string $uuid): ?City
     {
-        return $this->findOneBy(['uuid' => $uuid]);
+        return $uuid ? $this->findOneBy(['uuid' => $uuid]) : null;
     }
 
     /**
@@ -65,7 +65,7 @@ class CityRepository extends ServiceEntityRepository
         $qb->addSelect('('.implode(' + ', $scoreQuery).') AS score');
         $qb->addOrderBy('isPreferedCountry', 'DESC');
         $qb->addOrderBy('score', 'DESC');
-        $qb->addOrderBy('c.name', 'DESC');
+        $qb->addOrderBy('c.name', 'ASC');
         $qb->setMaxResults($limit);
 
         $data = $qb->getQuery()->getResult();

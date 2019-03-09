@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Event;
 use App\Entity\Group;
+use App\Geography\GeographyInterface;
 use CrEOF\Spatial\PHP\Types\Geography\Point;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -16,14 +17,22 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    public function findHomeMap(): iterable
+    public function createApprovedQueryBuilder($alias)
     {
-        $events = $this
-            ->createQueryBuilder('e')
-            ->select('e.slug', 'e.name', 'e.beginAt', 'g.name AS group', 'e.coordinates', 'e.coordinatesAccuracy')
+        return $this
+            ->createQueryBuilder($alias)
+            ->addSelect('g')
             ->leftJoin('e.group', 'g')
             ->where('g.approvedAt IS NOT NULL')
             ->andWhere('g.refusedAt IS NULL')
+        ;
+    }
+
+    public function findHomeMap(): iterable
+    {
+        $events = $this
+            ->createApprovedQueryBuilder('e')
+            ->select('e.slug', 'e.name', 'e.beginAt', 'g.name AS group', 'e.coordinates', 'e.coordinatesAccuracy')
             ->andWhere('e.beginAt > CURRENT_TIMESTAMP()')
             ->orderBy('e.beginAt', 'ASC')
             ->getQuery()
@@ -76,13 +85,9 @@ class EventRepository extends ServiceEntityRepository
     public function findHomeUpcoming(int $maxResults = 3): iterable
     {
         return $this
-            ->createQueryBuilder('e')
-            ->leftJoin('e.group', 'g')
-            ->addSelect('g')
+            ->createApprovedQueryBuilder('e')
             ->leftJoin('e.creator', 'c')
             ->addSelect('c')
-            ->where('g.approvedAt IS NOT NULL')
-            ->andWhere('g.refusedAt IS NULL')
             ->andWhere('e.beginAt > CURRENT_TIMESTAMP()')
             ->orderBy('e.beginAt', 'ASC')
             ->setMaxResults($maxResults)
@@ -94,9 +99,7 @@ class EventRepository extends ServiceEntityRepository
     public function findOneBySlug(string $slug): ?Event
     {
         return $this
-            ->createQueryBuilder('e')
-            ->leftJoin('e.group', 'g')
-            ->addSelect('g')
+            ->createApprovedQueryBuilder('e')
             ->leftJoin('e.creator', 'c')
             ->addSelect('c')
             ->where('e.slug = :slug')
@@ -109,9 +112,7 @@ class EventRepository extends ServiceEntityRepository
     public function findUpcoming(Group $group, int $maxResults = 10): array
     {
         return $this
-            ->createQueryBuilder('e')
-            ->leftJoin('e.group', 'g')
-            ->addSelect('g')
+            ->createApprovedQueryBuilder('e')
             ->leftJoin('e.creator', 'c')
             ->addSelect('c')
             ->where('e.group = :group')
@@ -127,9 +128,7 @@ class EventRepository extends ServiceEntityRepository
     public function findFinished(Group $group, int $maxResults = 10, int $page = 1): Paginator
     {
         $qb = $this
-            ->createQueryBuilder('e')
-            ->leftJoin('e.group', 'g')
-            ->addSelect('g')
+            ->createApprovedQueryBuilder('e')
             ->leftJoin('e.creator', 'c')
             ->addSelect('c')
             ->where('e.group = :group')
@@ -141,5 +140,52 @@ class EventRepository extends ServiceEntityRepository
         ;
 
         return new Paginator($qb);
+    }
+
+    public function search(GeographyInterface $around, string $term, int $maxDistance = 150, int $limit = 30): iterable
+    {
+        $qb = $this->createApprovedQueryBuilder('e');
+        $qb->addSelect('ST_Distance_Sphere(e.coordinates, :coordinates) as HIDDEN distance')
+            ->andWhere('ST_Distance_Sphere(e.coordinates, :coordinates) <= :maxDistance')
+            ->setParameter('coordinates', $around->getCoordinates(), 'point')
+            ->setParameter('maxDistance', $maxDistance * 1000)
+            ->andWhere('e.beginAt > CURRENT_TIMESTAMP()')
+            ->addOrderBy('distance', 'ASC')
+            ->setMaxResults($limit)
+        ;
+
+        $scoreQuery = [];
+
+        if ($term) {
+            $keywords = explode(' ', $term);
+            foreach ($keywords as $i => $keyword) {
+                // Start with => score 3
+                $scoreQuery[] = '(CASE WHEN LOWER(e.name) LIKE :ks'.$i.' THEN 3 ELSE 0 END)';
+                $qb->setParameter('ks'.$i, strtolower($keyword).'%');
+
+                // Contains => score 1
+                $scoreQuery[] = '(CASE WHEN LOWER(e.name) LIKE :kc'.$i.' THEN 1 ELSE 0 END)';
+                $qb->setParameter('kc'.$i, '%'.strtolower($keyword).'%');
+            }
+
+            $qb->addSelect('('.implode(' + ', $scoreQuery).') AS score');
+        } else {
+            $qb->addSelect('1 AS score');
+        }
+
+        $qb->addOrderBy('score', 'DESC');
+        $qb->addOrderBy('e.beginAt', 'ASC');
+        $qb->addOrderBy('e.name', 'ASC');
+
+        $data = $qb->getQuery()->getResult();
+        $results = [];
+
+        foreach ($data as $item) {
+            if ($item['score']) {
+                $results[] = $item[0];
+            }
+        }
+
+        return $results;
     }
 }

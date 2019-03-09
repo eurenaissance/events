@@ -13,6 +13,7 @@ use App\Validator\IsGeocoded\IsGeocoded;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -41,6 +42,8 @@ class Event implements EntitySlugInterface, GeographyInterface, GeocodableInterf
      *     minMessage="event.name.min_length",
      *     maxMessage="event.name.max_length"
      * )
+     *
+     * @Groups("search")
      */
     private $name;
 
@@ -66,6 +69,8 @@ class Event implements EntitySlugInterface, GeographyInterface, GeocodableInterf
      *
      * @Assert\NotBlank(message="event.begin_at.not_blank")
      * @Assert\Date(message="event.begin_at.invalid")
+     *
+     * @Groups("search")
      */
     private $beginAt;
 
@@ -99,6 +104,8 @@ class Event implements EntitySlugInterface, GeographyInterface, GeocodableInterf
      *
      * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     *
+     * @Groups("search")
      */
     private $group;
 
@@ -125,6 +132,14 @@ class Event implements EntitySlugInterface, GeographyInterface, GeocodableInterf
         }
 
         return sprintf('%s - %s', $this->beginAt->format('Y-m-d'), $this->name);
+    }
+
+    /**
+     * @Groups("search")
+     */
+    public function getCreatorName(): string
+    {
+        return $this->creator->getFullName();
     }
 
     public function getName(): ?string
