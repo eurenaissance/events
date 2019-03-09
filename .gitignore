@@ -1,5 +1,5 @@
-/storage/public/*
-!/storage/public/fixtures
+/storage/public/uploads/*
+!/storage/public/uploads/.gitignore
 
 ###> symfony/framework-bundle ###
 .env.local

@@ -1,0 +1,2 @@
+"https://{default}/": { type: upstream, upstream: "eu-renaissance-events:http" }
+"http://{default}/": { type: redirect, to: "https://{default}/" }

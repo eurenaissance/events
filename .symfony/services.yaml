@@ -1,0 +1,16 @@
+db:
+    type: postgresql:10
+    disk: 2048
+    configuration:
+        extensions:
+            - fuzzystrmatch
+            - postgis
+            - postgis_topology
+            - postgis_tiger_geocoder
+
+redis:
+    type: redis:3.2
+
+rabbitmq:
+    type: rabbitmq:3.7
+    disk: 1024

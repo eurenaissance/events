@@ -1,0 +1,53 @@
+name: eu-renaissance-events
+
+type: php:7.3
+disk: 1024
+
+runtime:
+    extensions:
+        - apcu
+        - sodium
+        - mbstring
+        - json
+        - pdo_pgsql
+
+relationships:
+    database: "db:postgresql"
+    redis: "redis:redis"
+
+build:
+    flavor: none
+
+dependencies:
+    nodejs:
+        yarn: "*"
+
+web:
+    locations:
+        "/":
+            root: "public"
+            expires: 1h
+            passthru: "/index.php"
+
+mounts:
+    "/var": "shared:files/var"
+    "/storage/public/uploads": "shared:files/storage/public/uploads"
+
+hooks:
+    build: |
+        set -x -e
+
+        curl -s https://get.symfony.com/cloud/configurator | (>&2 bash)
+        (>&2 symfony-build)
+
+    deploy: |
+        set -x -e
+
+        (>&2 symfony-deploy)
+
+workers:
+    enqueue:
+        size: M
+        disk: 256
+        commands:
+            start: php bin/console enqueue:consume default --setup-broker -vv
