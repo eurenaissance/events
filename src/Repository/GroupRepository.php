@@ -81,24 +81,27 @@ class GroupRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findClosestFrom(GeographyInterface $entity, int $maxResults = 3, int $maxDistance = 150): array
+    public function findClosestFrom(GeographyInterface $entity, int $maxResults = 3, ?int $maxDistance = 150): array
     {
         if (!$coordinates = $entity->getCoordinates()) {
             throw new \InvalidArgumentException('Cannot find closest groups from entity with no coordinates.');
         }
 
-        return $this
+        $qb = $this
             ->createApprovedQueryBuilder('g')
             ->innerJoin('g.city', 'c')
             ->addSelect('ST_Distance_Sphere(c.coordinates, :coordinates) as HIDDEN distance')
-            ->andWhere('ST_Distance_Sphere(c.coordinates, :coordinates) <= :maxDistance')
             ->setParameter('coordinates', $coordinates, 'point')
-            ->setParameter('maxDistance', $maxDistance * 1000)
             ->orderBy('distance', 'ASC')
             ->setMaxResults($maxResults)
-            ->getQuery()
-            ->getResult()
         ;
+
+        if ($maxDistance) {
+            $qb->andWhere('ST_Distance_Sphere(c.coordinates, :coordinates) <= :maxDistance')
+                ->setParameter('maxDistance', $maxDistance * 1000);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     public function findWithoutFilters(array $criteria): array

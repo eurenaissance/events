@@ -1,11 +1,122 @@
-<html>
-    <body>
-    {% block body '' %}
+{% set instance_configuration = get_instance_configuration() %}
 
-    {% block footer %}
-        <br/>
-        <hr>
-        <a href="{{ url('app_homepage') }}">Homepage</a>
-    {% endblock %}
-    </body>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        body, td {
+            font-family: 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif;
+            font-size: 14px;
+        }
+
+        body {
+            background-color: #fafafa;
+            color: #222222;
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: none;
+            -ms-text-size-adjust: none;
+        }
+    </style>
+</head>
+<body style="margin:0; padding:0; -webkit-text-size-adjust:none;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #fafafa">
+    <tbody>
+    <tr>
+        <td align="center" bgcolor="#fafafa">
+            <table cellpadding="0" cellspacing="0" border="0">
+                <tbody>
+                <tr>
+                    <td width="640" height="10"></td>
+                </tr>
+
+                {# Header #}
+                <tr>
+                    <td width="640">
+                        <table width="640" cellpadding="0" cellspacing="0" border="0" bgcolor="#fafafa">
+                            <tbody>
+                            <tr>
+                                <td width="30"></td>
+                                <td width="580" valign="middle" align="center">
+                                    <h1 style="text-align: center; font-size: 24px;">
+                                        <a href="{{ url('app_homepage') }}" style="color: #222222; text-decoration: none;">
+                                            {{ instance_configuration.partyName }}
+                                        </a>
+                                    </h1>
+                                </td>
+                                <td width="30"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="640" height="3" bgcolor="#e5e5e5"></td>
+                </tr>
+
+                {# Content #}
+                <tr>
+                    <td width="640" height="10" bgcolor="#ffffff"></td>
+                </tr>
+                <tr>
+                    <td width="640" bgcolor="#ffffff">
+                        <table width="640" cellpadding="0" cellspacing="0" border="0">
+                            <tbody>
+                            <tr>
+                                <td width="30"></td>
+                                <td width="580">
+                                    {% block content '' %}
+                                </td>
+                                <td width="30"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="640" height="10" bgcolor="#ffffff"></td>
+                </tr>
+
+                {# Footer #}
+                <tr>
+                    <td width="640" height="40" bgcolor="#fafafa"></td>
+                </tr>
+                <tr>
+                    <td width="640">
+                        <table width="640" cellpadding="0" cellspacing="0" border="0" bgcolor="#fafafa">
+                            <tbody>
+                            <tr>
+                                <td width="30"></td>
+                                <td width="580" valign="middle" align="center">
+                                    <div style="text-align: center; font-size: 11px;">
+                                        {% block unsubscribe_link %}
+                                            <a href="{{ url('app_actor_notifications_manage', {'uuid': app.user.uuid}) }}" style="color: #222222; text-decoration: none;">
+                                                {{ 'mails.footer.unsubscribe'|trans }}
+                                            </a>
+                                            <br />
+                                            <br />
+                                        {% endblock %}
+                                        <div style="color: #999999; font-size: 11px;">
+                                            © {{ instance_configuration.partyName }}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td width="30"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="640" height="60"></td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
 </html>

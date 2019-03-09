@@ -30,10 +30,18 @@ class HomepageController extends AbstractController
     }
 
     /**
-     * @Route("/design", name="app_design", methods="GET")
+     * @Route("/design", methods="GET")
      */
     public function design(): Response
     {
         return $this->render('design.html.twig');
+    }
+
+    /**
+     * @Route("/mail", methods="GET")
+     */
+    public function mail(): Response
+    {
+        return $this->render('mail.html.twig');
     }
 }

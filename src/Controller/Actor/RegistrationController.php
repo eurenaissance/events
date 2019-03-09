@@ -138,7 +138,7 @@ class RegistrationController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ACTOR');
 
         return $this->render('actor/registration/confirmed.html.twig', [
-            'closest_groups' => $groupRepository->findClosestFrom($this->getUser(), 3),
+            'closest_groups' => $groupRepository->findClosestFrom($this->getUser(), 3, null),
         ]);
     }
 }

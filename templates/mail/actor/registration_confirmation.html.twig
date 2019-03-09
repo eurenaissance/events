@@ -1,7 +1,12 @@
 {% extends 'mail/base.html.twig' %}
 
-{% block body %}
-    {{ 'common.welcome'|trans({ '%actor%': actor.firstName }) }}
-    <br>
-    {{ 'mail.actor.registration_confirmation.body'|trans({ '%url%': url('app_actor_registration_confirm', { uuid: token }) })|raw }}
+{% block unsubscribe_link '' %}
+
+{% block content %}
+    <p>
+        {{ 'mails.hello_named'|trans({ '%name%': actor.firstName }) }}
+    </p>
+    <p>
+        {{ 'mail.actor.registration_confirmation.body'|trans({ '%url%': url('app_actor_registration_confirm', { uuid: token }) })|raw }}
+    </p>
 {% endblock %}

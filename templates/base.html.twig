@@ -67,14 +67,19 @@
                             <a href="{{ path('app_group_search') }}">
                                 {{ 'layout.header.find_group'|trans }}
                             </a>
-                            {% if is_granted('GROUP_CREATE') %}
-                                <a href="{{ path('app_group_creation_create') }}" class="text-primary">
-                                    {{ 'layout.header.create_group'|trans }}
-                                </a>
-                            {% endif %}
                         </nav>
                         <nav class="header__user">
                             {% if app.user %}
+                                {% if app.user.animatedGroups|length > 0 or app.user.coAnimatorMemberships|length > 0 %}
+                                    <a href="{{ path('app_event_create_choose_group') }}" class="header__user__cta">
+                                        {{ 'layout.header.cta.organize_event'|trans }}
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('app_group_creation_create') }}" class="header__user__cta">
+                                        {{ 'layout.header.cta.create_group'|trans }}
+                                    </a>
+                                {% endif %}
+
                                 {% if is_granted('ROLE_ACTOR') %}
                                     <a href="{{ path('app_actor_profile_edit') }}">
                                         {{ app.user.fullName }}
@@ -95,15 +100,74 @@
                                     </a>
                                 {% endif %}
                             {% else %}
+                                <a href="{{ path('app_actor_registration_register') }}" class="header__user__cta">
+                                    {{ instance_configuration.homeIntroButton }}
+                                </a>
                                 <a href="{{ path('app_login') }}">
                                     {{ 'layout.header.user.login'|trans }}
                                 </a>
-                                <a href="{{ path('app_actor_registration_register') }}">
-                                    {{ 'layout.header.user.register'|trans }}
-                                </a>
                             {% endif %}
                         </nav>
+                        <div class="header__mobile">
+                            <button class="header__mobile__button header__mobile__button--open"
+                                    id="mobile-menu-open">
+                                <i class="fas fa-bars"></i>
+                            </button>
+
+                            <button class="header__mobile__button header__mobile__button--close"
+                                    id="mobile-menu-close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
                     </div>
+
+                    <nav class="header__mobile-menu" id="mobile-menu">
+                        {% if app.user %}
+                            {% if is_granted('ROLE_ACTOR') %}
+                                <a href="{{ path('app_actor_profile_edit') }}">
+                                    {{ app.user.fullName }}
+                                </a>
+                            {% else %}
+                                <a href="{{ path('sonata_admin_dashboard') }}">
+                                    {{ 'layout.header.admin.dashboard'|trans }}
+                                </a>
+                            {% endif %}
+
+                            {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                                <a href="{{ path('app_admin_impersonation_exit') }}">
+                                    {{ 'layout.header.admin.quit_impersonation'|trans }}
+                                </a>
+                            {% else %}
+                                <a href="{{ path('app_logout') }}">
+                                    {{ 'layout.header.user.logout'|trans }}
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{{ path('app_login') }}">
+                                {{ 'layout.header.user.login'|trans }}
+                            </a>
+                            <a href="{{ path('app_actor_registration_register') }}">
+                                {{ 'layout.header.user.register'|trans }}
+                            </a>
+                        {% endif %}
+
+                        <hr />
+
+                        {% if is_granted('GROUP_CREATE') %}
+                            <a href="{{ path('app_group_creation_create') }}">
+                                {{ 'layout.header.create_group'|trans }}
+                            </a>
+                        {% endif %}
+
+                        <a href="{{ path('app_event_search') }}">
+                            {{ 'layout.header.find_event'|trans }}
+                        </a>
+                        <a href="{{ path('app_group_search') }}">
+                            {{ 'layout.header.find_group'|trans }}
+                        </a>
+
+                        <hr />
+                    </nav>
                 </div>
             </header>
         {% endblock %}
@@ -151,6 +215,7 @@
         {% endblock %}
 
         <script type="application/json" id="exposed_data">{% block exposed_data data_exposer_json() %}</script>
+        {{ encore_entry_script_tags('global') }}
         {% block javascripts %}{% endblock %}
     </body>
 </html>

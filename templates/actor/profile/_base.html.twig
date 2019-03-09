@@ -16,17 +16,21 @@
             <ul class="nav nav-pills flex-column">
                 <li class="nav-item">
                     <a class="nav-link {% block item_profile_edit '' %}" href="{{ path('app_actor_profile_edit') }}">
-                        Account
+                        {{ 'profile.menu.account'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% block item_profile_password '' %}" href="{{ path('app_actor_profile_change_password') }}">
-                        Password
+                        {{ 'profile.menu.password'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% block item_profile_notifications '' %}" href="">
-                        Notifications
+                    <a class="nav-link {% block item_profile_notifications '' %}"
+                       href="{{ path('app_actor_notifications_manage', {'uuid': app.user.uuid}) }}" target="_blank">
+                        {{ 'profile.menu.notifications'|trans }}
+                        <small class="ml-1">
+                            <i class="fas fa-external-link-alt"></i>
+                        </small>
                     </a>
                 </li>
             </ul>
