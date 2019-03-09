@@ -18,7 +18,7 @@ class AdministratorSetupController extends AbstractController
     public function setup(Request $request, AdministratorRepository $administratorRepository): Response
     {
         if ($administratorRepository->hasAdministrator()) {
-            throw $this->createNotFoundException('Setup is now disabled.');
+            return $this->redirectToRoute('app_admin_login', ['from_setup' => '1']);
         }
 
         $form = $this->createForm(AdministratorSetupType::class, $administrator = new Administrator());
@@ -29,7 +29,7 @@ class AdministratorSetupController extends AbstractController
             $manager->persist($administrator);
             $manager->flush();
 
-            return $this->redirectToRoute('app_admin_login');
+            return $this->redirectToRoute('app_admin_login', ['from_setup' => '1']);
         }
 
         return $this->render('admin/setup/form.html.twig', [

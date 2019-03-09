@@ -24,6 +24,7 @@ use App\Repository\ConfigurationRepository;
  * @method getEmailSender
  * @method getEmailSenderName
  * @method getEmailContact
+ * @method getUpdatedAt
  */
 class InstanceConfiguration
 {

@@ -24,7 +24,8 @@ class AdministratorSetupType extends AbstractType
     {
         $builder
             ->add('emailAddress', EmailType::class, [
-                'label' => 'administrator.email_address',
+                'label' => 'setup.form.email.label',
+                'help' => 'setup.form.email.help',
             ])
             ->addEventSubscriber($this->passwordEncoderListener)
             ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {

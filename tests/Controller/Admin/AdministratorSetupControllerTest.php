@@ -34,14 +34,14 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Setup', [
+        $this->client->submitForm('setup.form.button', [
             'emailAddress' => $email,
             'plainPassword' => [
                 'first' => $password,
                 'second' => $password,
             ],
         ]);
-        $this->assertIsRedirectedTo('/admin/login');
+        $this->assertIsRedirectedTo('/admin/login?from_setup=1');
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
@@ -83,7 +83,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $this->client->request('GET', '/admin/setup');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('Setup', [
+        $this->client->submitForm('setup.form.button', [
             'emailAddress' => $email,
             'plainPassword' => [
                 'first' => $firstPassword,
@@ -97,7 +97,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
     public function testSetupIsDisabledForAnonymous(): void
     {
         $this->client->request('GET', '/admin/setup');
-        $this->assertNotFoundResponse();
+        $this->assertIsRedirectedTo('/admin/login?from_setup=1');
     }
 
     public function testSetupIsDisabledForActors(): void
@@ -105,7 +105,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/admin/setup');
-        $this->assertNotFoundResponse();
+        $this->assertIsRedirectedTo('/admin/login?from_setup=1');
     }
 
     public function testSetupIsDisabledForAdministrators(): void
@@ -113,6 +113,6 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/admin/setup');
-        $this->assertNotFoundResponse();
+        $this->assertIsRedirectedTo('/admin/login?from_setup=1');
     }
 }

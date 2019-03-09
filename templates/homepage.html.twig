@@ -32,8 +32,8 @@
 
         <div class="row">
             {% for event in upcomingEvents %}
-                <div class="col-4">
-                    <div class="card card--event">
+                <div class="col-lg-4">
+                    <div class="card card--event mb-3">
                         <h4 class="card__title">
                             <a href="{{ path('app_event_view', {'slug': event.slug}) }}">
                                 {{ event.name }}
@@ -99,8 +99,8 @@
 
         <div class="row">
             {% for group in mostActiveGroups %}
-                <div class="col-4">
-                    <div class="card card--group">
+                <div class="col-lg-4">
+                    <div class="card card--group mb-3">
                         <h4 class="card__title">
                             <a href="{{ path('app_group_view', {'slug': group.slug}) }}">
                                 {{ group.name }}

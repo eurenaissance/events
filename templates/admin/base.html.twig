@@ -25,21 +25,21 @@
                 <span>Dashboard</span>
             </a>
         </li>
+        <li>
+            <a href="{{ path('app_homepage') }}">
+                <i class="fa fa-reply"></i>
+                <span>Back to the platform</span>
+            </a>
+        </li>
     </ul>
 {% endblock %}
 
 {% block side_bar_after_nav %}
     <ul class="sidebar-menu">
         <li>
-            <a href="{{ path('app_homepage') }}">
-                <i class="fa fa-reply"></i>
-                <span>Homepage</span>
-            </a>
-        </li>
-        <li>
             <a href="{{ path('app_admin_logout') }}">
                 <i class="fa fa-sign-out"></i>
-                <span>Sign out</span>
+                <span>Log out</span>
             </a>
         </li>
     </ul>
