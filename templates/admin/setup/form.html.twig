@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block page_title 'Platform setup' %}
+{% block page_title 'setup.title'|trans %}
 
 {% block intro %}
     <div class="intro">
         <div class="container">
             <h2 class="intro__title">
-                Platform setup
+                {{ 'setup.title'|trans }}
             </h2>
 
-            Configure the platform to match your needs
+            {{ 'setup.subtitle'|trans }}
         </div>
     </div>
 {% endblock %}
@@ -23,7 +23,7 @@
             {{ form_row(form.plainPassword) }}
 
             <button type="submit" class="btn btn-block btn-primary">
-                Setup
+                {{ 'setup.form.button'|trans }}
             </button>
 
             {{ form_end(form) }}

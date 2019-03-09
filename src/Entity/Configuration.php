@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Util\EntityIdTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -190,6 +191,20 @@ class Configuration
      */
     private $emailContact;
 
+    /**
+     * @var \DateTimeInterface
+     *
+     * @ORM\Column(type="datetime")
+     *
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updatedAt;
+
+    public function __construct()
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
     public function getPartyName(): ?string
     {
         return $this->partyName;
@@ -368,5 +383,10 @@ class Configuration
     public function setEmailContact(?string $emailContact)
     {
         $this->emailContact = $emailContact;
+    }
+
+    public function getUpdatedAt(): \DateTimeInterface
+    {
+        return $this->updatedAt;
     }
 }

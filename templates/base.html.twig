@@ -56,7 +56,7 @@
                 <div class="header__row">
                     <div class="header__logo">
                         <a href="{{ path('app_homepage') }}">
-                            <img src="{{ image_asset(instance_configuration.partyLogo) }}" />
+                            <img src="{{ image_asset(instance_configuration.partyLogo, {'h': 100, 'c': instance_configuration.updatedAt.format('U')}) }}" />
                         </a>
                     </div>
                     <nav class="header__search">

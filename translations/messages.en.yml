@@ -37,6 +37,24 @@ layout:
         contact: Contact
 
 
+# Setup
+#########################################
+
+setup:
+    title: Platform setup
+    subtitle: Configure the platform and start organizing events today.
+    form:
+        email:
+            label: Administrator e-mail address
+            help: |
+                This will be the first administration account created.
+                It will allow you to finalize the configuration of the platform.
+        button: Setup
+    success: |
+        A first administration account was successfully created.
+        You can now use it to configure the platform to your needs.
+
+
 # Home
 #########################################
 

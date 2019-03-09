@@ -31,6 +31,10 @@ class ImageProviderExtension extends AbstractExtension
             $filters['fm'] = 'pjpg';
         }
 
+        if (!empty($filters['c'])) {
+            $filters['c'] = md5($filters['c']);
+        }
+
         $filters['s'] = SignatureFactory::create($this->secret)->generateSignature($path, $filters);
         $filters['path'] = $path;
 

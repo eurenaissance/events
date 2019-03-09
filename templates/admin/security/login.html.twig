@@ -3,8 +3,14 @@
 {% block title %}Administration login{% endblock %}
 
 {% block login_wrapper %}
+    {% if app.request.query.get('from_setup') %}
+        <div class="alert alert-success">
+            {{ 'setup.success'|trans }}
+        </div>
+    {% endif %}
+
     {% if error %}
-        <div class="alert alert-danger alert-error">
+        <div class="alert alert-danger">
             {{ error.messageKey|trans(error.messageData, 'security') }}
         </div>
     {% endif %}
