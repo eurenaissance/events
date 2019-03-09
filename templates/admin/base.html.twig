@@ -1,5 +1,7 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
 
+{% set instance_configuration = get_instance_configuration() %}
+
 {% block sonata_top_nav_menu_user_block '' %}
 
 {% block stylesheets %}
@@ -11,7 +13,7 @@
 
 {% block logo %}
     <a class="logo" href="{{ path('sonata_admin_dashboard') }}">
-        {{ include('_components/logo.html.twig') }}
+        {{ instance_configuration.partyName }}
     </a>
 {% endblock %}
 
