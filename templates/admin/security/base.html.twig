@@ -14,10 +14,9 @@
         {% block login_box_header %}
             <div class="login-logo">
                 <a href="{{ path('sonata_admin_dashboard') }}">
-                    <div>
-                        {{ include('_components/logo.html.twig') }}
-                    </div>
-                    <span>Administration</span>
+                    <strong>{{ instance_configuration.partyName }}</strong>
+                    <br />
+                    <small>Administration</small>
                 </a>
             </div>
         {% endblock %}

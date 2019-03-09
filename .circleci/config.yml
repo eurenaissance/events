@@ -43,7 +43,7 @@ jobs:
               environment:
                   POSTGRES_DB: mobilisation_eu
                   POSTGRES_USER: mobilisation_eu
-                  POSTGRES_PASSWOR: mobilisation_eu
+                  POSTGRES_PASSWORD: mobilisation_eu
         working_directory: ~/app
         environment:
             APP_ENV: test
