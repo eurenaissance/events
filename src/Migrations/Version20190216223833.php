@@ -9,9 +9,6 @@ final class Version20190216223833 extends AbstractMigration
 {
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE EXTENSION IF NOT EXISTS postgis;');
-        $this->addSql('CREATE EXTENSION IF NOT EXISTS postgis_topology;');
-
         $this->addSql('CREATE SEQUENCE actor_confirm_tokens_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE actor_reset_password_tokens_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE administrators_id_seq INCREMENT BY 1 MINVALUE 1 START 1');

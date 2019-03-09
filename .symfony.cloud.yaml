@@ -3,18 +3,24 @@ name: eu-renaissance-events
 type: php:7.3
 disk: 1024
 
-dependencies:
-    nodejs:
-        yarn: "*"
-
 runtime:
     extensions:
         - apcu
+        - sodium
         - mbstring
         - json
+        - pdo_pgsql
+
+relationships:
+    database: "db:postgresql"
+    redis: "redis:redis"
 
 build:
     flavor: none
+
+dependencies:
+    nodejs:
+        yarn: "*"
 
 web:
     locations:
@@ -25,7 +31,7 @@ web:
 
 mounts:
     "/var": "shared:files/var"
-    "/storage": "shared:files/storage"
+    "/storage/public/uploads": "shared:files/storage/public/uploads"
 
 hooks:
     build: |
@@ -38,3 +44,10 @@ hooks:
         set -x -e
 
         (>&2 symfony-deploy)
+
+workers:
+    enqueue:
+        size: M
+        disk: 256
+        commands:
+            start: php bin/console enqueue:consume default --setup-broker -vv
