@@ -51,60 +51,62 @@
         </script>
     </head>
     <body>
-        <header class="header">
-            <div class="container">
-                <div class="header__row">
-                    <div class="header__logo">
-                        <a href="{{ path('app_homepage') }}">
-                            <img src="{{ image_asset(instance_configuration.partyLogo, {'h': 100, 'c': instance_configuration.updatedAt.format('U')}) }}" />
-                        </a>
-                    </div>
-                    <nav class="header__search">
-                        <a href="{{ path('app_event_search') }}">
-                            {{ 'layout.header.find_event'|trans }}
-                        </a>
-                        <a href="{{ path('app_group_search') }}">
-                            {{ 'layout.header.find_group'|trans }}
-                        </a>
-                        {% if is_granted('GROUP_CREATE') %}
-                            <a href="{{ path('app_group_creation_create') }}" class="text-primary">
-                                {{ 'layout.header.create_group'|trans }}
+        {% block header %}
+            <header class="header">
+                <div class="container">
+                    <div class="header__row">
+                        <div class="header__logo">
+                            <a href="{{ path('app_homepage') }}">
+                                <img src="{{ image_asset(instance_configuration.partyLogo, {'h': 100, 'c': instance_configuration.updatedAt.format('U')}) }}" />
                             </a>
-                        {% endif %}
-                    </nav>
-                    <nav class="header__user">
-                        {% if app.user %}
-                            {% if is_granted('ROLE_ACTOR') %}
-                                <a href="{{ path('app_actor_profile_edit') }}">
-                                    {{ app.user.fullName }}
+                        </div>
+                        <nav class="header__search">
+                            <a href="{{ path('app_event_search') }}">
+                                {{ 'layout.header.find_event'|trans }}
+                            </a>
+                            <a href="{{ path('app_group_search') }}">
+                                {{ 'layout.header.find_group'|trans }}
+                            </a>
+                            {% if is_granted('GROUP_CREATE') %}
+                                <a href="{{ path('app_group_creation_create') }}" class="text-primary">
+                                    {{ 'layout.header.create_group'|trans }}
                                 </a>
                             {% endif %}
+                        </nav>
+                        <nav class="header__user">
+                            {% if app.user %}
+                                {% if is_granted('ROLE_ACTOR') %}
+                                    <a href="{{ path('app_actor_profile_edit') }}">
+                                        {{ app.user.fullName }}
+                                    </a>
+                                {% endif %}
 
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <a href="{{ path('sonata_admin_dashboard') }}">
-                                    {{ 'layout.header.admin.dashboard'|trans }}
-                                </a>
-                            {% elseif is_granted('ROLE_PREVIOUS_ADMIN') %}
-                                <a href="{{ path('app_admin_impersonation_exit') }}">
-                                    {{ 'layout.header.admin.quit_impersonation'|trans }}
-                                </a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('sonata_admin_dashboard') }}">
+                                        {{ 'layout.header.admin.dashboard'|trans }}
+                                    </a>
+                                {% elseif is_granted('ROLE_PREVIOUS_ADMIN') %}
+                                    <a href="{{ path('app_admin_impersonation_exit') }}">
+                                        {{ 'layout.header.admin.quit_impersonation'|trans }}
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('app_logout') }}">
+                                        {{ 'layout.header.user.logout'|trans }}
+                                    </a>
+                                {% endif %}
                             {% else %}
-                                <a href="{{ path('app_logout') }}">
-                                    {{ 'layout.header.user.logout'|trans }}
+                                <a href="{{ path('app_login') }}">
+                                    {{ 'layout.header.user.login'|trans }}
+                                </a>
+                                <a href="{{ path('app_actor_registration_register') }}">
+                                    {{ 'layout.header.user.register'|trans }}
                                 </a>
                             {% endif %}
-                        {% else %}
-                            <a href="{{ path('app_login') }}">
-                                {{ 'layout.header.user.login'|trans }}
-                            </a>
-                            <a href="{{ path('app_actor_registration_register') }}">
-                                {{ 'layout.header.user.register'|trans }}
-                            </a>
-                        {% endif %}
-                    </nav>
+                        </nav>
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>
+        {% endblock %}
 
         {% block intro '' %}
 
@@ -122,29 +124,31 @@
             {% block body '' %}
         </div>
 
-        <footer class="footer">
-            <div class="container">
-                <div class="footer__row">
-                    <div class="footer__copyright">
-                        © {{ instance_configuration.partyName }}
-                    </div>
-                    <div class="footer__links">
-                        <a href="">
-                            {{ 'layout.footer.legalities'|trans }}
-                        </a>
-                        <a href="">
-                            {{ 'layout.footer.terms'|trans }}
-                        </a>
-                        <a href="">
-                            {{ 'layout.footer.privacy'|trans }}
-                        </a>
-                        <a href="">
-                            {{ 'layout.footer.contact'|trans }}
-                        </a>
+        {% block footer %}
+            <footer class="footer">
+                <div class="container">
+                    <div class="footer__row">
+                        <div class="footer__copyright">
+                            © {{ instance_configuration.partyName }}
+                        </div>
+                        <div class="footer__links">
+                            <a href="">
+                                {{ 'layout.footer.legalities'|trans }}
+                            </a>
+                            <a href="">
+                                {{ 'layout.footer.terms'|trans }}
+                            </a>
+                            <a href="">
+                                {{ 'layout.footer.privacy'|trans }}
+                            </a>
+                            <a href="">
+                                {{ 'layout.footer.contact'|trans }}
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </footer>
+            </footer>
+        {% endblock %}
 
         <script type="application/json" id="exposed_data">{% block exposed_data data_exposer_json() %}</script>
         {% block javascripts %}{% endblock %}
