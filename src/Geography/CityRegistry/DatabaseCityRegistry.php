@@ -9,7 +9,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class DatabaseCityRegistry implements CityRegistryInterface
 {
-    private const CACHE_TTL = 3600 * 24 * 30; // 1 month
+    private const CACHE_TTL = 3600 * 24; // 1 day
 
     private $cache;
     private $repository;
