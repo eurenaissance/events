@@ -2,6 +2,7 @@
 
 namespace App\Controller\Event;
 
+use App\Entity\Actor;
 use App\Entity\Event;
 use App\Entity\Group;
 use App\Event\CreationHandler;
@@ -19,7 +20,26 @@ class CreationController extends AbstractController
      */
     public function choose(): Response
     {
-        throw new \LogicException('To implement');
+        /** @var Actor $user */
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_homepage');
+        }
+
+        $availableGroups = [];
+        foreach (array_merge($user->getCoAnimatedGroups()->toArray(), $user->getAnimatedGroups()->toArray()) as $group) {
+            if ($this->isGranted('EVENT_CREATE', $group)) {
+                $availableGroups[] = $group;
+            }
+        }
+
+        if (!$availableGroups) {
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('event/creation/choose.html.twig', [
+            'groups' => $availableGroups,
+        ]);
     }
 
     /**
@@ -37,10 +57,13 @@ class CreationController extends AbstractController
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $creationHandler->create($event);
 
+            $this->addFlash('success', 'event_create.success');
+
             return $this->redirectToRoute('app_event_view', ['slug' => $event->getSlug()]);
         }
 
         return $this->render('event/creation/create.html.twig', [
+            'group' => $group,
             'form' => $form->createView(),
         ]);
     }

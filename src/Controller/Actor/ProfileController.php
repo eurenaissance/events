@@ -57,4 +57,12 @@ class ProfileController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/notifications", name="app_actor_profile_notifications", methods={"GET", "POST"})
+     */
+    public function notifications(): Response
+    {
+        throw new \LogicException('To implement');
+    }
 }

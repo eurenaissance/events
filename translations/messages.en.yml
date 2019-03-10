@@ -1,11 +1,14 @@
 # Common
 #########################################
+
 base:
+    back: Back
     address:
         streetAddress: Street address
         postalCode: Postal code
         city: City
         country: Country
+        google_maps: View on Google Maps
     date:
         invalid: This date is not valid.
         year: Year
@@ -41,6 +44,7 @@ layout:
 
 # Mails
 #########################################
+
 mails:
     hello: 'Hello,'
     hello_named: 'Hello %name%,'
@@ -143,6 +147,21 @@ group_card:
     animated_by: Animated by
     learn_more: Learn more
 
+# View
+group_view:
+    follow: Follow
+    unfollow: Unfollow
+    about: About
+    animators: Animators
+    actions:
+        edit: Edit group
+        members: View members
+        organize_event: Organize an event
+    events:
+        none: This group did not organize any event yet.
+        upcoming: Upcoming events
+        finished: Finished events
+
 # Form
 group_form:
     information: Group information
@@ -156,9 +175,25 @@ group_create:
     title: Create a group
     submit: Create
 
-# View
-group_view:
-    follow: Follow
+# Edit
+group_edit:
+    title: Edit a group
+    submit: Edit
+
+# members
+group_members:
+    title: Group members
+    submit: Edit
+    animators: Animators
+    followers: Followers
+    columns:
+        name: Name
+        since: Follower since
+        actions: Actions
+    actions:
+        promote: Promote
+        demote: Demote
+    promote_success: '%name% was successfully promoted'
 
 
 # Events
@@ -173,10 +208,32 @@ event_view:
     google_maps: View on Google Maps
     register: Register
     contact_organizer: Contact the organizer
+    edit: Update
 
 event_choose:
-    title: Create an event
+    title: Organize an event
     subtitle: In which group would you like to create this event?
+    continue: Continue
+
+event_create:
+    title: Organize an event
+    submit: Create
+    success: |
+        The event was successfully created and your followers were notified.
+        Share it now to spread the word!
+
+event_edit:
+    title: Edit an event
+    submit: Edit
+
+event_form:
+    information: Group information
+    name: Name
+    description: Description
+    description_help: Describe this event in a few words.
+    beginAt: The event begins at ...
+    finishAt: and ends at ...
+    postalAddress: Postal address
 
 
 

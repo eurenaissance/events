@@ -2,13 +2,13 @@
     <div class="mb-5">
         {% if is_granted('GROUP_UNFOLLOW', group) %}
             <a href="{{ path('app_group_unfollow', { slug: group.slug }) }}" class="btn btn-block btn-primary">
-                Unfollow
+                {{ 'group_view.unfollow'|trans }}
             </a>
         {% endif %}
 
         {% if is_granted('GROUP_FOLLOW', group) %}
             <a href="{{ path('app_group_follow', { slug: group.slug }) }}" class="btn btn-block btn-primary">
-                Follow
+                {{ 'group_view.follow'|trans }}
             </a>
         {% endif %}
     </div>
@@ -25,19 +25,18 @@
         <div class="address__text__city">
             {{ group.city.name }}, {{ group.city.country|country }}
         </div>
+        <div>
+            <small>
+                <a href="https://maps.google.com/?q={{ group.address }} {{ group.city.name }} {{ group.city.country|country }}" target="_blank">
+                    {{ 'base.address.google_maps'|trans }}
+                </a>
+            </small>
+        </div>
     </div>
 </div>
 
-<div class="text-muted">
-    <small>
-        <a href="https://maps.google.com/?q={{ group.address }} {{ group.city.name }} {{ group.city.country|country }}" target="_blank">
-            Voir sur Google Maps
-        </a>
-    </small>
-</div>
-
 <h5 class="mt-5">
-    À propos
+    {{ 'group_view.about'|trans }}
 </h5>
 
 <div id="group-description">
@@ -45,7 +44,7 @@
 </div>
 
 <h5 class="mt-5">
-    Animé par :
+    {{ 'group_view.animators'|trans }}
 </h5>
 
 <div id="animators">

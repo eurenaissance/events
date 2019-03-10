@@ -235,6 +235,23 @@ abstract class HttpTestCase extends WebTestCase
         ];
     }
 
+    protected function createFormDateTime(string $time): array
+    {
+        $date = new \DateTime($time);
+
+        return [
+            'date' => [
+                'year' => (int) $date->format('Y'),
+                'month' => (int) $date->format('m'),
+                'day' => (int) $date->format('d'),
+            ],
+            'time' => [
+                'hour' => (int) $date->format('H'),
+                'minute' => 0,
+            ],
+        ];
+    }
+
     private function authenticate(UserInterface $user, string $firewallName, string $firewallContext): void
     {
         $session = $this->client->getContainer()->get('session');

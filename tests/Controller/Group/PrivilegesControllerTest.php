@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * @group functional
  */
-class AnimatorControllerTest extends HttpTestCase
+class PrivilegesControllerTest extends HttpTestCase
 {
     public function provideAnimatorCanPromoteFollowers(): iterable
     {
@@ -69,7 +69,7 @@ class AnimatorControllerTest extends HttpTestCase
             'Culture in Asnieres',
             '472508fa-4e4d-4330-8fda-5fefc92b1a8a',
             'remi@mobilisation-eu.localhost',
-            'Rémi',
+            'Rémi G.',
         ];
 
         yield [
@@ -78,7 +78,7 @@ class AnimatorControllerTest extends HttpTestCase
             'Ecology in Paris',
             '472508fa-4e4d-4330-8fda-5fefc92b1a8a',
             'remi@mobilisation-eu.localhost',
-            'Rémi',
+            'Rémi G.',
         ];
 
         yield [
@@ -87,7 +87,7 @@ class AnimatorControllerTest extends HttpTestCase
             'Ecology in Nice',
             '2a9051e9-7cea-460f-a714-052079d4aa2b',
             'nicolas@mobilisation-eu.localhost',
-            'Nicolas',
+            'Nicolas C.',
         ];
 
         yield [
@@ -96,7 +96,7 @@ class AnimatorControllerTest extends HttpTestCase
             'Ecology in Clichy',
             '472508fa-4e4d-4330-8fda-5fefc92b1a8a',
             'remi@mobilisation-eu.localhost',
-            'Rémi',
+            'Rémi G.',
         ];
     }
 
@@ -116,9 +116,9 @@ class AnimatorControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', "/group/$groupSlug/members");
         $this->assertResponseSuccessFul();
 
-        $this->assertCount(0, $crawler->filter("#co-animators tr:contains(\"$followerEmail\")"));
-        $this->assertCount(1, $followerRow = $crawler->filter("#followers tr:contains(\"$followerEmail\")"));
-        $this->assertCount(1, $linkCrawler = $followerRow->selectLink('Promote'));
+        $this->assertCount(0, $crawler->filter("#co-animators tr:contains(\"$followerName\")"));
+        $this->assertCount(1, $followerRow = $crawler->filter("#followers tr:contains(\"$followerName\")"));
+        $this->assertCount(1, $linkCrawler = $followerRow->selectLink('group_members.actions.promote'));
 
         $link = $linkCrawler->link();
         $this->assertSame($this->getAbsoluteUrl("/group/$groupSlug/promote/$followerUuid"), $link->getUri());
@@ -134,8 +134,8 @@ class AnimatorControllerTest extends HttpTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
         $this->assertCount(1, $crawler->filter('.alert:contains("group.animator.promote.flash.success")'));
-        $this->assertCount(1, $crawler->filter("#co-animators tr:contains(\"$followerEmail\")"));
-        $this->assertCount(0, $crawler->filter("#followers tr:contains(\"$followerEmail\")"));
+        $this->assertCount(1, $crawler->filter("#co-animators tr:contains(\"$followerName\")"));
+        $this->assertCount(0, $crawler->filter("#followers tr:contains(\"$followerName\")"));
     }
 
     public function provideActorCannotPromoteIfGroupIsNotApproved(): iterable
@@ -291,21 +291,21 @@ class AnimatorControllerTest extends HttpTestCase
             'marine@mobilisation-eu.localhost',
             'ecology-in-paris',
             '7ba7b43a-4a65-4862-b49a-91776043575b',
-            'titouan@mobilisation-eu.localhost',
+            'Titouan G.',
         ];
 
         yield [
             'marine@mobilisation-eu.localhost',
             'ecology-in-paris',
             '9b1f4321-8935-4ab5-b392-1e6f6913ace9',
-            'francis@mobilisation-eu.localhost',
+            'Francis B.',
         ];
 
         yield [
             'titouan@mobilisation-eu.localhost',
             'ecology-in-clichy',
             'b4e514ac-5ccb-4687-aed1-14d3678b5491',
-            'marine@mobilisation-eu.localhost',
+            'Marine B.',
         ];
     }
 
@@ -316,16 +316,16 @@ class AnimatorControllerTest extends HttpTestCase
         string $animatorEmail,
         string $groupSlug,
         string $coAnimatorUuid,
-        string $coAnimatorEmail
+        string $coAnimatorName
     ): void {
         $this->authenticateActor($animatorEmail);
 
         $crawler = $this->client->request('GET', "/group/$groupSlug/members");
         $this->assertResponseSuccessFul();
 
-        $this->assertCount(1, $coAnimatorRow = $crawler->filter("#co-animators tr:contains(\"$coAnimatorEmail\")"));
-        $this->assertCount(0, $crawler->filter("#followers tr:contains(\"$coAnimatorEmail\")"));
-        $this->assertCount(1, $linkCrawler = $coAnimatorRow->selectLink('Demote'));
+        $this->assertCount(1, $coAnimatorRow = $crawler->filter("#co-animators tr:contains(\"$coAnimatorName\")"));
+        $this->assertCount(0, $crawler->filter("#followers tr:contains(\"$coAnimatorName\")"));
+        $this->assertCount(1, $linkCrawler = $coAnimatorRow->selectLink('group_members.actions.demote'));
 
         $link = $linkCrawler->link();
         $this->assertSame($this->getAbsoluteUrl("/group/$groupSlug/demote/$coAnimatorUuid"), $link->getUri());
@@ -337,8 +337,8 @@ class AnimatorControllerTest extends HttpTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
         $this->assertCount(1, $crawler->filter('.alert:contains("group.animator.demote.flash.success")'));
-        $this->assertCount(0, $crawler->filter("#co-animators tr:contains(\"$coAnimatorEmail\")"));
-        $this->assertCount(1, $crawler->filter("#followers tr:contains(\"$coAnimatorEmail\")"));
+        $this->assertCount(0, $crawler->filter("#co-animators tr:contains(\"$coAnimatorName\")"));
+        $this->assertCount(1, $crawler->filter("#followers tr:contains(\"$coAnimatorName\")"));
     }
 
     public function provideActorCannotDemoteIfGroupIsNotApproved(): iterable

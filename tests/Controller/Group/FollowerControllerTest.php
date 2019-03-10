@@ -190,7 +190,7 @@ class FollowerControllerTest extends HttpTestCase
         $this->assertCount(1, $crawler->filter("a[href=\"/group/$groupSlug/follow\"]"));
         $this->assertCount(0, $crawler->filter("a[href=\"/group/$groupSlug/unfollow\"]"));
 
-        $this->client->clickLink('Follow');
+        $this->client->clickLink('group_view.follow');
         $this->assertIsRedirectedTo("/group/$groupSlug");
         $this->assertMailSent([
             'to' => $animatorEmail,
@@ -315,7 +315,7 @@ class FollowerControllerTest extends HttpTestCase
         $this->assertCount(0, $crawler->filter("a[href=\"/group/$groupSlug/follow\"]"));
         $this->assertCount(1, $crawler->filter("a[href=\"/group/$groupSlug/unfollow\"]"));
 
-        $this->client->clickLink('Unfollow');
+        $this->client->clickLink('group_view.unfollow');
         $this->assertIsRedirectedTo("/group/$groupSlug");
         $this->assertNoMailSent();
 

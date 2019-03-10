@@ -1,23 +1,64 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'event.creation.create.title'|trans %}
+{% block page_title 'event_create.title'|trans %}
+
+{% block javascripts encore_entry_script_tags('city-autocomplete') %}
+
+{% block intro %}
+    <div class="intro">
+        <div class="container">
+            <h2 class="intro__title">
+                {{ 'event_create.title'|trans }}
+            </h2>
+
+            {{ group.name }}
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
-    {{ form_row(form.name, { label: 'event.name.label' }) }}
-    {{ form_row(form.description, { label: 'event.description.label' }) }}
-    {{ form_row(form.beginAt, { label: 'event.beginAt.label' }) }}
-    {{ form_row(form.finishAt, { label: 'event.finishAt.label' }) }}
-    {{ form_row(form.address, { label: 'event.address.label' }) }}
-    {{ form_row(form.country, { label: 'event.country.label' }) }}
-    {{ form_row(form.zipCode, { label: 'event.zip_code.label' }) }}
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            {{ form_start(form) }}
 
-    {# since `form.city` is a hidden type we need to explicitely show errors with `form_errors(form.city)` #}
-    {{ form_errors(form.city) }}
-    {{ form_widget(form.city) }}
+            <h5 class="mb-3">
+                {{ 'event_form.information'|trans }}
+            </h5>
 
-    <button type="submit">
-        {{ 'event.creation.create.submit'|trans }}
-    </button>
-    {{ form_end(form) }}
+            {{ form_row(form.name, { label: 'event_form.name' }) }}
+            {{ form_row(form.description, { label: 'event_form.description', help: 'event_form.description_help' }) }}
+
+            <div class="form-datetime">
+                {{ form_row(form.beginAt, { label: 'event_form.beginAt' }) }}
+            </div>
+            <div class="form-datetime">
+                {{ form_row(form.finishAt, { label: 'event_form.finishAt' }) }}
+            </div>
+
+            <h5 class="mb-3 mt-5">
+                {{ 'event_form.postalAddress'|trans }}
+            </h5>
+
+            {{ form_row(form.country, { label: 'base.address.country' }) }}
+
+            {{ form_row(form.address, { label: 'base.address.streetAddress' }) }}
+
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_row(form.zipCode, { label: 'base.address.postalCode' }) }}
+                </div>
+                <div class="col-md-8">
+                    {{ form_row(form.city, { label: 'base.address.city' }) }}
+                </div>
+            </div>
+
+            <div class="mt-5 text-center">
+                <button type="submit" class="btn btn-lg btn-block btn-primary">
+                    {{ 'event_create.submit'|trans }}
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

@@ -155,7 +155,7 @@ class ViewControllerTest extends HttpTestCase
                 'First finished event in Paris',
             ],
             [
-                '/unfollow' => 'Unfollow',
+                '/unfollow' => 'group_view.unfollow',
                 '/follow' => false,
                 '/members' => false,
                 '/event/create' => false,
@@ -187,8 +187,8 @@ class ViewControllerTest extends HttpTestCase
             [
                 '/unfollow' => false,
                 '/follow' => false,
-                '/members' => 'View members',
-                '/event/create' => 'Create an event',
+                '/members' => 'group_view.actions.members',
+                '/event/create' => 'group_view.actions.organize_event',
             ],
         ];
 
@@ -217,8 +217,8 @@ class ViewControllerTest extends HttpTestCase
             [
                 '/unfollow' => false,
                 '/follow' => false,
-                '/members' => 'View members',
-                '/event/create' => 'Create an event',
+                '/members' => 'group_view.actions.members',
+                '/event/create' => 'group_view.actions.organize_event',
             ],
         ];
 
@@ -237,7 +237,7 @@ class ViewControllerTest extends HttpTestCase
             ['Event ecology in Clichy'],
             [
                 '/unfollow' => false,
-                '/follow' => 'Follow',
+                '/follow' => 'group_view.follow',
                 '/members' => false,
                 '/event/create' => false,
             ],
@@ -254,7 +254,7 @@ class ViewControllerTest extends HttpTestCase
             [],
             [
                 '/unfollow' => false,
-                '/follow' => 'Follow',
+                '/follow' => 'group_view.follow',
                 '/members' => false,
                 '/event/create' => false,
             ],
@@ -271,7 +271,7 @@ class ViewControllerTest extends HttpTestCase
             [],
             [
                 '/unfollow' => false,
-                '/follow' => 'Follow',
+                '/follow' => 'group_view.follow',
                 '/members' => false,
                 '/event/create' => false,
             ],
@@ -301,7 +301,7 @@ class ViewControllerTest extends HttpTestCase
             ],
             [
                 '/unfollow' => false,
-                '/follow' => 'Follow',
+                '/follow' => 'group_view.follow',
                 '/members' => false,
                 '/event/create' => false,
             ],

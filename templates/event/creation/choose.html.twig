@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block page_title 'event_choose.title'|trans %}
+
+{% block intro %}
+    <div class="intro">
+        <div class="container">
+            <h2 class="intro__title">
+                {{ 'event_choose.title'|trans }}
+            </h2>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="text-center mb-4">
+        {{ 'event_choose.subtitle'|trans }}
+    </div>
+
+    <div class="row justify-content-center">
+        {% for group in user_groups if is_granted('EVENT_CREATE', group) %}
+            <div class="col-lg-4 mb-3">
+                <div class="card card--group mb-3">
+                    <h4 class="card__title">
+                        <a href="{{ path('app_group_view', {'slug': group.slug}) }}" target="_blank">
+                            {{ group.name }}
+                        </a>
+                    </h4>
+
+                    <div class="address mt-4 mb-4" id="group-address">
+                        <div class="address__icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="address__text">
+                            <div class="address__text__street">
+                                <a href="https://maps.google.com/?q={{ group.address }} {{ group.city.name }} {{ group.city.country|country }}" target="_blank">
+                                    {{ group.address|capitalize }}
+                                </a>
+                            </div>
+                            <div class="address__text__city">
+                                {{ group.city.name }}, {{ group.city.country|country }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="{{ path('app_event_create', { slug: group.slug }) }}"
+                       class="btn btn-lg btn-block btn-primary text-white">
+                        {{ 'event_choose.continue'|trans }}
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

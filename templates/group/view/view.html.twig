@@ -22,19 +22,19 @@
             <div class="btn-group">
                 {% if is_granted('GROUP_EDIT', group) %}
                     <a href="{{ path('app_group_edit', { slug: group.slug }) }}" class="btn btn-sm btn-outline-secondary">
-                        Edit group
+                        {{ 'group_view.actions.edit'|trans }}
                     </a>
                 {% endif %}
 
                 {% if is_granted('GROUP_MEMBERS', group) %}
                     <a href="{{ path('app_group_view_members', { slug: group.slug }) }}" class="btn btn-sm btn-outline-secondary">
-                        View members
+                        {{ 'group_view.actions.members'|trans }}
                     </a>
                 {% endif %}
 
                 {% if is_granted('EVENT_CREATE', group) %}
                     <a href="{{ path('app_event_create', { slug: group.slug }) }}" class="btn btn-sm btn-outline-secondary">
-                        Create an event
+                        {{ 'group_view.actions.organize_event'|trans }}
                     </a>
                 {% endif %}
             </div>
@@ -48,13 +48,13 @@
             <div class="pr-3">
                 {% if upcoming_events|length == 0 and finished_events|length == 0 %}
                     <div class="p-5 text-center text-muted">
-                        This group did not organize any event yet.
+                        {{ 'group_view.events.none'|trans }}
                     </div>
                 {% else %}
                     {% if upcoming_events|length > 0 %}
                         <div id="upcoming-events" class="mb-5">
                             <h3 class="p-2 mb-3">
-                                Upcoming events
+                                {{ 'group_view.events.upcoming'|trans }}
                             </h3>
 
                             {% for event in upcoming_events %}
@@ -66,7 +66,7 @@
                     {% if finished_events|length > 0 %}
                         <div id="finished-events">
                             <h3 class="p-2 mb-3">
-                                Finished events
+                                {{ 'group_view.events.finished'|trans }}
                             </h3>
 
                             {% for event in finished_events %}

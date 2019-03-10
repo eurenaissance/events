@@ -4,11 +4,11 @@ namespace App\Form\Event;
 
 use App\Entity\Event;
 use App\Form\DataTransformer\CityToUuidTransformer;
+use App\Form\Type\CityType;
 use App\Form\Type\CountryType;
 use App\Util\Slugify;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -36,9 +36,10 @@ class EventType extends AbstractType
             ->add('description', TextareaType::class, [
                 'empty_data' => '',
             ])
-            ->add('beginAt', DateType::class, [
+            ->add('beginAt', DateTimeType::class, [
                 'widget' => 'choice',
                 'years' => $options['years'],
+                'minutes' => [0, 15, 30, 45],
                 'placeholder' => [
                     'year' => 'base.date.year',
                     'month' => 'base.date.month',
@@ -47,9 +48,10 @@ class EventType extends AbstractType
                 'empty_data' => null,
                 'invalid_message' => 'common.date.invalid',
             ])
-            ->add('finishAt', DateType::class, [
+            ->add('finishAt', DateTimeType::class, [
                 'widget' => 'choice',
                 'years' => $options['years'],
+                'minutes' => [0, 15, 30, 45],
                 'placeholder' => [
                     'year' => 'base.date.year',
                     'month' => 'base.date.month',
@@ -68,9 +70,9 @@ class EventType extends AbstractType
             ->add('country', CountryType::class, [
                 'mapped' => false,
             ])
-            ->add('city', HiddenType::class, [
-                'invalid_message' => 'common.city.invalid',
-                'error_bubbling' => false,
+            ->add('city', CityType::class, [
+                'country_field' => 'country',
+                'zip_code_field' => 'zipCode',
             ])
             ->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
                 $form = $event->getForm();

@@ -31,15 +31,15 @@ class CreationControllerTest extends HttpTestCase
             'name' => 'My new event',
             'description' => 'Description of my new event',
             'city' => CityFixtures::CITY_02_UUID,
-            'beginAt' => $beginAt = $this->createFormDate('+2 days'),
-            'finishAt' => $this->createFormDate('+3 days'),
+            'beginAt' => $beginAt = $this->createFormDateTime('+2 days'),
+            'finishAt' => $this->createFormDateTime('+3 days'),
         ]);
         $this->assertIsRedirectedTo('/login');
         $this->assertNull($this->getEventRepository()->findOneBySlug(sprintf(
             '%s-%s-%s-my-new-event',
-            $beginAt['year'],
-            str_pad($beginAt['month'], 2, '0', STR_PAD_LEFT),
-            str_pad($beginAt['day'], 2, '0', STR_PAD_LEFT)
+            $beginAt['date']['year'],
+            str_pad($beginAt['date']['month'], 2, '0', STR_PAD_LEFT),
+            str_pad($beginAt['date']['day'], 2, '0', STR_PAD_LEFT)
         )));
     }
 
@@ -105,19 +105,19 @@ class CreationControllerTest extends HttpTestCase
         $this->client->request('GET', "/group/$groupSlug/event/create");
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('event.creation.create.submit', [
+        $this->client->submitForm('event_create.submit', [
             'name' => $eventName,
             'description' => $eventDescription,
             'city' => CityFixtures::CITY_02_UUID,
-            'beginAt' => $beginAt = $this->createFormDate($eventBeginAt),
-            'finishAt' => $finishAt = $this->createFormDate($eventFinishAt),
+            'beginAt' => $beginAt = $this->createFormDateTime($eventBeginAt),
+            'finishAt' => $finishAt = $this->createFormDateTime($eventFinishAt),
         ]);
 
         $eventSlug = sprintf(
             '%s-%s-%s-%s',
-            $beginAt['year'],
-            str_pad($beginAt['month'], 2, '0', STR_PAD_LEFT),
-            str_pad($beginAt['day'], 2, '0', STR_PAD_LEFT),
+            $beginAt['date']['year'],
+            str_pad($beginAt['date']['month'], 2, '0', STR_PAD_LEFT),
+            str_pad($beginAt['date']['day'], 2, '0', STR_PAD_LEFT),
             $eventSlug
         );
         $this->assertIsRedirectedTo("/event/$eventSlug");
@@ -136,18 +136,18 @@ class CreationControllerTest extends HttpTestCase
         $this->assertSame(
             sprintf(
                 '%s-%s-%s',
-                $beginAt['year'],
-                str_pad($beginAt['month'], 2, '0', STR_PAD_LEFT),
-                str_pad($beginAt['day'], 2, '0', STR_PAD_LEFT)
+                $beginAt['date']['year'],
+                str_pad($beginAt['date']['month'], 2, '0', STR_PAD_LEFT),
+                str_pad($beginAt['date']['day'], 2, '0', STR_PAD_LEFT)
             ),
             $event->getBeginAt()->format('Y-m-d')
         );
         $this->assertSame(
             sprintf(
                 '%s-%s-%s',
-                $finishAt['year'],
-                str_pad($finishAt['month'], 2, '0', STR_PAD_LEFT),
-                str_pad($finishAt['day'], 2, '0', STR_PAD_LEFT)
+                $finishAt['date']['year'],
+                str_pad($finishAt['date']['month'], 2, '0', STR_PAD_LEFT),
+                str_pad($finishAt['date']['day'], 2, '0', STR_PAD_LEFT)
             ),
             $event->getFinishAt()->format('Y-m-d')
         );
@@ -176,15 +176,15 @@ class CreationControllerTest extends HttpTestCase
             'name' => 'My new event',
             'description' => 'Description of my new event',
             'city' => CityFixtures::CITY_02_UUID,
-            'beginAt' => $beginAt = $this->createFormDate('+2 days'),
-            'finishAt' => $this->createFormDate('+3 days'),
+            'beginAt' => $beginAt = $this->createFormDateTime('+2 days'),
+            'finishAt' => $this->createFormDateTime('+3 days'),
         ]);
         $this->assertAccessDeniedResponse();
         $this->assertNull($this->getEventRepository()->findOneBySlug(sprintf(
             '%s-%s-%s-my-new-event',
-            $beginAt['year'],
-            str_pad($beginAt['month'], 2, '0', STR_PAD_LEFT),
-            str_pad($beginAt['day'], 2, '0', STR_PAD_LEFT)
+            $beginAt['date']['year'],
+            str_pad($beginAt['date']['month'], 2, '0', STR_PAD_LEFT),
+            str_pad($beginAt['date']['day'], 2, '0', STR_PAD_LEFT)
         )));
     }
 
@@ -197,15 +197,11 @@ class CreationControllerTest extends HttpTestCase
                 'name' => null,
                 'description' => null,
                 'city' => null,
-                'beginAt' => [],
-                'finishAt' => [],
             ],
             [
                 'event.name.not_blank',
                 'event.description.not_blank',
                 'common.city.invalid',
-                'event.begin_at.not_blank',
-                'event.finish_at.not_blank',
             ],
         ];
 
@@ -216,8 +212,8 @@ class CreationControllerTest extends HttpTestCase
                 'name' => 'My new event',
                 'description' => 'Description of the new event.',
                 'city' => CityFixtures::CITY_02_UUID,
-                'beginAt' => ['year' => null, 'month' => 10, 'day' => 5],
-                'finishAt' => ['year' => 2019, 'month' => 10, 'day' => 8],
+                'beginAt' => ['date' => ['year' => null, 'month' => 10, 'day' => 5]],
+                'finishAt' => ['date' => ['year' => 2019, 'month' => 10, 'day' => 8]],
             ],
             [
                 'common.date.invalid',
@@ -231,8 +227,8 @@ class CreationControllerTest extends HttpTestCase
                 'name' => 'Event in Clichy',
                 'description' => 'Description of the new event.',
                 'city' => CityFixtures::CITY_02_UUID,
-                'beginAt' => $beginAt = $this->createFormDate('+3 days'),
-                'finishAt' => ['year' => null, 'month' => 10, 'day' => 8],
+                'beginAt' => $beginAt = $this->createFormDateTime('+3 days'),
+                'finishAt' => ['date' => ['year' => null, 'month' => 10, 'day' => 8]],
             ],
             [
                 'event.slug.not_unique',
@@ -251,7 +247,7 @@ class CreationControllerTest extends HttpTestCase
         $this->client->request('GET', "/group/$groupSlug/event/create");
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('event.creation.create.submit', $fieldValues);
+        $this->client->submitForm('event_create.submit', $fieldValues);
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
         $this->assertNull($this->getEventRepository()->findOneBy([
@@ -266,41 +262,37 @@ class CreationControllerTest extends HttpTestCase
         // animator of the group
         yield [
             'titouan@mobilisation-eu.localhost',
-            'Titouan',
             'ecology-in-clichy',
-            'Ecology in Clichy',
             [
                 'name' => 'My new event about development',
                 'description' => 'Description of my new event',
                 'city' => CityFixtures::CITY_02_UUID,
-                'beginAt' => $beginAt = $this->createFormDate('+2 days'),
-                'finishAt' => $this->createFormDate('+3 days'),
+                'beginAt' => $beginAt = $this->createFormDateTime('+2 days'),
+                'finishAt' => $this->createFormDateTime('+3 days'),
             ],
             sprintf(
                 '%s-%s-%s-my-new-event-about-development',
-                $beginAt['year'],
-                str_pad($beginAt['month'], 2, '0', STR_PAD_LEFT),
-                str_pad($beginAt['day'], 2, '0', STR_PAD_LEFT)
+                $beginAt['date']['year'],
+                str_pad($beginAt['date']['month'], 2, '0', STR_PAD_LEFT),
+                str_pad($beginAt['date']['day'], 2, '0', STR_PAD_LEFT)
             ),
         ];
 
         yield [
             'nicolas@mobilisation-eu.localhost',
-            'Nicolas',
             'culture-in-cannes',
-            'Culture in Cannes',
             [
                 'name' => 'My new event about culture',
                 'description' => 'Description of my new event',
                 'city' => CityFixtures::CITY_02_UUID,
-                'beginAt' => $beginAt = $this->createFormDate('+5 days'),
-                'finishAt' => $this->createFormDate('+6 days'),
+                'beginAt' => $beginAt = $this->createFormDateTime('+5 days'),
+                'finishAt' => $this->createFormDateTime('+6 days'),
             ],
             sprintf(
                 '%s-%s-%s-my-new-event-about-culture',
-                $beginAt['year'],
-                str_pad($beginAt['month'], 2, '0', STR_PAD_LEFT),
-                str_pad($beginAt['day'], 2, '0', STR_PAD_LEFT)
+                $beginAt['date']['year'],
+                str_pad($beginAt['date']['month'], 2, '0', STR_PAD_LEFT),
+                str_pad($beginAt['date']['day'], 2, '0', STR_PAD_LEFT)
             ),
         ];
     }
@@ -310,9 +302,7 @@ class CreationControllerTest extends HttpTestCase
      */
     public function testAnimatorCanCreateEventFromGroup(
         string $email,
-        string $firstName,
         string $groupSlug,
-        string $groupName,
         array $fieldValues,
         string $eventSlug
     ): void {
@@ -321,10 +311,10 @@ class CreationControllerTest extends HttpTestCase
         $this->client->request('GET', "/group/$groupSlug");
         $this->assertResponseSuccessFul();
 
-        $this->client->clickLink('Create an event');
+        $this->client->clickLink('group_view.actions.organize_event');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('event.creation.create.submit', $fieldValues);
+        $this->client->submitForm('event_create.submit', $fieldValues);
         $this->assertIsRedirectedTo("/event/$eventSlug");
         $this->assertMailSent([
             'to' => $email,
