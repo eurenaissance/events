@@ -55,3 +55,7 @@ services:
         arguments:
             -   source: '@app.image_provider.source'
                 cache: '@app.image_provider.cache'
+
+    App\ImageProvider\ImageStorage:
+        arguments:
+            $storage: '@app.image_provider.source'
