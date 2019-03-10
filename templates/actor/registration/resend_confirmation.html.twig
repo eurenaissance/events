@@ -1,17 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'actor.registration.resend_confirmation.title'|trans %}
+{% block page_title 'register.resend_confirm.title'|trans %}
 
 {% block body %}
-    {{ form_start(form)}}
-        {{ form_row(form.emailAddress, { label: 'actor.email_address.label' }) }}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-7 col-lg-5 col-xl-4">
+            <h4 class="text-center mb-4">
+                {{ 'register.resend_confirm.title'|trans }}
+            </h4>
 
-        <button type="submit">
-            {{ 'actor.registration.resend_confirmation.submit'|trans }}
-        </button>
-    {{ form_end(form) }}
+            {{ form_start(form)}}
 
-    <a href="{{ path('app_login') }}">
-        {{ 'security.login.link.back'|trans }}
-    </a>
+            {{ form_row(form.emailAddress, { label: 'register.resend_confirm.email' }) }}
+
+            <button type="submit" class="btn btn-primary btn-block">
+                {{ 'register.resend_confirm.submit'|trans }}
+            </button>
+
+            <div class="text-center mt-5">
+                <a href="{{ path('app_login') }}" class="btn btn-link">
+                    {{ 'register.resend_confirm.back'|trans }}
+                </a>
+            </div>
+
+            {{ form_end(form)}}
+        </div>
+    </div>
 {% endblock %}

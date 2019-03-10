@@ -31,7 +31,7 @@ class PrivilegesController extends AbstractController
 
         $coAnimatorMembershipHandler->promote($actor, $group);
 
-        $this->addFlash('info', 'group.animator.promote.flash.success');
+        $this->addFlash('success', 'flashes.group.promote_success');
 
         return $this->redirectToRoute('app_group_view_members', ['slug' => $group->getSlug()]);
     }
@@ -55,7 +55,7 @@ class PrivilegesController extends AbstractController
 
         $coAnimatorMembershipHandler->demote($actor, $group);
 
-        $this->addFlash('info', 'group.animator.demote.flash.success');
+        $this->addFlash('success', 'flashes.group.demote_success');
 
         return $this->redirectToRoute('app_group_view_members', ['slug' => $group->getSlug()]);
     }

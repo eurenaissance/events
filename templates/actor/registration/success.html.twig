@@ -14,6 +14,13 @@
 
 {% block body %}
     <div class="text-center">
-        {{ 'register.confirm.subtitle'|trans }}
+        <p>
+            {{ 'register.confirm.subtitle'|trans }}
+        </p>
+        <p>
+            <a href="{{ path('app_actor_register_resend_confirmation') }}">
+                {{ 'register.confirm.again'|trans }}
+            </a>
+        </p>
     </div>
 {% endblock %}

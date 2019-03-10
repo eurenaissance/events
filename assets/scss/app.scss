@@ -17,6 +17,14 @@
     box-shadow: none;
 }
 
+.flashes {
+    .alert {
+        border-radius: 0 !important;
+        border: 0 !important;
+        text-align: center;
+    }
+}
+
 .header {
     padding: 15px 0;
 

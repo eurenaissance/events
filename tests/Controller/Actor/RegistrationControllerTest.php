@@ -169,7 +169,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('actor.registration.resend_confirmation.submit', [
+        $this->client->submitForm('register.resend_confirm.submit', [
             'emailAddress' => 'patrick@mobilisation-eu.localhost',
         ]);
         $this->assertIsRedirectedTo('/register/resend-confirmation/check-email');
@@ -181,7 +181,7 @@ class RegistrationControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('actor.registration.resend_confirmation.success.mail_sent');
+        $this->assertResponseContains('register.resend_confirm.title');
         $this->assertActorConfirmed('patrick@mobilisation-eu.localhost', false);
     }
 
@@ -190,7 +190,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('actor.registration.resend_confirmation.submit', [
+        $this->client->submitForm('register.resend_confirm.submit', [
             'emailAddress' => 'unknown@mobilisation-eu.localhost',
         ]);
         $this->assertIsRedirectedTo('/register/resend-confirmation/check-email');
@@ -198,7 +198,7 @@ class RegistrationControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('actor.registration.resend_confirmation.success.mail_sent');
+        $this->assertResponseContains('register.resend_confirm.title');
     }
 
     public function provideResendConfirmationFailures(): iterable
@@ -207,14 +207,14 @@ class RegistrationControllerTest extends HttpTestCase
             'email' => 'leonard@mobilisation-eu.localhost',
             'alreadyConfirmed' => false,
             'redirectedTo' => '/login',
-            'errors' => ['actor.registration.resend_confirmation.flash.pending_token'],
+            'errors' => ['flashes.register.pending_token'],
         ];
 
         yield [
             'email' => 'remi@mobilisation-eu.localhost',
             'alreadyConfirmed' => true,
             'redirectedTo' => '/login',
-            'errors' => ['actor.registration.resend_confirmation.flash.already_confirmed'],
+            'errors' => ['flashes.register.already_confirmed'],
         ];
     }
 
@@ -232,7 +232,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->request('GET', '/register/resend-confirmation');
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('actor.registration.resend_confirmation.submit', ['emailAddress' => $email]);
+        $this->client->submitForm('register.resend_confirm.submit', ['emailAddress' => $email]);
         $this->assertIsRedirectedTo($redirectedTo);
         $this->assertNoMailSent();
 
@@ -273,7 +273,7 @@ class RegistrationControllerTest extends HttpTestCase
             'alreadyConfirmed' => true,
             'token' => ConfirmTokenFixtures::TOKEN_01_UUID,
             'redirectedTo' => '/login',
-            'errors' => ['actor.registration.confirm.flash.already_confirmed'],
+            'errors' => ['flashes.register.already_confirmed'],
         ];
 
         // token is expired but user is now confirmed
@@ -282,7 +282,7 @@ class RegistrationControllerTest extends HttpTestCase
             'alreadyConfirmed' => true,
             'token' => ConfirmTokenFixtures::TOKEN_02_UUID,
             'redirectedTo' => '/login',
-            'errors' => ['actor.registration.confirm.flash.already_confirmed'],
+            'errors' => ['flashes.register.already_confirmed'],
         ];
 
         // token is expired
@@ -291,7 +291,7 @@ class RegistrationControllerTest extends HttpTestCase
             'alreadyConfirmed' => false,
             'token' => ConfirmTokenFixtures::TOKEN_05_UUID,
             'redirectedTo' => '/register/resend-confirmation',
-            'errors' => ['actor.registration.confirm.flash.token_expired'],
+            'errors' => ['flashes.register.token_expired'],
         ];
     }
 
