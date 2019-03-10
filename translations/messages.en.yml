@@ -320,6 +320,8 @@ actor:
         label: Gender
         not_blank: Please select your gender.
         choice: The gender "{{ value }}" is not valid.
+    current_password:
+        label: Current password
     password:
         label: Password
         confirmation: Password confirmation

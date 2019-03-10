@@ -3,8 +3,8 @@
 namespace App\Controller\Actor;
 
 use App\Actor\ProfileHandler;
+use App\Form\Actor\ChangePasswordType;
 use App\Form\Actor\ProfileType;
-use App\Form\Actor\PasswordType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +43,7 @@ class ProfileController extends AbstractController
      */
     public function changePassword(Request $request, ProfileHandler $changePasswordHandler): Response
     {
-        $form = $this->createForm(PasswordType::class, $actor = $this->getUser());
+        $form = $this->createForm(ChangePasswordType::class, $actor = $this->getUser());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $changePasswordHandler->changePassword($actor);

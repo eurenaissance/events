@@ -48,6 +48,8 @@ actor.birthday.invalid: This birth date is invalid.
 actor.gender.not_blank: The gender is required. Don't hesitate to use "Prefered not to say" if you want.
 actor.gender.invalid: This gender is invalid.
 
+# Current password
+actor.current_password.invalid: Your current password is invalid!
 
 # Administrator
 #########################################
