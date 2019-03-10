@@ -14,7 +14,14 @@
 
 {% block body %}
     <div class="text-center mb-4">
-        {{ 'register.confirmed.subtitle'|trans }}
+        <p>
+            {{ 'register.confirmed.subtitle'|trans }}
+        </p>
+        {% if closest_groups %}
+        <p>
+            {{ 'register.confirmed.around'|trans }}
+        </p>
+        {% endif %}
     </div>
 
     <div class="row">

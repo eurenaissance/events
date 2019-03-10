@@ -43,6 +43,34 @@ layout:
         contact: Contact
 
 
+# Flashes
+#########################################
+
+flashes:
+    register:
+        already_confirmed: Your account is already confirmed.
+        pending_token: |
+            An e-mail has already been sent in the last 2 hours with this account.
+        token_expired: This link is no longer valid, please request a new confirmation link.
+    reset_password:
+        pending_token: |
+            An e-mail has already been sent in the last 2 hours with this account.
+            Please wait a few hours before requesting a new password.
+        token_expired: This link is no longer valid. Please request a new reset password link.
+        success: Your password has been successfully reset.
+    profile:
+        account_success: Your profile has been successfully saved.
+        password_success: Your password has been successfully changed.
+        notification_success: Your notification preferences has been successfully changed.
+    event:
+        create_success: |
+            The event was successfully created and your followers were notified.
+            Share it now to spread the word!
+    group:
+        promote_success: '%name% was successfully promoted'
+        demote_success: '%name% was successfully demoted'
+
+
 # Mails
 #########################################
 
@@ -58,7 +86,7 @@ mails:
 
 setup:
     title: Platform setup
-    subtitle: Configure the platform and start organizing events today.
+    subtitle: Start organizing events today
     form:
         email:
             label: Administrator e-mail address
@@ -115,9 +143,19 @@ register:
     confirm:
         title: One last step!
         subtitle: We sent you an e-mail with a link to confirm your account.
+        again: You didn't receive the e-mail? Click here to retry.
+    resend_confirm:
+        title: Resend the confirmation
+        again: You didn't receive the e-mail? Click here to retry.
+        email: E-mail address
+        submit: Submit
+        back: Back to the login page
+        message: A new mail has been sent with a link to confirm your account.
+        continue: Continue
     confirmed:
         title: You are all good!
-        subtitle: 'You can now follow groups to get notified about the events they organize. Here are some close to you:'
+        subtitle: 'You can now follow groups to get notified about the events they organize.'
+        around: 'Here are some around you:'
 
 # Login
 login:
@@ -135,12 +173,16 @@ password_reset_request:
     title: Request a new password
     email: E-mail address
     button: Submit
-    back: Back to the log in page
+    back: Back to the login page
 
 password_reset_check:
     title: Check your inbox
     message: We sent you an e-mail with a link to reset your password.
     continue: Continue
+
+password_reset_reset:
+    title: Choose a new password
+    save: Save
 
 
 # Groups
@@ -198,7 +240,6 @@ group_members:
     actions:
         promote: Promote
         demote: Demote
-    promote_success: '%name% was successfully promoted'
 
 
 # Events
@@ -223,9 +264,6 @@ event_choose:
 event_create:
     title: Organize an event
     submit: Create
-    success: |
-        The event was successfully created and your followers were notified.
-        Share it now to spread the word!
 
 event_edit:
     title: Edit an event
@@ -404,7 +442,6 @@ actor:
             title: My profile - Edition
             submit: Save my profile
             flash:
-                success: Your profile has been successfully saved.
 
         change_password:
             link:
@@ -412,23 +449,17 @@ actor:
             title: My profile - Change my password
             submit: Change my password
             flash:
-                success: Your password has been successfully changed.
 
         notification:
             submit: Change my notification preferences
             title: My profile - Change my notification preferences
             label: I want to receive e-mail notifications about my groups, events and profile.
-            flash:
-                success: Your notification preferences has been successfully changed.
 
-    reset_password:
         request:
             link:
                 default: Forgot password?
             title: Request a new password
             submit: Request new password
-            flash:
-                pending_token: A mail has already been sent in the last 2 hours with a link to reset your password. Please wait a while to ask for another reset reset_password request.
 
         check_email:
             title: Password request sent
@@ -437,9 +468,6 @@ actor:
         reset:
             title: Reset password
             submit: Reset password
-            flash:
-                token_expired: This link is no longer valid. Please request a new reset password link.
-                success: Your password has been successfully reset.
 
 
 #
@@ -474,8 +502,6 @@ group:
                 default: Create a group
             title: Create a group
             submit: Create
-            flash:
-                success: Your group has been created successfully.
 
     view:
         view:

@@ -1,17 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'actor.reset_password.reset.title'|trans %}
+{% block page_title 'password_reset_reset.title'|trans %}
 
 {% block body %}
-    {{ form_start(form)}}
-        {{ form_row(form.plainPassword) }}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-7 col-lg-5 col-xl-4">
+            <h4 class="mb-4 text-center">
+                {{ 'password_reset_reset.title'|trans }}
+            </h4>
 
-        <button type="submit">
-            {{ 'actor.reset_password.reset.submit'|trans }}
-        </button>
-    {{ form_end(form) }}
+            {{ form_start(form)}}
+            {{ form_row(form.plainPassword) }}
 
-    <a href="{{ path('app_login') }}">
-        {{- 'security.login.link.back'|trans -}}
-    </a>
+            <button type="submit" class="btn btn-primary btn-block">
+                {{ 'password_reset_reset.save'|trans }}
+            </button>
+            {{ form_end(form) }}
+
+            <a href="{{ path('app_login') }}" class="btn btn-link btn-block mt-3">
+                {{- 'security.login.link.back'|trans -}}
+            </a>
+        </div>
+    </div>
 {% endblock %}

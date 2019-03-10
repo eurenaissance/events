@@ -3,7 +3,7 @@
 {% set instance_configuration = get_instance_configuration() %}
 
 {% set user = app.user %}
-{% set user_groups = user ? user.allGroups : [] %}
+{% set user_groups = is_granted('ROLE_ACTOR') ? user.allGroups : [] %}
 
 <!DOCTYPE html>
 <html>
@@ -54,6 +54,18 @@
         </script>
     </head>
     <body>
+        {% block flashes %}
+            <div class="flashes">
+                {% for label, messages in app.flashes(['danger', 'warning', 'info', 'success']) %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }}">
+                            {{ message|trans }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endblock %}
+
         {% block header %}
             <header class="header">
                 <div class="container">
@@ -136,9 +148,8 @@
                                     <a href="{{ path('sonata_admin_dashboard') }}">
                                         {{ 'layout.header.admin.dashboard'|trans }}
                                     </a>
-                                {% elseif is_granted('ROLE_PREVIOUS_ADMIN') %}
-                                    <a href="{{ path('app_admin_impersonation_exit') }}">
-                                        {{ 'layout.header.admin.quit_impersonation'|trans }}
+                                    <a href="{{ path('app_logout') }}">
+                                        {{ 'layout.header.user.logout'|trans }}
                                     </a>
                                 {% endif %}
                             {% else %}
@@ -233,16 +244,6 @@
         {% block intro '' %}
 
         <div class="container">
-            {% block flash_message %}
-                {% for message in app.flashes('info') %}
-                    <div class="alert alert-primary">
-                        {{ message|trans }}
-                    </div>
-                {% endfor %}
-
-                {% block extra_flash_messages '' %}
-            {% endblock %}
-
             {% block body '' %}
         </div>
 

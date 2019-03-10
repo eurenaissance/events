@@ -62,7 +62,7 @@ class CreationController extends AbstractController
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $creationHandler->create($event);
 
-            $this->addFlash('success', 'event_create.success');
+            $this->addFlash('success', 'flashes.event.create_success');
 
             return $this->redirectToRoute('app_event_view', ['slug' => $event->getSlug()]);
         }
