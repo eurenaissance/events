@@ -9,7 +9,7 @@
                 {{ event.name }}
             </h2>
 
-            {{ event.beginAt|localizeddate('full') }}
+            {{ event.beginAt|localizeddate('full', 'short') }}
         </div>
     </div>
 {% endblock %}
@@ -17,6 +17,18 @@
 {% block body %}
     <div class="row justify-content-center">
         <div class="col-lg-8 col-xl-6">
+            {% if is_granted('EVENT_EDIT', event) %}
+                <div class="text-right">
+                    <div class="btn-group">
+                        <a href="{{ path('app_event_edit', { slug: event.slug }) }}" class="btn btn-sm btn-outline-secondary">
+                            {{ 'event_view.edit'|trans }}
+                        </a>
+                    </div>
+                </div>
+
+                <hr />
+            {% endif %}
+
             <div class="row align-items-center">
                 <div class="col text-muted">
                     {{ 'event_card.organized_by'|trans({ '%name%': event.creator.fullName }) }}
@@ -38,14 +50,13 @@
                             <div class="address__text__city">
                                 {{ event.city.name }}, {{ event.city.country|country }}
                             </div>
+                            <small>
+                                <a href="https://maps.google.com/?q={{ event.address }} {{ event.city.name }} {{ event.city.country|country }}" target="_blank">
+                                    {{ 'event_view.google_maps'|trans }}
+                                </a>
+                            </small>
                         </div>
                     </div>
-
-                    <small>
-                        <a href="https://maps.google.com/?q={{ event.address }} {{ event.city.name }} {{ event.city.country|country }}" target="_blank">
-                            {{ 'event_view.google_maps'|trans }}
-                        </a>
-                    </small>
                 </div>
             </div>
 

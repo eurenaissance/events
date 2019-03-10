@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  *
  * @UniqueEntity("slug", errorPath="name", message="event.slug.not_unique")
- * @IsGeocoded(groups={"registration", "profile"})
+ * @IsGeocoded
  */
 class Event implements EntitySlugInterface, GeographyInterface, GeocodableInterface
 {
@@ -33,7 +33,7 @@ class Event implements EntitySlugInterface, GeographyInterface, GeocodableInterf
     /**
      * @var string|null
      *
-     * @ORM\Column(length=50, unique=true)
+     * @ORM\Column(length=50)
      *
      * @Assert\NotBlank(message="event.name.not_blank")
      * @Assert\Length(
@@ -113,6 +113,8 @@ class Event implements EntitySlugInterface, GeographyInterface, GeocodableInterf
     {
         $this->uuid = $uuid ?? self::createUuid();
         $this->createdAt = new \DateTimeImmutable();
+        $this->beginAt = new \DateTime('tomorrow 20:00');
+        $this->finishAt = new \DateTime('tomorrow 22:00');
     }
 
     public function __toString(): string

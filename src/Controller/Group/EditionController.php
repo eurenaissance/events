@@ -31,6 +31,7 @@ class EditionController extends AbstractController
 
         return $this->render('group/edition/edit.html.twig', [
             'form' => $form->createView(),
+            'group' => $group,
         ]);
     }
 }

@@ -28,6 +28,7 @@ class EditionController extends AbstractController
         }
 
         return $this->render('event/edition/edit.html.twig', [
+            'event' => $event,
             'form' => $form->createView(),
         ]);
     }

@@ -78,10 +78,12 @@ class MembersControllerTest extends HttpTestCase
         yield ['remi@mobilisation-eu.localhost', 'ecology-in-paris'];
         yield ['remi@mobilisation-eu.localhost', 'culture-in-asnieres'];
         yield ['nicolas@mobilisation-eu.localhost', 'ecology-in-nice'];
+
         // no relation with the group
         yield ['francis@mobilisation-eu.localhost', 'ecology-in-clichy'];
         yield ['jacques@mobilisation-eu.localhost', 'culture-in-asnieres'];
         yield ['manon@mobilisation-eu.localhost', 'ecology-in-nice'];
+
         // no relation with any group
         yield ['didier@mobilisation-eu.localhost', 'ecology-in-paris'];
     }
@@ -128,12 +130,12 @@ class MembersControllerTest extends HttpTestCase
             'marine@mobilisation-eu.localhost',
             'ecology-in-paris',
             [
-                ['Marine', 'Boudeau', 'marine@mobilisation-eu.localhost'],
-                ['Titouan', 'Galopin', 'titouan@mobilisation-eu.localhost'],
-                ['Francis', 'Brioul', 'francis@mobilisation-eu.localhost'],
+                ['Marine B.'],
+                ['Titouan G.'],
+                ['Francis B.'],
             ],
             [
-                ['Rémi', 'Gardien', 'titouan@mobilisation-eu.localhost'],
+                ['Rémi G.'],
             ],
             true,
         ];
@@ -143,12 +145,12 @@ class MembersControllerTest extends HttpTestCase
             'titouan@mobilisation-eu.localhost',
             'ecology-in-paris',
             [
-                ['Marine', 'Boudeau', 'marine@mobilisation-eu.localhost'],
-                ['Titouan', 'Galopin', 'titouan@mobilisation-eu.localhost'],
-                ['Francis', 'Brioul', 'francis@mobilisation-eu.localhost'],
+                ['Marine B.'],
+                ['Titouan G.'],
+                ['Francis B.'],
             ],
             [
-                ['Rémi', 'Gardien', 'remi@mobilisation-eu.localhost'],
+                ['Rémi G.'],
             ],
             false,
         ];
@@ -157,11 +159,11 @@ class MembersControllerTest extends HttpTestCase
             'nicolas@mobilisation-eu.localhost',
             'culture-in-asnieres',
             [
-                ['Nicolas', 'Cage', 'nicolas@mobilisation-eu.localhost'],
+                ['Nicolas C.'],
             ],
             [
-                ['Rémi', 'Gardien', 'remi@mobilisation-eu.localhost'],
-                ['Marine', 'Boudeau', 'marine@mobilisation-eu.localhost'],
+                ['Rémi G.'],
+                ['Marine B.'],
             ],
             true,
         ];
@@ -170,11 +172,11 @@ class MembersControllerTest extends HttpTestCase
             'titouan@mobilisation-eu.localhost',
             'ecology-in-clichy',
             [
-                ['Titouan', 'Galopin', 'titouan@mobilisation-eu.localhost'],
-                ['Marine', 'Boudeau', 'marine@mobilisation-eu.localhost'],
+                ['Titouan G.'],
+                ['Marine B.'],
             ],
             [
-                ['Rémi', 'Gardien', 'remi@mobilisation-eu.localhost'],
+                ['Rémi G.'],
             ],
             true,
         ];
@@ -183,11 +185,11 @@ class MembersControllerTest extends HttpTestCase
             'marine@mobilisation-eu.localhost',
             'ecology-in-clichy',
             [
-                ['Titouan', 'Galopin', 'titouan@mobilisation-eu.localhost'],
-                ['Marine', 'Boudeau', 'marine@mobilisation-eu.localhost'],
+                ['Titouan G.'],
+                ['Marine B.'],
             ],
             [
-                ['Rémi', 'Gardien', 'remi@mobilisation-eu.localhost'],
+                ['Rémi G.'],
             ],
             false,
         ];
@@ -196,7 +198,7 @@ class MembersControllerTest extends HttpTestCase
             'manon@mobilisation-eu.localhost',
             'ecology-in-nantes',
             [
-                ['Manon', 'Mercier', 'manon@mobilisation-eu.localhost'],
+                ['Manon M.'],
             ],
             [],
             true,
@@ -218,7 +220,7 @@ class MembersControllerTest extends HttpTestCase
         $crawler = $this->client->request('GET', "/group/$groupSlug");
         $this->assertResponseSuccessFul();
 
-        $this->assertCount(1, $linkCrawler = $crawler->selectLink('View members'));
+        $this->assertCount(1, $linkCrawler = $crawler->selectLink('group_view.actions.members'));
 
         $link = $linkCrawler->link();
         $this->assertSame($this->getAbsoluteUrl("/group/$groupSlug/members"), $link->getUri());
@@ -231,14 +233,12 @@ class MembersControllerTest extends HttpTestCase
 
         for ($i = 0; $i < count($animatorsInformation); ++$i) {
             $expectedCoAnimator = $animatorsInformation[$i];
-            $expectedFirstName = $expectedCoAnimator[0];
-            $expectedLastName = $expectedCoAnimator[1];
+            $expectedName = $expectedCoAnimator[0];
 
             $row = $coAnimators->eq($i);
-            $this->assertSame($expectedFirstName, trim($row->filter('td')->eq(0)->text()));
-            $this->assertSame($expectedLastName, trim($row->filter('td')->eq(1)->text()));
+            $this->assertSame($expectedName, trim($row->filter('td')->eq(0)->text()));
 
-            $linkCrawler = $row->selectLink('Demote');
+            $linkCrawler = $row->selectLink('group_members.actions.demote');
             // first line is the animator, so there is no link to demote.
             if ($canSeeActions && 0 !== $i) {
                 $this->assertCount(1, $linkCrawler);
@@ -256,14 +256,12 @@ class MembersControllerTest extends HttpTestCase
 
         for ($i = 0; $i < count($followersInformation); ++$i) {
             $expectedFollower = $followersInformation[$i];
-            $expectedFirstName = $expectedFollower[0];
-            $expectedLastName = $expectedFollower[1];
+            $expectedName = $expectedFollower[0];
 
             $row = $followers->eq($i);
-            $this->assertSame($expectedFirstName, trim($row->filter('td')->eq(0)->text()));
-            $this->assertSame($expectedLastName, trim($row->filter('td')->eq(1)->text()));
+            $this->assertSame($expectedName, trim($row->filter('td')->eq(0)->text()));
 
-            $linkCrawler = $row->selectLink('Promote');
+            $linkCrawler = $row->selectLink('group_members.actions.promote');
             if ($canSeeActions) {
                 $this->assertCount(1, $linkCrawler);
                 $this->assertMatchesPattern(
