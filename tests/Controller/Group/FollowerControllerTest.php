@@ -368,4 +368,46 @@ class FollowerControllerTest extends HttpTestCase
             $filters->enable('refused');
         }
     }
+
+    public function provideActorCanFollowGroupFromViewWithNotificationDisabled(): iterable
+    {
+        yield [
+            'emmanuel@mobilisation-eu.localhost',
+            'Emmanuel BORGES',
+            'ecology-in-nice',
+            'Ecology in Nice',
+            'jacques@mobilisation-eu.localhost',
+            'Jacques',
+        ];
+    }
+
+    /**
+     * @dataProvider provideActorCanFollowGroupFromViewWithNotificationDisabled
+     */
+    public function testActorCanFollowGroupFromViewWithNotificationDisabled(
+        string $actorEmail,
+        string $actorFullName,
+        string $groupSlug,
+        string $groupName,
+        string $animatorEmail,
+        string $animatorName
+    ): void {
+        $this->authenticateActor($actorEmail);
+
+        $crawler = $this->client->request('GET', "/group/$groupSlug");
+        $this->assertResponseSuccessFul();
+
+        $this->assertCount(1, $crawler->filter("a[href=\"/group/$groupSlug/follow\"]"));
+        $this->assertCount(0, $crawler->filter("a[href=\"/group/$groupSlug/unfollow\"]"));
+
+        $this->client->clickLink('group_view.follow');
+        $this->assertIsRedirectedTo("/group/$groupSlug");
+        $this->assertMailSentTo($animatorEmail);
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseSuccessFul();
+
+        $this->assertCount(0, $crawler->filter("a[href=\"/group/$groupSlug/follow\"]"));
+        $this->assertCount(1, $crawler->filter("a[href=\"/group/$groupSlug/unfollow\"]"));
+    }
 }

@@ -53,7 +53,7 @@ final class Version20190216223833 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_5387574A8BAC62AF ON events (city_id)');
         $this->addSql('COMMENT ON COLUMN events.uuid IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN events.coordinates IS \'(DC2Type:point)\'');
-        $this->addSql('CREATE TABLE actors (id BIGINT NOT NULL, city_id BIGINT NOT NULL, email_address VARCHAR(255) NOT NULL, first_name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, birthday DATE NOT NULL, gender VARCHAR(6) DEFAULT NULL, password VARCHAR(255) NOT NULL, registered_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, confirmed_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, uuid UUID NOT NULL, address VARCHAR(150) DEFAULT NULL, coordinates Geometry(Point) DEFAULT NULL, coordinates_accuracy VARCHAR(10) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE actors (id BIGINT NOT NULL, city_id BIGINT NOT NULL, email_address VARCHAR(255) NOT NULL, first_name VARCHAR(50) NOT NULL, last_name VARCHAR(50) NOT NULL, birthday DATE NOT NULL, gender VARCHAR(6) DEFAULT NULL, password VARCHAR(255) NOT NULL, registered_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, confirmed_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, uuid UUID NOT NULL, address VARCHAR(150) DEFAULT NULL, coordinates Geometry(Point) DEFAULT NULL, coordinates_accuracy VARCHAR(10) DEFAULT NULL, notification_enabled BOOLEAN DEFAULT FALSE, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_DF2BF0E5D17F50A6 ON actors (uuid)');
         $this->addSql('CREATE INDEX IDX_DF2BF0E58BAC62AF ON actors (city_id)');
         $this->addSql('CREATE UNIQUE INDEX actors_email_address_unique ON actors (email_address)');

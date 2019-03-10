@@ -451,4 +451,50 @@ class PrivilegesControllerTest extends HttpTestCase
             $filters->enable('refused');
         }
     }
+
+    public function provideAnimatorCanPromoteFollowerFromViewWithNotificationDisabled(): iterable
+    {
+        yield [
+            'emmanuel@mobilisation-eu.localhost',
+            'ecology-in-mouscron',
+            'Ecology in Mouscron',
+            'b4e514ac-5ccb-4687-aed1-14d3678b5491',
+            'marine@mobilisation-eu.localhost',
+            'Marine B.',
+        ];
+    }
+
+    /**
+     * @dataProvider provideAnimatorCanPromoteFollowerFromViewWithNotificationDisabled
+     */
+    public function testAnimatorCanPromoteFollowerFromViewWithNotificationDisabled(
+        string $animatorEmail,
+        string $groupSlug,
+        string $groupName,
+        string $followerUuid,
+        string $followerEmail,
+        string $followerName
+    ): void {
+        $this->authenticateActor($animatorEmail);
+
+        $crawler = $this->client->request('GET', "/group/$groupSlug/members");
+        $this->assertResponseSuccessFul();
+
+        $this->assertCount(0, $crawler->filter("#co-animators tr:contains(\"$followerName\")"));
+        $this->assertCount(1, $followerRow = $crawler->filter("#followers tr:contains(\"$followerName\")"));
+        $this->assertCount(1, $linkCrawler = $followerRow->selectLink('group_members.actions.promote'));
+
+        $link = $linkCrawler->link();
+        $this->assertSame($this->getAbsoluteUrl("/group/$groupSlug/promote/$followerUuid"), $link->getUri());
+
+        $this->client->click($link);
+        $this->assertIsRedirectedTo("/group/$groupSlug/members");
+        $this->assertMailSentTo($followerEmail);
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseSuccessFul();
+        $this->assertCount(1, $crawler->filter('.alert:contains("group.animator.promote.flash.success")'));
+        $this->assertCount(1, $crawler->filter("#co-animators tr:contains(\"$followerName\")"));
+        $this->assertCount(0, $crawler->filter("#followers tr:contains(\"$followerName\")"));
+    }
 }

@@ -26,6 +26,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
     public const ACTOR_09_UUID = 'bf485b41-dad1-4226-87b6-66b925c29a80';
     public const ACTOR_10_UUID = '4001a167-a417-4bfe-87bb-a15a861d0b93';
     public const ACTOR_11_UUID = '676f8e4f-b01d-4496-bce8-34bd2a1f4094';
+    public const ACTOR_12_UUID = '676f8e4f-b01d-4496-bce8-34b156845454';
 
     private $encoder;
 
@@ -164,6 +165,20 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         );
         $actor11->confirm();
 
+        $actor12 = $this->create(
+            'actor-mouscron',
+            self::ACTOR_12_UUID,
+            'emmanuel@mobilisation-eu.localhost',
+            'Emmanuel',
+            'BORGES',
+            '1978-10-19',
+            'city-mouscron',
+            null,
+            null,
+            false
+        );
+        $actor12->confirm();
+
         $manager->persist($actor1);
         $manager->persist($actor2);
         $manager->persist($actor3);
@@ -175,6 +190,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($actor9);
         $manager->persist($actor10);
         $manager->persist($actor11);
+        $manager->persist($actor12);
 
         $manager->flush();
 
@@ -200,6 +216,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
             $actor->setCity($this->getReference('city-asnieres'));
             $actor->setCoordinates(new Coordinates($city[0], $city[1], 'low'));
             $actor->setAddress($faker->streetAddress);
+            $actor->setNotificationEnabled(true);
 
             $manager->persist($actor);
 
@@ -225,7 +242,8 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         string $birthday,
         string $cityReference,
         ?string $gender = null,
-        ?string $address = null
+        ?string $address = null,
+        ?bool $notificationEnabled = true
     ): Actor {
         $actor = new Actor(Uuid::fromString($uuid));
 
@@ -235,6 +253,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
         $actor->setBirthday(new \DateTimeImmutable($birthday));
         $actor->setCity($this->getReference($cityReference));
         $actor->setCoordinates($this->getReference($cityReference)->getCoordinates());
+        $actor->setNotificationEnabled($notificationEnabled);
 
         if ($gender) {
             $actor->setGender($gender);
