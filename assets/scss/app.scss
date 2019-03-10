@@ -35,8 +35,13 @@
         }
 
         img {
-            max-height: 50px;
-            max-width: 200px;
+            max-height: 40px;
+            max-width: 180px;
+
+            @include media-breakpoint-up(md) {
+                max-height: 50px;
+                max-width: 200px;
+            }
         }
     }
 
@@ -65,10 +70,63 @@
             background: $primary;
             color: $white !important;
             padding: 0.5rem 1.7rem !important;
-            margin-right: 15px !important;
+            margin-right: 5px !important;
             border-radius: 30px;
             font-size: 14px;
             font-family: $font-roboto-mono;
+        }
+    }
+
+    &__desktop-menu {
+        display: inline-block;
+        position: relative;
+
+        &__button {
+            padding: 15px 5px 15px 20px !important;
+        }
+
+        &__caret {
+            display: none;
+            z-index: 99;
+            position: absolute;
+            right: 40px;
+            height: 20px;
+            width: 40px;
+            margin-top: -20px;
+            padding-top: 12px;
+            overflow: hidden;
+
+            &__tip {
+                width: 17px;
+                height: 17px;
+                padding: 1px;
+                margin: 0 auto -10px auto;
+                box-shadow: 0 2px 11px 1px rgba(194, 194, 194, 0.5);
+                background: #fff;
+                transform: rotate(45deg);
+            }
+        }
+
+        &__nav {
+            display: none;
+            position: absolute;
+            right: 0;
+            width: 500px;
+            border-radius: 14px;
+            box-shadow: 0 2px 11px 1px rgba(194, 194, 194, 0.5);
+            padding: 15px 10px;
+            color: #555555;
+            background: #fff;
+
+            a {
+                display: block;
+                padding: 5px 10px;
+                color: $dark;
+            }
+        }
+
+        &:hover .header__desktop-menu__nav, &:hover .header__desktop-menu__caret {
+            display: block;
         }
     }
 
@@ -98,11 +156,6 @@
 
         &--open {
             display: block;
-        }
-
-        hr {
-            border: 0;
-            border-bottom: 1px solid #e5e5e5;
         }
 
         a {

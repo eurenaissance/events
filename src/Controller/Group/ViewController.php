@@ -18,6 +18,10 @@ class ViewController extends AbstractController
      */
     public function view(Group $group, Request $request, EventRepository $eventRepository): Response
     {
+        if ($group->isRefused()) {
+            throw $this->createNotFoundException();
+        }
+
         $this->denyAccessUnlessGranted('GROUP_VIEW', $group);
 
         $finishedEventsPage = $request->get(self::FINISHED_EVENTS_PAGE_PARAMETER, 1);

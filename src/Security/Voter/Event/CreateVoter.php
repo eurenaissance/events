@@ -13,7 +13,7 @@ class CreateVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        return self::ROLE === $attribute && $subject instanceof Group;
+        return self::ROLE === $attribute;
     }
 
     /**
@@ -31,6 +31,26 @@ class CreateVoter extends Voter
             return false;
         }
 
-        return $subject->isApproved() && ($user->isAnimatorOf($subject) || $user->isCoAnimatorOf($subject));
+        // If a group is given, check if the user can create an event for this group
+        if ($subject instanceof Group) {
+            return $subject->isApproved() && ($user->isAnimatorOf($subject) || $user->isCoAnimatorOf($subject));
+        }
+
+        // Otherwise, check if the user can create an event in general
+        foreach ($user->getAnimatedGroups() as $group) {
+            if ($group->isApproved() && ($user->isAnimatorOf($group) || $user->isCoAnimatorOf($group))) {
+                return true;
+            }
+        }
+
+        foreach ($user->getCoAnimatorMemberships() as $membership) {
+            $group = $membership->getGroup();
+
+            if ($group->isApproved() && ($user->isAnimatorOf($group) || $user->isCoAnimatorOf($group))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

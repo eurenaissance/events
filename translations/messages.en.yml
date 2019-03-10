@@ -19,11 +19,12 @@ base:
 layout:
     header:
         find_event: Find events
-        find_group: Find groups
+        find_group: Explore groups
         admin:
             dashboard: Administration
             quit_impersonation: Quit impersonation
         user:
+            register: Register
             login: Log in
             logout: Log out
         cta:

@@ -2,6 +2,9 @@
 {% set current_route_params = app.request.attributes.get('_route_params') %}
 {% set instance_configuration = get_instance_configuration() %}
 
+{% set user = app.user %}
+{% set user_groups = user ? user.allGroups : [] %}
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -70,23 +73,60 @@
                         </nav>
                         <nav class="header__user">
                             {% if app.user %}
-                                {% if app.user.animatedGroups|length > 0 or app.user.coAnimatorMemberships|length > 0 %}
+                                {% if is_granted('EVENT_CREATE') %}
                                     <a href="{{ path('app_event_create_choose_group') }}" class="header__user__cta">
                                         {{ 'layout.header.cta.organize_event'|trans }}
                                     </a>
-                                {% else %}
+                                {% elseif is_granted('GROUP_CREATE') %}
                                     <a href="{{ path('app_group_creation_create') }}" class="header__user__cta">
                                         {{ 'layout.header.cta.create_group'|trans }}
                                     </a>
                                 {% endif %}
 
                                 {% if is_granted('ROLE_ACTOR') %}
-                                    <a href="{{ path('app_actor_profile_edit') }}">
-                                        {{ app.user.fullName }}
-                                    </a>
-                                {% endif %}
+                                    <div class="header__desktop-menu">
+                                        <a href="{{ path('app_actor_profile_edit') }}"
+                                           class="header__desktop-menu__button">
+                                            {{ app.user.fullName }}
+                                        </a>
 
-                                {% if is_granted('ROLE_ADMIN') %}
+                                        <div class="header__desktop-menu__caret">
+                                            <div class="header__desktop-menu__caret__tip"></div>
+                                        </div>
+                                        <div class="header__desktop-menu__nav">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <a href="{{ path('app_actor_profile_edit') }}">
+                                                        {{ 'profile.menu.account'|trans }}
+                                                    </a>
+                                                    <a href="{{ path('app_actor_profile_change_password') }}">
+                                                        {{ 'profile.menu.password'|trans }}
+                                                    </a>
+                                                    <a href="{{ path('app_actor_notifications_manage', {'uuid': app.user.uuid}) }}" target="_blank">
+                                                        {{ 'profile.menu.notifications'|trans }}
+                                                    </a>
+
+                                                    <hr />
+
+                                                    <a href="{{ path('app_logout') }}">
+                                                        {{ 'layout.header.user.logout'|trans }}
+                                                    </a>
+                                                </div>
+                                                <div class="col-6">
+                                                    {% for group in user_groups if not group.refused %}
+                                                        <a href="{{ path('app_group_view', {'slug': group.slug}) }}">
+                                                            {{ group.name }}
+                                                        </a>
+                                                    {% endfor %}
+
+                                                    <a href="{{ path('app_group_search') }}" class="text-primary">
+                                                        {{ 'layout.header.find_group'|trans }}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elseif is_granted('ROLE_ADMIN') %}
                                     <a href="{{ path('sonata_admin_dashboard') }}">
                                         {{ 'layout.header.admin.dashboard'|trans }}
                                     </a>
@@ -94,14 +134,10 @@
                                     <a href="{{ path('app_admin_impersonation_exit') }}">
                                         {{ 'layout.header.admin.quit_impersonation'|trans }}
                                     </a>
-                                {% else %}
-                                    <a href="{{ path('app_logout') }}">
-                                        {{ 'layout.header.user.logout'|trans }}
-                                    </a>
                                 {% endif %}
                             {% else %}
                                 <a href="{{ path('app_actor_registration_register') }}" class="header__user__cta">
-                                    {{ instance_configuration.homeIntroButton }}
+                                    {{ 'layout.header.user.register'|trans }}
                                 </a>
                                 <a href="{{ path('app_login') }}">
                                     {{ 'layout.header.user.login'|trans }}
@@ -151,12 +187,28 @@
                             </a>
                         {% endif %}
 
+                        {% if user_groups|length > 0 %}
+                            <hr />
+
+                            {% for group in user_groups if not group.refused %}
+                                <a href="{{ path('app_group_view', {'slug': group.slug}) }}">
+                                    {{ group.name }}
+                                </a>
+                            {% endfor %}
+                        {% endif %}
+
                         <hr />
 
-                        {% if is_granted('GROUP_CREATE') %}
-                            <a href="{{ path('app_group_creation_create') }}">
-                                {{ 'layout.header.create_group'|trans }}
-                            </a>
+                        {% if app.user %}
+                            {% if is_granted('EVENT_CREATE') %}
+                                <a href="{{ path('app_event_create_choose_group') }}">
+                                    {{ 'layout.header.cta.organize_event'|trans }}
+                                </a>
+                            {% elseif is_granted('GROUP_CREATE') %}
+                                <a href="{{ path('app_group_creation_create') }}">
+                                    {{ 'layout.header.cta.create_group'|trans }}
+                                </a>
+                            {% endif %}
                         {% endif %}
 
                         <a href="{{ path('app_event_search') }}">
