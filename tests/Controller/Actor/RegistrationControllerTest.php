@@ -251,8 +251,8 @@ class RegistrationControllerTest extends HttpTestCase
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
         $this->assertResponseContains([
-            'Your registration is now complete.',
-            'Closest groups',
+            'register.confirmed.title',
+            'register.confirmed.subtitle',
             'Ecology in Nice',
             'Culture in Cannes',
         ]);

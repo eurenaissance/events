@@ -15,6 +15,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class CreationController extends AbstractController
 {
     /**
+     * @Route("/event/create/choose-group", name="app_event_create_choose_group")
+     */
+    public function choose(): Response
+    {
+        throw new \LogicException('To implement');
+    }
+
+    /**
      * @Route("/group/{slug}/event/create", name="app_event_create", methods={"GET", "POST"})
      * @Entity("group", expr="repository.findApprovedBySlug(slug)")
      */

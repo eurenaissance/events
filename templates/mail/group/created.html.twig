@@ -2,8 +2,11 @@
 
 {% extends 'mail/base.html.twig' %}
 
-{% block body %}
-    {{ 'common.hello'|trans({ '%actor%': animator.firstName }) }}
-    <br>
-    {{ 'mail.group.created.body'|trans({ '%group%': group.name })|raw }}
+{% block content %}
+    <p>
+        {{ 'common.hello'|trans({ '%actor%': animator.firstName }) }}
+    </p>
+    <p>
+        {{ 'mail.group.created.body'|trans({ '%group%': group.name })|raw }}
+    </p>
 {% endblock %}

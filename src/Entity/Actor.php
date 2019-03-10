@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Group\AbstractMembership;
 use App\Entity\Group\CoAnimatorMembership;
 use App\Entity\Group\FollowerMembership;
 use App\Entity\Util\EntityAddressTrait;
@@ -287,6 +288,38 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
         return $this->confirmedAt;
     }
 
+    /**
+     * @return Group[]
+     */
+    public function getAllGroups(): array
+    {
+        $groups = [];
+        $names = [];
+
+        foreach ($this->animatedGroups as $group) {
+            $groups[$group->getUuidAsString()] = $group;
+            $names[$group->getUuidAsString()] = strtolower($group->getName());
+        }
+
+        /** @var AbstractMembership $membership */
+        foreach (array_merge($this->coAnimatorMemberships->toArray(), $this->followerMemberships->toArray()) as $membership) {
+            $group = $membership->getGroup();
+            if (isset($groups[$group->getUuidAsString()])) {
+                continue;
+            }
+
+            $groups[$membership->getGroup()->getUuidAsString()] = $group;
+            $names[$membership->getGroup()->getUuidAsString()] = strtolower($group->getName());
+        }
+
+        $groups = array_values($groups);
+        $names = array_values($names);
+
+        array_multisort($names, SORT_ASC, SORT_NATURAL, $groups);
+
+        return $groups;
+    }
+
     public function isAnimator(): bool
     {
         return $this->animatedGroups->isEmpty();
@@ -323,6 +356,9 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
         return $this->getCoAnimatedGroups()->contains($group);
     }
 
+    /**
+     * @return Collection|CoAnimatorMembership[]
+     */
     public function getCoAnimatorMemberships(): Collection
     {
         return $this->coAnimatorMemberships;
@@ -365,6 +401,9 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
         return $this->getFollowedGroups()->contains($group);
     }
 
+    /**
+     * @return Collection|FollowerMembership[]
+     */
     public function getFollowerMemberships(): Collection
     {
         return $this->followerMemberships;

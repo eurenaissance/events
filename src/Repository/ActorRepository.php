@@ -17,10 +17,13 @@ class ActorRepository extends ServiceEntityRepository
     {
         return $this
             ->createQueryBuilder('a')
+            ->select('a', 'c', 'ag', 'cam', 'fm')
+            ->leftJoin('a.city', 'c')
+            ->leftJoin('a.animatedGroups', 'ag')
+            ->leftJoin('a.coAnimatorMemberships', 'cam')
+            ->leftJoin('a.followerMemberships', 'fm')
             ->where('a.emailAddress = :email')
             ->setParameter('email', $email)
-            ->innerJoin('a.city', 'c')
-            ->addSelect('c')
             ->getQuery()
             ->getOneOrNullResult()
         ;

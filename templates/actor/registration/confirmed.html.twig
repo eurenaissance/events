@@ -1,27 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'actor.registration.confirmed.title'|trans %}
+{% block page_title 'register.confirmed.title'|trans %}
+
+{% block intro %}
+    <div class="intro">
+        <div class="container">
+            <h2 class="intro__title">
+                {{ 'register.confirmed.title'|trans }}
+            </h2>
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-    <p>
-        Your registration is now complete.
-    </p>
+    <div class="text-center mb-4">
+        {{ 'register.confirmed.subtitle'|trans }}
+    </div>
 
-    <h3>Closest groups</h3>
     <div class="row">
         {% for group in closest_groups %}
-            <div class="col-md-4">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ group.name }}</h5>
-                        <p class="card-text">
-                            {{ distance_between(group, app.user).meters }} meters from you.
-                        </p>
-                        <p class="card-text">{{ group.description }}</p>
-                        <a href="{{ path('app_group_view', { slug: group.slug }) }}" class="btn btn-primary">
-                            View group
+            <div class="col-lg-4">
+                <div class="card card--group mb-3">
+                    <h4 class="card__title">
+                        <a href="{{ path('app_group_view', {'slug': group.slug}) }}">
+                            {{ group.name }}
                         </a>
+                    </h4>
+
+                    <div class="card__subtitle">
+                        {{ 'group_card.organized_events'|transchoice(group.events|length) }}<br />
+                        {{ 'group_card.followers'|transchoice(group.followers|length) }}
                     </div>
+
+                    <div class="address mt-4 mb-4" id="group-address">
+                        <div class="address__icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="address__text">
+                            <div class="address__text__street">
+                                <a href="https://maps.google.com/?q={{ group.address }} {{ group.city.name }} {{ group.city.country|country }}" target="_blank">
+                                    {{ group.address|capitalize }}
+                                </a>
+                            </div>
+                            <div class="address__text__city">
+                                {{ group.city.name }}, {{ group.city.country|country }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="{{ path('app_group_follow', { slug: group.slug }) }}"
+                       class="btn btn-lg btn-block btn-primary text-white" target="_blank">
+                        {{ 'group_view.follow'|trans }}
+                    </a>
                 </div>
             </div>
         {% endfor %}

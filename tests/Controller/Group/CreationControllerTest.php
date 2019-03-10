@@ -210,10 +210,6 @@ class CreationControllerTest extends HttpTestCase
         $this->client->submitForm('group_create.submit', $fieldValues);
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($errors);
-        $this->assertNull($this->getGroupRepository()->findOneBy([
-            'animator' => $this->getActorRepository()->findOneByEmail('remi@mobilisation-eu.localhost'),
-            'name' => $fieldValues['name'],
-        ]));
     }
 
     public function provideActorCanCreateGroupFromHomepage(): iterable
@@ -227,15 +223,6 @@ class CreationControllerTest extends HttpTestCase
             'Description of my very new group.',
         ];
 
-        // animator of a confirmed group
-        yield [
-            'titouan@mobilisation-eu.localhost',
-            'Titouan',
-            'A cool group',
-            'a-cool-group',
-            'Description of a very cool group.',
-        ];
-
         // no relation with any group
         yield [
             'didier@mobilisation-eu.localhost',
@@ -243,14 +230,6 @@ class CreationControllerTest extends HttpTestCase
             'Best new group',
             'best-new-group',
             'Description of the group.',
-        ];
-
-        yield [
-            'francis@mobilisation-eu.localhost',
-            'Francis',
-            'My new group',
-            'my-new-group',
-            'Description of the new group.',
         ];
     }
 
@@ -269,7 +248,62 @@ class CreationControllerTest extends HttpTestCase
         $this->client->request('GET', '/');
         $this->assertResponseSuccessFul();
 
-        $this->client->clickLink('layout.header.create_group');
+        $this->client->clickLink('layout.header.cta.create_group');
+        $this->assertResponseSuccessFul();
+
+        $this->client->submitForm('group_create.submit', [
+            'name' => $groupName,
+            'description' => $groupDescription,
+            'city' => CityFixtures::CITY_02_UUID,
+        ]);
+        $this->assertIsRedirectedTo("/group/$groupSlug");
+        $this->assertMailSent([
+            'to' => $email,
+            'subject' => 'mail.group.created.subject',
+            'body' => "@string@.contains('mail.group.created.body')",
+        ]);
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseSuccessFul();
+        $this->assertCount(1, $crawler->filter("h2:contains(\"$groupName\")"));
+        $this->assertCount(1, $crawler->filter('.alert:contains("group.view.view.flash.pending")'));
+        $this->assertCount(1, $crawler->filter("#group-description:contains(\"$groupDescription\")"));
+        $this->assertEmpty($crawler->selectLink('layout.header.create_group'));
+    }
+
+    public function provideActorCanCreateGroup(): iterable
+    {
+        // animator of a confirmed group
+        yield [
+            'titouan@mobilisation-eu.localhost',
+            'Titouan',
+            'A cool group',
+            'a-cool-group',
+            'Description of a very cool group.',
+        ];
+
+        yield [
+            'francis@mobilisation-eu.localhost',
+            'Francis',
+            'My new group',
+            'my-new-group',
+            'Description of the new group.',
+        ];
+    }
+
+    /**
+     * @dataProvider provideActorCanCreateGroup
+     */
+    public function testActorCanCreateGroup(
+        string $email,
+        string $firstName,
+        string $groupName,
+        string $groupSlug,
+        string $groupDescription
+    ): void {
+        $this->authenticateActor($email);
+
+        $this->client->request('GET', '/group/create');
         $this->assertResponseSuccessFul();
 
         $this->client->submitForm('group_create.submit', [

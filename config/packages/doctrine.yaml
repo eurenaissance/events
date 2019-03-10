@@ -29,7 +29,3 @@ doctrine:
         dql:
             numeric_functions:
                 st_distance_sphere: CrEOF\Spatial\ORM\Query\AST\Functions\PostgreSql\STDistanceSphere
-        filters:
-            refused:
-                class: App\Doctrine\RefusedFilter
-                enabled: true
