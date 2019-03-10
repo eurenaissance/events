@@ -26,6 +26,7 @@ class CreationController extends AbstractController
             return $this->redirectToRoute('app_homepage');
         }
 
+        /** @var Group[] $availableGroups */
         $availableGroups = [];
         foreach (array_merge($user->getCoAnimatedGroups()->toArray(), $user->getAnimatedGroups()->toArray()) as $group) {
             if ($this->isGranted('EVENT_CREATE', $group)) {
@@ -34,7 +35,11 @@ class CreationController extends AbstractController
         }
 
         if (!$availableGroups) {
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_homepage');
+        }
+
+        if (1 === count($availableGroups)) {
+            return $this->redirectToRoute('app_event_create', ['slug' => $availableGroups[0]->getSlug()]);
         }
 
         return $this->render('event/creation/choose.html.twig', [

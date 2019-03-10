@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SearchController extends AbstractController
 {
     /**
-     * @Route("/group/search", name="app_group_search", methods="GET")
+     * @Route("/search", name="app_group_search", methods="GET")
      */
     public function search(): Response
     {
