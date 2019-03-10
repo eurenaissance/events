@@ -108,9 +108,15 @@
 
                                                     <hr />
 
-                                                    <a href="{{ path('app_logout') }}">
-                                                        {{ 'layout.header.user.logout'|trans }}
-                                                    </a>
+                                                    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                                                        <a href="{{ path('app_admin_impersonation_exit') }}">
+                                                            {{ 'layout.header.admin.quit_impersonation'|trans }}
+                                                        </a>
+                                                    {% else %}
+                                                        <a href="{{ path('app_logout') }}">
+                                                            {{ 'layout.header.user.logout'|trans }}
+                                                        </a>
+                                                    {% endif %}
                                                 </div>
                                                 <div class="col-6">
                                                     {% for group in user_groups if not group.refused %}

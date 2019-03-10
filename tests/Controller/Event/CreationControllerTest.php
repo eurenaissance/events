@@ -4,12 +4,59 @@ namespace Test\App\Controller\Event;
 
 use App\DataFixtures\CityFixtures;
 use App\Tests\HttpTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * @group functional
  */
 class CreationControllerTest extends HttpTestCase
 {
+    public function provideChooseGroupUsers(): iterable
+    {
+        // No group available => redirect to home
+        yield [
+            'email' => 'remi@mobilisation-eu.localhost',
+            'redirect' => '/',
+            'groups' => [],
+        ];
+
+        // One group available => redirect to this group event creation
+        yield [
+            'email' => 'francis@mobilisation-eu.localhost',
+            'redirect' => '/group/ecology-in-paris/event/create',
+            'groups' => [],
+        ];
+
+        // No group available => chooser
+        yield [
+            'email' => 'titouan@mobilisation-eu.localhost',
+            'redirect' => null,
+            'groups' => ['Ecology in Clichy', 'Ecology in Paris'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideChooseGroupUsers
+     */
+    public function testChooseGroup(string $email, ?string $expectedRedirect, array $expectedGroups): void
+    {
+        $this->authenticateActor($email);
+
+        $crawler = $this->client->request('GET', '/event/create/choose-group');
+
+        if ($expectedRedirect) {
+            $this->assertIsRedirectedTo($expectedRedirect);
+        } else {
+            $this->assertResponseSuccessFul();
+
+            $groups = $crawler->filter('.card__title')->each(function (Crawler $node) {
+                return trim($node->text());
+            });
+
+            $this->assertSame($expectedGroups, $groups);
+        }
+    }
+
     public function provideGroupsForAnonymous(): iterable
     {
         yield ['ecology-in-paris'];
