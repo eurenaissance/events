@@ -26,6 +26,7 @@ class ProfileControllerTest extends HttpTestCase
         yield ['GET', '/profile/change-password'];
         yield ['POST', '/profile/change-password', [
             'plainPassword' => ['first' => 'test@12345', 'second' => 'test@12345'],
+            'oldPassword' => 'test@12345',
         ]];
     }
 
@@ -183,17 +184,17 @@ class ProfileControllerTest extends HttpTestCase
 
     public function providePasswordChanges(): iterable
     {
-        yield ['titouan@mobilisation-eu.localhost', 'Titouan', 'secret!321'];
-        yield ['marine@mobilisation-eu.localhost', 'Marine', '654_pass_123'];
-        yield ['nicolas@mobilisation-eu.localhost', 'Nicolas', 'n3W_P@sS'];
+        yield ['titouan@mobilisation-eu.localhost', 'Titouan', 'secret!321', 'secret!12345'];
+        yield ['marine@mobilisation-eu.localhost', 'Marine', '654_pass_123', 'secret!12345'];
+        yield ['nicolas@mobilisation-eu.localhost', 'Nicolas', 'n3W_P@sS', 'secret!12345'];
         // actor with pending reset password token
-        yield ['remi@mobilisation-eu.localhost', 'Rémi', 'new_password!123'];
+        yield ['remi@mobilisation-eu.localhost', 'Rémi', 'new_password!123', 'secret!12345'];
     }
 
     /**
      * @dataProvider providePasswordChanges
      */
-    public function testChangePasswordSuccess(string $email, string $firstName, string $newPassword): void
+    public function testChangePasswordSuccess(string $email, string $firstName, string $newPassword, string $currentPassword): void
     {
         $this->authenticateActor($email);
 
@@ -201,13 +202,21 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertResponseSuccessFul();
 
         $form = $crawler->selectButton('actor.profile.change_password.submit')->form();
-        $this->assertArraySubset(['plainPassword' => ['first' => '', 'second' => '']], $form->getPhpValues());
+        $formData = [
+            'plainPassword' => [
+                'first' => '',
+                'second' => '',
+            ],
+            'currentPassword' => '',
+        ];
+        $this->assertArraySubset($formData, $form->getPhpValues());
 
         $this->client->submit($form, [
             'plainPassword' => [
                 'first' => $newPassword,
                 'second' => $newPassword,
             ],
+            'currentPassword' => $currentPassword,
         ]);
         $this->assertIsRedirectedTo('/profile');
         $this->assertMailSent([
@@ -245,20 +254,36 @@ class ProfileControllerTest extends HttpTestCase
         yield [
             'first' => 'test',
             'second' => 'test',
+            'currentPassword' => 'test',
             'error' => 'common.password.min_length',
         ];
 
         yield [
             'first' => 'test123',
             'second' => '123test',
+            'currentPassword' => 'test',
             'error' => 'common.password.mismatch',
+        ];
+
+        yield [
+            'first' => 'test123',
+            'second' => '123test',
+            'currentPassword' => '',
+            'error' => 'actor.current_password.invalid',
+        ];
+
+        yield [
+            'first' => 'test123',
+            'second' => 'test123',
+            'currentPassword' => 'wrongpassword',
+            'error' => 'actor.current_password.invalid',
         ];
     }
 
     /**
      * @dataProvider provideBadPasswordChanges
      */
-    public function testChangePasswordFailure(string $first, string $second, string $error): void
+    public function testChangePasswordFailure(string $first, string $second, string $currentPassword, string $error): void
     {
         $initialPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation-eu.localhost')->getPassword();
 
@@ -272,6 +297,7 @@ class ProfileControllerTest extends HttpTestCase
                 'first' => $first,
                 'second' => $second,
             ],
+            'currentPassword' => $currentPassword,
         ]);
         $this->assertResponseSuccessFul();
         $this->assertResponseContains($error);
