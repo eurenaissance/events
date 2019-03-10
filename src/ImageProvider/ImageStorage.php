@@ -25,10 +25,10 @@ class ImageStorage implements ImageStorageInterface
     private $storage;
     private $glide;
 
-    public function __construct(ImageManager $im, FilesystemInterface $publicImages, Server $glide)
+    public function __construct(ImageManager $im, FilesystemInterface $storage, Server $glide)
     {
         $this->imageManager = $im;
-        $this->storage = $publicImages;
+        $this->storage = $storage;
         $this->glide = $glide;
     }
 
