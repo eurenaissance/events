@@ -51,6 +51,9 @@ actor.gender.invalid: This gender is invalid.
 # Current password
 actor.current_password.invalid: Your current password is invalid!
 
+# Terms
+actor.terms.needed: You must accept the Terms of Usage and the Privacy Policy!
+
 # Administrator
 #########################################
 

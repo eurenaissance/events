@@ -333,6 +333,8 @@ actor:
         label: Zip code
     city:
         label: City
+    terms:
+        label: I have read and accept the <a href="%terms_url%">Terms of Usage</a> and the <a href="%privacy_url%">Privacy Policy</a>
 
     registration:
         register:
