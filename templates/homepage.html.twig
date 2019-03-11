@@ -29,7 +29,6 @@
         {% endif %}
     </div>
 
-    {% if upcomingEvents %}
     <div class="home__category">
         <h3 class="mb-2 p-2 text-black">
             {{ 'home.upcoming.title'|trans }}
@@ -92,13 +91,14 @@
             {% endfor %}
         </div>
 
+        {% if upcomingEvents %}
         <div class="text-center mt-5">
             <a href="{{ path('app_event_search') }}" class="btn btn-outline-primary">
                 {{ 'home.upcoming.view_all'|trans }}
             </a>
         </div>
+        {% endif %}
     </div>
-    {% endif %}
 
     {% if mostActiveGroups %}
     <div class="home__category">
