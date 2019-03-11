@@ -42,7 +42,11 @@ for (let slug in exposed.map.blocks) {
     markers.push(L.marker([block.lng, block.lat], { icon: markerIcon }).bindPopup(content));
 }
 
-const featureGroup = L.featureGroup(markers);
+if (markers.length === 0) {
+    map.setView([47.206566, 13.402325], 4);
+} else {
+    const featureGroup = L.featureGroup(markers);
 
-featureGroup.addTo(map);
-map.fitBounds(featureGroup.getBounds());
+    featureGroup.addTo(map);
+    map.fitBounds(featureGroup.getBounds());
+}
