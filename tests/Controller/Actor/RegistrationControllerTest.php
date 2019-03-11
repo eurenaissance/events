@@ -23,6 +23,7 @@ class RegistrationControllerTest extends HttpTestCase
             'address' => '3 random street',
             'country' => 'FR',
             'zipCode' => '92270',
+            'terms' => '1',
             'city' => CityFixtures::CITY_02_UUID,
         ]];
         yield ['GET', '/register/check-email'];
@@ -54,6 +55,7 @@ class RegistrationControllerTest extends HttpTestCase
             'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
             'plainPassword' => ['first' => 'test123', 'second' => 'test123'],
             'address' => '123 random street',
+            'terms' => '1',
             'city' => CityFixtures::CITY_02_UUID,
         ]);
         $this->assertIsRedirectedTo('/register/check-email');
@@ -79,6 +81,7 @@ class RegistrationControllerTest extends HttpTestCase
                 'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
                 'plainPassword' => ['first' => null, 'second' => null],
                 'address' => '123 random street',
+                'terms' => '1',
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
@@ -95,6 +98,7 @@ class RegistrationControllerTest extends HttpTestCase
                 'birthday' => ['year' => 1988, 'month' => 11, 'day' => 27],
                 'plainPassword' => ['first' => '', 'second' => ''],
                 'address' => '123 random street',
+                'terms' => '1',
                 'city' => CityFixtures::CITY_02_UUID,
             ],
             [
@@ -111,6 +115,7 @@ class RegistrationControllerTest extends HttpTestCase
                 'birthday' => [],
                 'plainPassword' => ['first' => '123', 'second' => '123'],
                 'address' => '123 random street',
+                'terms' => '1',
                 'city' => 'abcdef',
             ],
             [
@@ -139,6 +144,7 @@ class RegistrationControllerTest extends HttpTestCase
                 'common.password.mismatch',
                 'common.city.invalid',
                 'common.address.max_length',
+                'actor.terms.needed',
             ],
         ];
     }

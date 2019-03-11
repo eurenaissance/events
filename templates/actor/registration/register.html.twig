@@ -72,6 +72,13 @@
                 <div class="col-md-4"></div>
             </div>
 
+            <div class="row">
+                <div class="col-md-12 {% if form.terms.vars.errors|length == 0 %}form-check-inline{% endif %}">
+                    <span>{{ form_row(form.terms, { label: false }) }}</span>
+                    <span>{{ 'actor.terms.label'|trans({'%terms_url%': path('app_page_terms'), '%privacy_url%': path('app_page_privacy')})|raw }}</span>
+                </div>
+            </div>
+
             <div class="mt-5 text-center">
                 <button type="submit" class="btn btn-lg btn-block btn-primary">
                     {{ 'register.submit'|trans }}
