@@ -107,6 +107,10 @@ register:
     main: Join to the European transformation
     sub: Let's rethink Europe together
     submit: Register
+    terms:
+        title: Terms of Service and Privacy Policy
+        message: Read the <a href="%terms_url%">Terms of Usage</a> and <a href="%privacy_url%">Privacy Policy</a>.
+        label: I have read and accept the Terms of Usage and the Privacy Policy.
     confirm:
         title: One last step!
         subtitle: We sent you an e-mail with a link to confirm your account.
