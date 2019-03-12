@@ -105,6 +105,7 @@ class Mailer
         }
     }
 
+    // not tested yet ?
     public function sendGroupConfirmedMail(Group $group): void
     {
         if ($group->getAnimator()->isNotificationEnabled()) {
