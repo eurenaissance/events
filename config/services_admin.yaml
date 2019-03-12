@@ -7,31 +7,31 @@ services:
         class: App\Admin\AdministratorAdmin
         arguments: [~, App\Entity\Administrator, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: 'System', label: 'Administrators' }
+            - { name: sonata.admin, manager_type: orm, label: 'Administrators' }
 
     admin.city:
         class: App\Admin\CityAdmin
         arguments: [~, App\Entity\City, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: 'System', label: 'City' }
+            - { name: sonata.admin, manager_type: orm, label: 'City' }
 
     admin.actor:
         class: App\Admin\ActorAdmin
         arguments: [~, App\Entity\Actor, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: 'Mobilisation', label: 'Actors' }
+            - { name: sonata.admin, manager_type: orm, label: 'Actors' }
 
     admin.group:
         class: App\Admin\GroupAdmin
         arguments: [~, App\Entity\Group, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: 'Mobilisation', label: 'Groups' }
+            - { name: sonata.admin, manager_type: orm, label: 'Groups' }
 
     admin.event:
         class: App\Admin\EventAdmin
         arguments: [~, App\Entity\Event, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: 'Mobilisation', label: 'Events' }
+            - { name: sonata.admin, manager_type: orm, label: 'Events' }
 
     admin.extension.read_only:
         class: App\Admin\Extension\ReadOnlyExtension

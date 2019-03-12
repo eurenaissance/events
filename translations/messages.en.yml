@@ -278,7 +278,35 @@ event_form:
     finishAt: and ends at ...
     postalAddress: Postal address
 
-
+admin:
+    configuration:
+        label: Instance Configuration
+    party:
+        name: Party Name
+        logo: Party Logo
+        website: party Website
+    color_primary: Color Primary
+    favicon: Favicon
+    meta:
+        description: Meta description
+        image: Meta Image
+        google: Google Analytics Id
+    home:
+        image: Home Image
+        intro:
+            subtitle: Intro subtitle
+            title: Intro title
+            button: Intro button
+        display_map: Display Map
+    email:
+        sender: Email sender
+        sender_name: Email sender name
+        contact: Email contact
+    submit:
+        label: Update configuration
+    edit:
+        flash:
+            success: The configuration was successfully updated
 
 #
 # TODO Migrate / remove the following translations

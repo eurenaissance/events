@@ -28,7 +28,7 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(length=50)
+     * @ORM\Column(length=200)
      */
     private $partyLogo;
 
@@ -76,10 +76,10 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(length=50)
+     * @ORM\Column(length=200)
      *
      * @Assert\NotBlank
-     * @Assert\Length(max=50)
+     * @Assert\Length(max=200)
      */
     private $favicon;
 
@@ -96,10 +96,10 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(length=50)
+     * @ORM\Column(length=200)
      *
      * @Assert\NotBlank
-     * @Assert\Length(max=50)
+     * @Assert\Length(max=200)
      */
     private $metaImage;
 
@@ -115,10 +115,10 @@ class Configuration
     /**
      * @var string|null
      *
-     * @ORM\Column(length=100)
+     * @ORM\Column(length=200)
      *
      * @Assert\NotBlank
-     * @Assert\Length(max=100)
+     * @Assert\Length(max=200)
      */
     private $homeImage;
 
@@ -164,7 +164,6 @@ class Configuration
      *
      * @ORM\Column(length=200)
      *
-     * @Assert\NotBlank
      * @Assert\Length(max=200)
      * @Assert\Email
      */
@@ -175,7 +174,6 @@ class Configuration
      *
      * @ORM\Column(length=50, nullable=true)
      *
-     * @Assert\NotBlank
      * @Assert\Length(max=50)
      */
     private $emailSenderName;
@@ -185,7 +183,6 @@ class Configuration
      *
      * @ORM\Column(length=200, nullable=true)
      *
-     * @Assert\NotBlank
      * @Assert\Length(max=200)
      * @Assert\Email
      */

@@ -18,4 +18,9 @@ class ConfigurationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Configuration::class);
     }
+
+    public function getConfiguration(): ?Configuration
+    {
+        return $this->findOneBy([]);
+    }
 }
