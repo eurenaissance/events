@@ -325,4 +325,47 @@ class CreationControllerTest extends HttpTestCase
         $this->assertCount(1, $crawler->filter("#group-description:contains(\"$groupDescription\")"));
         $this->assertEmpty($crawler->selectLink('layout.header.create_group'));
     }
+
+    public function provideActorCanCreateGroupWithNotificationDisabled(): iterable
+    {
+        // animator of a confirmed group
+        yield [
+            'emmanuel@mobilisation-eu.localhost',
+            'emmanuel',
+            'An another cool group',
+            'an-another-cool-group',
+            'Description of an another very cool group.',
+        ];
+    }
+
+    /**
+     * @dataProvider provideActorCanCreateGroupWithNotificationDisabled
+     */
+    public function testActorCanCreateGroupWithNotificationDisabled(
+        string $email,
+        string $firstName,
+        string $groupName,
+        string $groupSlug,
+        string $groupDescription
+    ): void {
+        $this->authenticateActor($email);
+
+        $this->client->request('GET', '/group/create');
+        $this->assertResponseSuccessFul();
+
+        $this->client->submitForm('group_create.submit', [
+            'name' => $groupName,
+            'description' => $groupDescription,
+            'city' => CityFixtures::CITY_02_UUID,
+        ]);
+        $this->assertIsRedirectedTo("/group/$groupSlug");
+        $this->assertNoMailSent();
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseSuccessFul();
+        $this->assertCount(1, $crawler->filter("h2:contains(\"$groupName\")"));
+        $this->assertCount(1, $crawler->filter('.alert:contains("group.view.view.flash.pending")'));
+        $this->assertCount(1, $crawler->filter("#group-description:contains(\"$groupDescription\")"));
+        $this->assertEmpty($crawler->selectLink('layout.header.create_group'));
+    }
 }

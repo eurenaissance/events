@@ -2,8 +2,10 @@
 
 namespace App\Controller\Actor;
 
+use App\Actor\NotificationHandler;
 use App\Actor\ProfileHandler;
 use App\Form\Actor\ChangePasswordType;
+use App\Form\Actor\NotificationType;
 use App\Form\Actor\ProfileType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,8 +63,22 @@ class ProfileController extends AbstractController
     /**
      * @Route("/notifications", name="app_actor_profile_notifications", methods={"GET", "POST"})
      */
-    public function notifications(): Response
+    public function notifications(Request $request, NotificationHandler $notificationHandler): Response
     {
-        throw new \LogicException('To implement');
+        $form = $this->createForm(NotificationType::class, $actor = $this->getUser());
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $notificationEnabled = (bool) $form->get('notificationEnabled')->getData();
+
+            $notificationHandler->changeNotification($actor, $notificationEnabled);
+
+            $this->addFlash('info', 'actor.profile.notification.flash.success');
+
+            return $this->redirectToRoute('app_actor_profile_notifications');
+        }
+
+        return $this->render('actor/profile/notification.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

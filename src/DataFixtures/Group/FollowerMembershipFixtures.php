@@ -20,6 +20,7 @@ class FollowerMembershipFixtures extends Fixture implements DependentFixtureInte
         $manager->persist($this->create('actor-nice', 'group-cannes-approved'));
         $manager->persist($this->create('actor-cannes', 'group-nice-ecology-approved'));
         $manager->persist($this->create('actor-cannes', 'group-lille-approved-and-refused'));
+        $manager->persist($this->create('actor-paris', 'group-mouscron-ecology-approved'));
 
         $manager->flush();
     }

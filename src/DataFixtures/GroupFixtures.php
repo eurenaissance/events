@@ -23,6 +23,8 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
     public const GROUP_08_UUID = '9dd181af-58a5-42f4-91d6-1e0b6c6723a5';
     public const GROUP_09_UUID = '7d94e9cf-1f88-4fd4-82a8-6e4a8949f000';
     public const GROUP_10_UUID = 'baa530cc-1ade-4275-9e8c-ba3530507c0e';
+    public const GROUP_11_UUID = 'baa530cc-1ade-4275-9e8c-56955bc07c0e';
+    public const GROUP_12_UUID = 'baa530cc-1ade-4275-9e8c-56896bc07c0e';
 
     private $slugify;
 
@@ -145,6 +147,28 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
         );
         $group10->approve();
 
+        $group11 = $this->create(
+            'group-mouscron-approved',
+            self::GROUP_11_UUID,
+            'Culture in Mouscron',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'actor-mouscron',
+            'city-mouscron',
+            '345 random street'
+        );
+        $group11->approve();
+
+        $group12 = $this->create(
+            'group-mouscron-ecology-approved',
+            self::GROUP_12_UUID,
+            'Ecology in Mouscron',
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'actor-mouscron',
+            'city-mouscron',
+            '345 random street'
+        );
+        $group12->approve();
+
         $manager->persist($group1);
         $manager->persist($group2);
         $manager->persist($group3);
@@ -155,6 +179,8 @@ class GroupFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($group8);
         $manager->persist($group9);
         $manager->persist($group10);
+        $manager->persist($group11);
+        $manager->persist($group12);
 
         $manager->flush();
 
