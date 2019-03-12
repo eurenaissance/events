@@ -6,7 +6,10 @@
 {% block profile_body %}
     {{ form_start(form)}}
 
-    {{ form_row(form.notificationEnabled, { label: 'actor.profile.notification.label' }) }}
+    {{ form_row(form.notificationEnabled, {
+        label: 'actor.profile.notification.label',
+        label_attr: { class: 'checkbox-custom' }
+    }) }}
 
     <div class="mt-5">
         <button type="submit" class="btn btn-primary">

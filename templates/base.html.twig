@@ -254,16 +254,19 @@
                             © {{ instance_configuration.partyName }}
                         </div>
                         <div class="footer__links">
-                            <a href="">
+                            <a href="{{ path('app_page_legalities') }}">
                                 {{ 'layout.footer.legalities'|trans }}
                             </a>
-                            <a href="">
+                            <a href="{{ path('app_page_terms') }}">
                                 {{ 'layout.footer.terms'|trans }}
                             </a>
-                            <a href="">
+                            <a href="{{ path('app_page_privacy') }}">
                                 {{ 'layout.footer.privacy'|trans }}
                             </a>
-                            <a href="">
+                            <a href="{{ path('app_page_cookies') }}">
+                                {{ 'layout.footer.cookies'|trans }}
+                            </a>
+                            <a href="{{ path('app_contact') }}">
                                 {{ 'layout.footer.contact'|trans }}
                             </a>
                         </div>

@@ -80,7 +80,10 @@
                 {{ 'register.terms.message'|trans({'%terms_url%': path('app_page_terms'), '%privacy_url%': path('app_page_privacy')})|raw }}
             </p>
 
-            {{ form_row(form.terms, { label: 'register.terms.label' }) }}
+            {{ form_row(form.terms, {
+                label: 'register.terms.label',
+                label_attr: { class: 'checkbox-custom' }
+            }) }}
 
             <div class="mt-5 text-center">
                 <button type="submit" class="btn btn-lg btn-block btn-primary">
