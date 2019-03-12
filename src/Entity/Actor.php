@@ -145,6 +145,13 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
     private $events;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $notificationEnabled = false;
+
+    /**
      * @var string[]
      */
     private $roles = [];
@@ -449,5 +456,15 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
     public function changePassword(string $encodedPassword): void
     {
         $this->password = $encodedPassword;
+    }
+
+    public function isNotificationEnabled(): bool
+    {
+        return $this->notificationEnabled;
+    }
+
+    public function setNotificationEnabled(bool $notificationEnabled): void
+    {
+        $this->notificationEnabled = $notificationEnabled;
     }
 }

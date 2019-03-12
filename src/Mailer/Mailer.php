@@ -92,69 +92,79 @@ class Mailer
 
     public function sendGroupCreatedMail(Group $group): void
     {
-        $this->send([
-            'to' => $group->getAnimator()->getEmailAddress(),
-            'subject' => $this->trans('mail.group.created.subject', [
-                '%group%' => $group->getName(),
-            ]),
-            'body' => $this->render('mail/group/created.html.twig', [
-                'group' => $group,
-            ]),
-        ]);
+        if ($group->getAnimator()->isNotificationEnabled()) {
+            $this->send([
+                'to' => $group->getAnimator()->getEmailAddress(),
+                'subject' => $this->trans('mail.group.created.subject', [
+                    '%group%' => $group->getName(),
+                ]),
+                'body' => $this->render('mail/group/created.html.twig', [
+                    'group' => $group,
+                ]),
+            ]);
+        }
     }
 
     public function sendGroupConfirmedMail(Group $group): void
     {
-        $this->send([
-            'to' => $group->getAnimator()->getEmailAddress(),
-            'subject' => $this->trans('mail.group.confirmed.subject', [
-                '%group%' => $group->getName(),
-            ]),
-            'body' => $this->render('mail/group/confirmed.html.twig', [
-                'group' => $group,
-            ]),
-        ]);
+        if ($group->getAnimator()->isNotificationEnabled()) {
+            $this->send([
+                'to' => $group->getAnimator()->getEmailAddress(),
+                'subject' => $this->trans('mail.group.confirmed.subject', [
+                    '%group%' => $group->getName(),
+                ]),
+                'body' => $this->render('mail/group/confirmed.html.twig', [
+                    'group' => $group,
+                ]),
+            ]);
+        }
     }
 
     public function sendGroupNewFollowerMail(FollowerMembership $membership): void
     {
         $group = $membership->getGroup();
 
-        $this->send([
-            'to' => $group->getAnimator()->getEmailAddress(),
-            'subject' => $this->trans('mail.group.new_follower.subject', [
-                '%group%' => $group->getName(),
-            ]),
-            'body' => $this->render('mail/group/new_follower.html.twig', [
-                'membership' => $membership,
-            ]),
-        ]);
+        if ($group->getAnimator()->isNotificationEnabled()) {
+            $this->send([
+                'to' => $group->getAnimator()->getEmailAddress(),
+                'subject' => $this->trans('mail.group.new_follower.subject', [
+                    '%group%' => $group->getName(),
+                ]),
+                'body' => $this->render('mail/group/new_follower.html.twig', [
+                    'membership' => $membership,
+                ]),
+            ]);
+        }
     }
 
     public function sendGroupNewCoAnimatorMail(CoAnimatorMembership $membership): void
     {
-        $this->send([
-            'to' => $membership->getActor()->getEmailAddress(),
-            'subject' => $this->trans('mail.group.new_co_animator.subject', [
-                '%group%' => $membership->getGroup()->getName(),
-            ]),
-            'body' => $this->render('mail/group/new_co_animator.html.twig', [
-                'membership' => $membership,
-            ]),
-        ]);
+        if ($membership->getActor()->isNotificationEnabled()) {
+            $this->send([
+                'to' => $membership->getActor()->getEmailAddress(),
+                'subject' => $this->trans('mail.group.new_co_animator.subject', [
+                    '%group%' => $membership->getGroup()->getName(),
+                ]),
+                'body' => $this->render('mail/group/new_co_animator.html.twig', [
+                    'membership' => $membership,
+                ]),
+            ]);
+        }
     }
 
     public function sendEventCreatedMail(Event $event): void
     {
-        $this->send([
-            'to' => $event->getCreator()->getEmailAddress(),
-            'subject' => $this->trans('mail.event.created.subject', [
-                '%event%' => $event->getName(),
-            ]),
-            'body' => $this->render('mail/event/created.html.twig', [
-                'event' => $event,
-            ]),
-        ]);
+        if ($event->getCreator()->isNotificationEnabled()) {
+            $this->send([
+                'to' => $event->getCreator()->getEmailAddress(),
+                'subject' => $this->trans('mail.event.created.subject', [
+                    '%event%' => $event->getName(),
+                ]),
+                'body' => $this->render('mail/event/created.html.twig', [
+                    'event' => $event,
+                ]),
+            ]);
+        }
     }
 
     private function send(array $mail): void

@@ -10,6 +10,44 @@ use App\Tests\HttpTestCase;
  */
 class ProfileControllerTest extends HttpTestCase
 {
+    public function testChangeNotificationSuccess(): void
+    {
+        $this->authenticateActor('remi@mobilisation-eu.localhost');
+
+        // Enable notifications
+        $crawler = $this->client->request('GET', '/profile/notifications');
+        $this->assertResponseSuccessFul();
+
+        $form = $crawler->selectButton('actor.profile.notification.submit')->form();
+        $this->assertArraySubset([], $form->getPhpValues());
+
+        $this->client->submit($form, [
+            'notificationEnabled' => '1',
+        ]);
+        $this->assertIsRedirectedTo('/profile/notifications');
+        $this->client->followRedirect();
+        $this->assertResponseContains('actor.profile.notification.flash.success');
+
+        // disable notifications
+        $crawler = $this->client->request('GET', '/profile/notifications');
+        $this->assertResponseSuccessFul();
+
+        $form = $crawler->selectButton('actor.profile.notification.submit')->form();
+        $this->assertArraySubset(
+            ['notificationEnabled' => '1'],
+            $form->getPhpValues()
+        );
+
+        $this->client->submit($form, []);
+        $this->assertIsRedirectedTo('/profile/notifications');
+        $this->client->followRedirect();
+        $this->assertResponseContains('actor.profile.notification.flash.success');
+
+        // ensure user is logged in
+        $this->client->request('GET', '/profile/notifications');
+        $this->assertResponseSuccessFul();
+    }
+
     public function provideRequestsForAnonymous(): iterable
     {
         yield ['GET', '/profile'];

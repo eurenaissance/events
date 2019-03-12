@@ -20,6 +20,7 @@ class CityFixtures extends Fixture
     public const CITY_09_UUID = '98cccdf2-ced1-4e40-935d-e562a0d9d391';
     public const CITY_10_UUID = '19f5a6f0-ea04-421a-bfea-4ead09e30506';
     public const CITY_11_UUID = '43b95711-0c51-4bc1-8c8c-18d9f8d340aa';
+    public const CITY_12_UUID = '43b95711-0c51-4bc1-8c8c-895658d340aa';
 
     public function load(ObjectManager $manager)
     {
@@ -54,6 +55,9 @@ class CityFixtures extends Fixture
         $manager->persist($city);
 
         $city = $this->create('bucarest', self::CITY_11_UUID, 'RO', 'Bucureşti', '021064', 44.418, 26.1691);
+        $manager->persist($city);
+
+        $city = $this->create('mouscron', self::CITY_12_UUID, 'BE', 'Mouscron', '7712', 50.743, 3.2139);
         $manager->persist($city);
 
         $manager->flush();

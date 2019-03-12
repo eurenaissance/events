@@ -381,6 +381,13 @@ actor:
             flash:
                 success: Your password has been successfully changed.
 
+        notification:
+            submit: Change my notification preferences
+            title: My profile - Change my notification preferences
+            label: Enable or disable notifications
+            flash:
+                success: Your notification preferences has been successfully changed.
+
     reset_password:
         request:
             link:

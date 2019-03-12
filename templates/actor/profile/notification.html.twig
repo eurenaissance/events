@@ -1,0 +1,18 @@
+{% extends 'actor/profile/_base.html.twig' %}
+
+{% block page_title 'actor.profile.notification.title'|trans %}
+{% block item_profile_notifications 'active' %}
+
+{% block profile_body %}
+    {{ form_start(form)}}
+
+    {{ form_row(form.notificationEnabled, { label: 'actor.profile.notification.label' }) }}
+
+    <div class="mt-5">
+        <button type="submit" class="btn btn-primary">
+            {{ 'actor.profile.notification.submit'|trans }}
+        </button>
+    </div>
+
+    {{ form_end(form) }}
+{% endblock %}

@@ -374,4 +374,53 @@ class CreationControllerTest extends HttpTestCase
         $this->assertCount(1, $crawler->filter('h2:contains("'.$fieldValues['name'].'")'));
         $this->assertCount(1, $crawler->filter('#event-description:contains("'.$fieldValues['description'].'")'));
     }
+
+    public function provideAnimatorWithNotificationDisabledCanCreateEventFromGroup(): iterable
+    {
+        // animator of the group
+        yield [
+            'emmanuel@mobilisation-eu.localhost',
+            'culture-in-mouscron',
+            [
+                'name' => 'My new event about development',
+                'description' => 'Description of my new event',
+                'city' => CityFixtures::CITY_02_UUID,
+                'beginAt' => $beginAt = $this->createFormDateTime('+2 days'),
+                'finishAt' => $this->createFormDateTime('+3 days'),
+            ],
+            sprintf(
+                '%s-%s-%s-my-new-event-about-development',
+                $beginAt['date']['year'],
+                str_pad($beginAt['date']['month'], 2, '0', STR_PAD_LEFT),
+                str_pad($beginAt['date']['day'], 2, '0', STR_PAD_LEFT)
+            ),
+        ];
+    }
+
+    /**
+     * @dataProvider provideAnimatorWithNotificationDisabledCanCreateEventFromGroup
+     */
+    public function testAnimatorWithDisabledNotificationCanCreateEventFromGroup(
+        string $email,
+        string $groupSlug,
+        array $fieldValues,
+        string $eventSlug
+    ): void {
+        $this->authenticateActor($email);
+
+        $this->client->request('GET', "/group/$groupSlug");
+        $this->assertResponseSuccessFul();
+
+        $this->client->clickLink('group_view.actions.organize_event');
+        $this->assertResponseSuccessFul();
+
+        $this->client->submitForm('event_create.submit', $fieldValues);
+        $this->assertIsRedirectedTo("/event/$eventSlug");
+        $this->assertNoMailSent();
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseSuccessFul();
+        $this->assertCount(1, $crawler->filter('h2:contains("'.$fieldValues['name'].'")'));
+        $this->assertCount(1, $crawler->filter('#event-description:contains("'.$fieldValues['description'].'")'));
+    }
 }
