@@ -10,7 +10,7 @@
         "creof/doctrine2-spatial": "^1.2",
         "danhunsaker/flysystem-redis": "^1.0",
         "endroid/qr-code-bundle": "^3.3",
-        "enqueue/amqp-lib": "^0.9.2",
+        "enqueue/amqp-lib": "0.9.2",
         "enqueue/enqueue-bundle": "^0.9.3",
         "enqueue/fs": "^0.9.2",
         "geokit/geokit": "^1.3",

@@ -41,6 +41,7 @@ RUN set -xe \
         gd \
         gmp \
         intl \
+        sockets \
         pdo_pgsql \
         pdo_sqlite \
         zip \
