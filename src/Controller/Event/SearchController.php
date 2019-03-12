@@ -13,6 +13,6 @@ class SearchController extends AbstractController
      */
     public function search(): Response
     {
-        throw new \LogicException('To implement');
+        return $this->render('to_implement.html.twig');
     }
 }
