@@ -31,4 +31,9 @@ class NotificationType extends AbstractType
             'data_class' => Actor::class,
         ]);
     }
+
+    public function getBlockPrefix(): ?string
+    {
+        return null;
+    }
 }
