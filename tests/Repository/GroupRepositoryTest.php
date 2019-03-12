@@ -29,7 +29,7 @@ class GroupRepositoryTest extends RepositoryTestCase
         // Actor from Nantes
         yield ['manon@mobilisation-eu.localhost', ['Nantes']];
         // Actor from Lille
-        yield ['thomas@mobilisation-eu.localhost', []];
+        yield ['thomas@mobilisation-eu.localhost', ['Mouscron', 'Mouscron']];
     }
 
     /**
