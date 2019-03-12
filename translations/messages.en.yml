@@ -39,6 +39,7 @@ layout:
         legalities: Legalities
         terms: Terms of usage
         privacy: Privacy policy
+        cookies: Cookies policy
         contact: Contact
 
 
@@ -388,7 +389,7 @@ actor:
         notification:
             submit: Change my notification preferences
             title: My profile - Change my notification preferences
-            label: Enable or disable notifications
+            label: I want to receive e-mail notifications about my groups, events and profile.
             flash:
                 success: Your notification preferences has been successfully changed.
 
