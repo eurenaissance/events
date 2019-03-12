@@ -7,6 +7,21 @@ sonata_admin:
         handler: sonata.admin.security.handler.role
     templates:
         layout:  admin/base.html.twig
+    dashboard:
+        groups:
+            System:
+                label: System
+                items:
+                    - admin.administrator
+                    - admin.city
+                    - route:     app_admin_configuration
+                      label:     Configuration
+            Mobilisation:
+                label: Mobilisation
+                items:
+                    - admin.actor
+                    - admin.group
+                    - admin.event
 
 sonata_block:
     blocks:
