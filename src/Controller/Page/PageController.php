@@ -16,7 +16,7 @@ class PageController extends AbstractController
      */
     public function legalities(): Response
     {
-        throw new \Exception('not implemented yet...');
+        return $this->render('to_implement.html.twig');
     }
 
     /**
@@ -24,7 +24,7 @@ class PageController extends AbstractController
      */
     public function terms(): Response
     {
-        throw new \Exception('not implemented yet...');
+        return $this->render('to_implement.html.twig');
     }
 
     /**
@@ -32,6 +32,6 @@ class PageController extends AbstractController
      */
     public function privacy(): Response
     {
-        throw new \Exception('not implemented yet...');
+        return $this->render('to_implement.html.twig');
     }
 }
