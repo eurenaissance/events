@@ -13,6 +13,7 @@ class NotificationHandler
     {
         $this->entityManager = $entityManager;
     }
+
     public function changeNotification(Actor $actor, bool $notificationEnabled): void
     {
         $actor->setNotificationEnabled($notificationEnabled);
