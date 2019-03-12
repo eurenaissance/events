@@ -67,7 +67,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->assertNoMailSent();
 
         $this->client->followRedirect();
-        $this->assertResponseContains('actor.reset_password.request.flash.pending_token');
+        $this->assertResponseContains('flashes.reset_password.pending_token');
     }
 
     public function provideResetSuccess(): iterable
@@ -88,7 +88,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->client->request('GET', $resetPasswordUrl);
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('actor.reset_password.reset.submit', [
+        $this->client->submitForm('password_reset_reset.save', [
             'plainPassword' => [
                 'first' => $password,
                 'second' => $password,
@@ -103,7 +103,7 @@ class ResetPasswordControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('actor.reset_password.reset.flash.success');
+        $this->assertResponseContains('flashes.reset_password.success');
 
         $this->client->submitForm('login.button', [
             'emailAddress' => 'remi@mobilisation-eu.localhost',
@@ -156,7 +156,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->client->request('GET', $resetPasswordUrl);
         $this->assertResponseSuccessFul();
 
-        $this->client->submitForm('actor.reset_password.reset.submit', [
+        $this->client->submitForm('password_reset_reset.save', [
             'plainPassword' => [
                 'first' => $first,
                 'second' => $second,
@@ -175,13 +175,13 @@ class ResetPasswordControllerTest extends HttpTestCase
         // consumed token
         yield [
             'token' => ResetPasswordTokenFixtures::TOKEN_02_UUID,
-            'error' => 'actor.reset_password.reset.flash.token_expired',
+            'error' => 'flashes.reset_password.token_expired',
         ];
 
         // expired token
         yield [
             'token' => ResetPasswordTokenFixtures::TOKEN_03_UUID,
-            'error' => 'actor.reset_password.reset.flash.token_expired',
+            'error' => 'flashes.reset_password.token_expired',
         ];
     }
 

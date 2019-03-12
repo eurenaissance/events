@@ -26,7 +26,7 @@ class ProfileControllerTest extends HttpTestCase
         ]);
         $this->assertIsRedirectedTo('/profile/notifications');
         $this->client->followRedirect();
-        $this->assertResponseContains('actor.profile.notification.flash.success');
+        $this->assertResponseContains('flashes.profile.notification_success');
 
         // disable notifications
         $crawler = $this->client->request('GET', '/profile/notifications');
@@ -41,7 +41,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->client->submit($form, []);
         $this->assertIsRedirectedTo('/profile/notifications');
         $this->client->followRedirect();
-        $this->assertResponseContains('actor.profile.notification.flash.success');
+        $this->assertResponseContains('flashes.profile.notification_success');
 
         // ensure user is logged in
         $this->client->request('GET', '/profile/notifications');
@@ -173,7 +173,7 @@ class ProfileControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('actor.profile.edit.flash.success');
+        $this->assertResponseContains('flashes.profile.account_success');
 
         $form = $crawler->selectButton('actor.profile.edit.submit')->form();
         $emailField = $form->get('emailAddress');
@@ -264,7 +264,7 @@ class ProfileControllerTest extends HttpTestCase
         ]);
 
         $this->client->followRedirect();
-        $this->assertResponseContains('actor.profile.change_password.flash.success');
+        $this->assertResponseContains('flashes.profile.password_success');
 
         // ensure user is not logged out after this request
         $this->client->request('GET', '/profile');

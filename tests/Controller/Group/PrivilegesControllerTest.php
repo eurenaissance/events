@@ -133,7 +133,7 @@ class PrivilegesControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertCount(1, $crawler->filter('.alert:contains("group.animator.promote.flash.success")'));
+        $this->assertCount(1, $crawler->filter('.alert:contains("flashes.group.promote_success")'));
         $this->assertCount(1, $crawler->filter("#co-animators tr:contains(\"$followerName\")"));
         $this->assertCount(0, $crawler->filter("#followers tr:contains(\"$followerName\")"));
     }
@@ -280,7 +280,7 @@ class PrivilegesControllerTest extends HttpTestCase
 
         $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertResponseContains('group.animator.demote.flash.success');
+        $this->assertResponseContains('flashes.group.demote_success');
 
         $this->assertActorIsFollowerOfGroup($coAnimatorUuid, $groupSlug);
     }
@@ -336,7 +336,7 @@ class PrivilegesControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertCount(1, $crawler->filter('.alert:contains("group.animator.demote.flash.success")'));
+        $this->assertCount(1, $crawler->filter('.alert:contains("flashes.group.demote_success")'));
         $this->assertCount(0, $crawler->filter("#co-animators tr:contains(\"$coAnimatorName\")"));
         $this->assertCount(1, $crawler->filter("#followers tr:contains(\"$coAnimatorName\")"));
     }
@@ -493,7 +493,7 @@ class PrivilegesControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessFul();
-        $this->assertCount(1, $crawler->filter('.alert:contains("group.animator.promote.flash.success")'));
+        $this->assertCount(1, $crawler->filter('.alert:contains("flashes.group.promote_success")'));
         $this->assertCount(1, $crawler->filter("#co-animators tr:contains(\"$followerName\")"));
         $this->assertCount(0, $crawler->filter("#followers tr:contains(\"$followerName\")"));
     }

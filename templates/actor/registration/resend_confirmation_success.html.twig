@@ -1,11 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title 'actor.registration.resend_confirmation.success.title'|trans %}
+{% block page_title 'register.resend_confirm.title'|trans %}
 
 {% block body %}
-    {{ 'actor.registration.resend_confirmation.success.mail_sent'|trans }}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-7 col-lg-5 col-xl-4 text-center">
+            <h4 class="mb-4">
+                {{ 'register.resend_confirm.title'|trans }}
+            </h4>
 
-    <a href="{{ path('app_login') }}">
-        {{ 'security.login.link.back'|trans }}
-    </a>
+            <div class="mt-5 mb-5">
+                {{ 'register.resend_confirm.message'|trans }}
+            </div>
+
+            <a href="{{ path('app_login') }}" class="btn btn-lg btn-block btn-primary">
+                {{ 'register.resend_confirm.continue'|trans }}
+            </a>
+        </div>
+    </div>
 {% endblock %}

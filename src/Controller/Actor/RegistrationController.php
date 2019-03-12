@@ -64,13 +64,13 @@ class RegistrationController extends AbstractController
 
             if ($actor = $registrationHandler->findActor($email)) {
                 if ($actor->isConfirmed()) {
-                    $this->addFlash('info', 'actor.registration.resend_confirmation.flash.already_confirmed');
+                    $this->addFlash('success', 'flashes.register.already_confirmed');
 
                     return $this->redirectToRoute('app_login');
                 }
 
                 if ($registrationHandler->hasPendingToken($actor)) {
-                    $this->addFlash('info', 'actor.registration.resend_confirmation.flash.pending_token');
+                    $this->addFlash('warning', 'flashes.register.pending_token');
 
                     return $this->redirectToRoute('app_login');
                 }
@@ -113,13 +113,13 @@ class RegistrationController extends AbstractController
 
         $actor = $token->getActor();
         if ($token->isConsumed() || $actor->isConfirmed()) {
-            $this->addFlash('info', 'actor.registration.confirm.flash.already_confirmed');
+            $this->addFlash('success', 'flashes.register.already_confirmed');
 
             return $this->redirectToRoute('app_login');
         }
 
         if ($token->isExpired()) {
-            $this->addFlash('info', 'actor.registration.confirm.flash.token_expired');
+            $this->addFlash('warning', 'flashes.register.token_expired');
 
             return $this->redirectToRoute('app_actor_register_resend_confirmation');
         }

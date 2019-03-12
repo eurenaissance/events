@@ -30,7 +30,7 @@ class ProfileController extends AbstractController
             $manager->persist($actor);
             $manager->flush();
 
-            $this->addFlash('info', 'actor.profile.edit.flash.success');
+            $this->addFlash('success', 'flashes.profile.account_success');
 
             return $this->redirectToRoute('app_actor_profile_edit');
         }
@@ -50,7 +50,7 @@ class ProfileController extends AbstractController
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $changePasswordHandler->changePassword($actor);
 
-            $this->addFlash('info', 'actor.profile.change_password.flash.success');
+            $this->addFlash('success', 'flashes.profile.password_success');
 
             return $this->redirectToRoute('app_actor_profile_edit');
         }
@@ -72,7 +72,7 @@ class ProfileController extends AbstractController
 
             $notificationHandler->changeNotification($actor, $notificationEnabled);
 
-            $this->addFlash('info', 'actor.profile.notification.flash.success');
+            $this->addFlash('success', 'flashes.profile.notification_success');
 
             return $this->redirectToRoute('app_actor_profile_notifications');
         }
