@@ -8,6 +8,7 @@ runtime:
         - apcu
         - sodium
         - mbstring
+        - sockets
         - json
         - pdo_pgsql
 
