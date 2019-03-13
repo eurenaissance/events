@@ -16,6 +16,7 @@ final class Version20190216223833 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE cities_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE events_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE actors_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE contents_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE configuration_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE co_animator_memberships_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE follower_memberships_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
@@ -84,6 +85,8 @@ final class Version20190216223833 extends AbstractMigration
         $this->addSql('ALTER TABLE co_animator_memberships ADD CONSTRAINT FK_1DEA70D8FE54D947 FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE follower_memberships ADD CONSTRAINT FK_CA3C50D510DAF24A FOREIGN KEY (actor_id) REFERENCES actors (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE follower_memberships ADD CONSTRAINT FK_CA3C50D5FE54D947 FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('CREATE TABLE contents (id BIGINT NOT NULL, title VARCHAR(255) NOT NULL, content TEXT NOT NULL, url VARCHAR(255) NOT NULL, updated_at TIMESTAMP(0), PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX contents_url_unique ON contents (url)');
     }
 
     public function down(Schema $schema): void
@@ -110,6 +113,7 @@ final class Version20190216223833 extends AbstractMigration
         $this->addSql('DROP SEQUENCE configuration_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE co_animator_memberships_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE follower_memberships_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE contents_id_seq CASCADE');
         $this->addSql('DROP TABLE actor_confirm_tokens');
         $this->addSql('DROP TABLE actor_reset_password_tokens');
         $this->addSql('DROP TABLE administrators');
@@ -117,6 +121,7 @@ final class Version20190216223833 extends AbstractMigration
         $this->addSql('DROP TABLE cities');
         $this->addSql('DROP TABLE events');
         $this->addSql('DROP TABLE actors');
+        $this->addSql('DROP TABLE contents');
         $this->addSql('DROP TABLE configuration');
         $this->addSql('DROP TABLE co_animator_memberships');
         $this->addSql('DROP TABLE follower_memberships');

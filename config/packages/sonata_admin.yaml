@@ -14,8 +14,10 @@ sonata_admin:
                 items:
                     - admin.administrator
                     - admin.city
+                    - admin.content
                     - route:     app_admin_configuration
                       label:     Configuration
+
             Mobilisation:
                 label: Mobilisation
                 items:
