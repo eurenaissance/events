@@ -33,6 +33,12 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: 'Events' }
 
+    admin.content:
+        class: App\Admin\ContentAdmin
+        arguments: [~, App\Entity\Content, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: 'Content' }
+
     admin.extension.read_only:
         class: App\Admin\Extension\ReadOnlyExtension
         tags:
