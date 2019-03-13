@@ -20,7 +20,6 @@ class ConfigurationController extends AbstractController
         $form = $this->createForm(ConfigurationType::class, $repository->getConfiguration());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-
             $configurationHandler->handle($form);
 
             $this->addFlash('info', 'admin.edit.flash.success');
