@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Admin\Handler\ConfigurationHandler;
 use App\Form\Admin\ConfigurationType;
 use App\Repository\ConfigurationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,15 +15,13 @@ class ConfigurationController extends AbstractController
     /**
      * @Route("/app/configuration", name="app_admin_configuration", methods={"GET", "POST"})
      */
-    public function list(Request $request, ConfigurationRepository $repository): Response
+    public function list(Request $request, ConfigurationRepository $repository, ConfigurationHandler $configurationHandler): Response
     {
         $form = $this->createForm(ConfigurationType::class, $repository->getConfiguration());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $manager = $this->getDoctrine()->getManager();
 
-            $manager->persist($form->getData());
-            $manager->flush();
+            $configurationHandler->handle($form);
 
             $this->addFlash('info', 'admin.edit.flash.success');
 

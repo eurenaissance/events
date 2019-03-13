@@ -1,101 +1,103 @@
 {% extends 'admin/administrator/base.html.twig' %}
 
 {% block sonata_admin_content %}
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="container-fluid">
-            <div class="navbar-collapse">
-                <div class="navbar-brand">
-                    {{ 'admin.configuration.label'|trans }}
+    <div class="container-fluid" style="">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-collapse">
+                    <div class="navbar-brand">
+                        {{ 'admin.configuration.label'|trans }}
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    {% for message in app.flashes('info') %}
-        <div class="alert alert-primary text-center" style="background-color: #6f80ff; color:#FFFFFF">
-            {{ message|trans }}
-        </div>
-    {% endfor %}
-
-    <div class="col-md-12">
-        <div class="box box-primary">
-            <div class="box-header">
+        {% for message in app.flashes('info') %}
+            <div class="alert alert-primary text-center" style="background-color: #6f80ff; color:#FFFFFF">
+                {{ message|trans }}
             </div>
-            <div class="box-body table-responsive no-padding">
-                {{ form_start(form) }}
-                <table class="table">
-                    <tbody>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.party.name'|trans }}</th>
-                        <td>{{ form_row(form.partyName, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.party.logo'|trans }}</th>
-                        <td>{{ form_row(form.partyLogo, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.party.website'|trans }}</th>
-                        <td>{{ form_row(form.partyWebsite, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.color_primary'|trans }}</th>
-                        <td>{{ form_row(form.colorPrimary, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.favicon'|trans }}</th>
-                        <td>{{ form_row(form.favicon, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.meta.description'|trans }}</th>
-                        <td>{{ form_row(form.metaDescription, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.meta.image'|trans }}</th>
-                        <td>{{ form_row(form.metaImage, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.meta.google'|trans }}</th>
-                        <td>{{ form_row(form.metaGoogleAnalyticsId, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.home.image'|trans }}</th>
-                        <td>{{ form_row(form.homeImage, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.home.intro.subtitle'|trans }}</th>
-                        <td>{{ form_row(form.homeIntroSubtitle, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.home.intro.title'|trans }}</th>
-                        <td>{{ form_row(form.homeIntroTitle, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.home.intro.button'|trans }}</th>
-                        <td>{{ form_row(form.homeIntroButton, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <td>{{ form_row(form.homeDisplayMap, { label: 'admin.home.display_map'|trans}) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.email.sender'|trans }}</th>
-                        <td>{{ form_row(form.emailSender, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.email.sender_name'|trans }}</th>
-                        <td>{{ form_row(form.emailSenderName, { label: false }) }}</td>
-                    </tr>
-                    <tr class="sonata-ba-view-container">
-                        <th>{{ 'admin.email.contact'|trans }}</th>
-                        <td>{{ form_row(form.emailContact, { label: false }) }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="row text-center" style="height: 50px;">
-                    <button type="submit" class="btn btn-primary">
-                        {{ 'admin.submit.label'|trans }}
-                    </button>
+        {% endfor %}
+
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header">
                 </div>
-                {{ form_end(form) }}
+                <div class="box-body table-responsive no-padding">
+                    {{ form_start(form) }}
+                    <table class="table">
+                        <tbody>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.party.name'|trans }}</th>
+                            <td>{{ form_row(form.partyName, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.party.logo'|trans }}</th>
+                            <td>{{ form_row(form.partyLogoFile, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.party.website'|trans }}</th>
+                            <td>{{ form_row(form.partyWebsite, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.color_primary'|trans }}</th>
+                            <td>{{ form_row(form.colorPrimary, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.favicon'|trans }}</th>
+                            <td>{{ form_row(form.faviconFile, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.meta.description'|trans }}</th>
+                            <td>{{ form_row(form.metaDescription, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.meta.image'|trans }}</th>
+                            <td>{{ form_row(form.metaImageFile, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.meta.google'|trans }}</th>
+                            <td>{{ form_row(form.metaGoogleAnalyticsId, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.home.image'|trans }}</th>
+                            <td>{{ form_row(form.homeImageFile, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.home.intro.subtitle'|trans }}</th>
+                            <td>{{ form_row(form.homeIntroSubtitle, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.home.intro.title'|trans }}</th>
+                            <td>{{ form_row(form.homeIntroTitle, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.home.intro.button'|trans }}</th>
+                            <td>{{ form_row(form.homeIntroButton, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <td>{{ form_row(form.homeDisplayMap, { label: 'admin.home.display_map'|trans}) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.email.sender'|trans }}</th>
+                            <td>{{ form_row(form.emailSender, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.email.sender_name'|trans }}</th>
+                            <td>{{ form_row(form.emailSenderName, { label: false }) }}</td>
+                        </tr>
+                        <tr class="sonata-ba-view-container">
+                            <th>{{ 'admin.email.contact'|trans }}</th>
+                            <td>{{ form_row(form.emailContact, { label: false }) }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center" style="height: 50px;">
+                        <button type="submit" class="btn btn-primary">
+                            {{ 'admin.submit.label'|trans }}
+                        </button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
             </div>
         </div>
     </div>
