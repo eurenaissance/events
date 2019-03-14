@@ -149,7 +149,7 @@ class Actor implements ActorInterface, GeographyInterface, GeocodableInterface
      *
      * @ORM\Column(type="boolean")
      */
-    private $notificationEnabled = false;
+    private $notificationEnabled = true;
 
     /**
      * @var string[]

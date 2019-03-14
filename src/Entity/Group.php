@@ -50,6 +50,7 @@ class Group implements EntitySlugInterface, GeographyInterface, GeocodableInterf
      *     maxMessage="group.name.max_length"
      * )
      *
+     * @Groups("group_autocomplete")
      * @Groups("search")
      */
     private $name;
