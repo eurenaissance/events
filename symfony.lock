@@ -392,6 +392,9 @@
     "sonata-project/google-authenticator": {
         "version": "2.2.0"
     },
+    "spatie/schema-org": {
+        "version": "2.1.0"
+    },
     "stof/doctrine-extensions-bundle": {
         "version": "1.2",
         "recipe": {

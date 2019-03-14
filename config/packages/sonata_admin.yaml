@@ -15,6 +15,7 @@ sonata_admin:
                     - admin.administrator
                     - admin.city
                     - admin.content
+                    - admin.tokens
                     - route:     app_admin_configuration
                       label:     Configuration
 

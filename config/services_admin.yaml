@@ -21,6 +21,12 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: 'Actors' }
 
+    admin.tokens:
+        class: App\Admin\TokenAdmin
+        arguments: [~, App\Entity\ApiToken, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: 'Tokens' }
+
     admin.group:
         class: App\Admin\GroupAdmin
         arguments: [~, App\Entity\Group, ~]
