@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Repository\CityRepository;
 use App\Repository\EventRepository;
+use App\Repository\GroupRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,5 +39,18 @@ class SearchController extends AbstractController
         }
 
         return $this->json($eventRepo->search($city, $request->query->get('q', '')), 200, [], ['groups' => 'search']);
+    }
+
+    /**
+     * @Route("/groups", methods="GET", name="app_api_search_groups")
+     */
+    public function groups(GroupRepository $repo, Request $request): JsonResponse
+    {
+        $term = $request->query->get('q', '');
+        if (strlen($term) < 3) {
+            throw new BadRequestHttpException();
+        }
+
+        return $this->json($repo->search($this->getUser(), $term), 200, [], ['groups' => 'group_autocomplete']);
     }
 }

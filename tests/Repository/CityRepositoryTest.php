@@ -108,7 +108,7 @@ class CityRepositoryTest extends RepositoryTestCase
 
         $actual = [];
         foreach ($cities as $city) {
-            $actual[] = [$city->getName(), $city->getLatitude(), $city->getLongitude()];
+            $actual[] = [$city->getName(), $city->getLongitude(), $city->getLatitude()];
         }
 
         $this->assertSame($expected, $actual);

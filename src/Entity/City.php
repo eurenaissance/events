@@ -74,7 +74,7 @@ class City implements GeographyInterface
         $this->name = $name;
         $this->zipCode = $zipCode;
         $this->canonicalZipCode = $this->canonicalizeZipCode($zipCode);
-        $this->coordinates = new Point($longitude, $latitude);
+        $this->coordinates = new Point($latitude, $longitude);
     }
 
     public function __toString(): string

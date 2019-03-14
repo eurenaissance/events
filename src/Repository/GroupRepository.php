@@ -128,4 +128,49 @@ class GroupRepository extends ServiceEntityRepository
             ->andWhere("$alias.refusedAt IS NULL")
         ;
     }
+
+    public function search(GeographyInterface $around, string $term, int $maxDistance = 150, int $limit = 30): iterable
+    {
+        $qb = $this->createQueryBuilder('g');
+        $qb->addSelect('ST_Distance_Sphere(g.coordinates, :coordinates) as HIDDEN distance')
+            ->andWhere('ST_Distance_Sphere(g.coordinates, :coordinates) <= :maxDistance')
+            ->setParameter('coordinates', $around->getCoordinates(), 'point')
+            ->setParameter('maxDistance', $maxDistance * 1000)
+            ->addOrderBy('distance', 'ASC')
+            ->setMaxResults($limit)
+        ;
+
+        $scoreQuery = [];
+
+        if ($term) {
+            $keywords = explode(' ', $term);
+            foreach ($keywords as $i => $keyword) {
+                // Start with => score 3
+                $scoreQuery[] = '(CASE WHEN LOWER(g.name) LIKE :ks'.$i.' THEN 3 ELSE 0 END)';
+                $qb->setParameter('ks'.$i, strtolower($keyword).'%');
+
+                // Contains => score 1
+                $scoreQuery[] = '(CASE WHEN LOWER(g.name) LIKE :kc'.$i.' THEN 1 ELSE 0 END)';
+                $qb->setParameter('kc'.$i, '%'.strtolower($keyword).'%');
+            }
+
+            $qb->addSelect('('.implode(' + ', $scoreQuery).') AS score');
+        } else {
+            $qb->addSelect('1 AS score');
+        }
+
+        $qb->addOrderBy('score', 'DESC');
+        $qb->addOrderBy('g.name', 'ASC');
+
+        $data = $qb->getQuery()->getResult();
+        $results = [];
+
+        foreach ($data as $item) {
+            if ($item['score']) {
+                $results[] = $item[0];
+            }
+        }
+
+        return $results;
+    }
 }
