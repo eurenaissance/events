@@ -59,13 +59,13 @@ class SecurityControllerTest extends HttpTestCase
     public function testLoginFailure(array $fieldValues, array $errors): void
     {
         $this->client->request('GET', '/login');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('login.button', $fieldValues);
         $this->assertIsRedirectedTo('/login');
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $form = $crawler->selectButton('login.button')->form();
         $this->assertEquals($fieldValues['emailAddress'], $form->get('emailAddress')->getValue());
@@ -78,7 +78,7 @@ class SecurityControllerTest extends HttpTestCase
     public function testLogin(): void
     {
         $this->client->request('GET', '/login');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('login.button', [
             'emailAddress' => 'remi@mobilisation-eu.localhost',
@@ -87,7 +87,7 @@ class SecurityControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/');
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains('Rémi Gardien');
     }
 }

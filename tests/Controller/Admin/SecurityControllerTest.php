@@ -31,7 +31,7 @@ class SecurityControllerTest extends HttpTestCase
     public function testLoginFailure(string $email, string $password): void
     {
         $this->client->request('GET', '/admin/login');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('Sign in', [
             'emailAddress' => $email,
@@ -40,14 +40,14 @@ class SecurityControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/admin/login');
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertEquals($email, $crawler->selectButton('Sign in')->form()->get('emailAddress')->getValue());
     }
 
     public function testLoginSuccess(): void
     {
         $this->client->request('GET', '/admin/login');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('Sign in', [
             'emailAddress' => 'superadmin@mobilisation-eu.localhost',
@@ -56,14 +56,14 @@ class SecurityControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/admin/dashboard');
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertGreaterThan(0, $crawler->filter('a:contains("Dashboard")')->count());
     }
 
     public function testLoginTwoFactor(): void
     {
         $this->client->request('GET', '/admin/login');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('Sign in', [
             'emailAddress' => 'admin@mobilisation-eu.localhost',
@@ -75,12 +75,12 @@ class SecurityControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo($this->getAbsoluteUrl('/admin/2fa'));
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->click($crawler->selectLink('Cancel')->link());
         $this->assertIsRedirectedTo($this->getAbsoluteUrl('/admin/login'));
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
     }
 }

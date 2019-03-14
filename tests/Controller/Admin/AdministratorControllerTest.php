@@ -40,7 +40,7 @@ class AdministratorControllerTest extends HttpTestCase
         $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $this->client->request('GET', $uri);
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
     }
 
     public function provideAdministratorEditions(): iterable
@@ -96,7 +96,7 @@ class AdministratorControllerTest extends HttpTestCase
         $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $crawler = $this->client->request('GET', "/admin/app/administrator/$id/edit");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $form = $crawler->selectButton('Update')->form();
         $uniqId = $this->getAdminFormUniqId($form);
@@ -108,7 +108,7 @@ class AdministratorControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo("/admin/app/administrator/$id/edit");
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains("Item \"$email\" has been successfully updated.");
 
         $form = $crawler->selectButton('Update')->form();
@@ -122,7 +122,7 @@ class AdministratorControllerTest extends HttpTestCase
         $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/admin/app/administrator/2/edit');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->submitAdminForm('Update', [
             'plainPassword' => [
@@ -134,14 +134,14 @@ class AdministratorControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/admin/app/administrator/2/edit');
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains('Item "admin@mobilisation-eu.localhost" has been successfully updated.');
 
         $this->client->request('GET', '/admin/logout');
         $this->assertIsRedirectedTo($this->getAbsoluteUrl('/admin/login'));
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('Sign in', [
             'emailAddress' => 'admin@mobilisation-eu.localhost',
@@ -150,7 +150,7 @@ class AdministratorControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/admin/dashboard');
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
     }
 
     public function provideEditPasswordFailures(): iterable
@@ -169,7 +169,7 @@ class AdministratorControllerTest extends HttpTestCase
         $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/admin/app/administrator/2/edit');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->submitAdminForm('Update', [
             'plainPassword' => [
@@ -177,7 +177,7 @@ class AdministratorControllerTest extends HttpTestCase
                 'second' => $secondPassword,
             ],
         ]);
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains([
             'An error has occurred during update of item "admin@mobilisation-eu.localhost".',
             $error,

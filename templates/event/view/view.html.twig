@@ -120,10 +120,12 @@
                             </div>
 
                             <div class="event__buttons">
-                                <a href="">
+                                <a href="{{ path('app_event_calendar_google', {'slug': event.slug}) }}"
+                                   target="_blank" rel="noreferrer noopener">
                                     <i class="fab fa-google"></i>
                                 </a>
-                                <a href="">
+                                <a href="{{ path('app_event_calendar_ics', {'slug': event.slug}) }}"
+                                   target="_blank" rel="noreferrer noopener">
                                     <i class="fas fa-calendar-alt"></i>
                                 </a>
                             </div>

@@ -94,7 +94,7 @@ class ViewControllerTest extends HttpTestCase
         $this->authenticateActor('marine@mobilisation-eu.localhost');
 
         $crawler = $this->client->request('GET', '/group/culture-in-paris');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertCount(1, $crawler->filter('h2:contains("Culture in Paris")'));
         $this->assertCount(1, $crawler->filter('.alert:contains("group.view.view.flash.pending")'));
     }
@@ -127,7 +127,7 @@ class ViewControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $this->client->request('GET', "/group/$groupSlug");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
     }
 
     public function provideActorsCanSeeGroupInformation(): iterable
@@ -333,7 +333,7 @@ class ViewControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $crawler = $this->client->request('GET', "/group/$groupSlug");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->assertCount(1, $crawler->filter("h2:contains(\"$groupName\")"));
         $this->assertCount(1, $crawler->filter("#group-description:contains(\"$groupDescription\")"));

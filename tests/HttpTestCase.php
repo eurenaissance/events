@@ -70,7 +70,7 @@ abstract class HttpTestCase extends WebTestCase
         $this->assertMatchesPattern($pattern, $response->headers->get('Location'));
     }
 
-    protected function assertResponseSuccessFul(string $message = null): void
+    protected function assertResponseSuccessful(string $message = null): void
     {
         $response = $this->client->getResponse();
 
@@ -104,7 +104,7 @@ abstract class HttpTestCase extends WebTestCase
     {
         $response = $this->client->getResponse();
 
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertSame('application/json', $response->headers->get('Content-Type'));
         $this->assertNotEmpty($response->getContent());
         $this->assertJson($response->getContent());

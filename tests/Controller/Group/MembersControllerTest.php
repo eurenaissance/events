@@ -120,7 +120,7 @@ class MembersControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $this->client->request('GET', "/group/$groupSlug/members");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
     }
 
     public function provideActorsCanSeeMembersFromView(): iterable
@@ -218,7 +218,7 @@ class MembersControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $crawler = $this->client->request('GET', "/group/$groupSlug");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->assertCount(1, $linkCrawler = $crawler->selectLink('group_view.actions.members'));
 
@@ -226,7 +226,7 @@ class MembersControllerTest extends HttpTestCase
         $this->assertSame($this->getAbsoluteUrl("/group/$groupSlug/members"), $link->getUri());
 
         $crawler = $this->client->click($link);
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $coAnimators = $crawler->filter('#co-animators tbody tr');
         $this->assertCount(count($animatorsInformation), $coAnimators);
