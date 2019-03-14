@@ -145,6 +145,8 @@ class ViewControllerTest extends HttpTestCase
                 'Francis Brioul',
             ],
             [
+                'First finished event in Paris',
+                'Second finished event in Paris',
                 'Event in Bois-Colombes',
                 'Event in Clichy',
                 'First event in Paris',
@@ -175,6 +177,8 @@ class ViewControllerTest extends HttpTestCase
                 'Francis Brioul',
             ],
             [
+                'First finished event in Paris',
+                'Second finished event in Paris',
                 'Event in Bois-Colombes',
                 'Event in Clichy',
                 'First event in Paris',
@@ -205,6 +209,8 @@ class ViewControllerTest extends HttpTestCase
                 'Francis Brioul',
             ],
             [
+                'First finished event in Paris',
+                'Second finished event in Paris',
                 'Event in Bois-Colombes',
                 'Event in Clichy',
                 'First event in Paris',
@@ -233,7 +239,7 @@ class ViewControllerTest extends HttpTestCase
                 'Titouan Galopin',
                 'Marine Boudeau',
             ],
-            [],
+            ['Event ecology in Clichy'],
             ['Event ecology in Clichy'],
             [
                 '/unfollow' => false,
@@ -290,6 +296,8 @@ class ViewControllerTest extends HttpTestCase
                 'Francis Brioul',
             ],
             [
+                'First finished event in Paris',
+                'Second finished event in Paris',
                 'Event in Bois-Colombes',
                 'Event in Clichy',
                 'First event in Paris',

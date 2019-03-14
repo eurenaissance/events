@@ -109,20 +109,23 @@ class EventRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findUpcoming(Group $group, int $maxResults = 10): array
+    public function findUpcoming(Group $group = null, int $maxResults = 10): array
     {
-        return $this
+        $qb = $this
             ->createApprovedQueryBuilder('e')
             ->leftJoin('e.creator', 'c')
             ->addSelect('c')
-            ->where('e.group = :group')
             ->andWhere('e.finishAt > CURRENT_TIMESTAMP()')
             ->orderBy('e.beginAt', 'ASC')
-            ->setParameter('group', $group)
-            ->setMaxResults($maxResults)
-            ->getQuery()
-            ->getResult()
-        ;
+            ->setMaxResults($maxResults);
+
+        if (null !== $group) {
+            $qb
+                ->where('e.group = :group')
+                ->setParameter('group', $group);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     public function findFinished(Group $group, int $maxResults = 10, int $page = 1): Paginator
