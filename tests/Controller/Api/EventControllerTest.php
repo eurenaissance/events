@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\Controller\Event;
+namespace App\Tests\Controller\Api;
 
 use App\Tests\HttpTestCase;
 
-class ListControllerTest extends HttpTestCase
+class EventControllerTest extends HttpTestCase
 {
     public function provideValidTokens(): iterable
     {
@@ -39,7 +39,7 @@ class ListControllerTest extends HttpTestCase
     {
         $this->authenticateActor($email);
 
-        $this->client->request('GET', sprintf('/event/list?token=%s', $token));
+        $this->client->request('GET', sprintf('/api/events/all?token=%s', $token));
         $this->assertResponseSuccessFul();
 
         $this->assertNotEmpty(json_decode($this->client->getResponse()->getContent(), true));
@@ -52,7 +52,7 @@ class ListControllerTest extends HttpTestCase
     {
         $this->authenticateActor($email);
 
-        $this->client->request('GET', sprintf('/event/list?token=%s', $token));
+        $this->client->request('GET', sprintf('/api/events/all?token=%s', $token));
 
         $this->assertSame(400, $this->client->getResponse()->getStatusCode());
     }

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/city")
+ * @Route("/cities")
  */
 class CityController extends AbstractController
 {

@@ -1,0 +1,64 @@
+<div class="card card--event mb-3">
+    <div class="card__row">
+        <div class="card__date">
+            <div class="card__date__day">
+                {{ event.beginAt|date('d') }}
+            </div>
+            <div class="card__date__month">
+                {{ event.beginAt|localizeddate('none', 'none', app.request.locale, null, 'LLL') }}
+            </div>
+        </div>
+
+        <h4 class="card__title">
+            <a href="{{ path('app_event_view', {'slug': event.slug}) }}">
+                {{ event.name }}
+            </a>
+        </h4>
+    </div>
+
+    <div class="card__calendar mt-4">
+        <div class="card__calendar__icon">
+            <i class="fas fa-calendar-alt"></i>
+        </div>
+        <div class="card__calendar__profile">
+            {{ event.beginAt|localizeddate('medium', 'short', app.request.locale) }}
+        </div>
+    </div>
+
+    <div class="address mt-4" id="group-address">
+        <div class="address__icon">
+            <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div class="address__text">
+            <div class="address__text__street">
+                <a href="https://maps.google.com/?q={{ event.address }} {{ event.city.name }} {{ event.city.country|country }}" target="_blank">
+                    {{ event.address|capitalize }}
+                </a>
+            </div>
+            <div class="address__text__city">
+                {{ event.city.name }}, {{ event.city.country|country }}
+            </div>
+        </div>
+    </div>
+
+    <div class="card__user mt-4">
+        <div class="card__user__icon">
+            <i class="fas fa-user"></i>
+        </div>
+        <div class="card__user__profile">
+            {{ 'event_card.organized_by'|trans({'%name%': event.creator.fullName}) }}
+            <br />
+            {{ 'event_card.from'|trans }}
+            <a href="{{ path('app_group_view', {'slug': event.group.slug}) }}">
+                {{ event.group.name }}
+            </a>
+        </div>
+    </div>
+
+    <div class="mt-4 text-right">
+        <a href="{{ path('app_event_view', {'slug': event.slug}) }}" class="d-inline-flex align-items-center">
+            {{ 'event_card.learn_more'|trans }}
+            <i class="fas fa-caret-right ml-2"></i>
+        </a>
+    </div>
+</div>

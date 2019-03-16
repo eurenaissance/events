@@ -278,6 +278,17 @@ event_form:
     finishAt: and ends at ...
     postalAddress: Postal address
 
+event_search:
+    title: Find events around you
+    subtitle: Make your voice heard in the European transformation.
+
+
+
+
+#
+# TODO Migrate / remove the following translations
+#
+
 admin:
     configuration:
         label: Instance Configuration
@@ -307,10 +318,6 @@ admin:
     edit:
         flash:
             success: The configuration was successfully updated
-
-#
-# TODO Migrate / remove the following translations
-#
 
 #
 # Common

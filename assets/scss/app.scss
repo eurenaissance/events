@@ -121,7 +121,7 @@
             right: 0;
             width: 500px;
             border-radius: 14px;
-            box-shadow: 0 2px 11px 1px rgba(194, 194, 194, 0.5);
+            box-shadow: 0 2px 11px 1px rgba(194, 194, 194, 0.7);
             padding: 15px 10px;
             color: #555555;
             background: #fff;
@@ -262,7 +262,7 @@
 .card {
     background: $white;
     border-radius: 14px;
-    box-shadow: 0 2px 11px 1px rgba(194, 194, 194, 0.5);
+    box-shadow: 0 2px 11px 1px rgba(194, 194, 194, 0.7);
     padding: 30px;
     font-family: $font-roboto-mono;
     font-size: 13px;
@@ -277,10 +277,40 @@
         font-weight: normal;
     }
 
+    &__row {
+        display: flex;
+        align-items: center;
+    }
+
+    &__date {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background: linear-gradient(to bottom, darken($primary, 5%) 0%, $primary 100%);
+        color: $white;
+        padding: 7px 12px;
+        margin-right: 10px;
+        border-radius: 2px;
+
+        &__day {
+            font-size: 22px;
+            line-height: 26px;
+            margin-bottom: 2px;
+            font-weight: bold;
+        }
+
+        &__month {
+            font-size: 13px;
+            line-height: 13px;
+        }
+    }
+
     &__title {
         font-family: $font-roboto-slab;
         font-size: 22px;
-        margin: 0 0 10px 0;
+        margin: 0;
         color: $black;
 
         &, a, a:hover {
@@ -289,10 +319,10 @@
     }
 
     &__subtitle {
-        margin: 0 0 8px 0;
+        margin: 10px 0 8px 0;
     }
 
-    &__user {
+    &__calendar, &__user {
         margin: 40px 0 0 0;
         display: flex;
         align-items: center;

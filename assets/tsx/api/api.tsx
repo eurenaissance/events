@@ -10,7 +10,7 @@ class Api {
             config.cancelToken = new axios.CancelToken(canceler);
         }
 
-        return axios.get<ApiCity>('/api/city/'+uuid, config);
+        return axios.get<ApiCity>('/api/cities/'+uuid, config);
     }
 
     public cityAutocomplete(country: string, zipCode: string, canceler?: HttpCanceler): AxiosPromise<ApiCity[]> {
@@ -19,7 +19,7 @@ class Api {
             config.cancelToken = new axios.CancelToken(canceler);
         }
 
-        return axios.get<ApiCity[]>('/api/city/autocomplete/'+country+'/'+zipCode, config);
+        return axios.get<ApiCity[]>('/api/cities/autocomplete/'+country+'/'+zipCode, config);
     }
 }
 
