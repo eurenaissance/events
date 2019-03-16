@@ -82,11 +82,12 @@ export class CityAutocomplete extends Component<Props, State> {
             <select id={this.props.id ? this.props.id: ''}
                     name={this.props.name ? this.props.name : ''}
                     className={this.props.className ? this.props.className : ''}
+                    defaultValue={this.props.value}
                     disabled={this.state.loading || !this.state.cities.length}>
 
                 {this.state.cities.map(city => {
                     return (
-                        <option value={city.uuid} selected={city.uuid === this.props.value}>
+                        <option value={city.uuid} key={city.uuid}>
                             {city.name}
                         </option>
                     );

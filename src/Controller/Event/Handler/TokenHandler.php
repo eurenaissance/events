@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Event\handler;
+namespace App\Controller\Event\Handler;
 
 use App\Repository\ApiTokenRepository;
 
