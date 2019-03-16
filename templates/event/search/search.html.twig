@@ -3,7 +3,38 @@
 {% block page_title 'event_search.title'|trans %}
 
 {% block body %}
-    <div class="search-page">
+    <div class="search">
+        <div class="search__intro">
+            <h3 class="search__intro__subtitle">
+                {{ 'event_search.title'|trans }}
+            </h3>
+            <h2 class="search__intro__title">
+                {{ 'event_search.subtitle'|trans }}
+            </h2>
+        </div>
 
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-11">
+                <div class="search__form">
+                    <div class="search__form__label">
+                        Find
+                    </div>
+                    <div class="search__form__term">
+                        <input type="text" class="form-control form-control-lg" placeholder="all events" />
+                    </div>
+                    <div class="search__form__label">
+                        around
+                    </div>
+                    <div class="search__form__city">
+                        <input type="text" class="form-control form-control-lg" placeholder="City" />
+                    </div>
+                    <div class="search__form__button">
+                        <button type="button" class="btn btn-link btn-lg">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -1,5 +1,6 @@
 // Color system
 $primary:       #6f80ff;
+$primary-gradient: linear-gradient(to bottom, darken($primary, 5%) 0%, $primary 60%, $primary 100%);
 $secondary:     #98a0a8;
 $success:       #02B875;
 $info:          #17a2b8;
