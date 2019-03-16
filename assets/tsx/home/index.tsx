@@ -48,5 +48,5 @@ if (markers.length === 0) {
     const featureGroup = L.featureGroup(markers);
 
     featureGroup.addTo(map);
-    map.fitBounds(featureGroup.getBounds());
+    map.fitBounds(featureGroup.getBounds(), { padding: [20, 20] });
 }
