@@ -13,5 +13,16 @@
         </div>
 
         <div id="search-events"></div>
+
+        <div class="row mt-5">
+            {% for i, event in events %}
+                <div class="col-md-4">
+                    {{ include('_components/_event_card.html.twig', {'event': event}) }}
+                </div>
+                {% if i % 3 == 0 and i > 0 %}
+                    </div><div class="row">
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
