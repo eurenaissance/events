@@ -279,8 +279,7 @@ event_form:
     postalAddress: Postal address
 
 event_search:
-    title: Find events around you.
-    subtitle: Get involed!
+    title: Find events around you
 
 
 

@@ -17,6 +17,27 @@
     box-shadow: none;
 }
 
+.autocomplete {
+    position: relative;
+
+    &__chooser {
+        position: absolute;
+        background: #fff;
+        box-shadow: 0 0 5px 0 rgba(194, 194, 194, 0.7);
+        margin: 5px 0;
+        padding: 5px;
+    }
+
+    &__item {
+        padding: 3px;
+        cursor: pointer;
+
+        &--active {
+            background: #e5e5e5;
+        }
+    }
+}
+
 .flashes {
     .alert {
         border-radius: 0 !important;
@@ -305,10 +326,10 @@
 
         &__city {
             flex-grow: 2;
-        }
 
-        &__label {
-            font-size: 1.25rem;
+            div {
+                width: 100%;
+            }
         }
 
         &__label, &__button {
