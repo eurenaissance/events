@@ -8,11 +8,13 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@types/react-autocomplete": "^1.8.4",
         "axios": "^0.18.0",
         "bootstrap": "^4.2.1",
         "leaflet": "^1.4.0",
         "moment": "^2.24.0",
         "react": "^16.8.1",
+        "react-autocomplete": "^1.8.1",
         "react-dom": "^16.8.1"
     },
     "devDependencies": {

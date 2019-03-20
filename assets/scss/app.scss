@@ -17,6 +17,27 @@
     box-shadow: none;
 }
 
+.autocomplete {
+    position: relative;
+
+    &__chooser {
+        position: absolute;
+        background: #fff;
+        box-shadow: 0 0 5px 0 rgba(194, 194, 194, 0.7);
+        margin: 5px 0;
+        padding: 5px;
+    }
+
+    &__item {
+        padding: 3px;
+        cursor: pointer;
+
+        &--active {
+            background: #e5e5e5;
+        }
+    }
+}
+
 .flashes {
     .alert {
         border-radius: 0 !important;
@@ -259,6 +280,45 @@
     }
 }
 
+.search {
+    &__form {
+        display: flex;
+        align-items: stretch;
+        text-align: center;
+        flex-direction: column;
+
+        input {
+            text-align: center;
+        }
+
+        @include media-breakpoint-up(md) {
+            flex-direction: row;
+            align-items: center;
+            text-align: left;
+
+            input {
+                text-align: left;
+            }
+        }
+
+        &__term {
+            flex-grow: 3;
+        }
+
+        &__city {
+            flex-grow: 2;
+
+            div {
+                width: 100%;
+            }
+        }
+
+        &__label, &__button {
+            padding: 10px 20px;
+        }
+    }
+}
+
 .card {
     background: $white;
     border-radius: 14px;
@@ -288,7 +348,7 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        background: linear-gradient(to bottom, darken($primary, 5%) 0%, $primary 100%);
+        background: $primary-gradient;
         color: $white;
         padding: 7px 12px;
         margin-right: 10px;

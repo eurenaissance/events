@@ -23,7 +23,7 @@ class SearchController extends AbstractController
     {
         $term = $request->query->get('q', '');
         if (strlen($term) < 3) {
-            throw new BadRequestHttpException();
+            return $this->json([]);
         }
 
         return $this->json($repo->search($term, $appCountry), 200, [], ['groups' => 'city_autocomplete']);
@@ -48,7 +48,7 @@ class SearchController extends AbstractController
     {
         $term = $request->query->get('q', '');
         if (strlen($term) < 3) {
-            throw new BadRequestHttpException();
+            return $this->json([]);
         }
 
         return $this->json($repo->search($this->getUser(), $term), 200, [], ['groups' => 'group_autocomplete']);
