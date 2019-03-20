@@ -191,7 +191,7 @@ password_reset_reset:
 group_card:
     organized_events: '1 event organized|%count% events organized'
     followers: '1 follower|%count% followers'
-    animated_by: Animated by
+    animated_by: 'Animated by %name%'
     learn_more: Learn more
 
 # View
@@ -279,7 +279,7 @@ event_form:
     postalAddress: Postal address
 
 event_search:
-    title: Find events around you
+    title: Upcoming events
 
 
 
