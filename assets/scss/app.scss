@@ -281,25 +281,6 @@
 }
 
 .search {
-    &__intro {
-        background: $primary-gradient;
-        color: #fff;
-        padding: 50px;
-        text-align: center;
-
-        &__subtitle {
-            font-family: $font-roboto-mono;
-            font-size: 22px;
-            font-weight: normal;
-        }
-
-        &__title {
-            font-size: 52px;
-            font-weight: bold;
-            margin-bottom: 0;
-        }
-    }
-
     &__form {
         display: flex;
         align-items: stretch;

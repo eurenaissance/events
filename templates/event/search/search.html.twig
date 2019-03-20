@@ -4,14 +4,18 @@
 
 {% block javascripts encore_entry_script_tags('search-event') %}
 
-{% block body %}
-    <div class="search">
-        <div class="search__intro">
-            <h2 class="search__intro__title">
+{% block intro %}
+    <div class="intro">
+        <div class="container">
+            <h2 class="intro__title">
                 {{ 'event_search.title'|trans }}
             </h2>
         </div>
+    </div>
+{% endblock %}
 
+{% block body %}
+    <div class="search">
         <div id="search-events"></div>
 
         <div class="row mt-5">
