@@ -23,7 +23,7 @@ class GeocoderSetupStep implements SetupStepInterface
 
     public function getOrder(): int
     {
-        return 2;
+        return 3;
     }
 
     public function getName(): string

@@ -17,7 +17,7 @@ class ConfigurationSetupStep implements SetupStepInterface
 
     public function getOrder(): int
     {
-        return 1;
+        return 2;
     }
 
     public function getName(): string
@@ -27,6 +27,12 @@ class ConfigurationSetupStep implements SetupStepInterface
 
     public function execute(OutputInterface $output): void
     {
+        if ($this->manager->getRepository(Configuration::class)->count([]) > 0) {
+            $output->writeln('Configuration already created.');
+
+            return;
+        }
+
         $configuration = new Configuration();
         $configuration->setPartyName('Your party');
         $configuration->setPartyLogo('fixtures/logo/default.jpg');
@@ -48,6 +54,6 @@ class ConfigurationSetupStep implements SetupStepInterface
         $this->manager->persist($configuration);
         $this->manager->flush();
 
-        $output->writeln('Created');
+        $output->writeln('Default configuration created successfully.');
     }
 }
