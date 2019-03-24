@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Repository\ActorRepository;
-use App\Repository\GroupRepository;
 use App\Setup\SetupStepInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
