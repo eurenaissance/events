@@ -38,12 +38,10 @@
     }
 }
 
-.flashes {
-    .alert {
-        border-radius: 0 !important;
-        border: 0 !important;
-        text-align: center;
-    }
+.flashes .alert {
+    border-radius: 0 !important;
+    border: 0 !important;
+    text-align: center;
 }
 
 .header {
@@ -109,6 +107,7 @@
     &__desktop-menu {
         display: inline-block;
         position: relative;
+        z-index: 99;
 
         &__button {
             padding: 15px 5px 15px 20px !important;
@@ -442,6 +441,50 @@
 
         &__city {
             font-weight: 600;
+        }
+    }
+}
+
+.event {
+    background: $white;
+    border-radius: 14px;
+    box-shadow: 0 2px 11px 1px rgba(194, 194, 194, 0.7);
+    padding: 60px;
+
+    &__title {
+        font-size: 30px;
+        color: $dark;
+    }
+
+    hr {
+        margin: 30px 0;
+    }
+
+    &__field {
+        margin-bottom: 20px;
+
+        &__label {
+            font-weight: bold;
+        }
+    }
+
+    &__buttons {
+        a {
+            display: inline-flex;
+            width: 40px;
+            height: 40px;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid $primary;
+            border-radius: 30px;
+            transition: all 0.2s;
+            margin-right: 5px;
+
+            &:hover {
+                background: $primary;
+                color: $white;
+                text-decoration: none;
+            }
         }
     }
 }
