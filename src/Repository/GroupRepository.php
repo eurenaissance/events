@@ -129,16 +129,20 @@ class GroupRepository extends ServiceEntityRepository
         ;
     }
 
-    public function search(GeographyInterface $around, string $term, int $maxDistance = 150, int $limit = 30): iterable
+    public function search(?GeographyInterface $around, string $term, int $maxDistance = 150, int $limit = 30): iterable
     {
         $qb = $this->createQueryBuilder('g');
-        $qb->addSelect('ST_Distance_Sphere(g.coordinates, :coordinates) as HIDDEN distance')
-            ->andWhere('ST_Distance_Sphere(g.coordinates, :coordinates) <= :maxDistance')
-            ->setParameter('coordinates', $around->getCoordinates(), 'point')
-            ->setParameter('maxDistance', $maxDistance * 1000)
-            ->addOrderBy('distance', 'ASC')
-            ->setMaxResults($limit)
-        ;
+
+        if ($around) {
+            $qb->addSelect('ST_Distance_Sphere(g.coordinates, :coordinates) as HIDDEN distance')
+                ->andWhere('ST_Distance_Sphere(g.coordinates, :coordinates) <= :maxDistance')
+                ->setParameter('coordinates', $around->getCoordinates(), 'point')
+                ->setParameter('maxDistance', $maxDistance * 1000)
+                ->addOrderBy('distance', 'ASC')
+            ;
+        }
+
+        $qb->setMaxResults($limit);
 
         $scoreQuery = [];
 
