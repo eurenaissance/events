@@ -251,10 +251,16 @@ event_card:
     learn_more: Learn more
 
 event_view:
+    date_time: Date and time
+    address: Address
+    description: Description
+    share: Share
+    add_calendar: Add to my calendar
+    edit: Update this event
     google_maps: View on Google Maps
     register: Register
     contact_organizer: Contact the organizer
-    edit: Update
+
 
 event_choose:
     title: Organize an event

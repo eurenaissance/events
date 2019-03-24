@@ -13,7 +13,7 @@ class ConfigurationControllerTest extends HttpTestCase
         $this->authenticateAdmin('admin@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/admin/app/configuration');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
     }
 
     public function testSuperAdminCanSeeConfigurationAdmin(): void
@@ -21,7 +21,7 @@ class ConfigurationControllerTest extends HttpTestCase
         $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/admin/app/configuration');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
     }
 
     public function testNotAuthentificatedCannotSeeConfigurationAdmin(): void
@@ -68,13 +68,13 @@ class ConfigurationControllerTest extends HttpTestCase
         $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/admin/app/configuration');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('Update configuration', $formValues);
 
         $this->assertIsRedirectedTo('/admin/app/configuration');
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $form = $crawler->selectButton('Update configuration')->form();
 
@@ -102,11 +102,11 @@ class ConfigurationControllerTest extends HttpTestCase
         $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/admin/app/configuration');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('Update configuration', $formValues);
 
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains('This value should not be blank');
     }
 
@@ -121,7 +121,7 @@ class ConfigurationControllerTest extends HttpTestCase
         $numbersBeforeUpload = count(glob($storagePath.'uploads/configuration/*.jpg'));
 
         $crawler = $this->client->request('GET', '/admin/app/configuration');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $form = $crawler->selectButton('Update configuration')->form();
         $formValues['faviconFile'] = '/storage/public/fixtures/home/default.jpg';

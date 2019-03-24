@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "calendar/icsfile": "^5.3",
         "cocur/slugify": "^3.1",
         "creof/doctrine2-spatial": "^1.2",
         "danhunsaker/flysystem-redis": "^1.0",

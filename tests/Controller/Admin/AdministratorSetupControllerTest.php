@@ -32,7 +32,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/admin/setup');
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('setup.form.button', [
             'emailAddress' => $email,
@@ -44,7 +44,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/admin/login?from_setup=1');
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertTrue($administratorRepository->hasAdministrator());
 
         $this->client->submitForm('Sign in', [
@@ -54,7 +54,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/admin/dashboard');
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertGreaterThan(0, $crawler->filter('a:contains("Administrators")')->count());
     }
 
@@ -81,7 +81,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
         $this->assertFalse($administratorRepository->hasAdministrator());
 
         $this->client->request('GET', '/admin/setup');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('setup.form.button', [
             'emailAddress' => $email,
@@ -90,7 +90,7 @@ class AdministratorSetupControllerTest extends HttpTestCase
                 'second' => $secondPassword,
             ],
         ]);
-        $this->assertResponseSuccessFul('User should not be redirected in order to see setup form errors.');
+        $this->assertResponseSuccessful('User should not be redirected in order to see setup form errors.');
         $this->assertResponseContains($errors);
     }
 

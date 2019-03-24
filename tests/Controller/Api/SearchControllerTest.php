@@ -63,7 +63,7 @@ class SearchControllerTest extends HttpTestCase
     {
         $this->client->request('GET', '/api/search/events?c='.$cityUuid.'&q='.$term);
 
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertJson($this->client->getResponse()->getContent());
 
         $content = \GuzzleHttp\json_decode($this->client->getResponse()->getContent());

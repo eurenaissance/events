@@ -43,7 +43,7 @@ class ResetPasswordControllerTest extends HttpTestCase
     public function testRequestSuccess(string $email, string $firstName): void
     {
         $this->client->request('GET', '/reset-password');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('password_reset_request.button', ['emailAddress' => $email]);
         $this->assertIsRedirectedTo('/reset-password/check-email');
@@ -54,13 +54,13 @@ class ResetPasswordControllerTest extends HttpTestCase
         ]);
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
     }
 
     public function testRequestToPendingToken(): void
     {
         $this->client->request('GET', '/reset-password');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('password_reset_request.button', ['emailAddress' => 'remi@mobilisation-eu.localhost']);
         $this->assertIsRedirectedTo('/login');
@@ -86,7 +86,7 @@ class ResetPasswordControllerTest extends HttpTestCase
     {
         $resetPasswordUrl = sprintf('/reset-password/%s', ResetPasswordTokenFixtures::TOKEN_01_UUID);
         $this->client->request('GET', $resetPasswordUrl);
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('password_reset_reset.save', [
             'plainPassword' => [
@@ -102,7 +102,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         ]);
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains('flashes.reset_password.success');
 
         $this->client->submitForm('login.button', [
@@ -112,7 +112,7 @@ class ResetPasswordControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/');
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->assertResponseContains('Rémi Gardien');
     }
@@ -154,7 +154,7 @@ class ResetPasswordControllerTest extends HttpTestCase
 
         $resetPasswordUrl = sprintf('/reset-password/%s', ResetPasswordTokenFixtures::TOKEN_01_UUID);
         $this->client->request('GET', $resetPasswordUrl);
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('password_reset_reset.save', [
             'plainPassword' => [
@@ -162,7 +162,7 @@ class ResetPasswordControllerTest extends HttpTestCase
                 'second' => $second,
             ],
         ]);
-        $this->assertResponseSuccessFul('Actor should not be redirected if reset form is not valid.');
+        $this->assertResponseSuccessful('Actor should not be redirected if reset form is not valid.');
         $this->assertResponseContains($error);
 
         $actorRepository->clear();

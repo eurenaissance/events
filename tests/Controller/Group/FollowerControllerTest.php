@@ -185,7 +185,7 @@ class FollowerControllerTest extends HttpTestCase
         $this->authenticateActor($actorEmail);
 
         $crawler = $this->client->request('GET', "/group/$groupSlug");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->assertCount(1, $crawler->filter("a[href=\"/group/$groupSlug/follow\"]"));
         $this->assertCount(0, $crawler->filter("a[href=\"/group/$groupSlug/unfollow\"]"));
@@ -199,7 +199,7 @@ class FollowerControllerTest extends HttpTestCase
         ]);
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->assertCount(0, $crawler->filter("a[href=\"/group/$groupSlug/follow\"]"));
         $this->assertCount(1, $crawler->filter("a[href=\"/group/$groupSlug/unfollow\"]"));
@@ -310,7 +310,7 @@ class FollowerControllerTest extends HttpTestCase
         $this->authenticateActor($actorEmail);
 
         $crawler = $this->client->request('GET', "/group/$groupSlug");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->assertCount(0, $crawler->filter("a[href=\"/group/$groupSlug/follow\"]"));
         $this->assertCount(1, $crawler->filter("a[href=\"/group/$groupSlug/unfollow\"]"));
@@ -320,7 +320,7 @@ class FollowerControllerTest extends HttpTestCase
         $this->assertNoMailSent();
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->assertCount(1, $crawler->filter("a[href=\"/group/$groupSlug/follow\"]"));
         $this->assertCount(0, $crawler->filter("a[href=\"/group/$groupSlug/unfollow\"]"));
@@ -395,7 +395,7 @@ class FollowerControllerTest extends HttpTestCase
         $this->authenticateActor($actorEmail);
 
         $crawler = $this->client->request('GET', "/group/$groupSlug");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->assertCount(1, $crawler->filter("a[href=\"/group/$groupSlug/follow\"]"));
         $this->assertCount(0, $crawler->filter("a[href=\"/group/$groupSlug/unfollow\"]"));
@@ -405,7 +405,7 @@ class FollowerControllerTest extends HttpTestCase
         $this->assertMailSentTo($animatorEmail);
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->assertCount(0, $crawler->filter("a[href=\"/group/$groupSlug/follow\"]"));
         $this->assertCount(1, $crawler->filter("a[href=\"/group/$groupSlug/unfollow\"]"));

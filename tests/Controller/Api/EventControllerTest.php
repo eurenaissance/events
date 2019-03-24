@@ -40,7 +40,7 @@ class EventControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $this->client->request('GET', sprintf('/api/events/all?token=%s', $token));
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->assertNotEmpty(json_decode($this->client->getResponse()->getContent(), true));
     }

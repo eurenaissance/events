@@ -69,7 +69,7 @@ class CreationControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $this->client->request('GET', '/group/create');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('group_create.submit', [
             'name' => $groupName,
@@ -80,7 +80,7 @@ class CreationControllerTest extends HttpTestCase
         $this->assertMailSentTo($email);
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $group = $this->getGroupRepository()->findOneBySlug($groupSlug);
         $this->assertNotNull($group);
@@ -205,10 +205,10 @@ class CreationControllerTest extends HttpTestCase
         $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/group/create');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('group_create.submit', $fieldValues);
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains($errors);
     }
 
@@ -246,10 +246,10 @@ class CreationControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $this->client->request('GET', '/');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->clickLink('layout.header.cta.create_group');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('group_create.submit', [
             'name' => $groupName,
@@ -264,7 +264,7 @@ class CreationControllerTest extends HttpTestCase
         ]);
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertCount(1, $crawler->filter("h2:contains(\"$groupName\")"));
         $this->assertCount(1, $crawler->filter('.alert:contains("group.view.view.flash.pending")'));
         $this->assertCount(1, $crawler->filter("#group-description:contains(\"$groupDescription\")"));
@@ -304,7 +304,7 @@ class CreationControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $this->client->request('GET', '/group/create');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('group_create.submit', [
             'name' => $groupName,
@@ -319,7 +319,7 @@ class CreationControllerTest extends HttpTestCase
         ]);
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertCount(1, $crawler->filter("h2:contains(\"$groupName\")"));
         $this->assertCount(1, $crawler->filter('.alert:contains("group.view.view.flash.pending")'));
         $this->assertCount(1, $crawler->filter("#group-description:contains(\"$groupDescription\")"));
@@ -351,7 +351,7 @@ class CreationControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $this->client->request('GET', '/group/create');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('group_create.submit', [
             'name' => $groupName,
@@ -362,7 +362,7 @@ class CreationControllerTest extends HttpTestCase
         $this->assertNoMailSent();
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertCount(1, $crawler->filter("h2:contains(\"$groupName\")"));
         $this->assertCount(1, $crawler->filter('.alert:contains("group.view.view.flash.pending")'));
         $this->assertCount(1, $crawler->filter("#group-description:contains(\"$groupDescription\")"));

@@ -2,74 +2,146 @@
 
 {% block page_title event.name %}
 
-{% block intro %}
-    <div class="intro intro--primary mb-5">
-        <div class="container">
-            <h2 class="intro__title">
-                {{ event.name }}
-            </h2>
-
-            {{ event.beginAt|localizeddate('full', 'short') }}
-        </div>
-    </div>
-{% endblock %}
+{% block intro '' %}
 
 {% block body %}
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-xl-6">
-            {% if is_granted('EVENT_EDIT', event) %}
-                <div class="text-right">
-                    <div class="btn-group">
-                        <a href="{{ path('app_event_edit', { slug: event.slug }) }}" class="btn btn-sm btn-outline-secondary">
+    <div class="container mt-5">
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <div class="back-link">
+                    <a href="{{ path('app_group_view', {'slug': event.group.slug}) }}">
+                        ⟵ {{ 'base.back'|trans }}
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                {% if is_granted('EVENT_EDIT', event) %}
+                    <div class="text-right">
+                        <a href="{{ path('app_event_edit', { slug: event.slug }) }}" class="btn btn-outline-primary">
                             {{ 'event_view.edit'|trans }}
                         </a>
                     </div>
-                </div>
+                {% endif %}
+            </div>
+        </div>
 
-                <hr />
-            {% endif %}
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-8">
+                <div class="event">
+                    <h1 class="event__title">
+                        {{ event.name }}
+                    </h1>
 
-            <div class="row align-items-center">
-                <div class="col text-muted">
-                    {{ 'event_card.organized_by'|trans({ '%name%': event.creator.fullName }) }}
-                    <br />
-                    {{ 'event_card.from'|trans }}
-                    <a href="{{ path('app_group_view', {'slug': event.group.slug}) }}">
-                        {{ event.group.name }}
-                    </a>
-                </div>
-                <div class="col">
-                    <div class="address mb-1">
-                        <div class="address__icon">
-                            <i class="fas fa-map-marker-alt"></i>
+                    <hr />
+
+                    <div class="event__field row">
+                        <div class="event__field__label col-md-4">
+                            {{ 'event_view.date_time'|trans }}
                         </div>
-                        <div class="address__text">
-                            <div class="address__text__street">
-                                {{ event.address }}
+                        <div class="event__field__value col-md-8">
+                            {{ event.beginAt|localizeddate('full', 'short') }}
+                        </div>
+                    </div>
+
+                    <div class="event__field row">
+                        <div class="event__field__label col-md-4">
+                            {{ 'event_view.address'|trans }}
+                        </div>
+                        <div class="event__field__value col-md-8">
+                            {{ event.address }}
+                            <br />
+                            {{ event.city.name }}, {{ event.city.country|country }}
+                            <br />
+                            <a href="https://maps.google.com/?q={{ event.address }} {{ event.city.name }} {{ event.city.country|country }}" target="_blank">
+                                {{ 'event_view.google_maps'|trans }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="event__field row">
+                        <div class="event__field__label col-md-4">
+                            {{ 'event_card.organized_by'|trans({ '%name%': '' }) }}
+                        </div>
+                        <div class="event__field__value col-md-8">
+                            {{ event.creator.fullName }}
+                            <br />
+                            <a href="{{ path('app_group_view', {'slug': event.group.slug}) }}">
+                                {{ event.group.name }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="event__field mt-5">
+                        <div class="event__field__label">
+                            {{ 'event_view.description'|trans }}
+                        </div>
+                    </div>
+
+                    <div class="event__description">
+                        {{ event.description|raw }}
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="col-md-6">
+                            <div class="event__field">
+                                <div class="event__field__label">
+                                    {{ 'event_view.share'|trans }}
+                                </div>
                             </div>
-                            <div class="address__text__city">
-                                {{ event.city.name }}, {{ event.city.country|country }}
-                            </div>
-                            <small>
-                                <a href="https://maps.google.com/?q={{ event.address }} {{ event.city.name }} {{ event.city.country|country }}" target="_blank">
-                                    {{ 'event_view.google_maps'|trans }}
+
+                            <div class="event__buttons">
+                                <a href="{{ facebook_share_url('app_event_view', {'slug': event.slug}, event.name) }}"
+                                   target="_blank" rel="noreferrer noopener">
+                                    <i class="fab fa-facebook"></i>
                                 </a>
-                            </small>
+                                <a href="{{ twitter_share_url('app_event_view', {'slug': event.slug}, event.name) }}"
+                                   target="_blank" rel="noreferrer noopener">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="{{ telegram_share_url('app_event_view', {'slug': event.slug}, event.name) }}"
+                                   target="_blank" rel="noreferrer noopener">
+                                    <i class="fab fa-telegram"></i>
+                                </a>
+                                <a href="{{ whatsapp_share_url('app_event_view', {'slug': event.slug}, event.name) }}"
+                                   target="_blank" rel="noreferrer noopener">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                                <a href="{{ mailto_share_url('app_event_view', {'slug': event.slug}, event.name, event.name) }}"
+                                   target="_blank" rel="noreferrer noopener">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                            </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="event__field">
+                                <div class="event__field__label">
+                                    {{ 'event_view.add_calendar'|trans }}
+                                </div>
+                            </div>
+
+                            <div class="event__buttons">
+                                <a href="{{ path('app_event_calendar_google', {'slug': event.slug}) }}"
+                                   target="_blank" rel="noreferrer noopener">
+                                    <i class="fab fa-google"></i>
+                                </a>
+                                <a href="{{ path('app_event_calendar_ics', {'slug': event.slug}) }}"
+                                   target="_blank" rel="noreferrer noopener">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5">
+                        <a href="" class="btn btn-primary btn-lg btn-block">
+                            {{ 'event_view.register'|trans }}
+                        </a>
+                        <a href="" class="btn btn-link btn-block">
+                            {{ 'event_view.contact_organizer'|trans }}
+                        </a>
                     </div>
                 </div>
             </div>
-
-            <div id="event-description" class="mt-5 mb-5">
-                {{ event.description|raw }}
-            </div>
-
-            <a href="" class="btn btn-primary btn-lg btn-block">
-                {{ 'event_view.register'|trans }}
-            </a>
-            <a href="" class="btn btn-link btn-block">
-                {{ 'event_view.contact_organizer'|trans }}
-            </a>
         </div>
     </div>
 {% endblock %}

@@ -16,7 +16,7 @@ class ProfileControllerTest extends HttpTestCase
 
         // Enable notifications
         $crawler = $this->client->request('GET', '/profile/notifications');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $form = $crawler->selectButton('actor.profile.notification.submit')->form();
         $this->assertArraySubset([], $form->getPhpValues());
@@ -30,7 +30,7 @@ class ProfileControllerTest extends HttpTestCase
 
         // disable notifications
         $crawler = $this->client->request('GET', '/profile/notifications');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $form = $crawler->selectButton('actor.profile.notification.submit')->form();
         $this->assertArraySubset(
@@ -45,7 +45,7 @@ class ProfileControllerTest extends HttpTestCase
 
         // ensure user is logged in
         $this->client->request('GET', '/profile/notifications');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
     }
 
     public function provideRequestsForAnonymous(): iterable
@@ -160,7 +160,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $crawler = $this->client->request('GET', '/profile');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $form = $crawler->selectButton('actor.profile.edit.submit')->form();
         $emailField = $form->get('emailAddress');
@@ -172,7 +172,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo('/profile');
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains('flashes.profile.account_success');
 
         $form = $crawler->selectButton('actor.profile.edit.submit')->form();
@@ -213,10 +213,10 @@ class ProfileControllerTest extends HttpTestCase
         $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/profile');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('actor.profile.edit.submit', $fieldValues);
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains($errors);
     }
 
@@ -237,7 +237,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $crawler = $this->client->request('GET', '/profile/change-password');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $form = $crawler->selectButton('actor.profile.change_password.submit')->form();
         $formData = [
@@ -268,13 +268,13 @@ class ProfileControllerTest extends HttpTestCase
 
         // ensure user is not logged out after this request
         $this->client->request('GET', '/profile');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->request('GET', '/logout');
         $this->assertIsRedirectedTo($this->getAbsoluteUrl('/login'));
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('login.button', [
             'emailAddress' => $email,
@@ -284,7 +284,7 @@ class ProfileControllerTest extends HttpTestCase
 
         // ensure user is logged in
         $this->client->request('GET', '/profile');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
     }
 
     public function provideBadPasswordChanges(): iterable
@@ -328,7 +328,7 @@ class ProfileControllerTest extends HttpTestCase
         $this->authenticateActor('remi@mobilisation-eu.localhost');
 
         $this->client->request('GET', '/profile/change-password');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('actor.profile.change_password.submit', [
             'plainPassword' => [
@@ -337,12 +337,12 @@ class ProfileControllerTest extends HttpTestCase
             ],
             'currentPassword' => $currentPassword,
         ]);
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains($error);
 
         // ensure user is not logged out
         $this->client->request('GET', '/profile');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $finalPassword = $this->getActorRepository()->findOneByEmail('remi@mobilisation-eu.localhost')->getPassword();
         $this->assertSame($initialPassword, $finalPassword);

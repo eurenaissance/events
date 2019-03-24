@@ -3,11 +3,13 @@
 {% block page_title group.name %}
 
 {% block intro %}
-    <div class="intro intro--primary mb-5">
+    <div class="intro mb-5">
         <div class="container">
             <h2 class="intro__title">
                 {{ group.name }}
             </h2>
+
+            {{ group.city.name }}, {{ group.city.country|country }}
         </div>
     </div>
 {% endblock %}

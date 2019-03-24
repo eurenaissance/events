@@ -46,7 +46,7 @@ class RegistrationControllerTest extends HttpTestCase
     public function testRegisterSuccess(): void
     {
         $this->client->request('GET', '/register');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('register.submit', [
             'emailAddress' => 'new@mobilisation-eu.localhost',
@@ -66,7 +66,7 @@ class RegistrationControllerTest extends HttpTestCase
         ]);
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains('register.confirm.subtitle');
         $this->assertActorConfirmed('new@mobilisation-eu.localhost', false);
     }
@@ -155,10 +155,10 @@ class RegistrationControllerTest extends HttpTestCase
     public function testRegisterFailure(array $fieldValues, array $errors): void
     {
         $this->client->request('GET', '/register');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('register.submit', $fieldValues);
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains($errors);
     }
 
@@ -167,7 +167,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->assertActorConfirmed('patrick@mobilisation-eu.localhost', false);
 
         $this->client->request('GET', '/register/resend-confirmation');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('register.resend_confirm.submit', [
             'emailAddress' => 'patrick@mobilisation-eu.localhost',
@@ -180,7 +180,7 @@ class RegistrationControllerTest extends HttpTestCase
         ]);
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains('register.resend_confirm.title');
         $this->assertActorConfirmed('patrick@mobilisation-eu.localhost', false);
     }
@@ -188,7 +188,7 @@ class RegistrationControllerTest extends HttpTestCase
     public function testResendConfirmationUnknownEmail(): void
     {
         $this->client->request('GET', '/register/resend-confirmation');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('register.resend_confirm.submit', [
             'emailAddress' => 'unknown@mobilisation-eu.localhost',
@@ -197,7 +197,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->assertNoMailSent();
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains('register.resend_confirm.title');
     }
 
@@ -230,14 +230,14 @@ class RegistrationControllerTest extends HttpTestCase
         $this->assertActorConfirmed($email, $alreadyConfirmed);
 
         $this->client->request('GET', '/register/resend-confirmation');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('register.resend_confirm.submit', ['emailAddress' => $email]);
         $this->assertIsRedirectedTo($redirectedTo);
         $this->assertNoMailSent();
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains($errors);
         $this->assertActorConfirmed($email, $alreadyConfirmed);
     }
@@ -255,7 +255,7 @@ class RegistrationControllerTest extends HttpTestCase
         ]);
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains([
             'register.confirmed.title',
             'register.confirmed.subtitle',
@@ -311,7 +311,7 @@ class RegistrationControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo($redirectedTo);
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains($errors);
         $this->assertActorConfirmed($email, $alreadyConfirmed);
     }

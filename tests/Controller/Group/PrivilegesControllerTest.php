@@ -114,7 +114,7 @@ class PrivilegesControllerTest extends HttpTestCase
         $this->authenticateActor($animatorEmail);
 
         $crawler = $this->client->request('GET', "/group/$groupSlug/members");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->assertCount(0, $crawler->filter("#co-animators tr:contains(\"$followerName\")"));
         $this->assertCount(1, $followerRow = $crawler->filter("#followers tr:contains(\"$followerName\")"));
@@ -132,7 +132,7 @@ class PrivilegesControllerTest extends HttpTestCase
         ]);
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertCount(1, $crawler->filter('.alert:contains("flashes.group.promote_success")'));
         $this->assertCount(1, $crawler->filter("#co-animators tr:contains(\"$followerName\")"));
         $this->assertCount(0, $crawler->filter("#followers tr:contains(\"$followerName\")"));
@@ -279,7 +279,7 @@ class PrivilegesControllerTest extends HttpTestCase
         $this->assertNoMailSent();
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains('flashes.group.demote_success');
 
         $this->assertActorIsFollowerOfGroup($coAnimatorUuid, $groupSlug);
@@ -321,7 +321,7 @@ class PrivilegesControllerTest extends HttpTestCase
         $this->authenticateActor($animatorEmail);
 
         $crawler = $this->client->request('GET', "/group/$groupSlug/members");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->assertCount(1, $coAnimatorRow = $crawler->filter("#co-animators tr:contains(\"$coAnimatorName\")"));
         $this->assertCount(0, $crawler->filter("#followers tr:contains(\"$coAnimatorName\")"));
@@ -335,7 +335,7 @@ class PrivilegesControllerTest extends HttpTestCase
         $this->assertNoMailSent();
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertCount(1, $crawler->filter('.alert:contains("flashes.group.demote_success")'));
         $this->assertCount(0, $crawler->filter("#co-animators tr:contains(\"$coAnimatorName\")"));
         $this->assertCount(1, $crawler->filter("#followers tr:contains(\"$coAnimatorName\")"));
@@ -478,7 +478,7 @@ class PrivilegesControllerTest extends HttpTestCase
         $this->authenticateActor($animatorEmail);
 
         $crawler = $this->client->request('GET', "/group/$groupSlug/members");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->assertCount(0, $crawler->filter("#co-animators tr:contains(\"$followerName\")"));
         $this->assertCount(1, $followerRow = $crawler->filter("#followers tr:contains(\"$followerName\")"));
@@ -492,7 +492,7 @@ class PrivilegesControllerTest extends HttpTestCase
         $this->assertMailSentTo($followerEmail);
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertCount(1, $crawler->filter('.alert:contains("flashes.group.promote_success")'));
         $this->assertCount(1, $crawler->filter("#co-animators tr:contains(\"$followerName\")"));
         $this->assertCount(0, $crawler->filter("#followers tr:contains(\"$followerName\")"));

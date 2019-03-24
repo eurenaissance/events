@@ -38,7 +38,7 @@ class ContentControllerTest extends HttpTestCase
         $this->authenticateAdmin($email);
 
         $crawler = $this->client->request('GET', "/admin/app/content/$id/edit");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $form = $crawler->selectButton('Update')->form();
         $uniqId = $this->getAdminFormUniqId($form);
@@ -48,13 +48,13 @@ class ContentControllerTest extends HttpTestCase
         $this->assertIsRedirectedTo("/admin/app/content/$id/edit");
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains('ceci est un ***test***');
         $this->assertResponseContains('has been successfully updated.');
 
         // Check if Markdown works correctly
         $this->client->request('GET', $url);
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains($title);
         $this->assertResponseContains('<p>ceci est un <strong><em>test</em></strong></p>');
     }
@@ -85,7 +85,7 @@ class ContentControllerTest extends HttpTestCase
         $this->authenticateAdmin('superadmin@mobilisation-eu.localhost');
 
         $this->client->request('GET', $uri);
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
     }
 
     /**

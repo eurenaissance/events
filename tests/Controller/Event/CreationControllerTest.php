@@ -47,7 +47,7 @@ class CreationControllerTest extends HttpTestCase
         if ($expectedRedirect) {
             $this->assertIsRedirectedTo($expectedRedirect);
         } else {
-            $this->assertResponseSuccessFul();
+            $this->assertResponseSuccessful();
 
             $groups = $crawler->filter('.card__title')->each(function (Crawler $node) {
                 return trim($node->text());
@@ -150,7 +150,7 @@ class CreationControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $this->client->request('GET', "/group/$groupSlug/event/create");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('event_create.submit', [
             'name' => $eventName,
@@ -171,7 +171,7 @@ class CreationControllerTest extends HttpTestCase
         $this->assertMailSentTo($email);
 
         $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $event = $this->getEventRepository()->findOneBySlug($eventSlug);
         $this->assertNotNull($event);
@@ -292,10 +292,10 @@ class CreationControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $this->client->request('GET', "/group/$groupSlug/event/create");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('event_create.submit', $fieldValues);
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
         $this->assertResponseContains($errors);
         $this->assertNull($this->getEventRepository()->findOneBy([
             'creator' => $this->getActorRepository()->findOneByEmail($email),
@@ -356,10 +356,10 @@ class CreationControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $this->client->request('GET', "/group/$groupSlug");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->clickLink('group_view.actions.organize_event');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('event_create.submit', $fieldValues);
         $this->assertIsRedirectedTo("/event/$eventSlug");
@@ -370,9 +370,9 @@ class CreationControllerTest extends HttpTestCase
         ]);
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
-        $this->assertCount(1, $crawler->filter('h2:contains("'.$fieldValues['name'].'")'));
-        $this->assertCount(1, $crawler->filter('#event-description:contains("'.$fieldValues['description'].'")'));
+        $this->assertResponseSuccessful();
+        $this->assertCount(1, $crawler->filter('h1:contains("'.$fieldValues['name'].'")'));
+        $this->assertCount(1, $crawler->filter('.event__description:contains("'.$fieldValues['description'].'")'));
     }
 
     public function provideAnimatorWithNotificationDisabledCanCreateEventFromGroup(): iterable
@@ -409,18 +409,18 @@ class CreationControllerTest extends HttpTestCase
         $this->authenticateActor($email);
 
         $this->client->request('GET', "/group/$groupSlug");
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->clickLink('group_view.actions.organize_event');
-        $this->assertResponseSuccessFul();
+        $this->assertResponseSuccessful();
 
         $this->client->submitForm('event_create.submit', $fieldValues);
         $this->assertIsRedirectedTo("/event/$eventSlug");
         $this->assertNoMailSent();
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseSuccessFul();
-        $this->assertCount(1, $crawler->filter('h2:contains("'.$fieldValues['name'].'")'));
-        $this->assertCount(1, $crawler->filter('#event-description:contains("'.$fieldValues['description'].'")'));
+        $this->assertResponseSuccessful();
+        $this->assertCount(1, $crawler->filter('h1:contains("'.$fieldValues['name'].'")'));
+        $this->assertCount(1, $crawler->filter('.event__description:contains("'.$fieldValues['description'].'")'));
     }
 }
