@@ -371,7 +371,7 @@ class CreationControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessful();
-        $this->assertCount(1, $crawler->filter('h2:contains("'.$fieldValues['name'].'")'));
+        $this->assertCount(1, $crawler->filter('h1:contains("'.$fieldValues['name'].'")'));
         $this->assertCount(1, $crawler->filter('#event-description:contains("'.$fieldValues['description'].'")'));
     }
 
@@ -420,7 +420,7 @@ class CreationControllerTest extends HttpTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessful();
-        $this->assertCount(1, $crawler->filter('h2:contains("'.$fieldValues['name'].'")'));
+        $this->assertCount(1, $crawler->filter('h1:contains("'.$fieldValues['name'].'")'));
         $this->assertCount(1, $crawler->filter('#event-description:contains("'.$fieldValues['description'].'")'));
     }
 }
