@@ -17,23 +17,45 @@
     box-shadow: none;
 }
 
-.autocomplete {
-    position: relative;
+.input-loading {
+    background: url('/res/loader.gif') no-repeat 100% 50% #fff !important;
+}
 
-    &__chooser {
-        position: absolute;
-        background: #fff;
-        box-shadow: 0 0 5px 0 rgba(194, 194, 194, 0.7);
-        margin: 5px 0;
-        padding: 5px;
+.react-autosuggest {
+    &__container {
+        position: relative;
     }
 
-    &__item {
-        padding: 3px;
-        cursor: pointer;
+    &__suggestions-container {
+        display: none;
 
-        &--active {
-            background: #e5e5e5;
+        &--open {
+            display: block;
+            position: absolute;
+            top: 40px;
+            width: 280px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            font-family: Helvetica, sans-serif;
+            font-weight: 300;
+            font-size: 16px;
+            border-radius: 4px;
+            z-index: 2;
+        }
+    }
+
+    &__suggestions-list {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    &__suggestion {
+        cursor: pointer;
+        padding: 10px 20px;
+
+        &--highlighted {
+            background-color: #e5e5e5;
         }
     }
 }
@@ -368,7 +390,7 @@
 
     &__title {
         font-family: $font-roboto-slab;
-        font-size: 22px;
+        font-size: 20px;
         margin: 0;
         color: $black;
 
@@ -392,6 +414,35 @@
             font-size: 18px;
             margin-right: 7px;
             text-align: center;
+        }
+    }
+
+    &--placeholder {
+        &__title {
+            background: #e9e9e9;
+            height: 24px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        &__field {
+            background: #ededed;
+            height: 14px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        &__more-container {
+            text-align: right;
+        }
+
+        &__more {
+            display: inline-block;
+            background: #ededed;
+            height: 12px;
+            width: 100px;
+            border-radius: 20px;
+            margin-top: 20px;
         }
     }
 }

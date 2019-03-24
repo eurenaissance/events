@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block page_title 'event_search.title'|trans %}
+{% block javascripts encore_entry_script_tags('search-event') %}
 
 {% block intro %}
     <div class="intro mb-0">
@@ -13,16 +14,24 @@
 {% endblock %}
 
 {% block body %}
-    <div class="search">
-        <div class="row mt-5">
-            {% for i, event in events %}
-                <div class="col-md-4">
-                    {{ include('_components/_event_card.html.twig', {'event': event}) }}
+    <div class="search" id="search-events">
+        <div class="row justify-content-center">
+            <div class="col-lg-11">
+                <div class="row mt-5">
+                    {% for i in 0..2 %}
+                        <div class="col-md-4">
+                            <div class="card card--placeholder mb-3">
+                                <div class="card--placeholder__title"></div>
+                                <div class="card--placeholder__field"></div>
+                                <div class="card--placeholder__field"></div>
+                                <div class="card--placeholder__more-container">
+                                    <div class="card--placeholder__more"></div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
-                {% if i % 3 == 0 and i > 0 %}
-                    </div><div class="row">
-                {% endif %}
-            {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}
