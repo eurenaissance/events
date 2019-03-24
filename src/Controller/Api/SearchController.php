@@ -8,7 +8,6 @@ use App\Repository\GroupRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -21,8 +20,7 @@ class SearchController extends AbstractController
      */
     public function cities(CityRepository $repo, string $appCountry, Request $request): JsonResponse
     {
-        $term = $request->query->get('q', '');
-        if (strlen($term) < 3) {
+        if (strlen($term = $request->query->get('q', '')) < 3) {
             return $this->json([]);
         }
 
@@ -34,23 +32,20 @@ class SearchController extends AbstractController
      */
     public function events(CityRepository $cityRepo, EventRepository $eventRepo, Request $request): JsonResponse
     {
-        if (!$city = $cityRepo->findOneByUuid($request->query->get('c'))) {
-            throw new BadRequestHttpException();
-        }
+        $term = (string) $request->query->get('q', '');
+        $city = $cityRepo->findOneByUuid($request->query->get('c'));
 
-        return $this->json($eventRepo->search($city, $request->query->get('q', '')), 200, [], ['groups' => 'search']);
+        return $this->json($eventRepo->search($city, $term), 200, [], ['groups' => 'search']);
     }
 
     /**
      * @Route("/groups", methods="GET", name="app_api_search_groups")
      */
-    public function groups(GroupRepository $repo, Request $request): JsonResponse
+    public function groups(CityRepository $cityRepo, GroupRepository $groupRepo, Request $request): JsonResponse
     {
-        $term = $request->query->get('q', '');
-        if (strlen($term) < 3) {
-            return $this->json([]);
-        }
+        $term = (string) $request->query->get('q', '');
+        $city = $cityRepo->findOneByUuid($request->query->get('c'));
 
-        return $this->json($repo->search($this->getUser(), $term), 200, [], ['groups' => 'group_autocomplete']);
+        return $this->json($groupRepo->search($city, $term), 200, [], ['groups' => 'group_autocomplete']);
     }
 }
