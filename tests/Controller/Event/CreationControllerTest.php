@@ -372,7 +372,7 @@ class CreationControllerTest extends HttpTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessful();
         $this->assertCount(1, $crawler->filter('h1:contains("'.$fieldValues['name'].'")'));
-        $this->assertCount(1, $crawler->filter('#event-description:contains("'.$fieldValues['description'].'")'));
+        $this->assertCount(1, $crawler->filter('.event__description:contains("'.$fieldValues['description'].'")'));
     }
 
     public function provideAnimatorWithNotificationDisabledCanCreateEventFromGroup(): iterable
@@ -421,6 +421,6 @@ class CreationControllerTest extends HttpTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseSuccessful();
         $this->assertCount(1, $crawler->filter('h1:contains("'.$fieldValues['name'].'")'));
-        $this->assertCount(1, $crawler->filter('#event-description:contains("'.$fieldValues['description'].'")'));
+        $this->assertCount(1, $crawler->filter('.event__description:contains("'.$fieldValues['description'].'")'));
     }
 }

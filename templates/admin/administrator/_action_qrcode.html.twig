@@ -1,3 +1,4 @@
+{% if object.id %}
 <li>
     <a href="{{ path('app_admin_qr_code', { id: object.id }) }}"
        class="sonata-action-element"
@@ -7,3 +8,4 @@
         QR code Google Authenticator
     </a>
 </li>
+{% endif %}

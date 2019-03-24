@@ -13,12 +13,6 @@ class AdministratorControllerTest extends HttpTestCase
     {
         yield ['/admin/app/administrator/list'];
         yield ['/admin/app/administrator/create'];
-        yield ['/admin/app/administrator/1/edit'];
-        yield ['/admin/app/administrator/1/delete'];
-
-        // own account
-        yield ['/admin/app/administrator/2/edit'];
-        yield ['/admin/app/administrator/2/delete'];
     }
 
     /**
