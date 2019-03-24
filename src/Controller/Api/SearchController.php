@@ -33,10 +33,7 @@ class SearchController extends AbstractController
      */
     public function events(CityRepository $cityRepo, EventRepository $eventRepo, Request $request): JsonResponse
     {
-        if (strlen($term = $request->query->get('q', '')) < 3) {
-            return $this->json([]);
-        }
-
+        $term = (string) $request->query->get('q', '');
         $city = $cityRepo->findOneByUuid($request->query->get('c'));
 
         return $this->json($eventRepo->search($city, $term), 200, [], ['groups' => 'search']);
@@ -47,10 +44,7 @@ class SearchController extends AbstractController
      */
     public function groups(CityRepository $cityRepo, GroupRepository $groupRepo, Request $request): JsonResponse
     {
-        if (strlen($term = $request->query->get('q', '')) < 3) {
-            return $this->json([]);
-        }
-
+        $term = (string) $request->query->get('q', '');
         $city = $cityRepo->findOneByUuid($request->query->get('c'));
 
         return $this->json($groupRepo->search($city, $term), 200, [], ['groups' => 'group_autocomplete']);

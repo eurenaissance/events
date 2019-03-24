@@ -177,4 +177,12 @@ class GroupRepository extends ServiceEntityRepository
 
         return $results;
     }
+
+    /**
+     * For tests purpose only.
+     */
+    public function deleteAll(): void
+    {
+        $this->createQueryBuilder('g')->delete()->getQuery()->execute();
+    }
 }

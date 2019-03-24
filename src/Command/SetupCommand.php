@@ -7,21 +7,20 @@ use App\Repository\GroupRepository;
 use App\Setup\SetupStepInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class SetupCommand extends Command
 {
     private $steps;
     private $actorRepository;
-    private $groupRepository;
 
-    public function __construct(iterable $steps, ActorRepository $actorRepo, GroupRepository $groupRepo)
+    public function __construct(iterable $steps, ActorRepository $actorRepo)
     {
         parent::__construct();
 
         $this->steps = $steps;
         $this->actorRepository = $actorRepo;
-        $this->groupRepository = $groupRepo;
     }
 
     protected function configure(): void
@@ -32,6 +31,7 @@ class SetupCommand extends Command
                 'Launch the initial setup of the platform. '.
                 'This command cannot be run if there are actors or groups already created.'
             )
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Launch the setup without persistance.')
         ;
     }
 
@@ -41,12 +41,6 @@ class SetupCommand extends Command
             $output->writeln('This command cannot be run if some actors are already registered.');
 
             return 1;
-        }
-
-        if ($this->hasGroups()) {
-            $output->writeln('This command cannot be run if some groups are already registered.');
-
-            return 2;
         }
 
         $output->writeln('Starting the setup ...');
@@ -64,7 +58,10 @@ class SetupCommand extends Command
 
         foreach ($steps as $i => $step) {
             $output->writeln("\n".($i + 1).'. '.$step->getName()."\n===================================");
-            $step->execute($output);
+
+            if (!$input->getOption('dry-run')) {
+                $step->execute($output);
+            }
         }
 
         $output->writeln('Platform installed successfully.');
@@ -77,18 +74,6 @@ class SetupCommand extends Command
         $count = $this->actorRepository
             ->createQueryBuilder('a')
             ->select('COUNT(a)')
-            ->getQuery()
-            ->getSingleScalarResult()
-        ;
-
-        return 0 !== $count;
-    }
-
-    private function hasGroups(): bool
-    {
-        $count = $this->groupRepository
-            ->createQueryBuilder('g')
-            ->select('COUNT(g)')
             ->getQuery()
             ->getSingleScalarResult()
         ;
