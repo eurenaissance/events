@@ -198,8 +198,11 @@ group_card:
 group_view:
     follow: Follow
     unfollow: Unfollow
+    follow_explain: By following this group, you will receive an e-mail each time it organizes an event.
+    location: Location
     about: About
     animators: Animators
+    share: Share
     actions:
         edit: Edit group
         members: View members
