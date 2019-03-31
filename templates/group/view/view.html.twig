@@ -45,9 +45,9 @@
         </div>
     {% endif %}
 
-    <div class="row">
+    <div class="row flex-column-reverse flex-md-row">
         <div class="col-md-8">
-            <div class="pr-3">
+            <div class="pr-md-3 mt-5 mt-md-0">
                 {% if upcoming_events|length == 0 and finished_events|length == 0 %}
                     <div class="p-5 text-center text-muted">
                         {{ 'group_view.events.none'|trans }}

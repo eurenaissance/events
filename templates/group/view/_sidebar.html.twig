@@ -1,60 +1,98 @@
-{% if is_granted('GROUP_FOLLOW', group) or is_granted('GROUP_UNFOLLOW', group)  %}
-    <div class="mb-5">
-        {% if is_granted('GROUP_UNFOLLOW', group) %}
-            <a href="{{ path('app_group_unfollow', { slug: group.slug }) }}" class="btn btn-block btn-primary">
-                {{ 'group_view.unfollow'|trans }}
-            </a>
+<div class="group__sidebar">
+    <div class="text-center">
+        {% if is_granted('GROUP_FOLLOW', group) or is_granted('GROUP_UNFOLLOW', group)  %}
+            <div class="mb-4">
+                <div class="mb-2">
+                    {% if is_granted('GROUP_UNFOLLOW', group) %}
+                        <a href="{{ path('app_group_unfollow', { slug: group.slug }) }}" class="btn btn-primary">
+                            {{ 'group_view.unfollow'|trans }}
+                        </a>
+                    {% endif %}
+
+                    {% if is_granted('GROUP_FOLLOW', group) %}
+                        <a href="{{ path('app_group_follow', { slug: group.slug }) }}" class="btn btn-primary">
+                            {{ 'group_view.follow'|trans }}
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="group__sidebar__follow-explain">
+                    <small>{{ 'group_view.follow_explain'|trans }}</small>
+                </div>
+            </div>
         {% endif %}
 
-        {% if is_granted('GROUP_FOLLOW', group) %}
-            <a href="{{ path('app_group_follow', { slug: group.slug }) }}" class="btn btn-block btn-primary">
-                {{ 'group_view.follow'|trans }}
+        <div class="share-buttons mb-5">
+            <a href="{{ facebook_share_url('app_group_view', {'slug': group.slug}, group.name) }}"
+               target="_blank" rel="noreferrer noopener">
+                <i class="fab fa-facebook"></i>
             </a>
-        {% endif %}
-    </div>
-{% endif %}
-
-<div class="address mb-2" id="group-address">
-    <div class="address__icon">
-        <i class="fas fa-map-marker-alt"></i>
-    </div>
-    <div class="address__text">
-        <div class="address__text__street">
-            {{ group.address }}
-        </div>
-        <div class="address__text__city">
-            {{ group.city.name }}, {{ group.city.country|country }}
-        </div>
-        <div>
-            <small>
-                <a href="https://maps.google.com/?q={{ group.address }} {{ group.city.name }} {{ group.city.country|country }}" target="_blank">
-                    {{ 'base.address.google_maps'|trans }}
-                </a>
-            </small>
+            <a href="{{ twitter_share_url('app_group_view', {'slug': group.slug}, group.name) }}"
+               target="_blank" rel="noreferrer noopener">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="{{ telegram_share_url('app_group_view', {'slug': group.slug}, group.name) }}"
+               target="_blank" rel="noreferrer noopener">
+                <i class="fab fa-telegram"></i>
+            </a>
+            <a href="{{ whatsapp_share_url('app_group_view', {'slug': group.slug}, group.name) }}"
+               target="_blank" rel="noreferrer noopener">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="{{ mailto_share_url('app_group_view', {'slug': group.slug}, group.name, group.name) }}"
+               target="_blank" rel="noreferrer noopener">
+                <i class="fas fa-envelope"></i>
+            </a>
         </div>
     </div>
-</div>
 
-<h5 class="mt-5">
-    {{ 'group_view.about'|trans }}
-</h5>
+    <h5 class="mt-5">
+        {{ 'group_view.location'|trans }}
+    </h5>
 
-<div id="group-description">
-    {{ group.description|nl2br }}
-</div>
-
-<h5 class="mt-5">
-    {{ 'group_view.animators'|trans }}
-</h5>
-
-<div id="animators">
-    <div>
-        {{ group.animator.fullName }}
+    <div class="address mb-2" id="group-address">
+        <div class="address__icon">
+            <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div class="address__text">
+            <div class="address__text__street">
+                {{ group.address }}
+            </div>
+            <div class="address__text__city">
+                {{ group.city.name }}, {{ group.city.country|country }}
+            </div>
+            <div>
+                <small>
+                    <a href="https://maps.google.com/?q={{ group.address }} {{ group.city.name }} {{ group.city.country|country }}" target="_blank">
+                        {{ 'base.address.google_maps'|trans }}
+                    </a>
+                </small>
+            </div>
+        </div>
     </div>
 
-    {% for coAnimator in group.coAnimators %}
-        <div>
-            {{ coAnimator.fullName }}
+    <div class="d-none d-md-block">
+        <h5 class="mt-5">
+            {{ 'group_view.about'|trans }}
+        </h5>
+
+        <div id="group-description">
+            {{ group.description|nl2br }}
         </div>
-    {% endfor %}
+
+        <h5 class="mt-5">
+            {{ 'group_view.animators'|trans }}
+        </h5>
+
+        <div id="animators">
+            <div>
+                {{ group.animator.fullName }}
+            </div>
+
+            {% for coAnimator in group.coAnimators %}
+                <div>
+                    {{ coAnimator.fullName }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
