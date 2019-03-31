@@ -3,8 +3,8 @@
 namespace App\Controller\Api;
 
 use App\Repository\CityRepository;
-use App\Repository\EventRepository;
 use App\Repository\GroupRepository;
+use App\Search\SearchEngine;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,12 +30,9 @@ class SearchController extends AbstractController
     /**
      * @Route("/events", methods="GET", name="app_api_search_events")
      */
-    public function events(CityRepository $cityRepo, EventRepository $eventRepo, Request $request): JsonResponse
+    public function events(SearchEngine $searchEngine, Request $request): JsonResponse
     {
-        $term = (string) $request->query->get('q', '');
-        $city = $cityRepo->findOneByUuid($request->query->get('c'));
-
-        return $this->json($eventRepo->search($city, $term), 200, [], ['groups' => 'search']);
+        return $searchEngine->searchEvent($request);
     }
 
     /**

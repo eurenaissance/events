@@ -261,7 +261,6 @@ event_view:
     register: Register
     contact_organizer: Contact the organizer
 
-
 event_choose:
     title: Organize an event
     subtitle: In which group would you like to create this event?
@@ -285,7 +284,12 @@ event_form:
     postalAddress: Postal address
 
 event_search:
-    title: Upcoming events
+    title: Find events
+    find: Find
+    all_events: all events
+    around: around
+    any_city: any city
+    search: Search
 
 
 

@@ -63,8 +63,8 @@ class CityRepository extends ServiceEntityRepository
         }
 
         $qb->addSelect('('.implode(' + ', $scoreQuery).') AS score');
-        $qb->addOrderBy('isPreferedCountry', 'DESC');
         $qb->addOrderBy('score', 'DESC');
+        $qb->addOrderBy('isPreferedCountry', 'DESC');
         $qb->addOrderBy('c.name', 'ASC');
         $qb->setMaxResults($limit);
 

@@ -69,8 +69,6 @@ class Event implements EntitySlugInterface, GeographyInterface, GeocodableInterf
      *
      * @Assert\NotBlank(message="event.begin_at.not_blank")
      * @Assert\Date(message="event.begin_at.invalid")
-     *
-     * @Groups("search")
      */
     private $beginAt;
 

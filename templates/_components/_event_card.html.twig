@@ -5,7 +5,7 @@
                 {{ event.beginAt|date('d') }}
             </div>
             <div class="card__date__month">
-                {{ event.beginAt|localizeddate('none', 'none', app.request.locale, null, 'LLL') }}
+                {{ include('_components/localized_date/month.html.twig', {'date': event.beginAt}) }}
             </div>
         </div>
 
@@ -21,7 +21,7 @@
             <i class="fas fa-calendar-alt"></i>
         </div>
         <div class="card__calendar__profile">
-            {{ event.beginAt|localizeddate('medium', 'short', app.request.locale) }}
+            {{ include('_components/localized_date/full.html.twig', {'date': event.beginAt}) }}
         </div>
     </div>
 
