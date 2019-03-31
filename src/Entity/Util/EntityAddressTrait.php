@@ -18,8 +18,6 @@ trait EntityAddressTrait
      *
      * @Assert\NotBlank(message="common.address.not_blank", groups={"address"})
      * @Assert\Length(max=150, maxMessage="common.address.max_length", groups={"address"})
-     *
-     * @Groups("search")
      */
     private $address;
 
@@ -30,8 +28,6 @@ trait EntityAddressTrait
      * @ORM\JoinColumn(nullable=false)
      *
      * @Assert\NotBlank(message="common.city.not_blank", groups={"address"})
-     *
-     * @Groups("search")
      */
     private $city;
 

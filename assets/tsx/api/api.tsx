@@ -1,5 +1,5 @@
 import axios, {AxiosPromise, AxiosRequestConfig, Canceler} from 'axios';
-import {ApiCity, ApiEvent} from '../types';
+import {ApiCity, ApiEvent, ApiGroup} from '../types';
 
 export type HttpCanceler = (cancel: Canceler) => void;
 
@@ -29,6 +29,15 @@ class Api {
         }
 
         return axios.get<ApiEvent[]>('/api/search/events?q='+term+'&c='+(city ? city.uuid : ''), config);
+    }
+
+    public searchGroup(term: string, city: ApiCity | null, canceler?: HttpCanceler): AxiosPromise<ApiGroup[]> {
+        let config: AxiosRequestConfig = {};
+        if (canceler) {
+            config.cancelToken = new axios.CancelToken(canceler);
+        }
+
+        return axios.get<ApiGroup[]>('/api/search/groups?q='+term+'&c='+(city ? city.uuid : ''), config);
     }
 }
 

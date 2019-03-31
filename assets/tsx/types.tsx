@@ -3,15 +3,6 @@ export interface ApiCity {
     name: string,
 }
 
-export interface ApiGroup {
-    uuid: string,
-    name: string,
-    slug: string,
-    address: string,
-    city: ApiCity,
-    membersCount: number,
-}
-
 export interface ApiEvent {
     name: string,
     slug: string,
@@ -20,8 +11,19 @@ export interface ApiEvent {
         month: number,
         full: string,
     },
-    group: ApiGroup,
-    address: string,
+    group: {
+        uuid: string,
+        name: string,
+        slug: string,
+    },
+    address: string | null,
     city: ApiCity,
-    creatorName: string,
+}
+
+export interface ApiGroup {
+    name: string,
+    slug: string,
+    address: string | null,
+    city: ApiCity,
+    followers: number,
 }

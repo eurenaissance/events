@@ -131,9 +131,6 @@ class Group implements EntitySlugInterface, GeographyInterface, GeocodableInterf
         return (string) $this->name;
     }
 
-    /**
-     * @Groups("search")
-     */
     public function getMembersCount(): int
     {
         // animator + memberships

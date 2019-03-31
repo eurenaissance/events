@@ -3,7 +3,6 @@
 namespace App\Controller\Api;
 
 use App\Repository\CityRepository;
-use App\Repository\GroupRepository;
 use App\Search\SearchEngine;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,11 +37,8 @@ class SearchController extends AbstractController
     /**
      * @Route("/groups", methods="GET", name="app_api_search_groups")
      */
-    public function groups(CityRepository $cityRepo, GroupRepository $groupRepo, Request $request): JsonResponse
+    public function groups(SearchEngine $searchEngine, Request $request): JsonResponse
     {
-        $term = (string) $request->query->get('q', '');
-        $city = $cityRepo->findOneByUuid($request->query->get('c'));
-
-        return $this->json($groupRepo->search($city, $term), 200, [], ['groups' => 'group_autocomplete']);
+        return $searchEngine->searchGroup($request);
     }
 }

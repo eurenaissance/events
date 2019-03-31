@@ -194,7 +194,6 @@ group_card:
     animated_by: 'Animated by %name%'
     learn_more: Learn more
 
-# View
 group_view:
     follow: Follow
     unfollow: Unfollow
@@ -212,7 +211,6 @@ group_view:
         upcoming: Upcoming events
         finished: Finished events
 
-# Form
 group_form:
     information: Group information
     name: Name
@@ -220,17 +218,14 @@ group_form:
     description_help: Describe this group in a few words.
     postalAddress: Postal address
 
-# Create
 group_create:
     title: Create a group
     submit: Create
 
-# Edit
 group_edit:
     title: Edit a group
     submit: Edit
 
-# members
 group_members:
     title: Group members
     submit: Edit
@@ -243,6 +238,18 @@ group_members:
     actions:
         promote: Promote
         demote: Demote
+
+group_search:
+    title: Explore groups
+    find: Find
+    all_groups: all groups
+    around: around
+    any_city: any city
+    followers: 'followers'
+    no_result:
+        title: Sorry, we couldn't find any group for this search.
+        text: It may be the occasion to create a group in your city!
+        button: Create a group
 
 
 # Events
@@ -292,7 +299,10 @@ event_search:
     all_events: all events
     around: around
     any_city: any city
-    search: Search
+    no_result:
+        title: Sorry, we couldn't find any event for this search.
+        text: It may be the occasion to organize a event in your city!
+        button: Organize an event
 
 
 

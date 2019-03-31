@@ -9,6 +9,7 @@ Encore
     .addEntry('city-autocomplete', './assets/tsx/city-autocomplete/index.tsx')
     .addEntry('home', './assets/tsx/home/index.tsx')
     .addEntry('search-event', './assets/tsx/search/event/index.tsx')
+    .addEntry('search-group', './assets/tsx/search/group/index.tsx')
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
