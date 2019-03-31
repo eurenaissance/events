@@ -31,7 +31,7 @@ export class Page extends Component<{}, State> {
 
     search(term: string, city: ApiCity | null) {
         if (this.cancelRequest) {
-            this.cancelRequest();
+            this.cancelRequest('canceled');
         }
 
         this.setState({ isLoading: true });
@@ -43,7 +43,11 @@ export class Page extends Component<{}, State> {
             this.cancelRequest = null;
         });
 
-        request.catch(() => {
+        request.catch(({ message }) => {
+            if (message === 'canceled') {
+                return;
+            }
+
             this.setState({ isLoading: false });
             this.cancelRequest = null;
         });

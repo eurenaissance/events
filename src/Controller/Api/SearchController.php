@@ -3,7 +3,6 @@
 namespace App\Controller\Api;
 
 use App\Repository\CityRepository;
-use App\Repository\EventRepository;
 use App\Repository\GroupRepository;
 use App\Search\SearchEngine;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
