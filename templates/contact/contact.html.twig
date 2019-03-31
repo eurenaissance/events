@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block page_title (type == 'admin' ? 'contact.admin.title'|trans : 'contact.actor.title'|trans({'%name%': actor.fullName})) %}
+
+{% block intro %}
+    <div class="intro">
+        <div class="container">
+            <h2 class="intro__title">
+                {{ block('page_title') }}
+            </h2>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            {{ form_start(form) }}
+
+            {{ form_row(form.sender, { label: 'contact.sender' }) }}
+            {{ form_row(form.subject, { label: 'contact.subject' }) }}
+            {{ form_row(form.message, { label: 'contact.message', attr: { 'rows': 10 } }) }}
+
+            <div class="mt-5 text-center">
+                <button type="submit" class="btn btn-primary">
+                    {{ 'contact.send'|trans }}
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

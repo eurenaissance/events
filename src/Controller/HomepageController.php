@@ -30,14 +30,6 @@ class HomepageController extends AbstractController
     }
 
     /**
-     * @Route("/contact", name="app_contact", methods="GET")
-     */
-    public function contact(): Response
-    {
-        return $this->render('to_implement.html.twig');
-    }
-
-    /**
      * @Route("/design", methods="GET")
      */
     public function design(): Response

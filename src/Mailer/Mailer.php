@@ -3,6 +3,7 @@
 namespace App\Mailer;
 
 use App\Entity\Actor;
+use App\Entity\ContactMessage;
 use App\Entity\Event;
 use App\Entity\Group;
 use App\Entity\Group\CoAnimatorMembership;
@@ -27,6 +28,16 @@ class Mailer
         $this->producer = $producer;
         $this->translator = $translator;
         $this->twig = $twig;
+    }
+
+    public function sendContactMessage(ContactMessage $message): void
+    {
+        $this->send([
+            'from' => $message->getSender(),
+            'to' => $message->getRecipient(),
+            'subject' => $message->getSubject(),
+            'body' => nl2br($message->getMessage()),
+        ]);
     }
 
     public function sendActorRegistrationConfirmationMail(Actor $actor, string $token): void

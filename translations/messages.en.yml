@@ -69,6 +69,8 @@ flashes:
     group:
         promote_success: '%name% was successfully promoted'
         demote_success: '%name% was successfully demoted'
+    contact:
+        success: 'Your message was successfully sent'
 
 
 # Mails
@@ -109,6 +111,20 @@ home:
     active:
         title: Most active groups
         view_all: View all the groups
+
+
+# Contact
+#########################################
+
+contact:
+    admin:
+        title: 'Contact us'
+    actor:
+        title: 'Contact %name%'
+    sender: Your e-mail address
+    subject: Subject
+    message: Message
+    send: Send the message
 
 
 # Actors
