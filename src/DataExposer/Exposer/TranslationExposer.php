@@ -14,7 +14,19 @@ class TranslationExposer implements EventSubscriberInterface
         'event_search.all_events',
         'event_search.around',
         'event_search.any_city',
-        'event_search.search',
+        'event_search.no_result.title',
+        'event_search.no_result.text',
+        'event_search.no_result.button',
+
+        'group_search.find',
+        'group_search.all_groups',
+        'group_search.around',
+        'group_search.any_city',
+        'group_search.followers',
+        'group_search.no_result.title',
+        'group_search.no_result.text',
+        'group_search.no_result.button',
+        'group_card.learn_more',
     ];
 
     private $exposer;

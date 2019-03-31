@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block page_title 'group_search.title'|trans %}
+{% block javascripts encore_entry_script_tags('search-group') %}
+
+{% block intro %}
+    <div class="intro mb-0">
+        <div class="container">
+            <h2 class="intro__title">
+                {{ 'group_search.title'|trans }}
+            </h2>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="search" id="search-groups">
+        <div class="row justify-content-center">
+            <div class="col-lg-11">
+                <div class="row mt-5">
+                    {% for i in 0..2 %}
+                        <div class="col-md-4">
+                            <div class="card card--placeholder mb-3">
+                                <div class="card--placeholder__title"></div>
+                                <div class="card--placeholder__field"></div>
+                                <div class="card--placeholder__field"></div>
+                                <div class="card--placeholder__more-container">
+                                    <div class="card--placeholder__more"></div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

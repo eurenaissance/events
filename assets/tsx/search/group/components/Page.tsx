@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Canceler} from 'axios';
 import {data} from '../../../data/readDataTag';
 import {Form} from './Form';
-import {ApiCity, ApiEvent} from '../../../types';
+import {ApiCity, ApiGroup} from '../../../types';
 import {api} from '../../../api/api';
 
 const exposed = data.readExposedData();
@@ -11,7 +11,7 @@ const translations = exposed.translations;
 
 interface State {
     isLoading: boolean,
-    results: ApiEvent[],
+    results: ApiGroup[],
 }
 
 export class Page extends Component<{}, State> {
@@ -37,7 +37,7 @@ export class Page extends Component<{}, State> {
 
         this.setState({ isLoading: true });
 
-        const request = api.searchEvent(term, city, cancel => this.cancelRequest = cancel);
+        const request = api.searchGroup(term, city, cancel => this.cancelRequest = cancel);
 
         request.then(response => {
             this.setState({ isLoading: false, results: response.data });
@@ -79,34 +79,19 @@ export class Page extends Component<{}, State> {
                             ))
                         ) : ''}
 
-                        {!this.state.results.length ? '' : this.state.results.map(event => {
+                        {!this.state.results.length ? '' : this.state.results.map(group => {
                             return (
-                                <div className="col-md-4 mb-3" key={event.slug}>
-                                    <div className={'card card--event '+(this.state.isLoading ? 'card--loading' : '')}>
-                                        <div className="card__row">
-                                            <div className="card__date">
-                                                <div className="card__date__day">
-                                                    {event.date.day}
-                                                </div>
-                                                <div className="card__date__month">
-                                                    {event.date.month}
-                                                </div>
-                                            </div>
+                                <div className="col-md-4 mb-3" key={group.slug}>
+                                    <div className="card card--group mb-3">
+                                        <h4 className="card__title">
+                                            <a href={'/group/'+group.slug} target="_blank">
+                                                {group.name}
+                                            </a>
+                                        </h4>
 
-                                            <h4 className="card__title">
-                                                <a href={'/event/'+event.slug} target="_blank">
-                                                    {event.name}
-                                                </a>
-                                            </h4>
-                                        </div>
-
-                                        <div className="card__calendar mt-4">
-                                            <div className="card__calendar__icon">
-                                                <i className="fas fa-calendar-alt"></i>
-                                            </div>
-                                            <div className="card__calendar__profile">
-                                                {event.date.full}
-                                            </div>
+                                        <div className="card__subtitle">
+                                            {group.followers + ' '}
+                                            {translations['group_search.followers']}
                                         </div>
 
                                         <div className="address mt-4">
@@ -115,32 +100,21 @@ export class Page extends Component<{}, State> {
                                             </div>
                                             <div className="address__text">
                                                 <div className="address__text__street">
-                                                    <a href={'https://maps.google.com/?q='+event.address+' '+event.city.name}
+                                                    <a href={'https://maps.google.com/?q='+group.address+' '+group.city.name}
                                                        target="_blank">
-                                                        {event.address}
+                                                        {group.address}
                                                     </a>
                                                 </div>
                                                 <div className="address__text__city">
-                                                    {event.city.name}
+                                                    {group.city.name}
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="card__user mt-4">
-                                            <div className="card__user__icon">
-                                                <i className="fas fa-users"></i>
-                                            </div>
-                                            <div className="card__user__profile">
-                                                <a href={'/group/'+event.group.slug}>
-                                                    {event.group.name}
-                                                </a>
                                             </div>
                                         </div>
 
                                         <div className="mt-4 text-right">
-                                            <a href={'/event/'+event.slug} target="_blank"
+                                            <a href={'/group/'+group.slug} target="_blank"
                                                className="d-inline-flex align-items-center">
-                                                Learn more
+                                                {translations['group_card.learn_more']}
                                                 <i className="fas fa-caret-right ml-2"></i>
                                             </a>
                                         </div>
@@ -152,15 +126,15 @@ export class Page extends Component<{}, State> {
                         {!this.state.results.length && !this.state.isLoading ? (
                             <div className="text-center col-12">
                                 <h4>
-                                    {translations['event_search.no_result.title']}
+                                    {translations['group_search.no_result.title']}
                                 </h4>
 
                                 <p>
-                                    {translations['event_search.no_result.text']}
+                                    {translations['group_search.no_result.text']}
                                 </p>
 
                                 <a href="/group/create" className="btn btn-primary">
-                                    {translations['event_search.no_result.button']}
+                                    {translations['group_search.no_result.button']}
                                 </a>
                             </div>
                         ) : ''}
