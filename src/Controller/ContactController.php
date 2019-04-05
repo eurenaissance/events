@@ -31,6 +31,10 @@ class ContactController extends AbstractController
             throw $this->createNotFoundException('Actor not found');
         }
 
+        if (!$actor && !$config->getEmailContact()) {
+            throw $this->createNotFoundException('Contact e-mail not configured');
+        }
+
         $message = new ContactMessage($actor ? $actor->getEmailAddress() : $config->getEmailContact());
         if ($this->getUser()) {
             $message->setSender($this->getUser()->getEmailAddress());
